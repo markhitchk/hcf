@@ -1,0 +1,1201 @@
+/* ===================================
+   Harley's Clan Forum Custom CSS V4
+   Full Theme (Light + Dark Fixed)
+
+   Version: 4.0
+   Author: HarleyTG
+   Updated: 2026-03-20 (UTC)
+=================================== */
+
+/* ===================================
+
+   GLOBAL VARIABLES
+
+=================================== */
+
+:root {
+
+  --cyan: #00ffff;
+
+  --cyan-soft: rgba(0, 255, 255, 0.35);
+
+  --glass-bg: rgba(25, 25, 25, 0.9);
+
+  --text: #e8e8e8;
+
+  --accent: #00ffff;
+
+  --border: rgba(255, 255, 255, 0.12);
+
+  --shadow: rgba(0, 0, 0, 0.35);
+
+  --btn-text: #1a1a1a;
+
+}
+
+
+
+/* ===================================
+
+   HEADER TITLE + LOGO
+
+=================================== */
+
+.Header-title {
+
+  display: flex !important;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 26px;
+
+  font-weight: bold;
+
+  color: var(--text);
+
+  text-shadow: 2px 2px 0 var(--accent);
+
+}
+
+
+
+.Header-title a {
+
+  display: flex !important;
+
+  align-items: center;
+
+  gap: 10px;
+
+  text-decoration: none;
+
+  color: var(--accent);
+
+  font-weight: 600;
+
+}
+
+
+
+.Header-title::before {
+
+  content: '';
+
+  display: inline-block;
+
+  width: 46px;
+
+  height: 46px;
+
+  background: url('https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png') center/cover no-repeat;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+
+}
+
+
+
+.Header-logo {
+
+  display: block !important;
+
+  max-height: 36px;
+
+  width: auto;
+
+}
+
+
+
+.Header-title span {
+
+  display: inline-block !important;
+
+  font-weight: 600;
+
+}
+
+
+
+/* ===================================
+
+   ALERT - STYLING ONLY (NO LOCATION CHANGE)
+
+=================================== */
+
+.Alert {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px 20px;
+
+  border-radius: 12px;
+
+  background: var(--glass-bg);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  color: var(--text);
+
+  border: 1px solid var(--cyan-soft);
+
+  border-left: 4px solid var(--cyan);
+
+  box-shadow: 0 6px 18px var(--shadow), 0 0 12px rgba(0, 255, 255, 0.15);
+
+  text-align: center;
+
+  animation: fadeIn 0.3s ease;
+
+}
+
+
+
+@keyframes fadeIn { 
+
+  from { 
+
+    opacity: 0; 
+
+    transform: translateY(-6px); 
+
+  } 
+
+  to { 
+
+    opacity: 1; 
+
+    transform: translateY(0); 
+
+  } 
+
+}
+
+
+
+.Alert-body { 
+
+  font-size: 14px; 
+
+  line-height: 1.5; 
+
+  word-break: break-word; 
+
+}
+
+
+
+.Alert a {
+
+  color: var(--cyan);
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+}
+
+
+
+.Alert a:hover {
+
+  text-decoration: underline;
+
+}
+
+
+
+.Alert-controls {
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+}
+
+
+
+.Alert-controls .Button--link {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 12px;
+
+  border-radius: 6px;
+
+  border: none;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  background: rgba(0, 255, 255, 0.15);
+
+  color: var(--accent);
+
+  text-decoration: none;
+
+  transition: background 0.2s;
+
+}
+
+
+
+.Alert-controls .Button--link:hover {
+
+  background: var(--accent);
+
+  color: var(--btn-text);
+
+}
+
+
+
+.Alert-dismiss {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 6px 10px;
+
+  border-radius: 6px;
+
+  border: none;
+
+  background: var(--border);
+
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition: background 0.2s;
+
+  font-size: 13px;
+
+}
+
+
+
+.Alert-dismiss:hover { 
+
+  background: var(--accent); 
+
+  color: var(--btn-text); 
+
+}
+
+
+
+/* ===================================
+
+   RESPONSIVE
+
+=================================== */
+
+@media (max-width: 500px) {
+
+  .Header-title { 
+
+    font-size: 20px; 
+
+  }
+
+  
+
+  .Header-title::before {
+
+    width: 36px;
+
+    height: 36px;
+
+  }
+
+}
+
+/* Make logout button red */
+
+.item-logOut button {
+
+  color: #ff4d4d !important;
+
+}
+
+
+
+.item-logOut button:hover {
+
+  color: #ff6b6b !important;
+
+  background: rgba(255, 0, 0, 0.1) !important;
+
+}
+
+
+
+/* If you want the icon red too */
+
+.item-logOut button .Button-icon {
+
+  color: #ff4d4d !important;
+
+}
+
+
+
+.item-logOut button:hover .Button-icon {
+
+  color: #ff6b6b !important;
+
+}
+
+
+
+
+
+
+
+/* Make logout icon red in the container */
+
+.backgrwb .logoutt,
+
+.backgrwb button.logwbox .Button-icon {
+
+  color: #ff4d4d !important;
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+.backgrwb button.logwbox:hover .logoutt,
+
+.backgrwb button.logwbox:hover .Button-icon {
+
+  color: #ff6b6b !important;
+
+  transform: scale(1.1) !important;
+
+}
+
+
+
+/* Make the entire logout button have red text if needed */
+
+.backgrwb button.logwbox {
+
+  color: #ff4d4d !important;
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+.backgrwb button.logwbox:hover {
+
+  color: #ff6b6b !important;
+
+  background: rgba(255, 0, 0, 0.15) !important;
+
+  transform: translateY(-2px) !important;
+
+}
+
+
+
+/* Make the backgrwb dropdown transparent - NO DOUBLE SHADOWS */
+
+.backgrwb {
+
+  background: rgba(25, 25, 25, 0.3) !important;
+
+  backdrop-filter: blur(16px) !important;
+
+  -webkit-backdrop-filter: blur(16px) !important;
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+
+  border-radius: 12px !important;
+
+  border: 1px solid rgba(0, 255, 255, 0.25) !important;
+
+}
+
+
+
+/* Containerwb styling (parent if needed) */
+
+.containerwb {
+
+  /* Only if you need to style the container separately */
+
+}
+
+
+
+/* Style the avatar dropdown menu - NO CYAN GLOW */
+
+.backgrwb .AvatarEditor .Dropdown-menu {
+
+  background: rgba(18, 18, 18, 0.8) !important;
+
+  backdrop-filter: blur(16px) !important;
+
+  -webkit-backdrop-filter: blur(16px) !important;
+
+  border: 1px solid rgba(0, 255, 255, 0.35) !important;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+
+}
+
+
+
+/* Make the top icons cyan on hover - NO EXTRA GLOW */
+
+.backgrwb .circletop a {
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+.backgrwb .circletop a:hover i {
+
+  color: #00ffff !important;
+
+  transform: scale(1.2) translateY(-3px) !important;
+
+}
+
+
+
+.backgrwb .circletop a i {
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+/* Style the badges/items */
+
+.backgrwb .ulwb li {
+
+  color: #e8e8e8;
+
+  transition: all 0.2s ease !important;
+
+}
+
+
+
+.backgrwb .ulwb li:hover {
+
+  transform: translateX(5px) !important;
+
+  color: #00ffff !important;
+
+}
+
+
+
+.backgrwb .textinfo {
+
+  color: #e8e8e8;
+
+  transition: all 0.2s ease !important;
+
+}
+
+
+
+.backgrwb strong.username {
+
+  color: #00ffff;
+
+}
+
+
+
+/* Shadow behind avatar - SINGLE SHADOW ONLY */
+
+.backgrwb .avatarwb {
+
+  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+.backgrwb .avatarwb:hover {
+
+  transform: scale(1.02) !important;
+
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.5)) !important;
+
+}
+
+
+
+/* Badge - NO ANIMATION */
+
+.backgrwb .iconbadge .Badge {
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+.backgrwb .iconbadge .Badge:hover {
+
+  transform: scale(1.2) !important;
+
+}
+
+
+
+/* Avatar editor dropdown items hover */
+
+.backgrwb .AvatarEditor .Dropdown-menu li button:hover {
+
+  background: rgba(0, 255, 255, 0.15) !important;
+
+  color: #00ffff !important;
+
+  transform: translateX(5px) !important;
+
+  transition: all 0.3s ease !important;
+
+}
+
+
+
+
+
+
+
+/* ===================================
+
+   PROFILE BUTTON STYLE ONLY
+
+   Target the button inside item-session
+
+=================================== */
+
+
+
+/* The profile button itself */
+
+li.item-session .Dropdown-toggle.Button--user {
+
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 200, 255, 0.05)) !important;
+
+  border: 1px solid rgba(0, 255, 255, 0.25) !important;
+
+  border-radius: 40px !important;
+
+  padding: 4px 16px 4px 4px !important;
+
+  backdrop-filter: blur(10px) !important;
+
+  transition: all 0.3s ease !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 8px !important;
+
+  height: 40px !important;
+
+}
+
+
+
+/* Hover state */
+
+li.item-session .Dropdown-toggle.Button--user:hover {
+
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(0, 200, 255, 0.15)) !important;
+
+  border-color: rgba(0, 255, 255, 0.5) !important;
+
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2) !important;
+
+  transform: translateY(-1px) !important;
+
+}
+
+
+
+/* Avatar inside button */
+
+li.item-session .Dropdown-toggle.Button--user .Avatar {
+
+  width: 32px !important;
+
+  height: 32px !important;
+
+  border-radius: 50% !important;
+
+  border: 2px solid #00ffff !important;
+
+  margin: 0 !important;
+
+}
+
+
+
+/* Username text */
+
+li.item-session .Dropdown-toggle.Button--user .username {
+
+  font-weight: 600 !important;
+
+  color: white !important;
+
+  font-size: 14px !important;
+
+}
+
+
+
+/* Button label container */
+
+li.item-session .Dropdown-toggle.Button--user .Button-label {
+
+  display: flex !important;
+
+  align-items: center !important;
+
+}
+
+
+
+
+
+/* Ultra compact for very small screens */
+
+@media (max-width: 700px) {
+
+  #header-secondary .Header-controls {
+
+    gap: 2px !important;
+
+  }
+
+  
+
+
+
+  #header-secondary .Button--flat {
+
+    padding: 6px 8px !important;
+
+    min-width: 32px !important;
+
+  }
+
+  
+
+  #header-secondary .item-session .Button--user {
+
+    padding: 3px 8px 3px 3px !important;
+
+  }
+
+  
+
+  #header-secondary .item-session .username {
+
+    display: none !important;
+
+  }
+
+}
+
+
+/* ===================================
+   LOGIN / SIGNUP BUTTONS
+   FULL LIGHT + DARK SUPPORT
+=================================== */
+
+/* Base button */
+.item-logIn .Button,
+.item-signUp .Button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* THEME-AWARE COLORS */
+  background: var(--control-bg, rgba(0,0,0,0.05));
+  border: 1px solid var(--control-border, rgba(0,0,0,0.15));
+
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-weight: 600;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  white-space: nowrap;
+  min-width: 0;
+
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.item-logIn .Button:hover,
+.item-signUp .Button:hover {
+  background: var(--control-bg-hover, rgba(0,0,0,0.08));
+  border-color: var(--accent);
+
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Active (click) */
+.item-logIn .Button:active,
+.item-signUp .Button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* Label polish */
+.item-logIn .Button-label,
+.item-signUp .Button-label {
+  letter-spacing: 0.3px;
+}
+
+/* Optional spacing tweak */
+.item-logIn {
+  margin-right: 4px;
+}
+
+/* ===================================
+   HARD FALLBACK (if theme vars missing)
+=================================== */
+
+/* Light mode fallback */
+html:not(.dark) .item-logIn .Button,
+html:not(.dark) .item-signUp .Button {
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Dark mode fallback */
+html.dark .item-logIn .Button,
+html.dark .item-signUp .Button {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+
+
+/* ===================================
+   LOGIN HELP TOOLTIP ( ? ICON )
+=================================== */
+
+/* Position anchor */
+.LogInModal .Modal-header,
+.SignUpModal .Modal-header {
+  position: relative;
+}
+
+/* ? ICON */
+.LogInModal .Modal-header::after,
+.SignUpModal .Modal-header::after {
+  content: "?";
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.LogInModal .Modal-header:hover::after,
+.SignUpModal .Modal-header:hover::after {
+  background: rgba(0,255,255,0.2);
+}
+
+/* TOOLTIP BOX */
+.LogInModal .Modal-header::before,
+.SignUpModal .Modal-header::before {
+  content: "Usernames are NOT case-sensitive.\A Passwords ARE case-sensitive.";
+  white-space: pre-line;
+  position: absolute;
+  top: 42px;
+  left: 10px;
+  width: 230px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #fff;
+  background: rgba(20,20,20,0.95);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+/* SHOW TOOLTIP ON HOVER */
+.LogInModal .Modal-header:hover::before,
+.SignUpModal .Modal-header:hover::before {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* LIGHT MODE TOOLTIP */
+html:not(.dark) .LogInModal .Modal-header::before,
+html:not(.dark) .SignUpModal .Modal-header::before {
+  background: rgba(255,255,255,0.95);
+  color: #111;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+
+
+/* ===================================
+   Ultra-Slim SignUp Modal Legal Notice with Icon (CSS only)
+=================================== */
+.FoF-Terms-SignUp-Legal.Alert {
+    position: relative; /* needed for icon */
+    background: rgba(25, 25, 25, 0.85);
+    color: #e8e8e8;
+    border-left: 2px solid #00ffff;
+    padding: 6px 10px 6px 28px; /* extra left padding for icon */
+    margin: 6px 0;
+    border-radius: 5px;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    white-space: pre-line; /* allows text wrapping & respects \n */
+    word-wrap: break-word; /* ensures long text wraps */
+}
+
+/* Top-left alert icon */
+.FoF-Terms-SignUp-Legal.Alert::before {
+    content: "⚠"; /* alert icon (can change to any emoji or Unicode symbol) */
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 0.9rem;
+}
+
+/* Hover effect */
+.FoF-Terms-SignUp-Legal.Alert:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+
+
+/* ===================================
+   HARLEYTG MODAL SYSTEM v3.3
+   Full Light/Dark Safe Version
+=================================== */
+
+/* GLOBAL DEFAULTS (Dark Theme Fallback) */
+:root {
+  --modal-bg: var(--glass-bg, rgba(25, 25, 25, 0.9));
+  --modal-border: var(--border, rgba(255, 255, 255, 0.12));
+  --modal-shadow: var(--shadow, rgba(0, 0, 0, 0.35));
+  --modal-text: var(--text, #e8e8e8);
+
+  --input-bg: rgba(0, 0, 0, 0.35);
+  --input-border: var(--cyan-soft);
+  --primary-bg: var(--cyan-soft);
+  --primary-border: var(--cyan-soft);
+  --primary-rgb: 0, 255, 255;
+
+  --discord-bg: rgba(88, 101, 242, 0.15);
+  --discord-border: rgba(88, 101, 242, 0.35);
+  --discord-color: var(--text);
+
+  --divider-color: var(--border);
+  --terms-bg: rgba(0, 255, 255, 0.08);
+  --terms-border: var(--cyan-soft);
+  --terms-text: var(--text);
+}
+
+/* Light mode overrides */
+html:not(.dark) {
+  --modal-bg: rgba(255, 255, 255, 0.95);
+  --modal-border: rgba(0, 0, 0, 0.1);
+  --modal-shadow: rgba(0, 0, 0, 0.15);
+  --modal-text: #222;
+
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.15);
+  --primary-bg: var(--cyan-soft);
+  --primary-border: rgba(0, 0, 0, 0.15);
+
+  --discord-bg: rgba(88, 101, 242, 0.1);
+  --discord-border: rgba(88, 101, 242, 0.3);
+  --discord-color: #111;
+
+  --divider-color: rgba(0, 0, 0, 0.1);
+  --terms-bg: rgba(0, 255, 255, 0.05);
+  --terms-border: rgba(0, 0, 0, 0.1);
+  --terms-text: #111;
+}
+
+/* ===================================
+   1. GLOBAL MODAL BASE
+=================================== */
+.Modal-content {
+  background: var(--modal-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  border: 1px solid var(--modal-border);
+  box-shadow: 0 18px 45px var(--modal-shadow);
+  color: var(--modal-text);
+}
+
+.Modal-header {
+  border-bottom: 1px solid var(--modal-border);
+}
+
+.Modal-footer {
+  border-top: 1px solid var(--modal-border);
+  text-align: center;
+}
+
+.Modal-title,
+.App-titleControl {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--modal-text);
+}
+
+.Modal-close {
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.Modal-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.Modal-backdrop {
+  background: rgba(0,0,0,0.65);
+}
+
+/* ===================================
+   2. AUTH MODALS
+=================================== */
+.LogInModal .Modal-content,
+.SignUpModal .Modal-content,
+.ForgotPasswordModal .Modal-content {
+  border: 1px solid var(--primary-border);
+  box-shadow: 0 20px 50px var(--modal-shadow),
+              0 0 25px rgba(var(--primary-rgb),0.08);
+}
+
+.LogInModal .Modal-header,
+.SignUpModal .Modal-header,
+.ForgotPasswordModal .Modal-header {
+  border-bottom: 1px solid rgba(var(--primary-rgb),0.15);
+  padding: 16px 20px;
+}
+
+.LogInModal .App-titleControl,
+.SignUpModal .App-titleControl,
+.ForgotPasswordModal .App-titleControl {
+  font-size: 18px;
+  color: var(--primary-bg);
+}
+
+.LogInModal .Modal-body,
+.SignUpModal .Modal-body,
+.ForgotPasswordModal .Modal-body {
+  padding: 20px;
+}
+
+/* ===================================
+   3. INPUTS
+=================================== */
+.LogInModal .FormControl,
+.SignUpModal .FormControl,
+.ForgotPasswordModal .FormControl {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--modal-text);
+  transition: all 0.25s ease;
+}
+
+.LogInModal .FormControl:focus,
+.SignUpModal .FormControl:focus,
+.ForgotPasswordModal .FormControl:focus {
+  border-color: var(--primary-bg);
+  box-shadow: 0 0 10px rgba(var(--primary-rgb),0.25);
+  background: var(--input-bg);
+  outline: none;
+}
+
+/* ===================================
+   4. PRIMARY BUTTONS
+=================================== */
+.LogInModal .Button--primary,
+.SignUpModal .Button--primary,
+.ForgotPasswordModal .Button--primary {
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 10px;
+  background: var(--primary-bg);
+  border: 1px solid var(--primary-border);
+  color: var(--modal-text);
+  transition: all 0.25s ease;
+}
+
+.LogInModal .Button--primary:hover,
+.SignUpModal .Button--primary:hover,
+.ForgotPasswordModal .Button--primary:hover {
+  background: var(--primary-bg);
+  color: var(--modal-text);
+  box-shadow: 0 0 12px rgba(var(--primary-rgb),0.4);
+}
+
+/* ===================================
+   5. OR DIVIDER
+=================================== */
+.LogInModal .LogInButtons::before,
+.SignUpModal .LogInButtons::before {
+  content: "OR CONTINUE WITH";
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  color: var(--divider-color);
+  margin-bottom: 12px;
+}
+
+.LogInModal .LogInButtons::after,
+.SignUpModal .LogInButtons::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: -16px 0 16px;
+  background: linear-gradient(to right, transparent, var(--divider-color), transparent);
+}
+
+/* ===================================
+   6. DISCORD BUTTON
+=================================== */
+.LogInModal .LogInButton--discord,
+.SignUpModal .LogInButton--discord {
+  width: 100%;
+  justify-content: center;
+  background: var(--discord-bg);
+  border: 1px solid var(--discord-border);
+  border-radius: 10px;
+  padding: 10px;
+  color: var(--discord-color);
+  transition: all 0.25s ease;
+}
+
+.LogInModal .LogInButton--discord:hover,
+.SignUpModal .LogInButton--discord:hover {
+  background: #5865F2;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(88,101,242,0.4);
+  transform: translateY(-1px);
+}
+
+/* ===================================
+   7. TERMS BOX
+=================================== */
+.SignUpModal .FoF-Terms-SignUp-Legal {
+  font-size: 13px;
+  line-height: 1.4;
+  background: var(--terms-bg);
+  border: 1px solid var(--terms-border);
+  border-left: 3px solid var(--primary-bg);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--terms-text);
+}
+
+/* ===================================
+   8. CHECKBOX
+=================================== */
+.LogInModal .checkbox,
+.SignUpModal .checkbox {
+  font-size: 13px;
+}
+
+.LogInModal .checkbox input,
+.SignUpModal .checkbox input {
+  accent-color: var(--primary-bg);
+}
+
+/* ===================================
+   9. FOOTER LINKS
+=================================== */
+.LogInModal .Modal-footer a,
+.SignUpModal .Modal-footer a {
+  color: var(--primary-bg);
+}
+
+.LogInModal .Modal-footer a:hover,
+.SignUpModal .Modal-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===================================
+   10. SMALL POLISH
+=================================== */
+.Modal .helpText {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
