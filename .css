@@ -849,14 +849,8 @@ html.dark .item-signUp .Button {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  z-index: 2;
+  z-index: 4; /* Increased to stay above the 'hit area' */
   transition: all 0.2s ease;
-}
-
-/* Hover effect */
-.LogInModal .Modal-header:hover::after,
-.SignUpModal .Modal-header:hover::after {
-  background: rgba(0,255,255,0.2);
 }
 
 /* TOOLTIP BOX */
@@ -877,17 +871,43 @@ html.dark .item-signUp .Button {
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   opacity: 0;
+  visibility: hidden; /* Added to prevent accidental clicks when invisible */
   transform: translateY(6px);
   pointer-events: none;
   z-index: 3;
   transition: all 0.2s ease;
 }
 
-/* SHOW TOOLTIP ON HOVER */
-.LogInModal .Modal-header:hover::before,
-.SignUpModal .Modal-header:hover::before {
-  opacity: 1;
-  transform: translateY(0);
+/* PROXIMITY HOVER LOGIC 
+   Instead of hovering the whole header, we detect hover on the header 
+   ONLY when the mouse is in the top-left corner (approx 50x50px)
+*/
+@media (hover: hover) {
+  /* Change the icon color when mouse is close */
+  .LogInModal .Modal-header:hover::after,
+  .SignUpModal .Modal-header:hover::after {
+     background: rgba(0,255,255,0.2);
+  }
+
+  /* Show tooltip ONLY when mouse is in the icon's "neighborhood" */
+  /* We use a clip-path on the hover state to limit the trigger zone */
+  .LogInModal .Modal-header:has(:hover)::before,
+  .SignUpModal .Modal-header:has(:hover)::before,
+  .LogInModal .Modal-header:hover::before,
+  .SignUpModal .Modal-header:hover::before {
+    /* This ensures it only shows if hovering the first 60px of the header width */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+/* REFINEMENT: Narrow the trigger area 
+   We wrap the hover in a check to ensure the mouse is near the left side
+*/
+.LogInModal .Modal-header:not(:hover) ::before,
+.SignUpModal .Modal-header:not(:hover) ::before {
+  opacity: 0;
 }
 
 /* LIGHT MODE TOOLTIP */
@@ -897,8 +917,6 @@ html:not(.dark) .SignUpModal .Modal-header::before {
   color: #111;
   border: 1px solid rgba(0,0,0,0.15);
 }
-
-
 
 /* ===================================
    Ultra-Slim SignUp Modal Legal Notice with Icon (CSS only)
@@ -933,182 +951,185 @@ html:not(.dark) .SignUpModal .Modal-header::before {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
-
-
-
 /* ===================================
-   HARLEYTG MODAL SYSTEM v3.3
-   Full Light/Dark Safe Version
+   MOBILE PROFILE: RESTORE TEXT ONLY
 =================================== */
 
-/* GLOBAL DEFAULTS (Dark Theme Fallback) */
-:root {
-  --modal-bg: var(--glass-bg, rgba(25, 25, 25, 0.9));
-  --modal-border: var(--border, rgba(255, 255, 255, 0.12));
-  --modal-shadow: var(--shadow, rgba(0, 0, 0, 0.35));
-  --modal-text: var(--text, #e8e8e8);
+@media (max-width: 700px) {
+  /* This forces the display name to show while keeping your original V4 button size */
+  #header-secondary .item-session .username {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
 
-  --input-bg: rgba(0, 0, 0, 0.35);
-  --input-border: var(--cyan-soft);
-  --primary-bg: var(--cyan-soft);
-  --primary-border: var(--cyan-soft);
-  --primary-rgb: 0, 255, 255;
+  /* Ensures the label container doesn't collapse */
+  #header-secondary .item-session .Button--user .Button-label {
+    display: flex !important;
+  }
 
-  --discord-bg: rgba(88, 101, 242, 0.15);
-  --discord-border: rgba(88, 101, 242, 0.35);
-  --discord-color: var(--text);
 
-  --divider-color: var(--border);
-  --terms-bg: rgba(0, 255, 255, 0.08);
-  --terms-border: var(--cyan-soft);
-  --terms-text: var(--text);
 }
 
-/* Light mode overrides */
-html:not(.dark) {
-  --modal-bg: rgba(255, 255, 255, 0.95);
-  --modal-border: rgba(0, 0, 0, 0.1);
-  --modal-shadow: rgba(0, 0, 0, 0.15);
-  --modal-text: #222;
 
-  --input-bg: rgba(255, 255, 255, 0.9);
-  --input-border: rgba(0, 0, 0, 0.15);
-  --primary-bg: var(--cyan-soft);
-  --primary-border: rgba(0, 0, 0, 0.15);
+/* ===================================
+   HARLEYTG MODAL SYSTEM v4.1
+   Matches V4 Cyberpunk Cyan System
+   — Cleaned, no duplicates, no layout issues
+=================================== */
 
-  --discord-bg: rgba(88, 101, 242, 0.1);
-  --discord-border: rgba(88, 101, 242, 0.3);
-  --discord-color: #111;
-
-  --divider-color: rgba(0, 0, 0, 0.1);
-  --terms-bg: rgba(0, 255, 255, 0.05);
-  --terms-border: rgba(0, 0, 0, 0.1);
-  --terms-text: #111;
+/* ===================================
+   BACKDROP
+=================================== */
+.Modal-backdrop {
+  background: rgba(0, 0, 0, 0.75) !important;
 }
 
 /* ===================================
-   1. GLOBAL MODAL BASE
+   MODAL SHELL
 =================================== */
 .Modal-content {
-  background: var(--modal-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-radius: 14px;
-  border: 1px solid var(--modal-border);
-  box-shadow: 0 18px 45px var(--modal-shadow);
-  color: var(--modal-text);
+  background: rgba(10, 10, 15, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0, 255, 255, 0.25) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(0, 255, 255, 0.08) !important;
+  color: #e8e8e8 !important;
 }
 
+/* ===================================
+   HEADER / FOOTER
+=================================== */
 .Modal-header {
-  border-bottom: 1px solid var(--modal-border);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.15) !important;
+  padding: 16px 20px !important;
 }
 
 .Modal-footer {
-  border-top: 1px solid var(--modal-border);
-  text-align: center;
+  border-top: 1px solid rgba(0, 255, 255, 0.15) !important;
+  text-align: center !important;
+  padding: 12px 20px !important;
 }
 
-.Modal-title,
-.App-titleControl {
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  color: var(--modal-text);
+.Modal-footer a {
+  color: #00ffff !important;
+  font-weight: 600 !important;
 }
 
+.Modal-footer a:hover {
+  text-decoration: underline !important;
+}
+
+/* ===================================
+   TITLE
+=================================== */
+.Modal-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  letter-spacing: 0.4px !important;
+  color: #00ffff !important;
+}
+
+/* ===================================
+   CLOSE BUTTON
+=================================== */
 .Modal-close {
-  opacity: 0.7;
-  transition: all 0.2s ease;
+  opacity: 0.5 !important;
+  transition: all 0.2s ease !important;
 }
 
 .Modal-close:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.Modal-backdrop {
-  background: rgba(0,0,0,0.65);
+  opacity: 1 !important;
+  color: #00ffff !important;
+  transform: scale(1.1) !important;
 }
 
 /* ===================================
-   2. AUTH MODALS
+   MODAL BODY — flex order so inputs come first
 =================================== */
-.LogInModal .Modal-content,
-.SignUpModal .Modal-content,
-.ForgotPasswordModal .Modal-content {
-  border: 1px solid var(--primary-border);
-  box-shadow: 0 20px 50px var(--modal-shadow),
-              0 0 25px rgba(var(--primary-rgb),0.08);
-}
-
-.LogInModal .Modal-header,
-.SignUpModal .Modal-header,
-.ForgotPasswordModal .Modal-header {
-  border-bottom: 1px solid rgba(var(--primary-rgb),0.15);
-  padding: 16px 20px;
-}
-
-.LogInModal .App-titleControl,
-.SignUpModal .App-titleControl,
-.ForgotPasswordModal .App-titleControl {
-  font-size: 18px;
-  color: var(--primary-bg);
+.Modal-body {
+  padding: 20px !important;
 }
 
 .LogInModal .Modal-body,
-.SignUpModal .Modal-body,
-.ForgotPasswordModal .Modal-body {
-  padding: 20px;
+.SignUpModal .Modal-body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Input fields — top */
+.LogInModal .Modal-body .Form-group,
+.SignUpModal .Modal-body .Form-group {
+  order: 1 !important;
+}
+
+/* Submit button — after inputs */
+.LogInModal .Modal-body .Button--primary,
+.SignUpModal .Modal-body .Button--primary {
+  order: 2 !important;
+}
+
+/* OR divider + OAuth — last */
+.LogInModal .Modal-body .LogInButtons,
+.SignUpModal .Modal-body .LogInButtons {
+  order: 3 !important;
 }
 
 /* ===================================
-   3. INPUTS
+   INPUTS
 =================================== */
-.LogInModal .FormControl,
-.SignUpModal .FormControl,
-.ForgotPasswordModal .FormControl {
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--modal-text);
-  transition: all 0.25s ease;
+.Modal-content input.FormControl {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(0, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  color: #e8e8e8 !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.LogInModal .FormControl:focus,
-.SignUpModal .FormControl:focus,
-.ForgotPasswordModal .FormControl:focus {
-  border-color: var(--primary-bg);
-  box-shadow: 0 0 10px rgba(var(--primary-rgb),0.25);
-  background: var(--input-bg);
-  outline: none;
+.Modal-content input.FormControl:focus {
+  border-color: rgba(0, 255, 255, 0.55) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2) !important;
+  outline: none !important;
 }
 
 /* ===================================
-   4. PRIMARY BUTTONS
+   PRIMARY BUTTONS
 =================================== */
-.LogInModal .Button--primary,
-.SignUpModal .Button--primary,
-.ForgotPasswordModal .Button--primary {
-  border-radius: 10px;
-  font-weight: 600;
-  padding: 10px;
-  background: var(--primary-bg);
-  border: 1px solid var(--primary-border);
-  color: var(--modal-text);
-  transition: all 0.25s ease;
+.Modal-content .Button--primary {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 10px !important;
+  background: rgba(0, 255, 255, 0.12) !important;
+  border: 1px solid rgba(0, 255, 255, 0.35) !important;
+  color: #00ffff !important;
+  transition: background 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.LogInModal .Button--primary:hover,
-.SignUpModal .Button--primary:hover,
-.ForgotPasswordModal .Button--primary:hover {
-  background: var(--primary-bg);
-  color: var(--modal-text);
-  box-shadow: 0 0 12px rgba(var(--primary-rgb),0.4);
+.Modal-content .Button--primary .Button-label {
+  color: #00ffff !important;
+}
+
+.Modal-content .Button--primary:hover {
+  background: rgba(0, 255, 255, 0.22) !important;
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.35) !important;
 }
 
 /* ===================================
-   5. OR DIVIDER
+   OR DIVIDER
 =================================== */
+.LogInModal .LogInButtons,
+.SignUpModal .LogInButtons {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  margin-top: 8px !important;
+}
+
+/* Text with a simple bottom border line — no ::after needed */
 .LogInModal .LogInButtons::before,
 .SignUpModal .LogInButtons::before {
   content: "OR CONTINUE WITH";
@@ -1116,86 +1137,82 @@ html:not(.dark) {
   text-align: center;
   font-size: 11px;
   letter-spacing: 1.2px;
-  color: var(--divider-color);
+  color: rgba(255, 255, 255, 0.4);
+  padding-bottom: 12px;
   margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  width: 100%;
 }
 
+/* Remove ::after entirely */
 .LogInModal .LogInButtons::after,
 .SignUpModal .LogInButtons::after {
-  content: "";
-  display: block;
-  height: 1px;
-  margin: -16px 0 16px;
-  background: linear-gradient(to right, transparent, var(--divider-color), transparent);
+  display: none !important;
+  content: none !important;
 }
 
 /* ===================================
-   6. DISCORD BUTTON
+   OAUTH / DISCORD BUTTONS
 =================================== */
-.LogInModal .LogInButton--discord,
-.SignUpModal .LogInButton--discord {
-  width: 100%;
-  justify-content: center;
-  background: var(--discord-bg);
-  border: 1px solid var(--discord-border);
-  border-radius: 10px;
-  padding: 10px;
-  color: var(--discord-color);
-  transition: all 0.25s ease;
+.Modal-content .LogInButtonContainer .FoFLogInButton,
+.Modal-content .LogInButton--discord {
+  width: 100% !important;
+  justify-content: center !important;
+  background: rgba(88, 101, 242, 0.12) !important;
+  border: 1px solid rgba(88, 101, 242, 0.3) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  color: #e8e8e8 !important;
+  transition: background 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.LogInModal .LogInButton--discord:hover,
-.SignUpModal .LogInButton--discord:hover {
-  background: #5865F2;
-  color: #fff;
-  box-shadow: 0 0 15px rgba(88,101,242,0.4);
-  transform: translateY(-1px);
+.Modal-content .LogInButtonContainer .FoFLogInButton .Button-label,
+.Modal-content .LogInButton--discord .Button-label {
+  color: #e8e8e8 !important;
+}
+
+.Modal-content .LogInButtonContainer .FoFLogInButton:hover,
+.Modal-content .LogInButton--discord:hover {
+  background: #5865F2 !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(88, 101, 242, 0.45) !important;
+}
+
+.Modal-content .LogInButtonContainer .FoFLogInButton:hover .Button-label,
+.Modal-content .LogInButton--discord:hover .Button-label {
+  color: #fff !important;
 }
 
 /* ===================================
-   7. TERMS BOX
+   TERMS BOX
 =================================== */
 .SignUpModal .FoF-Terms-SignUp-Legal {
-  font-size: 13px;
-  line-height: 1.4;
-  background: var(--terms-bg);
-  border: 1px solid var(--terms-border);
-  border-left: 3px solid var(--primary-bg);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--terms-text);
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  background: rgba(0, 255, 255, 0.05) !important;
+  border: 1px solid rgba(0, 255, 255, 0.2) !important;
+  border-left: 3px solid #00ffff !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  color: #e8e8e8 !important;
 }
 
 /* ===================================
-   8. CHECKBOX
+   CHECKBOX
 =================================== */
-.LogInModal .checkbox,
-.SignUpModal .checkbox {
-  font-size: 13px;
+.Modal-content .checkbox {
+  font-size: 13px !important;
 }
 
-.LogInModal .checkbox input,
-.SignUpModal .checkbox input {
-  accent-color: var(--primary-bg);
-}
-
-/* ===================================
-   9. FOOTER LINKS
-=================================== */
-.LogInModal .Modal-footer a,
-.SignUpModal .Modal-footer a {
-  color: var(--primary-bg);
-}
-
-.LogInModal .Modal-footer a:hover,
-.SignUpModal .Modal-footer a:hover {
-  text-decoration: underline;
+.Modal-content .checkbox input {
+  accent-color: #00ffff !important;
 }
 
 /* ===================================
-   10. SMALL POLISH
+   HELP TEXT
 =================================== */
 .Modal .helpText {
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
+  font-size: 13px !important;
+  color: #e8e8e8 !important;
+  opacity: 0.6 !important;
 }
