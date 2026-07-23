@@ -206,7 +206,7 @@
 =================================== */
 
 .backgrwb {
-  position: fixed !important;
+  position: absolute !important;
   background: color-mix(in srgb, var(--body-bg, #191919) 85%, transparent) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
