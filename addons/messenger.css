@@ -56,7 +56,7 @@ li.startConvo {
     color: #7b7b7b !important;
 }
 li.startConvo::before {
-    content: "\";
+    content: "\";
     font-family: 'Font Awesome 6 Brands';
     margin: 4px;
 }
@@ -89,7 +89,7 @@ vertical-align: middle;
     background: transparent !important;
 }
 div#people-list::before {
-    content: "\";
+    content: "\";
     font-family: 'Font Awesome 6 Brands';
     margin: 4% 6%;
     font-size: 180%;
@@ -122,7 +122,7 @@ form.chat-message.clearfix {
         padding: 5px;
     }
 .fa-comment-alt::before {
-    content: "\" !important;
+    content: "\" !important;
     font-size: larger;
     font-family: 'Font Awesome 6 Brands';
 }
