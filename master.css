@@ -1,11 +1,22 @@
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
 
+
+/* NOTE: @main tracks the default branch — consider pinning to a tag/commit for stability. */
+
 /* ===================================
    Harley's Clan Forum Custom CSS V4
    Full Theme (Light + Dark)
-   Version: 4.6
+
+   Version: 4.5 (Animations + boot loader + flip-phone fixes + light-mode username fix + header username dark-mode fix)
    Author: HarleyTG
-   Updated: 2026-07-23 (UTC)
+   Updated: 2026-07-22 (UTC)
+
+   Dark mode note: this forum's dark mode (FoF NightMode) swaps in a
+   separate stylesheet rather than toggling a .dark class on <html>.
+   Theming below therefore uses Flarum's live CSS variables
+   (--body-bg, --body-color, --control-bg, --control-border,
+   --primary-color, --muted-color), which the dark stylesheet redefines
+   automatically, instead of html.dark / html:not(.dark) selectors.
 =================================== */
 
 :root {
@@ -17,6 +28,8 @@
   --border: rgba(255, 255, 255, 0.12);
   --shadow: rgba(0, 0, 0, 0.35);
   --btn-text: #1a1a1a;
+  /* Cyan blended toward the live body text color — stays legible on both
+     light and dark backgrounds, unlike raw neon cyan on white. */
   --cyan-readable: color-mix(in srgb, var(--cyan) 65%, var(--body-color, #1a1a1a) 35%);
 }
 
@@ -63,19 +76,8 @@
   font-weight: 600;
 }
 
-@media (max-width: 500px) {
-  .Header-title {
-    font-size: 20px;
-  }
-
-  .Header-title::before {
-    width: 36px;
-    height: 36px;
-  }
-}
-
 /* ===================================
-   ALERTS
+   ALERT
 =================================== */
 .Alert {
   display: flex;
@@ -163,7 +165,8 @@
 }
 
 /* ===================================
-   ANIMATIONS
+   ENTRANCE ANIMATIONS (modals, dropdown, file card)
+   Modal backdrop reuses fadeIn above.
 =================================== */
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(10px) scale(0.98); }
@@ -181,8 +184,20 @@
 }
 
 /* ===================================
-   LOGOUT BUTTON
+   RESPONSIVE
 =================================== */
+@media (max-width: 500px) {
+  .Header-title {
+    font-size: 20px;
+  }
+
+  .Header-title::before {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Logout button */
 .item-logOut button {
   color: #ff4d4d !important;
 }
@@ -200,184 +215,7 @@
   color: #ff6b6b !important;
 }
 
-/* ===================================
-   USER CARDS - REDESIGNED
-   Username top-left, icons top-right, menu in corner
-=================================== */
-
-.backgrwb {
-  position: absolute !important;
-  background: color-mix(in srgb, var(--body-bg, #191919) 85%, transparent) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
-  border-radius: 12px !important;
-  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
-  animation: dropdownIn 0.25s ease !important;
-  width: 320px !important;
-  z-index: 9999 !important;
-  overflow: visible !important;
-}
-
-.containerwb {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
-}
-
-.backgrwb .ulwb li {
-  list-style: none !important;
-  padding: 16px !important;
-  background: rgba(0, 255, 255, 0.08) !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(0, 255, 255, 0.15) !important;
-  display: grid !important;
-  grid-template-columns: auto 1fr auto !important;
-  grid-template-rows: auto auto !important;
-  gap: 8px 12px !important;
-  align-items: start !important;
-  transition: all 0.2s ease !important;
-  animation: cardIn 0.35s ease both !important;
-}
-
-.backgrwb .ulwb li:hover {
-  background: rgba(0, 255, 255, 0.12) !important;
-  border-color: rgba(0, 255, 255, 0.3) !important;
-  transform: translateY(-2px) !important;
-}
-
-.backgrwb .avatarwb {
-  grid-column: 1 !important;
-  grid-row: 1 / 3 !important;
-  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4)) !important;
-  transition: all 0.3s ease !important;
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: 50% !important;
-  flex-shrink: 0 !important;
-}
-
-.backgrwb .avatarwb:hover {
-  transform: scale(1.05) !important;
-  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.5)) !important;
-}
-
-.backgrwb .ulwb li label.textinfo,
-.backgrwb .ulwb li strong.textinfo {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  color: var(--body-color) !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  transition: all 0.2s ease !important;
-}
-
-.backgrwb .ulwb li strong .username {
-  color: var(--cyan-readable) !important;
-  display: block !important;
-}
-
-.backgrwb .ulwb li strong {
-  grid-column: 2 !important;
-  grid-row: 2 !important;
-  font-size: 12px !important;
-  color: var(--muted-color) !important;
-  transition: all 0.2s ease !important;
-}
-
-.backgrwb .ulwb li .item-menu,
-.backgrwb .ulwb li button[aria-label*="menu"],
-.backgrwb .ulwb li button[aria-label*="options"],
-.backgrwb .ulwb li .Button:last-child {
-  grid-column: 3 !important;
-  grid-row: 1 !important;
-  justify-self: end !important;
-  align-self: start !important;
-  width: 36px !important;
-  height: 36px !important;
-  padding: 6px !important;
-  background: rgba(0, 255, 255, 0.1) !important;
-  border: 1px solid rgba(0, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  color: var(--cyan-readable) !important;
-  cursor: pointer !important;
-  transition: all 0.25s ease !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 16px !important;
-}
-
-.backgrwb .ulwb li .item-menu:hover,
-.backgrwb .ulwb li button[aria-label*="menu"]:hover,
-.backgrwb .ulwb li button[aria-label*="options"]:hover,
-.backgrwb .ulwb li .Button:last-child:hover {
-  background: rgba(0, 255, 255, 0.2) !important;
-  border-color: rgba(0, 255, 255, 0.4) !important;
-  transform: scale(1.08) !important;
-}
-
-.backgrwb .iconbadge .Badge {
-  transition: all 0.3s ease !important;
-  background: rgba(0, 255, 255, 0.15) !important;
-  color: var(--cyan-readable) !important;
-  border: 1px solid rgba(0, 255, 255, 0.3) !important;
-  border-radius: 6px !important;
-  padding: 2px 6px !important;
-  font-size: 10px !important;
-}
-
-.backgrwb .iconbadge .Badge:hover {
-  transform: scale(1.1) !important;
-  background: rgba(0, 255, 255, 0.25) !important;
-}
-
-.backgrwb.backgrwb.backgrwb .circletop a i {
-  color: var(--body-color) !important;
-  transition: all 0.3s ease !important;
-  font-size: 16px !important;
-}
-
-.backgrwb .circletop a:hover i,
-.backgrwb .circletop a:focus-visible i {
-  color: var(--cyan-readable) !important;
-  transform: scale(1.2) translateY(-3px) !important;
-}
-
-.backgrwb .AvatarEditor .Dropdown-menu {
-  background: color-mix(in srgb, var(--body-bg, #121212) 92%, black 8%) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.35)) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
-  animation: dropdownIn 0.2s ease !important;
-  position: fixed !important;
-  z-index: 10000 !important;
-}
-
-.backgrwb .AvatarEditor .Dropdown-menu li button {
-  color: var(--body-color, #e8e8e8) !important;
-}
-
-.backgrwb .AvatarEditor .Dropdown-menu li button:hover {
-  background: color-mix(in srgb, var(--cyan) 15%, transparent) !important;
-  color: var(--cyan-readable) !important;
-  transform: translateX(5px) !important;
-  transition: all 0.3s ease !important;
-}
-
-.backgrwb.backgrwb.backgrwb .ulwb li,
-.backgrwb.backgrwb.backgrwb .contentwb .textinfo,
-.backgrwb.backgrwb.backgrwb .textinfo {
-  color: var(--body-color) !important;
-  transition: all 0.2s ease !important;
-}
-
-.backgrwb.backgrwb .contentwb .textinfo strong .username,
-.backgrwb.backgrwb .username {
-  color: var(--cyan-readable) !important;
-}
-
+/* Logout icon in the profile dropdown */
 .backgrwb .logoutt,
 .backgrwb button.logwbox .Button-icon {
   color: #ff4d4d !important;
@@ -401,8 +239,126 @@
   transform: translateY(-2px) !important;
 }
 
+/* Profile dropdown */
+.backgrwb {
+  background: color-mix(in srgb, var(--body-bg, #191919) 85%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.containerwb {
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu {
+  background: color-mix(in srgb, var(--body-bg, #121212) 92%, black 8%) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.35)) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+  animation: dropdownIn 0.2s ease !important;
+}
+
+.backgrwb .circletop a {
+  transition: all 0.3s ease !important;
+}
+
+/* FIX: these icons (settings/profile/mentions/discussions) only had a
+   color set on :hover — at rest they fall back to the extension's own
+   default (white), invisible on a light card. */
+.backgrwb.backgrwb.backgrwb .circletop a i {
+  color: var(--body-color) !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .circletop a:hover i,
+.backgrwb .circletop a:focus-visible i {
+  color: var(--cyan-readable) !important;
+  transform: scale(1.2) translateY(-3px) !important;
+}
+
+/* FIX: "Welcome back," and the Posts/Discussions/Last Visit stats were
+   still invisible on light backgrounds even after adding !important —
+   this widget's markup/styling comes from a separate extension bundling
+   its own CSS (confirmed: messenger.css, imported above, only styles the
+   chat/messenger feature and never touches .backgrwb/.textinfo/.ulwb at
+   all), and that extension's own rule apparently matches with equal-or-
+   higher specificity, so a plain !important tie can still go either way
+   depending on load order. Selectors below repeat .backgrwb and match the
+   full DOM path (contentwb/ulwb > li > label|strong.textinfo) to push
+   specificity decisively higher, so this wins outright rather than on a
+   coin-flip tie. */
+.backgrwb.backgrwb.backgrwb .ulwb li,
+.backgrwb.backgrwb.backgrwb .ulwb li label.textinfo,
+.backgrwb.backgrwb.backgrwb .ulwb li strong.textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+.backgrwb .ulwb li:hover {
+  transform: translateX(5px) !important;
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb.backgrwb.backgrwb .contentwb .textinfo,
+.backgrwb.backgrwb.backgrwb .textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* FIX: markup is <strong><span class="username">...</span></strong> — the
+   class lives on the span, so "strong.username" never matched and the
+   username fell back to the imported stylesheet's hardcoded light color,
+   going invisible on a light background.
+   This still lost to a rule inside the imported messenger.css even with
+   !important, because that rule's selector has equal-or-higher specificity
+   and @import content is inserted BEFORE our rules — so on a pure
+   specificity tie the import doesn't automatically lose, whichever
+   selector is more specific wins outright. Fix: match the real DOM path
+   (.backgrwb .contentwb .textinfo strong .username) and double the
+   .backgrwb class to push specificity above anything reasonable the
+   import could have. */
+.backgrwb.backgrwb .contentwb .textinfo strong .username,
+.backgrwb.backgrwb .username {
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb .avatarwb {
+  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .avatarwb:hover {
+  transform: scale(1.02) !important;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.backgrwb .iconbadge .Badge {
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .iconbadge .Badge:hover {
+  transform: scale(1.2) !important;
+}
+
+/* FIX: Upload/Remove buttons in the avatar dropdown had no base text color,
+   only a hover color — so they were invisible-on-light until hovered. */
+.backgrwb .AvatarEditor .Dropdown-menu li button {
+  color: var(--body-color, #e8e8e8) !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu li button:hover {
+  background: color-mix(in srgb, var(--cyan) 15%, transparent) !important;
+  color: var(--cyan-readable) !important;
+  transform: translateX(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
 /* ===================================
-   PROFILE BUTTON
+   PROFILE BUTTON (item-session)
 =================================== */
 li.item-session .Dropdown-toggle.Button--user {
   background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 200, 255, 0.05)) !important;
@@ -435,6 +391,17 @@ li.item-session .Dropdown-toggle.Button--user .Avatar {
 li.item-session .Dropdown-toggle.Button--user .username {
   font-weight: 600 !important;
   font-size: 14px !important;
+}
+
+/* FIX: header username used plain var(--body-color), which NightMode's
+   dark stylesheet defines as a muted gray for general body text — legible,
+   but flat compared to the avatar-dropdown card's username (which already
+   uses --cyan-readable). Switched to --cyan-readable so both username
+   instances match in light and dark mode. html.dark override removed
+   since it's dead code under NightMode's stylesheet-swap approach (see
+   dark-mode note at the top of the file) and is now superseded by the
+   live-variable rule below anyway. */
+li.item-session .Dropdown-toggle.Button--user .username {
   color: var(--cyan-readable) !important;
 }
 
@@ -456,16 +423,7 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   #header-secondary .item-session .Button--user {
     padding: 3px 8px 3px 3px !important;
   }
-
-  #header-secondary .item-session .username {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  #header-secondary .item-session .Button--user .Button-label {
-    display: flex !important;
-  }
+  /* Username text is restored on mobile — see "MOBILE PROFILE" below. */
 }
 
 /* ===================================
@@ -492,6 +450,8 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 .item-signUp .Button:hover {
   background: var(--control-bg-hover, rgba(0,0,0,0.08));
   border-color: var(--accent);
+  /* Plain shadow first for engines without color-mix() support; the
+     color-mix() line overrides it where supported. */
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
   transform: translateY(-1px);
@@ -514,7 +474,7 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 }
 
 /* ===================================
-   LOGIN HELP TOOLTIP
+   LOGIN HELP TOOLTIP ( ? ICON )
 =================================== */
 .LogInModal .Modal-header,
 .SignUpModal .Modal-header {
@@ -566,6 +526,8 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   transition: all 0.2s ease;
 }
 
+/* :has() enhances desktop proximity-hover; the plain :hover rules are the
+   fallback for engines without :has() support. */
 @media (hover: hover) {
   .LogInModal .Modal-header:hover::after,
   .SignUpModal .Modal-header:hover::after {
@@ -582,6 +544,7 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   }
 }
 
+/* Keyboard-focus equivalent of the hover reveal above. */
 .LogInModal .Modal-header:focus-within::after,
 .SignUpModal .Modal-header:focus-within::after {
   background: rgba(0,255,255,0.2);
@@ -600,7 +563,7 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 }
 
 /* ===================================
-   SIGNUP LEGAL NOTICE
+   SIGNUP MODAL LEGAL NOTICE
 =================================== */
 .FoF-Terms-SignUp-Legal.Alert {
     position: relative;
@@ -629,6 +592,21 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 .FoF-Terms-SignUp-Legal.Alert:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===================================
+   MOBILE PROFILE: RESTORE USERNAME TEXT
+=================================== */
+@media (max-width: 700px) {
+  #header-secondary .item-session .username {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  #header-secondary .item-session .Button--user .Button-label {
+    display: flex !important;
+  }
 }
 
 /* ===================================
@@ -700,7 +678,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   transition: all 0.2s ease !important;
   color: var(--body-color) !important;
 }
-
 .Modal-close:hover {
   opacity: 1 !important;
   color: var(--primary-color) !important;
@@ -855,13 +832,16 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 }
 
 /* ===================================
-   FILE CARDS
+   FILE CARD — YouTube-style thumbnail, download only.
+   height:0 + padding-bottom:56.25% is a 16:9 fallback for engines without
+   aspect-ratio support; @supports hands off to aspect-ratio where available.
 =================================== */
 .Post-body .wrapper {
   position: relative !important;
   width: 100% !important;
   max-width: 360px !important;
-  height: auto !important;
+  height: 0 !important;
+  padding-bottom: 56.25% !important;
   aspect-ratio: 16 / 9 !important;
   border-radius: 16px !important;
   overflow: hidden !important;
@@ -871,6 +851,13 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
   animation: cardIn 0.35s ease both !important;
+}
+
+@supports (aspect-ratio: 16 / 9) {
+  .Post-body .wrapper {
+    height: auto !important;
+    padding-bottom: 0 !important;
+  }
 }
 
 .Post-body .wrapper:hover {
@@ -886,7 +873,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   transition: background 0.25s ease;
   z-index: 1;
 }
-
 .Post-body .wrapper:hover::before {
   background: rgba(0,0,0,0.4);
 }
@@ -916,13 +902,14 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   align-items: flex-end !important;
   justify-content: flex-end !important;
 }
-
 .Post-body .wrapper .data .content {
   display: flex !important;
   justify-content: flex-end !important;
   width: 100% !important;
 }
 
+/* Download button — icon-only pill, hidden until hover/focus. Always
+   visible below 500px since touch devices have no true hover state. */
 .Post-body .wrapper .data .Button--primary {
   background: rgba(0,0,0,0.65) !important;
   backdrop-filter: blur(8px) !important;
@@ -960,13 +947,11 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   box-shadow: 0 0 14px rgba(0,184,240,0.5) !important;
   transform: scale(1.08) !important;
 }
-
 .Post-body .wrapper .data .Button--primary i {
   font-size: 14px !important;
   color: #fff !important;
   display: block !important;
 }
-
 .Post-body .wrapper .data .Button--primary .Button-label {
   display: none !important;
 }
@@ -979,10 +964,707 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   }
 }
 
+/* Hides thread titles too — intentional, global scope. */
 a[data-tag="H4"] {
   font-size: 0 !important;
 }
 
 .catalog-top {
   display: none !important;
+}
+
+/* ===================================
+   SMALL-SCREEN SAFETY NET (~176–320px)
+=================================== */
+@media (max-width: 360px) {
+  /* FIX (flip phones showing only a thin bar, no thumbnail content):
+     the @supports(aspect-ratio) block above switches to
+     height:auto/padding-bottom:0 whenever a browser reports aspect-ratio
+     support — but several flip-phone / feature-phone browsers pass that
+     check without actually sizing the box from aspect-ratio, especially
+     since the visible content inside is position:absolute and contributes
+     no intrinsic height. The wrapper then collapses to ~0 height and only
+     the bottom .data gradient bar (also position:absolute) is visible.
+     Force the old padding-bottom fallback unconditionally at this width,
+     disable aspect-ratio so it can't fight it, and add a hard min-height
+     floor in case percentage padding also misbehaves on that browser. */
+  .Post-body .wrapper {
+    max-width: 100% !important;
+    height: 0 !important;
+    padding-bottom: 56.25% !important;
+    aspect-ratio: unset !important;
+    min-height: 110px !important;
+  }
+
+  .Modal-content {
+    width: 94vw !important;
+    max-width: 94vw !important;
+    margin: 0 auto !important;
+  }
+
+  .LogInModal .Modal-header::before,
+  .SignUpModal .Modal-header::before {
+    width: 80vw !important;
+    max-width: 260px !important;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY: REDUCED MOTION
+=================================== */
+@media (prefers-reduced-motion: reduce) {
+  .Alert,
+  .backgrwb,
+  .backgrwb .AvatarEditor .Dropdown-menu,
+  .Modal-backdrop,
+  .Modal-content,
+  .Post-body .wrapper,
+  #flarum-loading,
+  #flarum-loading::before {
+    animation: none !important;
+  }
+}
+/* ===================================
+   HERO / WELCOME BANNER — slim/modern + logo
+   For:
+   <div class="containerNarrow">
+     <h2 class="Hero-title">...</h2>
+     <div class="Hero-subtitle">...</div>
+   </div>
+=================================== */
+
+.containerNarrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+  margin: 14px auto;
+  padding: 0 12px 8px;
+  text-align: center;
+  animation: heroFadeIn 0.35s ease;
+}
+
+/* HTG logo, stacked above the title via flex order (no HTML change needed). */
+.containerNarrow::before {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  background: url('https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png') center/cover no-repeat;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.Hero-title {
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 6px 0;
+  padding-bottom: 8px;
+  letter-spacing: 0.1px;
+  /* Gradient text with a slow, subtle shimmer. */
+  background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: heroShimmer 6s linear infinite;
+}
+
+/* Thin gradient underline accent instead of a heavy card/box. */
+.Hero-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan-readable, #00ffff), transparent);
+}
+
+.Hero-subtitle {
+  color: var(--body-color, #1a1a1a);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  white-space: pre-line;
+  opacity: 0.75;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroShimmer {
+  to { background-position: -200% center; }
+}
+
+@media (max-width: 500px) {
+  .containerNarrow {
+    margin: 10px auto;
+    padding: 0 10px 6px;
+  }
+
+  .containerNarrow::before {
+    width: 28px;
+    height: 28px;
+  }
+
+  .Hero-title {
+    font-size: 18px;
+  }
+
+  .Hero-subtitle {
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .containerNarrow,
+  .Hero-title {
+    animation: none !important;
+  }
+
+  .Hero-title {
+    background-position: 0% center !important;
+  }
+}
+
+/* ===================================
+   Harley's Clan Forum — USER DIRECTORY
+   "Access Roster" terminal/HUD theme for /users
+
+   Author: HarleyTG (assisted)
+   Version: 1.2
+   Created: 2026-07-22 (UTC)
+   Updated: 2026-07-22 (UTC) — added Dropdown-menu fill + explicit
+   card item placement (see the two new sections below, inserted
+   after CARD CONTROLS BUTTON and before ACCESSIBILITY), then a
+   stacking-context/z-index fix so the card list can't paint over an
+   open toolbar dropdown
+
+   DEPENDS ON the main HCF v4.5 stylesheet being loaded on the same page —
+   this file uses the :root variables defined there (--cyan, --cyan-soft,
+   --cyan-readable, --control-bg, --control-border, --body-bg, --body-color,
+   --muted-color, --primary-color). Fallback values are included on every
+   var() so this still degrades gracefully if pasted somewhere those
+   variables don't exist, but colors will be plain cyan rather than the
+   theme-blended readable version.
+
+   Class names below were pulled directly from the fof/user-directory
+   source (resources/less/components/{toolbar,list,SearchFiled,
+   UserDirectoryHero}.less) and Flarum core's UserCard.less — not guessed.
+   If your installed version of fof/user-directory has since renamed any
+   of these classes, the affected rule(s) simply won't match (harmless),
+   but flag it and I'll adjust.
+
+   KNOWN BLOCKER (found while building this): forum.harleytg.com is
+   currently serving its no-JS fallback HTML instead of booting the real
+   app ("Something went wrong while trying to load the full version of
+   this site"). None of this CSS will visibly apply until that JS boot
+   issue is fixed — this file is ready to go once it is.
+=================================== */
+
+/* -----------------------------------
+   HERO BANNER
+----------------------------------- */
+.Hero.UserDirectoryHero {
+  position: relative;
+  overflow: hidden;
+}
+
+.Hero.UserDirectoryHero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.05) 0px,
+      rgba(0, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  pointer-events: none;
+}
+
+.Hero.UserDirectoryHero {
+  border-bottom: 1px solid var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.08);
+}
+
+/* -----------------------------------
+   TOOLBAR (search / sort / group filter)
+----------------------------------- */
+.User--directory .IndexPage-toolbar {
+  padding: 10px 0 16px;
+  /* FIX: cards further down the page were painting on top of an open
+     Sort By / Filter Groups dropdown. The card entrance animation ends
+     on a "translateY(0)" transform (not the literal keyword none), and
+     a lingering non-none transform value keeps each card in its own
+     stacking context indefinitely — not just while animating. Giving
+     the toolbar an explicit, higher-numbered stacking context of its
+     own means nothing inside the card list below it can ever paint
+     over it or its dropdown children, regardless of what stacking
+     contexts the cards create internally. */
+  position: relative;
+  z-index: 20;
+}
+
+.UserDirectorySearchInput {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  border-radius: 30px !important;
+  padding: 6px 16px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.UserDirectorySearchInput:focus-within {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 12px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectorySearchInput input {
+  color: var(--body-color, #e8e8e8) !important;
+}
+
+.UserDirectorySearchInput .LoadingIndicator {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+}
+
+.UserDirectorySearchLabel {
+  background: color-mix(in srgb, var(--cyan, #00ffff) 15%, var(--control-bg, transparent)) !important;
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  border: 1px solid var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectorySearchKind {
+  color: var(--muted-color, #aaa);
+}
+
+/* Sort / filter buttons — pill style matching login/signup buttons */
+.User--directory .IndexPage-toolbar .Button,
+.item-filterGroups .ButtonGroup button {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 0, 0, 0.15)) !important;
+  border-radius: 30px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.User--directory .IndexPage-toolbar .Button:hover,
+.item-filterGroups .ButtonGroup button:hover {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 10px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transform: translateY(-1px);
+}
+
+.GroupFilterButton .ButtonCheck {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+}
+
+/* -----------------------------------
+   USER LIST ENTRANCE ANIMATION
+----------------------------------- */
+@keyframes hcfDirCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.UserDirectoryList-users {
+  padding-top: 4px;
+}
+
+.UserDirectoryList-users > .User {
+  animation: hcfDirCardIn 0.4s ease both;
+}
+
+/* Stagger the first ~12 cards so the list "populates" like a HUD roster.
+   Cards beyond nth-child(12) just use the base 0.4s entrance with no
+   extra delay — still animates, just without the cascade. */
+.UserDirectoryList-users > .User:nth-child(1)  { animation-delay: 0.02s; }
+.UserDirectoryList-users > .User:nth-child(2)  { animation-delay: 0.06s; }
+.UserDirectoryList-users > .User:nth-child(3)  { animation-delay: 0.10s; }
+.UserDirectoryList-users > .User:nth-child(4)  { animation-delay: 0.14s; }
+.UserDirectoryList-users > .User:nth-child(5)  { animation-delay: 0.18s; }
+.UserDirectoryList-users > .User:nth-child(6)  { animation-delay: 0.22s; }
+.UserDirectoryList-users > .User:nth-child(7)  { animation-delay: 0.26s; }
+.UserDirectoryList-users > .User:nth-child(8)  { animation-delay: 0.30s; }
+.UserDirectoryList-users > .User:nth-child(9)  { animation-delay: 0.34s; }
+.UserDirectoryList-users > .User:nth-child(10) { animation-delay: 0.38s; }
+.UserDirectoryList-users > .User:nth-child(11) { animation-delay: 0.42s; }
+.UserDirectoryList-users > .User:nth-child(12) { animation-delay: 0.46s; }
+
+/* -----------------------------------
+   USER CARD — glass ID-badge / HUD terminal look
+   Covers both full cards (.UserCard--directory) and the compact
+   grid mode (.UserCard--small, enabled via the "Use small cards"
+   setting in fof/user-directory's admin settings).
+----------------------------------- */
+.UserDirectoryList .UserCard--directory,
+.UserDirectoryList .UserCard--small {
+  position: relative;
+  border-radius: 14px !important;
+  overflow: hidden;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.2));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.UserDirectoryList .UserCard--directory:hover,
+.UserDirectoryList .UserCard--small:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan-readable, var(--cyan, #00ffff));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 18px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+/* Tint the darkening overlay (core adds this over the user's cover photo
+   for text legibility) cyan instead of flat black, so it matches the
+   theme instead of just going generic-dark. */
+.UserDirectoryList .UserCard--directory .darkenBackground,
+.UserDirectoryList .UserCard--small .darkenBackground {
+  background: linear-gradient(135deg, rgba(0, 25, 30, 0.75), rgba(0, 0, 0, 0.55)) !important;
+}
+
+/* Corner HUD brackets — hidden by default, sweep into view on hover.
+   Single pseudo-element, 8 background layers (2 per corner: one
+   horizontal stroke, one vertical stroke) forming 4 L-shaped brackets. */
+.UserDirectoryList .UserCard--directory::before,
+.UserDirectoryList .UserCard--small::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background:
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 0 / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 0 / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 0 / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 0 / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 100% / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 100% / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 100% / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 100% / 2px 14px no-repeat;
+  background-color: transparent;
+  z-index: 2;
+}
+
+.UserDirectoryList .UserCard--directory:hover::before,
+.UserDirectoryList .UserCard--small:hover::before {
+  opacity: 0.85;
+}
+
+/* Username — cyan glow to match the rest of the theme, scoped strictly
+   to the directory so it doesn't touch usernames elsewhere on the forum. */
+.UserDirectoryList .username {
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 8px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+/* Avatar — cyan ring instead of the default white border */
+.UserDirectoryList .UserCard-avatar .Avatar {
+  border: 3px solid var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 14px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.UserDirectoryList .UserCard--directory:hover .UserCard-avatar .Avatar,
+.UserDirectoryList .UserCard--small:hover .UserCard-avatar .Avatar {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--cyan-soft, rgba(0, 255, 255, 0.5));
+}
+
+/* Badges — small glowing chips */
+.UserDirectoryList .UserCard-badges .Badge {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.UserDirectoryList .UserCard-badges .Badge:hover {
+  transform: scale(1.15);
+}
+
+/* Stat items (posts, discussions, last seen) — quiet monospace-ish chip
+   feel, cyan icons */
+.UserDirectoryList .UserCard-info {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.UserDirectoryList .UserCard-info .icon {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+  margin-right: 4px;
+}
+
+/* Online status — pulsing "live" blip instead of a static dot */
+@keyframes hcfOnlinePulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px currentColor); }
+  50% { opacity: 0.55; filter: drop-shadow(0 0 8px currentColor); }
+}
+
+.UserDirectoryList .UserCard-lastSeen.online .icon {
+  animation: hcfOnlinePulse 1.8s ease-in-out infinite;
+}
+
+/* Load more — glass pill button matching login/signup style */
+.UserDirectoryList-loadMore .Button {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 0, 0, 0.15)) !important;
+  border-radius: 30px !important;
+  padding: 8px 20px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.UserDirectoryList-loadMore .Button:hover {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 12px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transform: translateY(-1px);
+}
+
+/* -----------------------------------
+   BIGGER CARDS + BIGGER BADGES (small-cards grid mode)
+   Default fof/user-directory grid is a hard repeat(4)/(3)/(2)/(1) column
+   count. Swapped for auto-fill so cards size themselves up and the grid
+   just reflows — bigger cards without picking new breakpoints by hand.
+----------------------------------- */
+.UserDirectoryList.UserDirectoryList--small-cards .UserDirectoryList-users {
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important;
+  grid-gap: 14px !important;
+}
+
+.UserDirectoryList .UserCard--small .container {
+  padding: 16px !important;
+  /* Reserve fixed room above the avatar/name for the badge row (see
+     below) so 1-badge and 3-badge cards line up the same either way,
+     instead of badges overlapping the avatar when there's more than one. */
+  padding-top: 38px !important;
+}
+
+/* FIX: core positions .UserCard-badges as a single absolute-positioned
+   row (top:0, left:8px) sized for exactly one 18px badge, but only at
+   tablet-up (min-width: 768px) — below that it deliberately switches to
+   inline/centered flow instead. Scoped this override to the same
+   768px breakpoint so it stops fighting that narrower layout (an
+   earlier version of this rule applied everywhere and was dumping
+   badges directly on top of the avatar below 768px). With badges bumped
+   up to 26px, and users who have 2-3 badges, they'd otherwise spill
+   sideways into the avatar/username — so let them wrap onto a second
+   row instead, dropped down slightly to sit inside the reserved
+   padding-top above rather than pinned to the card's very edge. */
+@media (min-width: 768px) {
+  .UserDirectoryList .UserCard--small .UserCard-badges {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    right: 8px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin: 0 !important;
+  }
+}
+
+.UserDirectoryList .UserCard--small .UserCard-avatar .Avatar {
+  width: 48px !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  font-size: 20px !important;
+}
+
+.UserDirectoryList .UserCard--small .username {
+  font-size: 18px !important;
+}
+
+/* Core's small-card badge icons default to 18x18px — sized up so they
+   read clearly instead of as tiny dots. */
+.UserDirectoryList .UserCard--small .UserCard-badges .Badge {
+  width: 26px !important;
+  height: 26px !important;
+  line-height: 24px !important;
+}
+
+.UserDirectoryList .UserCard--small .UserCard-badges .Badge-icon {
+  font-size: 13px !important;
+}
+
+/* -----------------------------------
+   CARD CONTROLS BUTTON (⋮ kebab menu)
+   FIX: .Dropdown-toggle here had no color set at rest, only inheriting
+   whatever's behind it — invisible depending on the card's background.
+   Pinned to a solid white icon on a dark glass circle so it reads on
+   any card, with a cyan hover state matching the rest of the theme.
+----------------------------------- */
+.UserDirectoryList .UserCard-controls .Dropdown-toggle {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.UserDirectoryList .UserCard-controls .Dropdown-toggle:hover {
+  background: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 0 10px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectoryList .UserCard-controls .Dropdown-toggle .Button-icon,
+.UserDirectoryList .UserCard-controls .Dropdown-toggle .Button-caret {
+  color: inherit !important;
+}
+
+/* -----------------------------------
+   NEW — TOOLBAR DROPDOWN MENU (fill/background)
+
+   The "Sort By" control (and any other <Dropdown> instance in the
+   toolbar) renders as two separate pieces: a toggle button, and a
+   popup <ul class="Dropdown-menu"> that Flarum shows/hides on click.
+   The toggle button already carries Flarum's own .Button class, so it
+   was already picking up the pill styling above — but the popup menu
+   itself had no background, border, or item styling defined anywhere
+   in this file, so it had nothing to "fill" it in and was falling back
+   to whatever sat behind it (usually just plain white/browser default,
+   which is why it read as not showing up against the dark theme).
+
+   NOTE: the group filter (.item-filterGroups) is a ButtonGroup, not a
+   Dropdown, and is already covered further up — this section is only
+   for actual popup-menu-style dropdowns (Sort By being the main one).
+----------------------------------- */
+.User--directory .IndexPage-toolbar .Dropdown-menu {
+  background: var(--body-bg, #14181c) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25));
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 14px var(--cyan-soft, rgba(0, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000 !important;
+}
+
+/* Belt-and-braces companion to the toolbar z-index above: explicitly
+   pins the whole card list to a low, known stacking context so no card
+   (animated or not) can ever outrank the toolbar's z-index: 20. */
+.UserDirectoryList,
+.UserDirectoryList-users {
+  position: relative;
+  z-index: 1;
+}
+
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > a,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > button {
+  color: var(--body-color, #e8e8e8) !important;
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > a:hover,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > button:hover,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li.active > a,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li.active > button {
+  background: color-mix(in srgb, var(--cyan, #00ffff) 15%, transparent) !important;
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+}
+
+/* -----------------------------------
+   NEW — EXPLICIT ITEM PLACEMENT (profile cards, small-cards mode)
+
+   Everything above styles the *appearance* of each piece (avatar ring,
+   username glow, badge chips, stat icons) but never explicitly says
+   where each piece sits relative to the others — that was left to
+   whatever order/flow fof/user-directory's markup happens to output.
+   This section pins it down: avatar → username → stats, centered,
+   in a fixed column, with the badges row and controls button anchored
+   to fixed corners so they can't drift or overlap as content changes.
+
+   If your actual card markup nests things differently than assumed
+   here (e.g. UserCard-info wraps the avatar+username together rather
+   than sitting below them), the `order` values are what to adjust —
+   right-click a card → Inspect once the site is rendering the real
+   app, and match these selectors up to what's actually there.
+----------------------------------- */
+.UserDirectoryList .UserCard--small .container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 6px !important;
+}
+
+.UserDirectoryList .UserCard--small .UserCard-avatar {
+  order: 1;
+  margin-top: 6px;
+}
+
+.UserDirectoryList .UserCard--small .username {
+  order: 2;
+}
+
+.UserDirectoryList .UserCard--small .UserCard-info {
+  order: 3;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin-top: 2px;
+}
+
+/* Kebab menu — anchored bottom-right of the card, out of the way of
+   the centered avatar/username/stats column above. */
+.UserDirectoryList .UserCard-controls {
+  position: absolute !important;
+  bottom: 8px;
+  right: 8px;
+  z-index: 3;
+}
+
+/* -----------------------------------
+   ACCESSIBILITY: REDUCED MOTION
+----------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .UserDirectoryList-users > .User {
+    animation: none !important;
+  }
+
+  .UserDirectoryList .UserCard--directory,
+  .UserDirectoryList .UserCard--small,
+  .UserDirectoryList .UserCard-avatar .Avatar,
+  .UserDirectoryList-loadMore .Button,
+  .User--directory .IndexPage-toolbar .Button,
+  .item-filterGroups .ButtonGroup button {
+    transition: none !important;
+  }
+
+  /* Keep the HUD brackets visible at rest rather than relying on a
+     hover fade, since hover-only reveal is itself a motion cue. */
+  .UserDirectoryList .UserCard--directory::before,
+  .UserDirectoryList .UserCard--small::before {
+    opacity: 0.6;
+    transition: none !important;
+  }
+
+  .UserDirectoryList .UserCard-lastSeen.online .icon {
+    animation: none !important;
+  }
 }
