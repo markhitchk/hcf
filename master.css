@@ -1,4 +1,4 @@
-
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
 
 
 /* NOTE: @main tracks the default branch — consider pinning to a tag/commit for stability. */
@@ -1133,5 +1133,542 @@ a[data-tag="H4"] {
 
   .Hero-title {
     background-position: 0% center !important;
+  }
+}
+
+/* ===================================
+   Harley's Clan Forum — USER DIRECTORY
+   "Access Roster" terminal/HUD theme for /users
+
+   Author: HarleyTG (assisted)
+   Version: 1.2
+   Created: 2026-07-22 (UTC)
+   Updated: 2026-07-22 (UTC) — added Dropdown-menu fill + explicit
+   card item placement (see the two new sections below, inserted
+   after CARD CONTROLS BUTTON and before ACCESSIBILITY), then a
+   stacking-context/z-index fix so the card list can't paint over an
+   open toolbar dropdown
+
+   DEPENDS ON the main HCF v4.5 stylesheet being loaded on the same page —
+   this file uses the :root variables defined there (--cyan, --cyan-soft,
+   --cyan-readable, --control-bg, --control-border, --body-bg, --body-color,
+   --muted-color, --primary-color). Fallback values are included on every
+   var() so this still degrades gracefully if pasted somewhere those
+   variables don't exist, but colors will be plain cyan rather than the
+   theme-blended readable version.
+
+   Class names below were pulled directly from the fof/user-directory
+   source (resources/less/components/{toolbar,list,SearchFiled,
+   UserDirectoryHero}.less) and Flarum core's UserCard.less — not guessed.
+   If your installed version of fof/user-directory has since renamed any
+   of these classes, the affected rule(s) simply won't match (harmless),
+   but flag it and I'll adjust.
+
+   KNOWN BLOCKER (found while building this): forum.harleytg.com is
+   currently serving its no-JS fallback HTML instead of booting the real
+   app ("Something went wrong while trying to load the full version of
+   this site"). None of this CSS will visibly apply until that JS boot
+   issue is fixed — this file is ready to go once it is.
+=================================== */
+
+/* -----------------------------------
+   HERO BANNER
+----------------------------------- */
+.Hero.UserDirectoryHero {
+  position: relative;
+  overflow: hidden;
+}
+
+.Hero.UserDirectoryHero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.05) 0px,
+      rgba(0, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  pointer-events: none;
+}
+
+.Hero.UserDirectoryHero {
+  border-bottom: 1px solid var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.08);
+}
+
+/* -----------------------------------
+   TOOLBAR (search / sort / group filter)
+----------------------------------- */
+.User--directory .IndexPage-toolbar {
+  padding: 10px 0 16px;
+  /* FIX: cards further down the page were painting on top of an open
+     Sort By / Filter Groups dropdown. The card entrance animation ends
+     on a "translateY(0)" transform (not the literal keyword none), and
+     a lingering non-none transform value keeps each card in its own
+     stacking context indefinitely — not just while animating. Giving
+     the toolbar an explicit, higher-numbered stacking context of its
+     own means nothing inside the card list below it can ever paint
+     over it or its dropdown children, regardless of what stacking
+     contexts the cards create internally. */
+  position: relative;
+  z-index: 20;
+}
+
+.UserDirectorySearchInput {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  border-radius: 30px !important;
+  padding: 6px 16px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.UserDirectorySearchInput:focus-within {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 12px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectorySearchInput input {
+  color: var(--body-color, #e8e8e8) !important;
+}
+
+.UserDirectorySearchInput .LoadingIndicator {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+}
+
+.UserDirectorySearchLabel {
+  background: color-mix(in srgb, var(--cyan, #00ffff) 15%, var(--control-bg, transparent)) !important;
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  border: 1px solid var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectorySearchKind {
+  color: var(--muted-color, #aaa);
+}
+
+/* Sort / filter buttons — pill style matching login/signup buttons */
+.User--directory .IndexPage-toolbar .Button,
+.item-filterGroups .ButtonGroup button {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 0, 0, 0.15)) !important;
+  border-radius: 30px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.User--directory .IndexPage-toolbar .Button:hover,
+.item-filterGroups .ButtonGroup button:hover {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 10px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transform: translateY(-1px);
+}
+
+.GroupFilterButton .ButtonCheck {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+}
+
+/* -----------------------------------
+   USER LIST ENTRANCE ANIMATION
+----------------------------------- */
+@keyframes hcfDirCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.UserDirectoryList-users {
+  padding-top: 4px;
+}
+
+.UserDirectoryList-users > .User {
+  animation: hcfDirCardIn 0.4s ease both;
+}
+
+/* Stagger the first ~12 cards so the list "populates" like a HUD roster.
+   Cards beyond nth-child(12) just use the base 0.4s entrance with no
+   extra delay — still animates, just without the cascade. */
+.UserDirectoryList-users > .User:nth-child(1)  { animation-delay: 0.02s; }
+.UserDirectoryList-users > .User:nth-child(2)  { animation-delay: 0.06s; }
+.UserDirectoryList-users > .User:nth-child(3)  { animation-delay: 0.10s; }
+.UserDirectoryList-users > .User:nth-child(4)  { animation-delay: 0.14s; }
+.UserDirectoryList-users > .User:nth-child(5)  { animation-delay: 0.18s; }
+.UserDirectoryList-users > .User:nth-child(6)  { animation-delay: 0.22s; }
+.UserDirectoryList-users > .User:nth-child(7)  { animation-delay: 0.26s; }
+.UserDirectoryList-users > .User:nth-child(8)  { animation-delay: 0.30s; }
+.UserDirectoryList-users > .User:nth-child(9)  { animation-delay: 0.34s; }
+.UserDirectoryList-users > .User:nth-child(10) { animation-delay: 0.38s; }
+.UserDirectoryList-users > .User:nth-child(11) { animation-delay: 0.42s; }
+.UserDirectoryList-users > .User:nth-child(12) { animation-delay: 0.46s; }
+
+/* -----------------------------------
+   USER CARD — glass ID-badge / HUD terminal look
+   Covers both full cards (.UserCard--directory) and the compact
+   grid mode (.UserCard--small, enabled via the "Use small cards"
+   setting in fof/user-directory's admin settings).
+----------------------------------- */
+.UserDirectoryList .UserCard--directory,
+.UserDirectoryList .UserCard--small {
+  position: relative;
+  border-radius: 14px !important;
+  overflow: hidden;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.2));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.UserDirectoryList .UserCard--directory:hover,
+.UserDirectoryList .UserCard--small:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan-readable, var(--cyan, #00ffff));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 18px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+/* Tint the darkening overlay (core adds this over the user's cover photo
+   for text legibility) cyan instead of flat black, so it matches the
+   theme instead of just going generic-dark. */
+.UserDirectoryList .UserCard--directory .darkenBackground,
+.UserDirectoryList .UserCard--small .darkenBackground {
+  background: linear-gradient(135deg, rgba(0, 25, 30, 0.75), rgba(0, 0, 0, 0.55)) !important;
+}
+
+/* Corner HUD brackets — hidden by default, sweep into view on hover.
+   Single pseudo-element, 8 background layers (2 per corner: one
+   horizontal stroke, one vertical stroke) forming 4 L-shaped brackets. */
+.UserDirectoryList .UserCard--directory::before,
+.UserDirectoryList .UserCard--small::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background:
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 0 / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 0 / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 0 / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 0 / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 100% / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 0 100% / 2px 14px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 100% / 14px 2px no-repeat,
+    linear-gradient(var(--cyan, #00ffff), var(--cyan, #00ffff)) 100% 100% / 2px 14px no-repeat;
+  background-color: transparent;
+  z-index: 2;
+}
+
+.UserDirectoryList .UserCard--directory:hover::before,
+.UserDirectoryList .UserCard--small:hover::before {
+  opacity: 0.85;
+}
+
+/* Username — cyan glow to match the rest of the theme, scoped strictly
+   to the directory so it doesn't touch usernames elsewhere on the forum. */
+.UserDirectoryList .username {
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 8px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+/* Avatar — cyan ring instead of the default white border */
+.UserDirectoryList .UserCard-avatar .Avatar {
+  border: 3px solid var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 14px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.UserDirectoryList .UserCard--directory:hover .UserCard-avatar .Avatar,
+.UserDirectoryList .UserCard--small:hover .UserCard-avatar .Avatar {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--cyan-soft, rgba(0, 255, 255, 0.5));
+}
+
+/* Badges — small glowing chips */
+.UserDirectoryList .UserCard-badges .Badge {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.UserDirectoryList .UserCard-badges .Badge:hover {
+  transform: scale(1.15);
+}
+
+/* Stat items (posts, discussions, last seen) — quiet monospace-ish chip
+   feel, cyan icons */
+.UserDirectoryList .UserCard-info {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.UserDirectoryList .UserCard-info .icon {
+  color: var(--cyan-readable, var(--cyan, #00ffff));
+  margin-right: 4px;
+}
+
+/* Online status — pulsing "live" blip instead of a static dot */
+@keyframes hcfOnlinePulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px currentColor); }
+  50% { opacity: 0.55; filter: drop-shadow(0 0 8px currentColor); }
+}
+
+.UserDirectoryList .UserCard-lastSeen.online .icon {
+  animation: hcfOnlinePulse 1.8s ease-in-out infinite;
+}
+
+/* Load more — glass pill button matching login/signup style */
+.UserDirectoryList-loadMore .Button {
+  background: var(--control-bg, rgba(0, 0, 0, 0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0, 0, 0, 0.15)) !important;
+  border-radius: 30px !important;
+  padding: 8px 20px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.UserDirectoryList-loadMore .Button:hover {
+  border-color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  box-shadow: 0 0 12px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+  transform: translateY(-1px);
+}
+
+/* -----------------------------------
+   BIGGER CARDS + BIGGER BADGES (small-cards grid mode)
+   Default fof/user-directory grid is a hard repeat(4)/(3)/(2)/(1) column
+   count. Swapped for auto-fill so cards size themselves up and the grid
+   just reflows — bigger cards without picking new breakpoints by hand.
+----------------------------------- */
+.UserDirectoryList.UserDirectoryList--small-cards .UserDirectoryList-users {
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important;
+  grid-gap: 14px !important;
+}
+
+.UserDirectoryList .UserCard--small .container {
+  padding: 16px !important;
+  /* Reserve fixed room above the avatar/name for the badge row (see
+     below) so 1-badge and 3-badge cards line up the same either way,
+     instead of badges overlapping the avatar when there's more than one. */
+  padding-top: 38px !important;
+}
+
+/* FIX: core positions .UserCard-badges as a single absolute-positioned
+   row (top:0, left:8px) sized for exactly one 18px badge, but only at
+   tablet-up (min-width: 768px) — below that it deliberately switches to
+   inline/centered flow instead. Scoped this override to the same
+   768px breakpoint so it stops fighting that narrower layout (an
+   earlier version of this rule applied everywhere and was dumping
+   badges directly on top of the avatar below 768px). With badges bumped
+   up to 26px, and users who have 2-3 badges, they'd otherwise spill
+   sideways into the avatar/username — so let them wrap onto a second
+   row instead, dropped down slightly to sit inside the reserved
+   padding-top above rather than pinned to the card's very edge. */
+@media (min-width: 768px) {
+  .UserDirectoryList .UserCard--small .UserCard-badges {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    right: 8px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin: 0 !important;
+  }
+}
+
+.UserDirectoryList .UserCard--small .UserCard-avatar .Avatar {
+  width: 48px !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  font-size: 20px !important;
+}
+
+.UserDirectoryList .UserCard--small .username {
+  font-size: 18px !important;
+}
+
+/* Core's small-card badge icons default to 18x18px — sized up so they
+   read clearly instead of as tiny dots. */
+.UserDirectoryList .UserCard--small .UserCard-badges .Badge {
+  width: 26px !important;
+  height: 26px !important;
+  line-height: 24px !important;
+}
+
+.UserDirectoryList .UserCard--small .UserCard-badges .Badge-icon {
+  font-size: 13px !important;
+}
+
+/* -----------------------------------
+   CARD CONTROLS BUTTON (⋮ kebab menu)
+   FIX: .Dropdown-toggle here had no color set at rest, only inheriting
+   whatever's behind it — invisible depending on the card's background.
+   Pinned to a solid white icon on a dark glass circle so it reads on
+   any card, with a cyan hover state matching the rest of the theme.
+----------------------------------- */
+.UserDirectoryList .UserCard-controls .Dropdown-toggle {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.UserDirectoryList .UserCard-controls .Dropdown-toggle:hover {
+  background: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 0 10px var(--cyan-soft, rgba(0, 255, 255, 0.35));
+}
+
+.UserDirectoryList .UserCard-controls .Dropdown-toggle .Button-icon,
+.UserDirectoryList .UserCard-controls .Dropdown-toggle .Button-caret {
+  color: inherit !important;
+}
+
+/* -----------------------------------
+   NEW — TOOLBAR DROPDOWN MENU (fill/background)
+
+   The "Sort By" control (and any other <Dropdown> instance in the
+   toolbar) renders as two separate pieces: a toggle button, and a
+   popup <ul class="Dropdown-menu"> that Flarum shows/hides on click.
+   The toggle button already carries Flarum's own .Button class, so it
+   was already picking up the pill styling above — but the popup menu
+   itself had no background, border, or item styling defined anywhere
+   in this file, so it had nothing to "fill" it in and was falling back
+   to whatever sat behind it (usually just plain white/browser default,
+   which is why it read as not showing up against the dark theme).
+
+   NOTE: the group filter (.item-filterGroups) is a ButtonGroup, not a
+   Dropdown, and is already covered further up — this section is only
+   for actual popup-menu-style dropdowns (Sort By being the main one).
+----------------------------------- */
+.User--directory .IndexPage-toolbar .Dropdown-menu {
+  background: var(--body-bg, #14181c) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25));
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 14px var(--cyan-soft, rgba(0, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000 !important;
+}
+
+/* Belt-and-braces companion to the toolbar z-index above: explicitly
+   pins the whole card list to a low, known stacking context so no card
+   (animated or not) can ever outrank the toolbar's z-index: 20. */
+.UserDirectoryList,
+.UserDirectoryList-users {
+  position: relative;
+  z-index: 1;
+}
+
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > a,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > button {
+  color: var(--body-color, #e8e8e8) !important;
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > a:hover,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li > button:hover,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li.active > a,
+.User--directory .IndexPage-toolbar .Dropdown-menu > li.active > button {
+  background: color-mix(in srgb, var(--cyan, #00ffff) 15%, transparent) !important;
+  color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+}
+
+/* -----------------------------------
+   EXPLICIT ITEM PLACEMENT
+----------------------------------- */
+.UserDirectoryList .UserCard,
+.UserDirectoryList .UserCard--directory,
+.UserDirectoryList .UserCard--small {
+  position: relative !important;
+}
+
+.UserDirectoryList .UserCard .container,
+.UserDirectoryList .UserCard--directory .container,
+.UserDirectoryList .UserCard--small .container {
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  text-align:center !important;
+  gap:6px !important;
+  padding:40px 16px 44px !important;
+}
+
+.UserDirectoryList .UserCard .UserCard-avatar,
+.UserDirectoryList .UserCard--directory .UserCard-avatar,
+.UserDirectoryList .UserCard--small .UserCard-avatar {order:1!important;margin-top:6px!important;}
+
+.UserDirectoryList .UserCard .username,
+.UserDirectoryList .UserCard--directory .username,
+.UserDirectoryList .UserCard--small .username {order:2!important;}
+
+.UserDirectoryList .UserCard .UserCard-info,
+.UserDirectoryList .UserCard--directory .UserCard-info,
+.UserDirectoryList .UserCard--small .UserCard-info{
+order:3!important;display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:10px!important;margin-top:2px!important;
+}
+
+.UserDirectoryList .UserCard .UserCard-badges,
+.UserDirectoryList .UserCard--directory .UserCard-badges,
+.UserDirectoryList .UserCard--small .UserCard-badges{
+position:absolute!important;top:8px!important;left:8px!important;right:42px!important;display:flex!important;flex-wrap:wrap!important;gap:4px!important;margin:0!important;z-index:5!important;
+}
+
+.UserDirectoryList .UserCard .UserCard-controls,
+.UserDirectoryList .UserCard--directory .UserCard-controls,
+.UserDirectoryList .UserCard--small .UserCard-controls,
+.UserDirectoryList .UserCard-controls{
+position:absolute!important;
+inset:auto 8px 8px auto!important;
+top:auto!important;left:auto!important;right:8px!important;bottom:8px!important;
+margin:0!important;transform:none!important;z-index:1000!important;
+}
+
+.UserDirectoryList .UserCard-controls>*,
+.UserDirectoryList .UserCard-controls .Dropdown{
+position:static!important;
+margin:0!important;
+}
+
+/* -----------------------------------
+   ACCESSIBILITY: REDUCED MOTION
+----------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .UserDirectoryList-users > .User {
+    animation: none !important;
+  }
+
+  .UserDirectoryList .UserCard--directory,
+  .UserDirectoryList .UserCard--small,
+  .UserDirectoryList .UserCard-avatar .Avatar,
+  .UserDirectoryList-loadMore .Button,
+  .User--directory .IndexPage-toolbar .Button,
+  .item-filterGroups .ButtonGroup button {
+    transition: none !important;
+  }
+
+  /* Keep the HUD brackets visible at rest rather than relying on a
+     hover fade, since hover-only reveal is itself a motion cue. */
+  .UserDirectoryList .UserCard--directory::before,
+  .UserDirectoryList .UserCard--small::before {
+    opacity: 0.6;
+    transition: none !important;
+  }
+
+  .UserDirectoryList .UserCard-lastSeen.online .icon {
+    animation: none !important;
   }
 }
