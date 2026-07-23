@@ -1,0 +1,323 @@
+/* ===================================
+   Harley's Clan Forum — Admin Panel Theme
+   Companion to the front-end Custom CSS (cyan/glass theme)
+
+   Version: 1.0
+   Author: HarleyTG
+   Updated: 2026-07-19 (UTC)
+
+   Notes:
+   - Uses Flarum admin's own LESS variables where available
+     (@config-dark-mode) so this adapts to light/dark automatically,
+     the same way the front-end file leans on Flarum's live CSS vars.
+   - Kept scoped to admin-only selectors (.App-nav .AdminNav, .Extension*,
+     admin .Modal-content, etc.) so nothing here leaks onto the forum.
+=================================== */
+
+:root {
+  --htg-cyan: #00ffff;
+  --htg-cyan-soft: rgba(0, 255, 255, 0.35);
+  --htg-glass-dark: rgba(20, 20, 20, 0.72);
+  --htg-glass-light: rgba(255, 255, 255, 0.72);
+  --htg-border: rgba(0, 255, 255, 0.22);
+  --htg-shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* ===================================
+   SHARED KEYFRAMES
+=================================== */
+@keyframes htg-fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes htg-shimmer {
+  to { background-position: -200% center; }
+}
+
+@keyframes htg-pulseGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 255, 0.25); }
+  50% { box-shadow: 0 0 18px rgba(0, 255, 255, 0.45); }
+}
+
+/* ===================================
+   ADMIN HEADER
+=================================== */
+.AdminHeader {
+  background: transparent !important;
+  transition: border-radius 0.6s ease;
+}
+
+.AdminHeader h2 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: htg-shimmer 6s linear infinite;
+}
+
+.AdminHeader-description {
+  text-align: center;
+  opacity: 0.75;
+}
+
+/* ===================================
+   ADMIN SIDE NAV
+=================================== */
+.App-nav .AdminNav .Dropdown-menu {
+  border-radius: 16px !important;
+  background: var(--htg-glass-dark) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid var(--htg-border) !important;
+  box-shadow: 0 10px 30px var(--htg-shadow) !important;
+  animation: htg-fadeIn 0.3s ease;
+}
+
+body when (@config-dark-mode = false) {
+  .App-nav .AdminNav .Dropdown-menu {
+    background: var(--htg-glass-light) !important;
+    color: #1a1a1a;
+  }
+}
+
+.App-nav .AdminNav .Dropdown-menu > li > a {
+  border-radius: 10px !important;
+  margin: 3px 8px;
+  transition: all 0.25s ease;
+}
+
+.App-nav .AdminNav .Dropdown-menu > li > a:hover {
+  background: rgba(0, 255, 255, 0.12) !important;
+  transform: translateX(4px);
+}
+
+.App-nav .AdminNav .Dropdown-menu > li.active > a {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.18), rgba(0, 200, 255, 0.06)) !important;
+  border-left: 3px solid var(--htg-cyan) !important;
+  color: var(--htg-cyan) !important;
+  font-weight: 600;
+}
+
+.App-nav .AdminNav .Dropdown-menu > li .Button-icon {
+  color: var(--htg-cyan) !important;
+  transition: transform 0.25s ease;
+}
+
+.App-nav .AdminNav .Dropdown-menu > li > a:hover .Button-icon {
+  transform: scale(1.15);
+}
+
+.App-nav .AdminNav .Dropdown-menu > li .SearchBar {
+  border-radius: 30px !important;
+  border: 1px solid var(--htg-border) !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===================================
+   ADMIN CONTENT PANEL
+=================================== */
+div#content {
+  border-radius: 20px !important;
+  background: var(--htg-glass-dark) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 15px 40px var(--htg-shadow) !important;
+  border: 1px solid var(--htg-border) !important;
+}
+
+body when (@config-dark-mode = false) {
+  div#content {
+    background: var(--htg-glass-light) !important;
+    color: #1a1a1a;
+  }
+}
+
+.App-content .container {
+  padding: 0 24px;
+  border-radius: 16px;
+}
+
+/* ===================================
+   EXTENSION LIST / CARDS
+=================================== */
+.ExtensionList-Category,
+.Widget,
+.ExtensionsWidget {
+  border-radius: 16px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid var(--htg-border) !important;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.ExtensionListTitle {
+  color: var(--htg-cyan);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.ExtensionIcon {
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 2px var(--htg-border), 0 0 12px rgba(0, 255, 255, 0.25);
+}
+
+.ExtensionListItem-Dot.enabled {
+  background: var(--htg-cyan) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+  animation: htg-pulseGlow 2.4s ease-in-out infinite;
+}
+
+.ExtensionListItem-Dot.disabled {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.ExtensionPage-header {
+  border-radius: 16px;
+  text-align: -webkit-center;
+}
+
+.ExtensionPage-header h2 {
+  color: var(--htg-cyan) !important;
+  font-weight: 600;
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+.Button {
+  border-radius: 30px !important;
+  transition: all 0.25s ease !important;
+}
+
+.Button--primary {
+  background: linear-gradient(135deg, var(--htg-cyan), #00b8f0) !important;
+  color: #0a0a0a !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.Button--primary:hover {
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+/* ===================================
+   FORM CONTROLS
+=================================== */
+.FormControl {
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid var(--htg-border) !important;
+  color: inherit !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.FormControl:focus {
+  border-color: var(--htg-cyan) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.25) !important;
+  outline: none !important;
+}
+
+.Checkbox-display {
+  border-radius: 6px !important;
+}
+
+/* ===================================
+   MODALS (admin-scoped)
+=================================== */
+.App .Modal-content {
+  border-radius: 18px !important;
+  background: var(--htg-glass-dark) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--htg-border) !important;
+  box-shadow: 0 12px 40px var(--htg-shadow) !important;
+  animation: htg-fadeIn 0.25s ease !important;
+}
+
+body when (@config-dark-mode = false) {
+  .App .Modal-content {
+    background: var(--htg-glass-light) !important;
+    color: #1a1a1a;
+  }
+}
+
+.App .Modal-header {
+  border-bottom: 1px solid var(--htg-border) !important;
+  background: transparent !important;
+}
+
+.App .Modal-header h3 {
+  color: var(--htg-cyan) !important;
+  font-weight: 700 !important;
+}
+
+.App .Modal-footer {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-top: 1px solid var(--htg-border) !important;
+}
+
+/* ===================================
+   ALERTS (admin toast)
+=================================== */
+.AlertManager .Alert {
+  border-radius: 14px !important;
+  background: var(--htg-glass-dark) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--htg-border) !important;
+  border-left: 4px solid var(--htg-cyan) !important;
+  box-shadow: 0 6px 20px var(--htg-shadow) !important;
+  animation: htg-fadeIn 0.3s ease;
+}
+
+/* ===================================
+   STATISTICS / DASHBOARD WIDGETS
+=================================== */
+.StatisticsWidget-title {
+  background: rgba(0, 255, 255, 0.1) !important;
+  color: var(--htg-cyan) !important;
+  border-radius: 12px 12px 0 0;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.DashboardPage,
+.PermissionsPage-groups {
+  background: transparent !important;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 767px) {
+  .App {
+    padding: 8px;
+  }
+
+  div#content {
+    border-radius: 16px !important;
+  }
+
+  .AdminHeader h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY: REDUCED MOTION
+=================================== */
+@media (prefers-reduced-motion: reduce) {
+  .AdminHeader h2,
+  .App-nav .AdminNav .Dropdown-menu,
+  .App .Modal-content,
+  .AlertManager .Alert,
+  .ExtensionListItem-Dot.enabled {
+    animation: none !important;
+  }
+}

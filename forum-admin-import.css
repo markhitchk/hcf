@@ -1,0 +1,20 @@
+/* ===================================
+   IMPORT MANAGER: Forum + Admin Panel
+   
+   This file ensures the correct load order for the forum admin panel:
+   1. master.css (core theme) — must load FIRST
+   2. admin.css (admin panel styles) — second
+   3. messenger.css (addon, optional) — last
+   
+   Loading messenger BEFORE master breaks master.css.
+   This manager prevents that by explicit import order.
+=================================== */
+
+/* Core theme — ALWAYS LOAD FIRST */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/master.css");
+
+/* Admin panel system theme */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/system/admin.css");
+
+/* Optional: Messenger addon (uncomment to enable) */
+/* @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css"); */
