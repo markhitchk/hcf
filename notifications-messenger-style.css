@@ -1,8 +1,8 @@
 /* ===================================
    NOTIFICATIONS — matched to messenger.css
-   (translucent #262626-toned gray with blur, same
-   rgba + blur(10px) pattern messenger.css uses on
-   .ConversationsList — 30px radius, white text,
+   (verbatim rgba(0,0,0,0.75) + blur(10px) — the exact
+   values messenger.css itself uses on .ConversationsList,
+   not an approximation — 30px radius, white text,
    muted opacity)
 
    Drop this in alongside messenger.css. The old
@@ -22,7 +22,7 @@
 }
 
 .NotificationList {
-    background: rgba(38, 38, 38, 0.75) !important;
+    background: rgba(0, 0, 0, 0.75) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 30px !important;
