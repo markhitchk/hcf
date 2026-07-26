@@ -8,18 +8,25 @@ This repo powers the custom styling for **[Harley's Clan Forum](https://forum.ha
 
 ```
 core/
-├── master.css         # Main theme stylesheet (glassmorphism, animations, layout)
-├── main.css           # Utilities and helpers
-└── (future) drawer.css  # Forum-specific drawer/sidebar styles (when ready)
+└── master.css                          # Main theme stylesheet (glassmorphism, animations, layout)
 
 system/
-└── admin.css          # Admin panel theme (isolated from forum)
+└── admin.css                           # Admin panel theme (isolated from forum)
 
 addons/
-└── messenger.css      # Private messages addon (optional plugin)
+├── messenger.css                       # Private messages addon (optional plugin)
+└── notifications-messenger-style.css   # Messenger-style notifications dropdown
+
+footer/
+└── footer.html                         # Custom forum footer (identity, IP, clocks)
+
+FoF HTML Errors/
+├── 403.html                            # Forbidden error page
+├── 404.html                            # Not Found error page
+├── 500.html                            # Internal Server Error page
+└── 503.html                            # Service Unavailable / maintenance page
 
 README.md
-forum-admin-import.css  # Master import file for forum + admin panel combo
 ```
 
 ## 🚀 Usage
@@ -35,19 +42,23 @@ forum-admin-import.css  # Master import file for forum + admin panel combo
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css" />
 ```
 
+### Messenger-Style Notifications
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css" />
+```
+
 ### Admin Panel Only
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/system/admin.css" />
 ```
 
-### Forum + Admin Panel (Correct Order)
-Use `forum-admin-import.css` which ensures master.css loads before admin.css:
+**Load order matters:** always load `core/master.css` first, then addons — if an addon loads before master.css, it can override critical styles.
 
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/forum-admin-import.css" />
-```
+### Footer
+Paste the contents of `footer/footer.html` into the forum's custom footer (Administration → Appearance → Custom Footer).
 
-**Why this order matters:** If messenger addon loads before master.css, it can override critical styles. The import manager ensures core styles are always established first.
+### Error Pages
+The pages in `FoF HTML Errors/` are standalone HTML error pages (403, 404, 500, 503) for the FoF error pages setup — serve each file for its matching HTTP status code.
 
 ## 🎨 Features
 
@@ -62,13 +73,19 @@ Use `forum-admin-import.css` which ensures master.css loads before admin.css:
 
 ### Core Files
 - **master.css** — Main theme; includes header, alerts, modals, buttons, profile dropdown, login/signup, file cards, and responsive design
-- **main.css** — Utility styles and helpers (planned expansion)
 
 ### System (Admin)
 - **admin.css** — Flarum admin panel theme; scoped to admin-only selectors to avoid leaking onto the forum
 
 ### Addons
 - **messenger.css** — Private messages styling; optional plugin that enhances the messaging interface
+- **notifications-messenger-style.css** — Styles the notifications dropdown to match the messenger look
+
+### Footer
+- **footer.html** — Harley's Clan footer with back-to-top button, brand block, and a terminal-style panel (identity, click-to-reveal IP, UTC/local clocks); all data processed locally in the browser
+
+### FoF HTML Errors
+- **403.html / 404.html / 500.html / 503.html** — Standalone branded error pages with animated logo and Back to Home / Get Support buttons
 
 ## 🛠️ Customization
 
@@ -109,4 +126,4 @@ Bugs, suggestions, or improvements? Open an issue or submit a PR.
 
 **Version:** 4.6  
 **Author:** HarleyTG  
-**Last Updated:** 2026-07-23 (UTC)
+**Last Updated:** 2026-07-26 (UTC)
