@@ -1,0 +1,19 @@
+/* ===================================
+   IMPORT MANAGER: Forum (Admin Panel Disabled)
+
+   This file ensures the correct load order for the forum:
+   1. master.css (core theme) — must load FIRST
+   2. Addons (messenger, notifications) — last
+
+   Loading addons BEFORE master breaks master.css.
+   This manager prevents that by explicit import order.
+
+   The admin panel theme (system/admin.css) is NOT included.
+=================================== */
+
+/* Core theme — ALWAYS LOAD FIRST */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/master.css");
+
+/* Addons */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css");
