@@ -1,4 +1,5 @@
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css");
 
 /* ===================================
    Harley's Clan Forum Custom CSS V4
@@ -6,7 +7,7 @@
    Glassmorphic theme: frosted glass, cyan accents, smooth
    animations, light/dark mode, KaiOS-safe fallbacks.
 
-   Version: 4.10
+   Version: 4.11
    Author: HarleyTG
    Updated: 2026-07-26 (UTC)
 
@@ -99,7 +100,7 @@
   gap: 10px;
   padding: 14px 44px 14px 20px;
   border-radius: 12px;
-  background: var(--body-bg);
+  background: var(--surface-translucent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: var(--body-color);
@@ -829,70 +830,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 
 .Modal-content .checkbox input {
   accent-color: var(--primary-color) !important;
-}
-
-/* ===================================
-   NOTIFICATIONS / FLAG LIST
-   Covers Flarum's stock .NotificationList (used here by the
-   flags extension's FlagList) so it reads as part of the same
-   glass/cyan system as .Alert, .backgrwb and .Modal-content
-   rather than a plain default panel.
-=================================== */
-.NotificationList {
-  background: var(--surface-translucent) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
-  overflow: hidden !important;
-  animation: dropdownIn 0.25s ease !important;
-}
-
-.NotificationList-header {
-  padding: 14px 16px !important;
-  border-bottom: 1px solid var(--control-border, rgba(0, 255, 255, 0.2)) !important;
-  background: transparent !important;
-}
-
-.NotificationList-header .App-titleControl {
-  margin: 0 !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.3px !important;
-  color: var(--cyan-readable) !important;
-}
-
-.NotificationList-content {
-  padding: 4px 0 !important;
-  max-height: 360px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: transparent !important;
-}
-
-.NotificationGroup-content {
-  list-style: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.NotificationList-empty {
-  padding: 28px 16px !important;
-  text-align: center !important;
-  font-size: 13px !important;
-  color: var(--muted-color, rgba(232, 232, 232, 0.6)) !important;
-}
-
-/* Small "all clear" glyph so the empty state doesn't read as a
-   bare, unstyled div — same pattern as the ⚠ on the signup legal
-   notice elsewhere in this file. */
-.NotificationList-empty::before {
-  content: "✓";
-  display: block;
-  font-size: 20px;
-  margin-bottom: 6px;
-  color: var(--cyan-readable);
 }
 
 /* ===================================
