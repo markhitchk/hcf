@@ -1,39 +1,44 @@
-/* NOTE: @main tracks the default branch — consider pinning to a tag/commit for stability. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
 
 /* ===================================
    Harley's Clan Forum Custom CSS V4
-   
-   A modern, glassmorphic theme with smooth animations,
-   cyan accents, and full light/dark mode support.
-   
-   Version: 4.6
+
+   Glassmorphic theme: frosted glass, cyan accents, smooth
+   animations, light/dark mode, KaiOS-safe fallbacks.
+
+   Version: 4.10
    Author: HarleyTG
-   Updated: 2026-07-23 (UTC)
-   
-   Features:
-   • Frosted glass effects with backdrop blur
-   • Cyan color scheme with readable blends
-   • Smooth entrance animations
-   • Full accessibility support (reduced motion)
-   • Responsive design for all screen sizes
-   • Native dark mode (FoF NightMode compatible)
-   
-   Color System:
-   Uses Flarum's live CSS variables (--body-bg, --body-color,
-   --control-bg, --control-border, --primary-color, --muted-color)
-   which automatically adjust for light/dark mode.
+   Updated: 2026-07-26 (UTC)
+
 =================================== */
 
 :root {
   --cyan: #00ffff;
-  --cyan-soft: rgba(0, 255, 255, 0.35);
-  --glass-bg: rgba(25, 25, 25, 0.9);
   --text: #e8e8e8;
-  --accent: #00ffff;
-  --border: rgba(255, 255, 255, 0.12);
-  --shadow: rgba(0, 0, 0, 0.35);
   --btn-text: #1a1a1a;
-  --cyan-readable: color-mix(in srgb, var(--cyan) 65%, var(--body-color, #1a1a1a) 35%);
+
+  /* Plain-color fallbacks — used as-is on browsers without
+     color-mix() (e.g. KaiOS/old Gecko). Upgraded below for
+     browsers that support it. */
+  --cyan-readable: var(--cyan);
+  --surface-translucent: rgba(20, 20, 20, 0.85);
+  --surface-translucent-strong: rgba(15, 15, 15, 0.92);
+  --cyan-tint-15: rgba(0, 255, 255, 0.15);
+  --cyan-glow-40: rgba(0, 255, 255, 0.4);
+  --cyan-glow-30: rgba(0, 255, 255, 0.3);
+  --primary-tint-15: rgba(0, 255, 255, 0.15);
+}
+
+@supports (background: color-mix(in srgb, red, blue)) {
+  :root {
+    --cyan-readable: color-mix(in srgb, var(--cyan) 80%, var(--body-color, #1a1a1a) 20%);
+    --surface-translucent: color-mix(in srgb, var(--body-bg, #191919) 85%, transparent);
+    --surface-translucent-strong: color-mix(in srgb, var(--body-bg, #121212) 92%, black 8%);
+    --cyan-tint-15: color-mix(in srgb, var(--cyan) 15%, transparent);
+    --cyan-glow-40: color-mix(in srgb, var(--cyan-readable) 40%, transparent);
+    --cyan-glow-30: color-mix(in srgb, var(--cyan-readable) 30%, transparent);
+    --primary-tint-15: color-mix(in srgb, var(--primary-color, var(--cyan-readable)) 15%, transparent);
+  }
 }
 
 /* ===================================
@@ -46,7 +51,7 @@
   font-size: 26px;
   font-weight: bold;
   color: var(--text);
-  text-shadow: 2px 2px 0 var(--accent);
+  text-shadow: 2px 2px 0 var(--cyan-readable);
 }
 
 .Header-title a {
@@ -54,7 +59,7 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--accent);
+  color: var(--cyan-readable);
   font-weight: 600;
 }
 
@@ -68,8 +73,12 @@
   flex-shrink: 0;
 }
 
+/* Kept hidden so it doesn't render on top of / next to the
+   ::before circular logo above. Flip to display:block if you
+   ever want to switch to Flarum's native logo instead of the
+   CSS pseudo-element one. */
 .Header-logo {
-  display: block !important;
+  display: none !important;
   max-height: 36px;
   width: auto;
 }
@@ -83,11 +92,12 @@
    ALERT
 =================================== */
 .Alert {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 14px 20px;
+  padding: 14px 44px 14px 20px;
   border-radius: 12px;
   background: var(--body-bg);
   backdrop-filter: blur(12px);
@@ -132,39 +142,49 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  margin: 0 !important;
   padding: 6px 12px;
   border-radius: 6px;
   border: none;
   font-size: 13px;
   cursor: pointer;
-  background: color-mix(in srgb, var(--primary-color, var(--accent)) 15%, transparent);
-  color: var(--primary-color, var(--accent));
+  background: var(--primary-tint-15) !important;
+  color: var(--primary-color, var(--cyan-readable)) !important;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.Alert-controls .Button--link:hover {
-  background: var(--accent);
-  color: var(--btn-text);
+.Alert-controls .Button--link:hover,
+.Alert-controls .Button--link:focus-visible,
+.Alert-controls .Button--link:active {
+  background: var(--cyan-readable) !important;
+  color: var(--btn-text) !important;
 }
 
 .Alert-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
   border: none;
-  background: var(--control-bg, var(--border));
+  background: var(--control-bg, rgba(255, 255, 255, 0.12));
   color: var(--body-color, var(--text));
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s ease;
   font-size: 13px;
+  z-index: 2;
 }
 
 .Alert-dismiss:hover {
-  background: var(--accent);
+  background: var(--cyan-readable);
   color: var(--btn-text);
+  transform: scale(1.08);
 }
 
 /* ===================================
@@ -183,20 +203,6 @@
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===================================
-   RESPONSIVE
-=================================== */
-@media (max-width: 500px) {
-  .Header-title {
-    font-size: 20px;
-  }
-
-  .Header-title::before {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* ===================================
@@ -246,7 +252,7 @@
 }
 
 .backgrwb {
-  background: color-mix(in srgb, var(--body-bg, #191919) 85%, transparent) !important;
+  background: var(--surface-translucent) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
@@ -256,7 +262,7 @@
 }
 
 .backgrwb .AvatarEditor .Dropdown-menu {
-  background: color-mix(in srgb, var(--body-bg, #121212) 92%, black 8%) !important;
+  background: var(--surface-translucent-strong) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   border: 1px solid var(--control-border, rgba(0, 255, 255, 0.35)) !important;
@@ -273,7 +279,16 @@
   transition: all 0.3s ease !important;
 }
 
-.backgrwb .circletop a:hover i,
+/* Split from :focus-visible on purpose: on browsers that don't
+   parse :focus-visible (e.g. old Gecko/KaiOS), a combined comma
+   selector list is invalidated as a whole, which would silently
+   kill the plain :hover rule too. Keeping them separate means
+   :hover still works even where :focus-visible doesn't. */
+.backgrwb .circletop a:hover i {
+  color: var(--cyan-readable) !important;
+  transform: scale(1.2) translateY(-3px) !important;
+}
+
 .backgrwb .circletop a:focus-visible i {
   color: var(--cyan-readable) !important;
   transform: scale(1.2) translateY(-3px) !important;
@@ -325,7 +340,7 @@
 }
 
 .backgrwb .AvatarEditor .Dropdown-menu li button:hover {
-  background: color-mix(in srgb, var(--cyan) 15%, transparent) !important;
+  background: var(--cyan-tint-15) !important;
   color: var(--cyan-readable) !important;
   transform: translateX(5px) !important;
   transition: all 0.3s ease !important;
@@ -396,11 +411,12 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--control-bg, rgba(0,0,0,0.05));
+  background: var(--control-bg, rgba(0,0,0,0.05)) !important;
   border: 1px solid var(--control-border, rgba(0,0,0,0.15));
   border-radius: 12px;
   padding: 8px 16px;
   font-weight: 600;
+  color: var(--cyan-readable) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   white-space: nowrap;
@@ -410,18 +426,17 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 
 .item-logIn .Button:hover,
 .item-signUp .Button:hover {
-  background: var(--control-bg-hover, rgba(0,0,0,0.08));
-  border-color: var(--accent);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--control-bg-hover, rgba(0,0,0,0.08)) !important;
+  border-color: var(--cyan-readable);
+  color: var(--cyan-readable) !important;
+  box-shadow: 0 0 10px var(--cyan-glow-40);
   transform: translateY(-1px);
 }
 
 .item-logIn .Button:active,
 .item-signUp .Button:active {
   transform: scale(0.97);
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow: 0 0 6px var(--cyan-glow-30);
 }
 
 .item-logIn .Button-label,
@@ -429,8 +444,9 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   letter-spacing: 0.3px;
 }
 
-.item-logIn {
-  margin-right: 4px;
+.item-logIn,
+.item-signUp {
+  margin: 0 4px;
 }
 
 /* ===================================
@@ -451,7 +467,7 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   height: 22px;
   border-radius: 50%;
   background: rgba(255,255,255,0.08);
-  color: var(--accent);
+  color: var(--cyan-readable);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -492,14 +508,23 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
      background: rgba(0,255,255,0.2);
   }
 
-  .LogInModal .Modal-header:has(:hover)::before,
-  .SignUpModal .Modal-header:has(:hover)::before,
   .LogInModal .Modal-header:hover::before,
   .SignUpModal .Modal-header:hover::before {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
+}
+
+/* Kept separate from the (hover: hover) block above on purpose:
+   :has() isn't parseable on old Gecko, and grouping it with
+   :hover in one selector list would invalidate the whole rule
+   there too. */
+.LogInModal .Modal-header:has(:hover)::before,
+.SignUpModal .Modal-header:has(:hover)::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .LogInModal .Modal-header:focus-within::after,
@@ -559,10 +584,28 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    /* Safety net: forcing this visible again means Flarum's own
+       overflow handling for this label no longer applies. Without
+       these, a long username has nothing stopping it from pushing
+       the header into horizontal overflow, especially at the
+       320px KaiOS-class breakpoint below. */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 96px !important;
   }
 
   #header-secondary .item-session .Button--user .Button-label {
     display: flex !important;
+    /* Lets the .username child above actually shrink/ellipsize
+       inside this flex row instead of forcing the row wider. */
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 320px) {
+  #header-secondary .item-session .username {
+    max-width: 64px !important;
   }
 }
 
@@ -789,6 +832,70 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 }
 
 /* ===================================
+   NOTIFICATIONS / FLAG LIST
+   Covers Flarum's stock .NotificationList (used here by the
+   flags extension's FlagList) so it reads as part of the same
+   glass/cyan system as .Alert, .backgrwb and .Modal-content
+   rather than a plain default panel.
+=================================== */
+.NotificationList {
+  background: var(--surface-translucent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  overflow: hidden !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.NotificationList-header {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--control-border, rgba(0, 255, 255, 0.2)) !important;
+  background: transparent !important;
+}
+
+.NotificationList-header .App-titleControl {
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  color: var(--cyan-readable) !important;
+}
+
+.NotificationList-content {
+  padding: 4px 0 !important;
+  max-height: 360px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: transparent !important;
+}
+
+.NotificationGroup-content {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.NotificationList-empty {
+  padding: 28px 16px !important;
+  text-align: center !important;
+  font-size: 13px !important;
+  color: var(--muted-color, rgba(232, 232, 232, 0.6)) !important;
+}
+
+/* Small "all clear" glyph so the empty state doesn't read as a
+   bare, unstyled div — same pattern as the ⚠ on the signup legal
+   notice elsewhere in this file. */
+.NotificationList-empty::before {
+  content: "✓";
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: var(--cyan-readable);
+}
+
+/* ===================================
    FILE CARD
 =================================== */
 .Post-body .wrapper {
@@ -954,4 +1061,378 @@ a[data-tag="H4"] {
   padding: 0 12px 8px;
   text-align: center;
   animation: heroFadeIn 0.35s ease;
+}
+
+.containerNarrow::before {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  background: url('https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png') center/cover no-repeat;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.Hero-title {
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 6px 0;
+  padding-bottom: 8px;
+  letter-spacing: 0.1px;
+  /* Solid, readable fallback. Without this, browsers that don't
+     support background-clip: text (e.g. KaiOS/old Gecko) are
+     left with color: transparent and NO visible heading text at
+     all — the gradient trick below only applies where it's
+     actually supported. */
+  color: var(--cyan-readable);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .Hero-title {
+    background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: heroShimmer 6s linear infinite;
+  }
+}
+
+.Hero-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan-readable, #00ffff), transparent);
+}
+
+.Hero-subtitle {
+  color: #b3fdff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroShimmer {
+  to { background-position: -200% center; }
+}
+
+@media (max-width: 500px) {
+  .containerNarrow::before {
+    width: 28px;
+    height: 28px;
+  }
+
+  .Hero-title {
+    font-size: 18px;
+  }
+
+  .Hero-subtitle {
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .containerNarrow,
+  .Hero-title {
+    animation: none !important;
+  }
+
+  .Hero-title {
+    background-position: 0% center !important;
+  }
+}
+
+/* ===================================
+   MOBILE UI OVERHAUL (<= 700px)
+   Modal + profile dropdown become bottom sheets;
+   grab handles are visual only (no swipe-to-dismiss JS —
+   closes via tap-outside or the close button).
+   At <= 320px, .backgrwb reverts to a normal dropdown —
+   see fix log at top. Unverified on a real device.
+=================================== */
+@media (max-width: 700px) {
+
+  /* ---- Global tap target floor + touch polish ---- */
+  .Button,
+  .item-logIn .Button,
+  .item-signUp .Button,
+  .Modal-content .Button--primary,
+  .Alert-controls .Button--link {
+    min-height: 44px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .Alert-dismiss {
+    width: 36px !important;
+    height: 36px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* ---- Header: tighter ---- */
+  .Header-title {
+    font-size: 18px;
+    gap: 8px;
+  }
+
+  .Header-title::before {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* ---- Modal: bottom sheet ---- */
+  .Modal {
+    align-items: flex-end !important;
+    justify-content: center !important;
+  }
+
+  .Modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    animation: sheetUp 0.28s ease !important;
+    border-bottom: none !important;
+    padding-bottom: max(0px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .Modal-body {
+    padding: 18px 18px 28px !important;
+  }
+
+  .Modal-header {
+    padding: 14px 18px !important;
+  }
+
+  /* Small grab handle so it reads as a sheet, not a stray card.
+     Visual cue only — see note above. */
+  .Modal-content::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--control-border, rgba(255,255,255,0.2));
+    margin: 8px auto 4px;
+  }
+
+  @keyframes sheetUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .Modal-content .Button--primary,
+  .item-logIn .Button,
+  .item-signUp .Button {
+    width: 100% !important;
+  }
+
+  .LogInModal .Modal-header::before,
+  .SignUpModal .Modal-header::before {
+    width: calc(100vw - 40px);
+    max-width: 280px;
+  }
+
+  /* ---- Login / signup header buttons: stack under logo instead of squeezing beside it ---- */
+  #header-secondary .item-logIn,
+  #header-secondary .item-signUp {
+    margin: 0 !important;
+  }
+
+  /* ---- Profile dropdown: bottom sheet ---- */
+  .backgrwb {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom: none !important;
+    animation: sheetUp 0.28s ease !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    /* Preventive: fixed-position takes this out of the header's
+       stacking context entirely. Verify against your header on a
+       real phone — raise or drop this number if it renders behind
+       (or awkwardly above) something it shouldn't. */
+    z-index: 1000 !important;
+  }
+
+  .backgrwb::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--control-border, rgba(255,255,255,0.2));
+    margin: 8px auto 10px;
+  }
+
+  .backgrwb .ulwb li {
+    padding: 12px 4px !important;
+    font-size: 15px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* ---- Alerts: less padding, flatter top corners on small screens ---- */
+  .Alert {
+    border-radius: 12px 12px 0 0;
+    padding: 12px 40px 12px 16px;
+  }
+
+  .Alert-dismiss {
+    top: 10px;
+    right: 10px;
+  }
+
+  .Alert-controls {
+    width: 100%;
+  }
+
+  .Alert-controls .Button--link {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  /* ---- File card: full width on small screens ---- */
+  .Post-body .wrapper {
+    max-width: 100% !important;
+  }
+
+  /* ---- Hero banner: reclaim vertical space ---- */
+  .containerNarrow {
+    margin: 8px auto;
+    padding: 0 16px 4px;
+  }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .Modal-content,
+  .backgrwb {
+    animation: none !important;
+  }
+}
+
+/* ===================================
+   TINY / KaiOS-CLASS SCREENS (<= 320px)
+   Stand-in for flip-phone browsers: D-pad nav, weak GPU.
+   Flat colors instead of blur, animations off, smaller type.
+   320px is a guess at common KaiOS widths — unverified.
+=================================== */
+@media (max-width: 320px) {
+  .Header-title {
+    font-size: 15px;
+    gap: 6px;
+  }
+
+  .Header-title::before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .Hero-title {
+    font-size: 15px;
+  }
+
+  .Hero-subtitle {
+    font-size: 11px;
+  }
+
+  .containerNarrow::before {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Flat backgrounds instead of glass/blur — cheap to render and
+     doesn't leave a translucent, low-contrast box on browsers
+     where the blur itself silently fails. */
+  .Alert,
+  .Modal-content,
+  .backgrwb,
+  .backgrwb .AvatarEditor .Dropdown-menu {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--body-bg) !important;
+    box-shadow: none !important;
+  }
+
+  li.item-session .Dropdown-toggle.Button--user {
+    backdrop-filter: none !important;
+    background: var(--control-bg, rgba(0, 255, 255, 0.08)) !important;
+  }
+
+  .item-logIn .Button,
+  .item-signUp .Button {
+    backdrop-filter: none !important;
+  }
+
+  .Post-body .wrapper {
+    box-shadow: none !important;
+  }
+
+  /* No pointer device to hover with, and no GPU to spare —
+     entrance/attention animations off entirely. */
+  .Alert,
+  .Modal-content,
+  .Modal-backdrop,
+  .backgrwb,
+  .backgrwb .AvatarEditor .Dropdown-menu,
+  .Post-body .wrapper,
+  .containerNarrow,
+  .Hero-title {
+    animation: none !important;
+  }
+
+  /* Undo the 700px bottom-sheet treatment (fixed + 100% width).
+     Was previously position: absolute, but that's still out-of-
+     flow: .containerwb (display:flex) collapses around it, so
+     page content shifts up into the space .backgrwb used to
+     reserve, while .backgrwb itself keeps rendering near its old
+     spot — i.e. it floats on top of that shifted-up content on
+     scroll/zoom. position: static keeps it in normal flow, same
+     as the welcomebox extension's own default (position:
+     relative), so nothing below it can be overlapped. */
+  .backgrwb {
+    position: static !important;
+    width: auto !important;
+    max-width: 220px !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    border-radius: 12px !important;
+    padding-bottom: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  /* Grab handle implies a draggable sheet — hide it here since
+     .backgrwb is back to a normal in-flow block at this width. */
+  .backgrwb::before {
+    display: none !important;
+  }
 }
