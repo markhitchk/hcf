@@ -1,0 +1,75 @@
+/* ===================================
+   NOTIFICATIONS — matched to messenger.css
+   (black glass panel, 30px radius, white text,
+   translucent hover states, muted opacity)
+
+   Drop this in alongside messenger.css. The old
+   cyan/glassmorphic .NotificationList block has been
+   removed from master.css — see that file's diff.
+=================================== */
+
+.NotificationList {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px !important;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+    overflow: hidden !important;
+    padding: 8px !important;
+}
+
+.NotificationList * {
+    color: white !important;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.NotificationList-header {
+    padding: 10px !important;
+    border-bottom: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.NotificationList-header .App-titleControl {
+    margin: 0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+.NotificationList-header .App-primaryControl {
+    display: flex;
+    gap: 4px;
+}
+
+.NotificationList-header .App-primaryControl .Button {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-radius: 30px !important;
+    border: none !important;
+}
+
+.NotificationList-header .App-primaryControl .Button:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+}
+
+.NotificationList-content {
+    background: transparent !important;
+    padding: 4px 0 !important;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.NotificationGroup-content {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.NotificationList-empty {
+    opacity: 0.5 !important;
+    font-size: 11px;
+    text-align: center;
+    padding: 20px 10px !important;
+}
