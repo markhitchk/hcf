@@ -1,16 +1,30 @@
 /* ===================================
    NOTIFICATIONS — matched to messenger.css
-   (solid #262626 gray, exact match to messenger.css's
-   UserListItem.active color — no blur/transparency,
-   30px radius, white text, muted opacity)
+   (translucent #262626-toned gray with blur, same
+   rgba + blur(10px) pattern messenger.css uses on
+   .ConversationsList — 30px radius, white text,
+   muted opacity)
 
    Drop this in alongside messenger.css. The old
    cyan/glassmorphic .NotificationList block has been
    removed from master.css — see that file's diff.
 =================================== */
 
+/* The panel's own transparency does nothing if the dropdown
+   wrapper Flarum renders around it is already opaque — kill
+   that wrapper's own background/shadow so .NotificationList's
+   rgba + blur is what actually shows. */
+.NotificationsDropdown .Dropdown-menu {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
 .NotificationList {
-    background: #262626 !important;
+    background: rgba(38, 38, 38, 0.75) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 30px !important;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
     overflow: hidden !important;
