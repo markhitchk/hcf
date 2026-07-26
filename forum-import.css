@@ -8,8 +8,7 @@
    Loading addons BEFORE master breaks master.css.
    This manager prevents that by explicit import order.
 
-   The admin panel theme (system/admin.css) is intentionally
-   DISABLED in this import file.
+   The admin panel theme (system/admin.css) is NOT included.
 =================================== */
 
 /* Core theme — ALWAYS LOAD FIRST */
@@ -18,6 +17,3 @@
 /* Addons */
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css");
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css");
-
-/* Admin panel theme — DISABLED (uncomment to enable) */
-/* @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/system/admin.css"); */
