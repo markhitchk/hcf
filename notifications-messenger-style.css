@@ -10,6 +10,17 @@
    removed from master.css — see that file's diff.
 =================================== */
 
+/* The panel's own transparency does nothing if the dropdown
+   wrapper Flarum renders around it is already opaque — kill
+   that wrapper's own background/shadow so .NotificationList's
+   rgba + blur is what actually shows. */
+.NotificationsDropdown .Dropdown-menu {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
 .NotificationList {
     background: rgba(38, 38, 38, 0.75) !important;
     backdrop-filter: blur(10px);
