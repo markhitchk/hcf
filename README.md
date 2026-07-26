@@ -2,6 +2,8 @@
 
 A modern, glassmorphic theme for Flarum with cyan accents, smooth animations, and full light/dark mode support.
 
+This repo powers the custom styling for **[Harley's Clan Forum](https://forum.harleytg.com/)** (also available at [harleysclan.freeflaurm.com](https://harleysclan.freeflaurm.com/)).
+
 ## 📁 Folder Structure
 
 ```
