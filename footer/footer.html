@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harley's Clan Footer</title>
+
+<style>
+/* =========================================
+   Pull cyan theme variables (Harley forum)
+========================================= */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
+
+/* ===========================================================
+   HARLEY'S CLAN FOOTER v2 (cyan-matched)
+   Light/Dark Theme Compatible
+=========================================================== */
+
+:root{
+    --hc-accent: var(--cyan, #00ffff);
+    --hc-cyan-readable: color-mix(in srgb, var(--cyan, #00ffff) 65%, var(--body-color, #1a1a1a) 35%);
+
+    /* make all "cyan" uses point to the readable cyan */
+    --hc-accent: var(--hc-cyan-readable);
+
+    --hc-bg:#15171b;
+    --hc-border:#2f3742;
+    --hc-text:#eefcff;
+    --hc-muted:#9cb7c2;
+
+    --hc-cyan-glow: color-mix(in srgb, var(--cyan, #00ffff) 70%, transparent);
+    --hc-cyan-glow-soft: color-mix(in srgb, var(--cyan, #00ffff) 40%, transparent);
+
+    /* discord-style spoiler */
+    --hc-spoiler-bg:#202225;
+    --hc-spoiler-bg-hover:#4f545c;
+}
+
+.hc-simple-footer{
+    width:100%;
+    padding:60px 20px;
+    margin-top:60px;
+    border-top:1px solid var(--control-border,var(--hc-border));
+    background:transparent;
+    color:var(--text-color,var(--hc-text));
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    box-sizing:border-box;
+}
+
+.hc-simple-footer *,
+.hc-simple-footer *::before,
+.hc-simple-footer *::after{
+    box-sizing:inherit;
+}
+
+/* Scroll Button */
+
+.hc-scroll-container{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+#hc-top-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 24px;
+    border-radius:999px;
+    border:1px solid var(--control-border,var(--hc-border));
+    background:var(--control-bg,var(--hc-bg));
+    color:var(--text-color,var(--hc-text));
+    cursor:pointer;
+    font:600 .85rem inherit;
+    transition:.25s ease;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+}
+
+#hc-top-btn:hover{
+    border-color:var(--hc-accent);
+    color:var(--hc-accent);
+    box-shadow:0 0 18px var(--hc-cyan-glow-soft);
+    transform:translateY(-2px);
+}
+
+#hc-top-btn:focus-visible{
+    outline:2px solid var(--hc-accent);
+    outline-offset:4px;
+}
+
+/* Brand */
+
+.hc-footer-brand{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.hc-footer-logo-img{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--hc-accent);
+    box-shadow:0 0 20px var(--hc-cyan-glow-soft);
+    display:block;
+    margin:0 auto 18px;
+}
+
+.hc-footer-text{
+    font-size:1.05rem;
+}
+
+.hc-footer-text strong{
+    color:var(--hc-accent);
+    letter-spacing:.6px;
+}
+
+/* Terminal */
+
+.hc-terminal-block{
+    display:block;
+    width:min(100%,620px);
+    margin:auto;
+    padding:22px;
+    border-radius:16px;
+    background:var(--control-bg,var(--hc-bg));
+    border:1px solid var(--control-border,var(--hc-border));
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    font:500 .88rem "JetBrains Mono","Courier New",monospace;
+    color:var(--text-color,var(--hc-text));
+}
+
+.hc-data-row{
+    display:grid;
+    grid-template-columns:110px 1fr;
+    gap:14px;
+    line-height:1.9;
+    align-items:start;
+}
+
+.hc-label{
+    color:var(--hc-accent);
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.hc-label::after{
+    content:":";
+}
+
+.hc-value{
+    min-width:0;
+    word-break:break-word;
+}
+
+.hc-divider{
+    height:1px;
+    background:var(--control-border,var(--hc-border));
+    margin:16px 0;
+    opacity:.65;
+}
+
+.hc-sep{
+    opacity:.45;
+    margin:0 8px;
+}
+
+#hc-id{
+    font-weight:700;
+}
+
+.hc-ip-line{
+    font-weight:700;
+    letter-spacing:.04em;
+    white-space:nowrap;
+}
+
+.hc-bracket{
+    opacity:.55;
+}
+
+/* Discord-style spoiler (click to reveal) */
+
+.hc-spoiler{
+    display:inline-block;
+    max-width:100%;
+    margin:0 1px;
+    padding:0;
+    border:0;
+    border-radius:4px;
+    background:var(--hc-spoiler-bg);
+    color:inherit;
+    font:inherit;
+    letter-spacing:inherit;
+    font-weight:inherit;
+    cursor:pointer;
+    vertical-align:baseline;
+    transition:background-color .15s ease;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.hc-spoiler-text{
+    display:inline-block;
+    padding:0 4px;
+    opacity:0;
+    filter:blur(6px);
+    user-select:none;
+    -webkit-user-select:none;
+    transition:opacity .15s ease,filter .15s ease;
+}
+
+.hc-spoiler:hover{
+    background:var(--hc-spoiler-bg-hover);
+}
+
+.hc-spoiler:focus-visible{
+    outline:2px solid var(--hc-accent);
+    outline-offset:2px;
+}
+
+.hc-spoiler.is-revealed{
+    background:color-mix(in srgb, var(--hc-spoiler-bg) 45%, transparent);
+    cursor:default;
+}
+
+.hc-spoiler.is-revealed .hc-spoiler-text{
+    opacity:1;
+    filter:none;
+    user-select:text;
+    -webkit-user-select:text;
+}
+
+@media(prefers-reduced-motion:reduce){
+    .hc-spoiler,
+    .hc-spoiler-text{
+        transition:none;
+    }
+}
+
+#local-zone{
+    color:var(--muted-color,var(--hc-muted));
+    font-size:.85em;
+}
+
+.hc-system-notice{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--control-border,var(--hc-border));
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    color:var(--muted-color,var(--hc-muted));
+    font-size:.72rem;
+    line-height:1.6;
+}
+
+.hc-system-notice svg{
+    flex-shrink:0;
+    margin-top:2px;
+    opacity:.7;
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+    .hc-terminal-block{
+        padding:18px;
+    }
+
+    .hc-data-row{
+        grid-template-columns:1fr;
+        gap:2px;
+    }
+
+    .hc-label{
+        margin-top:8px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce){
+    #hc-top-btn{
+        transition:none;
+    }
+}
+</style>
+</head>
+<body>
+
+<footer class="hc-simple-footer">
+
+<div class="hc-scroll-container">
+<button id="hc-top-btn" type="button" aria-label="Back to Top">
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="18 15 12 9 6 15"/>
+</svg>
+<span>TOP</span>
+</button>
+</div>
+
+<div class="hc-footer-brand">
+<img
+src="https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png"
+alt="Harley's Clan Logo"
+class="hc-footer-logo-img">
+
+<div class="hc-footer-text">
+Owned by <strong>Harley's Studios</strong>
+</div>
+</div>
+
+<div class="hc-terminal-block">
+
+<div class="hc-data-row">
+<div class="hc-label">IDENTITY</div>
+<div class="hc-value" id="hc-id">INITIALIZING...</div>
+</div>
+
+<div class="hc-data-row">
+    <div class="hc-label">ACCESS IP</div>
+
+    <div class="hc-value">
+
+        <span class="hc-ip-line"><span class="hc-bracket">[</span><button
+            id="hc-ip-spoiler"
+            class="hc-spoiler"
+            type="button"
+            aria-expanded="false"
+            aria-label="Reveal IP address"><span class="hc-spoiler-text" id="hc-ip">000.000.000.000</span></button><span class="hc-bracket">]</span>
+            <span class="hc-sep">•</span>
+            <span id="hc-ip-status">CONNECTING...</span></span>
+
+    </div>
+</div>
+
+<div class="hc-divider"></div>
+
+<div class="hc-data-row">
+<div class="hc-label">UTC</div>
+<div class="hc-value">
+<span id="utc-date">---</span>
+<span class="hc-sep">•</span>
+<span id="utc-clock">--:--:--</span>
+</div>
+</div>
+
+<div class="hc-data-row">
+<div class="hc-label">LOCAL</div>
+<div class="hc-value">
+<span id="local-date">---</span>
+<span class="hc-sep">•</span>
+<span id="local-time">--:--:--</span>
+<span id="local-zone"></span>
+</div>
+</div>
+
+<div class="hc-system-notice">
+
+<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="10"/>
+<line x1="12" y1="8" x2="12" y2="12"/>
+<circle cx="12" cy="16.5" r=".5" fill="currentColor"/>
+</svg>
+
+<span>
+DATA IS PROCESSED LOCALLY IN YOUR BROWSER.<br>
+NOTHING IS TRANSMITTED TO HARLEY'S SERVICES.
+</span>
+
+</div>
+
+</div>
+
+</footer>
+
+<script>
+(function(){
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function normalizeUsername(s){
+  s = (s ?? "").toString().trim();
+  if(!s) return "";
+
+  const lower = s.toLowerCase();
+
+  if (lower === "guest") return "";
+  if (lower === "guest_protocol") return "";
+  if (lower.includes("guest_protocol")) return "";
+  if (lower.includes("guest")) return "";
+  if (lower === "sign in" || lower === "log in" || lower === "login") return "";
+  if (lower.includes("sign in") || lower.includes("log in") || lower.includes("login")) return "";
+
+  return s;
+}
+
+function getIdentity(){
+  try{
+    if(window.app && app.session){
+      const u = app.session.user;
+      if(!u) return "";
+      const raw = (typeof u.username === "function") ? u.username.call(u) : u.username;
+      return normalizeUsername(raw);
+    }
+  }catch(e){}
+
+  var el = document.querySelector("header .Button--user .username")
+        || document.querySelector(".App-header .Button--user .username");
+  const raw = el ? el.textContent : "";
+  return normalizeUsername(raw);
+}
+
+function getCurrentActiveSessionIpFromSecurityPage(){
+  var legend = document.querySelector('fieldset.UserSecurityPage-sessions > legend');
+  if(!legend) return null;
+
+  var items = document.querySelectorAll('.AccessTokensList-item');
+  for (var i = 0; i < items.length; i++){
+    var titleSub = items[i].querySelector('.AccessTokensList-item-title-sub');
+    if(!titleSub) continue;
+
+    if(titleSub.textContent.trim() === "Current Active Session"){
+      var code = items[i].querySelector('.IPAddress code');
+      if(!code) return null;
+      var ip = code.textContent.trim();
+      return ip || null;
+    }
+  }
+  return null;
+}
+
+function setIdentityDisplay(username){
+  var el = $("hc-id");
+  if(!el) return;
+
+  el.innerHTML = "";
+
+  if(!username){
+    el.textContent = "GUEST_PROTOCOL";
+    return;
+  }
+
+  var atText = "@" + username;
+  var a = document.createElement("a");
+
+  var hostParts = (location.hostname || "").split(".").filter(Boolean);
+  var domainSuffix = hostParts.length >= 2
+    ? hostParts.slice(-2).join(".")
+    : "harleytg.com";
+
+  a.href = "https://forum." + domainSuffix + "/u/" + encodeURIComponent(username);
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.textContent = atText;
+
+  a.style.color = "var(--hc-accent)";
+  a.style.textDecoration = "none";
+
+  el.appendChild(a);
+}
+
+function updateClock(){
+  var now = new Date();
+
+  setIdentityDisplay(getIdentity());
+
+  $("utc-date").textContent = now.toLocaleDateString("en-US",{
+    month:"short",
+    day:"numeric",
+    year:"numeric",
+    timeZone:"UTC"
+  });
+
+  $("utc-clock").textContent = now.toLocaleTimeString("en-US",{
+    timeZone:"UTC",
+    hour:"numeric",
+    minute:"2-digit",
+    second:"2-digit",
+    hour12:true
+  });
+
+  $("local-date").textContent = now.toLocaleDateString("en-US",{
+    month:"short",
+    day:"numeric",
+    year:"numeric"
+  });
+
+  $("local-time").textContent = now.toLocaleTimeString("en-US",{
+    hour:"numeric",
+    minute:"2-digit",
+    second:"2-digit",
+    hour12:true
+  });
+
+  var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  $("local-zone").textContent = "(" + tz + ")";
+}
+
+var spoiler = $("hc-ip-spoiler");
+
+function setIp(ip, status){
+  $("hc-ip").textContent = ip;
+  $("hc-ip-status").textContent = status;
+}
+
+function loadIp(){
+  var activeIp = getCurrentActiveSessionIpFromSecurityPage();
+  if(activeIp){
+    setIp(activeIp, "SESSION ACTIVE");
+    return;
+  }
+
+  fetch("https://api.ipify.org?format=json")
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      setIp(d.ip, "SESSION ACTIVE");
+    })
+    .catch(function(){
+      setIp("---.---.---.---", "UNAVAILABLE");
+    });
+}
+
+function revealIp(){
+  if(spoiler.classList.contains("is-revealed")) return;
+
+  spoiler.classList.add("is-revealed");
+  spoiler.setAttribute("aria-expanded","true");
+  spoiler.setAttribute("aria-label","IP address revealed");
+}
+
+spoiler.addEventListener("click", revealIp);
+
+$("hc-top-btn").onclick = function(){
+  window.scrollTo({ top:0, behavior:"smooth" });
+};
+
+updateClock();
+loadIp();
+setInterval(updateClock,1000);
+
+})();
+</script>
+
+</body>
+</html>
