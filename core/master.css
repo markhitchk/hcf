@@ -52,7 +52,6 @@
   font-size: 26px;
   font-weight: bold;
   color: var(--text);
-  text-shadow: 2px 2px 0 var(--cyan-readable);
 }
 
 .Header-title a {
@@ -61,7 +60,19 @@
   gap: 10px;
   text-decoration: none;
   color: var(--cyan-readable);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  
+  /* Black outline around cyan text */
+  -webkit-text-stroke: 1.2px #000000;
+  paint-order: stroke fill;
+
+  /* Keeps your exact 3D offset style with black separation layers */
+  text-shadow:
+    1px 1px 0 #000000,
+    2px 2px 0 #000000,
+    3px 3px 0 var(--cyan-readable),
+    4px 4px 0 #000000;
 }
 
 .Header-title::before {
@@ -86,7 +97,7 @@
 
 .Header-title span {
   display: inline-block !important;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 /* ===================================
@@ -1372,4 +1383,38 @@ a[data-tag="H4"] {
   .backgrwb::before {
     display: none !important;
   }
+}
+
+/* ===================================
+   MODAL INLINE ALERT (e.g. login error)
+   Inherits background/blur/shadow/color/animation
+   from the master .Alert rule — only sizing is
+   overridden here so it fits inside Modal-body.
+=================================== */
+.Modal-alert {
+  display: flex;
+  justify-content: center;
+}
+
+.Modal-alert .Alert {
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 14px;
+  gap: 6px;
+  border-radius: 10px;
+  font-size: 12.5px;
+}
+
+.Modal-alert .Alert-body {
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.Modal-alert .Alert--error {
+  border-left-color: #ff4d4d;
+}
+
+.Modal-alert .Alert-controls .Button--link {
+  padding: 4px 10px;
+  font-size: 12px;
 }
