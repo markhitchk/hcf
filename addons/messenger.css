@@ -1,4 +1,3 @@
-
 span.message-data-name, .ConversationsList .chat .chat-message button {
   display:none!important;
 }
@@ -57,7 +56,7 @@ li.startConvo {
     color: #7b7b7b !important;
 }
 li.startConvo::before {
-    content: "\";
+    content: "\";
     font-family: 'Font Awesome 6 Brands';
     margin: 4px;
 }
@@ -90,7 +89,7 @@ vertical-align: middle;
     background: transparent !important;
 }
 div#people-list::before {
-    content: "\";
+    content: "\";
     font-family: 'Font Awesome 6 Brands';
     margin: 4% 6%;
     font-size: 180%;
@@ -110,8 +109,15 @@ div#people-list::before {
     color: white !important;
     background: rgba(255, 255, 255, 0.10) !important;
 }
+    /* FIX: was "overflow-y: hidden !important" — this was the direct cause of the
+       chat pane not scrolling. hidden always beat the desktop-only "scroll" rule
+       further below because !important wins regardless of source order.
+       min-height: 0 is required so this flex child can shrink to its container
+       instead of growing to fit content (which caused the panel to visibly
+       move/shift as messages loaded). */
     .ConversationsList .chat .chat-history {
-        overflow-y: hidden !important;
+        overflow-y: auto !important;
+        min-height: 0;
     }
 .ConversationsList .chat .chat-history ul {
     gap: 0.5rem !important;
@@ -123,7 +129,7 @@ form.chat-message.clearfix {
         padding: 5px;
     }
 .fa-comment-alt::before {
-    content: "\" !important;
+    content: "\" !important;
     font-size: larger;
     font-family: 'Font Awesome 6 Brands';
 }
@@ -342,6 +348,7 @@ font-weight: 900;
     flex-direction: column;
     background: @body-bg;
     border-radius: @border-radius;
+    min-height: 0;
 
     .LoadingIndicator-container {
       padding: 20px 0;
@@ -378,6 +385,8 @@ font-weight: 900;
     .chat-history {
       flex: 1;
       padding: 10px;
+      min-height: 0;
+      overflow-y: auto;
 
       .message-read {
         display: flex;
@@ -750,10 +759,4 @@ font-weight: 900;
 .App-header .ConversationsList-list a,
 .ConversationsPage .ConversationsList-list a {
   color: var(--text-color);
-}
-
-@media(min-width: @screen-desktop) {
-  .ConversationsList .chat .chat-history {
-    overflow-y: scroll;
-  }
 }
