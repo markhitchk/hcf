@@ -104,19 +104,21 @@ vertical-align: middle;
 .ConversationsList, form.Dropdown-menu.Dropdown-menu--right  {
     background: transparent !important;
 }
-/* HTG logo shown above the conversations list */
+/* HTG logo shown above the conversations list
+   Large SVG logo sized for clear visibility above the conversations list. */
 div#people-list::before {
     content: "";
     display: block;
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    flex: 0 0 36px;
-    margin: 12px auto 6px;
-    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG%20Icon.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    flex: 0 0 80px !important;
+    margin: 14px auto 10px !important;
+    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
 }
     .ConversationsList {
      background: rgba(0, 0, 0, 0.75) !important;
@@ -143,27 +145,29 @@ div#people-list::before {
 form.chat-message.clearfix {
     height: 15% !important;
 }
-/* Replace only messenger comment icons with the HTG icon */
+/* Replace messenger comment icons with a consistently sized HTG icon.
+   Larger SVG icon box for improved visibility in messenger controls. */
 .ConversationsList .fa-comment-alt,
 .MessagesDropdown .fa-comment-alt {
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    flex: 0 0 20px;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex: 0 0 36px !important;
     padding: 0 !important;
     margin: 0 !important;
-    line-height: 20px !important;
+    line-height: 36px !important;
     font-size: 0 !important;
-    vertical-align: middle;
-    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG%20Icon.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    vertical-align: middle !important;
+    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
 }
+
 .ConversationsList .fa-comment-alt::before,
 .MessagesDropdown .fa-comment-alt::before {
     content: "" !important;
@@ -734,26 +738,7 @@ font-weight: 900;
   border-radius: 0 0 var(--border-radius) 0;
 }
 
-/* Keep the custom icons proportional on smaller screens */
-@media (max-width: 767.98px) {
-  div#people-list::before {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    flex-basis: 32px;
-    margin-top: 10px;
-  }
-
-  .ConversationsList .fa-comment-alt,
-  .MessagesDropdown .fa-comment-alt {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    min-height: 18px !important;
-    flex-basis: 18px;
-    line-height: 18px !important;
-  }
-}
+/* Custom HTG logo/icon sizes intentionally remain consistent on mobile. */
 
 /* ---------- Responsive breakpoints ----------
    Flarum's actual compiled px values:
@@ -807,4 +792,14 @@ font-weight: 900;
     overflow-y: scroll !important;
     overscroll-behavior: contain;
   }
+}
+
+/* SVG logo rendering: no raster enlargement, no transparent-padding workaround. */
+div#people-list::before,
+.ConversationsList .fa-comment-alt,
+.MessagesDropdown .fa-comment-alt {
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    image-rendering: auto;
 }
