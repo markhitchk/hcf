@@ -105,17 +105,16 @@ vertical-align: middle;
     background: transparent !important;
 }
 /* HTG logo shown above the conversations list
-   The source PNG contains transparent padding, so the artwork is enlarged
-   inside a fixed box to match the surrounding avatars visually. */
+   Large SVG logo sized for clear visibility above the conversations list. */
 div#people-list::before {
     content: "";
     display: block;
-    width: 52px !important;
-    height: 52px !important;
-    min-width: 52px !important;
-    min-height: 52px !important;
-    flex: 0 0 52px !important;
-    margin: 12px auto 8px !important;
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    flex: 0 0 80px !important;
+    margin: 14px auto 10px !important;
     background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
     background-size: contain !important;
     background-repeat: no-repeat !important;
@@ -147,21 +146,20 @@ form.chat-message.clearfix {
     height: 15% !important;
 }
 /* Replace messenger comment icons with a consistently sized HTG icon.
-   The icon box matches common Flarum toolbar/button icon proportions while
-   enlarging the padded artwork inside the PNG. */
+   Larger SVG icon box for improved visibility in messenger controls. */
 .ConversationsList .fa-comment-alt,
 .MessagesDropdown .fa-comment-alt {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 26px !important;
-    height: 26px !important;
-    min-width: 26px !important;
-    min-height: 26px !important;
-    flex: 0 0 26px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex: 0 0 36px !important;
     padding: 0 !important;
     margin: 0 !important;
-    line-height: 26px !important;
+    line-height: 36px !important;
     font-size: 0 !important;
     vertical-align: middle !important;
     background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
