@@ -1,0 +1,805 @@
+/* ==========================================================================
+   messenger.css — compiled
+   Source: neoncube2/flarum-private-messages LESS, resolved to plain CSS.
+   - All LESS variables mapped to Flarum's live CSS custom properties
+     (--control-bg, --body-bg, --text-color, --muted-color, --border-radius,
+     --online-user-circle-color, --shadow-color, --control-color), so this
+     file now follows NightMode's stylesheet swap automatically instead of
+     being frozen to one light/dark scheme.
+   - lighten()/darken()/mix() LESS functions -> color-mix() CSS equivalents.
+   - @screen-tablet/@screen-desktop -> literal 768px / 992px / 991.98px
+     (Flarum's actual compiled breakpoint values).
+   - All nested LESS selectors flattened to plain CSS.
+   - Empty conversation-state placeholder icon (div#people-list::before)
+     replaced with a small Harley's Studios HTG icon in place of the
+     generic Font Awesome glyph.
+   ========================================================================== */
+
+span.message-data-name, .ConversationsList .chat .chat-message button {
+  display:none!important;
+}
+.message-text {
+    background: #0084ff !important;
+    color: white !important;
+}
+    .ConversationsList {
+        border-radius: 30px;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+border-radius: 30px;
+    }
+.ConversationsList .chat .chat-message {
+    border-radius: 0 0 30px 0 !important;
+}
+.ConversationsList .chat .chat-history .message-data, .ConversationsList .chat .chat-history .message-data {
+    place-self: center !important;
+  align-self: center;
+    opacity: 0.5 !important;
+}
+.ConversationsList .chat {
+    background: black !important;
+    border-radius: 30px !important;
+color: white;
+}
+.chat-num-messages {
+    font-size: 11px;
+    opacity: 0.5;
+}
+.ConversationsList .chat .chat-header .chat-about {
+    margin-top: 1px !important;
+}
+.ConversationsList .chat .chat-message {
+    background-color: black!important;
+    padding: 10px !important;
+  border-radius: 30px !important;
+}
+.ConversationsList .chat .chat-message textarea {
+    height: 100%;
+    padding: 13px 15px 10px !important;
+    background-color: #333333!important;
+    color: white;
+    font: inherit !important;
+    border-radius: 30px !important;
+    overflow: hidden;
+}
+.ConversationsList .chat .chat-header {
+    padding: 10px !important;
+    border-bottom: none !important;
+}
+.chat-about {
+    margin-top: 11px !important;
+}
+li.startConvo {
+    font-size: 14px;
+    color: #7b7b7b !important;
+}
+li.startConvo::before {
+    content: "\f086";
+    font-family: 'Font Awesome 6 Brands';
+    margin: 4px;
+}
+    .ConversationsList {
+        background: #191919;
+        padding: 5px;
+    }
+.ConversationsList .people-list .UserListItem.active {
+    background-color: #262626;
+    border-radius: 30px;
+    padding: 3%;
+}
+.ConversationsList * {
+    color: white !important;
+    font-weight: 500;
+vertical-align: middle;
+}
+.ConversationsList .people-list .Button--primary {
+    border-radius: 30px !important;
+}
+.ConversationsList .chat .chat-history .my-message .message-data {
+    justify-content: center!important;
+    opacity: 0.5;
+}
+.message-text, .ConversationsList, form.Dropdown-menu.Dropdown-menu--right {
+    border-radius: 30px !important;
+}
+.ConversationsList, form.Dropdown-menu.Dropdown-menu--right  {
+    background: transparent !important;
+}
+/* HTG logo shown above the conversations list
+   Large SVG logo sized for clear visibility above the conversations list. */
+div#people-list::before {
+    content: "";
+    display: block;
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    flex: 0 0 80px !important;
+    margin: 14px auto 10px !important;
+    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+    .ConversationsList {
+     background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+      padding: 8px !important;
+    }
+.ConversationsList .people-list .UserListItem:hover, .ConversationsList .people-list .UserListItem.active {
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-radius: 30px !important;
+}
+
+.ConversationsList .Button {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+}
+.ConversationsList .chat .chat-history {
+    overflow-y: hidden !important;
+    min-height: 0;
+}
+.ConversationsList .chat .chat-history ul {
+    gap: 0.5rem !important;
+}
+form.chat-message.clearfix {
+    height: 15% !important;
+}
+/* Replace messenger comment icons with a consistently sized HTG icon.
+   Larger SVG icon box for improved visibility in messenger controls. */
+.ConversationsList .fa-comment-alt,
+.MessagesDropdown .fa-comment-alt {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex: 0 0 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 36px !important;
+    font-size: 0 !important;
+    vertical-align: middle !important;
+    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG-Icon.svg");
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.ConversationsList .fa-comment-alt::before,
+.MessagesDropdown .fa-comment-alt::before {
+    content: "" !important;
+    display: none !important;
+}
+.ConversationsList .chat .message-content .message-text {
+    padding: 7px 15px !important;
+}
+.ConversationsList .fa-circle::before {
+font-weight: 900;
+    color: #53ff1b;
+    position: relative;
+    top: -2px;
+    font-size: 12px;
+}
+.ConversationsList .fa-check::before {
+    font-size: 10px;
+    content: "\f00c";
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 700;
+}
+
+/* ---------- .MessagesPage ---------- */
+.MessagesPage .chat,
+.MessagesPage .container.clearfix {
+  width: 100% !important;
+  max-width: unset;
+}
+
+/* ---------- .MessagesDropdown ---------- */
+.MessagesDropdown .tiblock {
+  align-items: center;
+  display: flex;
+  height: 23px;
+  margin: 13px;
+}
+
+.MessagesDropdown .tidot {
+  -webkit-animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
+  border-radius: 13px;
+  display: inline-block;
+  height: 13px;
+  margin-right: 2px;
+  width: 13px;
+  background-color: var(--neoncube-private-messages-sender-background-color);
+}
+
+@-webkit-keyframes mercuryTypingAnimation {
+  0% {
+    -webkit-transform: translateY(0px);
+  }
+  28% {
+    -webkit-transform: translateY(-5px);
+  }
+  44% {
+    -webkit-transform: translateY(0px);
+  }
+}
+
+.MessagesDropdown .tidot:nth-child(1) {
+  -webkit-animation-delay: 200ms;
+}
+
+.MessagesDropdown .tidot:nth-child(2) {
+  -webkit-animation-delay: 300ms;
+}
+
+.MessagesDropdown .tidot:nth-child(3) {
+  -webkit-animation-delay: 400ms;
+}
+
+.MessagesDropdown .Dropdown-menu {
+  display: flex;
+  max-height: calc(100vh - var(--header-height) - 0.5em);
+}
+
+@media (min-width: 992px) {
+  .MessagesDropdown .Dropdown-menu {
+    width: 725px;
+  }
+}
+
+/* ---------- .StartConversationModal ---------- */
+.StartConversationModal h2 {
+  text-align: center;
+}
+
+/* ---------- .ConversationsPage ---------- */
+.ConversationsPage {
+  display: flex;
+}
+
+/* ---------- .ConversationsList (main layout) ---------- */
+.ConversationsList {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-auto-rows: 100%;
+  flex: 1;
+  padding: 0;
+  background: var(--control-bg);
+  border-radius: var(--border-radius);
+}
+
+.ConversationsList *,
+.ConversationsList *:before,
+.ConversationsList *:after {
+  box-sizing: border-box;
+}
+
+.ConversationsList .ConversationsList-list {
+  overflow-y: auto;
+}
+
+/* -- people list -- */
+.ConversationsList .people-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ConversationsList .people-list .Button--primary {
+  margin: 15px 10px;
+  width: 90%;
+}
+
+.ConversationsList .people-list .ConversationsList-list.desktop {
+  display: none;
+}
+
+.ConversationsList .people-list .ConversationsList-list.mobile {
+  display: flex;
+}
+
+@media (min-width: 992px) {
+  .ConversationsList .people-list .ConversationsList-list.desktop {
+    display: flex;
+  }
+
+  .ConversationsList .people-list .ConversationsList-list.mobile {
+    display: none;
+  }
+}
+
+.ConversationsList .people-list .ConversationsList-list {
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+
+.ConversationsList .people-list .UserListItem {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: var(--border-radius);
+}
+
+.ConversationsList .people-list .UserListItem.active {
+  background-color: var(--neoncube-private-messages-sender-background-color);
+}
+
+.ConversationsList .people-list .UserListItem:hover {
+  background: color-mix(in srgb, var(--control-bg) 50%, var(--muted-color) 50%);
+}
+
+.ConversationsList .people-list .UserListItem .tiblock {
+  padding-left: 12px;
+  margin: 0;
+  padding-top: 11px;
+  display: inline-block;
+  float: right;
+}
+
+.ConversationsList .people-list .UserListItem .tiblock .tidot {
+  background-color: var(--text-color);
+}
+
+.ConversationsList .people-list .UserListItem .info {
+  display: inline-block;
+  margin: 8px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.ConversationsList .people-list .UserListItem .info .UserOnline {
+  margin-left: 5px;
+}
+
+.ConversationsList .people-list .UserListItem .info .UserOnline .fa-circle {
+  color: var(--online-user-circle-color);
+}
+
+.ConversationsList .people-list .UserListItem .Avatar {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.ConversationsList .people-list img {
+  float: left;
+}
+
+.ConversationsList .people-list .about {
+  float: left;
+  margin-top: 8px;
+  padding-left: 8px;
+}
+
+.ConversationsList .people-list .status {
+  color: var(--muted-color);
+}
+
+/* -- chat pane -- */
+.ConversationsList .chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--body-bg);
+  border-radius: var(--border-radius);
+}
+
+.ConversationsList .chat .LoadingIndicator-container {
+  padding: 20px 0;
+}
+
+.ConversationsList .chat .chat-header {
+  padding: 20px;
+  border-bottom: 2px solid var(--control-bg);
+}
+
+.ConversationsList .chat .chat-header .Avatar,
+.ConversationsList .chat .chat-header img {
+  float: left;
+}
+
+.ConversationsList .chat .chat-header .chat-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+
+.ConversationsList .chat .chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ConversationsList .chat .chat-header .chat-num-messages {
+  color: var(--muted-color);
+}
+
+.ConversationsList .chat .chat-history {
+  flex: 1;
+  padding: 10px;
+  min-height: 0;
+}
+
+.ConversationsList .chat .chat-history .message-read {
+  display: flex;
+  align-items: end;
+  margin-bottom: 2px;
+}
+
+.ConversationsList .chat .chat-history .startConvo {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.ConversationsList .chat .chat-history .message-data {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.ConversationsList .chat .chat-history .message-data .avatar-inline {
+  display: inline-block;
+}
+
+.ConversationsList .chat .chat-history .message-data .avatar-inline .Avatar {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  line-height: 16px;
+}
+
+.ConversationsList .chat .chat-history .message-data-name {
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.ConversationsList .chat .chat-history .message-data-time {
+  color: color-mix(in srgb, var(--muted-color) 92%, white 8%);
+  padding-left: 6px;
+}
+
+.ConversationsList .chat .chat-history ul {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0px;
+  margin: 0;
+  list-style-type: none;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-data {
+  justify-content: end;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text-and-indicators {
+  flex-direction: row-reverse;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text {
+  background: var(--neoncube-private-messages-sender-background-color);
+  color: var(--neoncube-private-messages-sender-text-color);
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text a {
+  color: var(--neoncube-private-messages-sender-text-color);
+}
+
+.ConversationsList .chat .chat-history .other-message .message-text {
+  background: var(--neoncube-private-messages-recipient-background-color);
+  color: var(--neoncube-private-messages-recipient-text-color);
+}
+
+.ConversationsList .chat .chat-history .other-message .message-text a {
+  color: var(--neoncube-private-messages-recipient-text-color);
+}
+
+.ConversationsList .chat .message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ConversationsList .chat .message-content .message-text-and-indicators {
+  display: flex;
+  gap: 10px;
+}
+
+.ConversationsList .chat .message-content .message-text {
+  padding: 10px 18px;
+  line-height: 26px;
+  font-size: 16px;
+  word-wrap: break-word;
+  border-radius: var(--border-radius);
+  display: inline-block;
+  max-width: 95%;
+}
+
+.ConversationsList .chat .message-content .message-text p {
+  margin: 0;
+}
+
+.ConversationsList .chat .message-content .message-text img {
+  max-width: 100%;
+}
+
+.ConversationsList .chat .message-preview {
+  opacity: 0.5;
+}
+
+.ConversationsList .chat .chat-message {
+  background-color: color-mix(in srgb, var(--control-bg) 98%, black 2%);
+  padding: 30px;
+}
+
+.ConversationsList .chat .chat-message h4 {
+  float: right;
+}
+
+.ConversationsList .chat .chat-message textarea {
+  width: 100%;
+  border: none;
+  padding: 10px 20px;
+  background-color: var(--body-bg);
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
+  resize: none;
+}
+
+.ConversationsList .chat .chat-message h3 {
+  color: #FF4136;
+}
+
+.ConversationsList .chat .chat-message .fa-file-o,
+.ConversationsList .chat .chat-message .fa-file-image-o {
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+}
+
+.ConversationsList .chat .chat-message button {
+  float: right;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+}
+
+/* -- status colors / utility classes (direct children of .ConversationsList) -- */
+.ConversationsList .online,
+.ConversationsList .offline,
+.ConversationsList .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.ConversationsList .online {
+  color: var(--neoncube-private-messages-sender-background-color);
+}
+
+.ConversationsList .offline {
+  color: var(--neoncube-private-messages-receiver-background-color);
+}
+
+.ConversationsList .me {
+  color: var(--neoncube-private-messages-sender-background-color);
+}
+
+.ConversationsList .other {
+  color: var(--neoncube-private-messages-receiver-background-color);
+}
+
+.ConversationsList .align-left {
+  text-align: left;
+}
+
+.ConversationsList .align-right {
+  text-align: right;
+}
+
+.ConversationsList .float-right {
+  float: right;
+}
+
+.ConversationsList .clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* ---------- Add recipient modal / recipient labels ---------- */
+.AddRecipientModal-form textarea {
+  width: 100%;
+  border: none;
+  background-color: var(--body-bg);
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
+  resize: none;
+}
+
+.AddRecipientModal-form-input {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.AddRecipientModal-form-input input.RecipientsInput {
+  margin: 0 1em;
+  width: auto !important;
+}
+
+.AddRecipientModal-form-input ul.Search-results.fade:not(.in) {
+  display: none;
+}
+
+.AddRecipientModal-form-submit {
+  margin-top: 1em;
+  display: contents;
+}
+
+.Button--cancel {
+  margin-left: 15px;
+}
+
+.RecipientLabel {
+  font-size: 85%;
+  font-weight: 600;
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  background: var(--body-bg);
+  color: var(--control-color);
+  text-transform: none;
+  border: 1px solid var(--neoncube-private-messages-sender-background-color);
+}
+
+.RecipientLabel.none {
+  background: transparent;
+  border: 1px dotted var(--muted-color);
+  color: var(--muted-color);
+}
+
+.DiscussionHero .RecipientsLabel .RecipientLabel {
+  font-size: 14px;
+}
+
+.RecipientsLabel .RecipientLabel {
+  background: transparent;
+  border: none;
+}
+
+.RecipientsLabel .RecipientLabel .username {
+  display: inline-block;
+  margin: 8px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.RecipientsLabel .RecipientLabel .Avatar {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.AddRecipientModal-form .RecipientsInput-selected {
+  margin: 2vh 0;
+}
+
+.AddRecipientModal-form .Search-results {
+  position: relative;
+  display: block;
+  max-height: 70vh;
+  overflow: auto;
+  left: 0;
+  right: 0;
+}
+
+.AddRecipientModal-form .Search-results > li > a {
+  white-space: normal;
+}
+
+.AddRecipientModal-form .Search-results .SearchResult .Avatar {
+  --size: 24px;
+  width: var(--size);
+  height: var(--size);
+  margin: -2px 10px -2px 0;
+}
+
+.AddRecipientModal-form .Search-results mark {
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  color: inherit;
+  box-shadow: none;
+}
+
+.AddRecipientModal-form .RecipientsInput {
+  overflow: hidden;
+  height: auto;
+}
+
+.AddRecipientModal-form .RecipientsInput input {
+  display: block;
+  outline: none;
+  margin-top: -2px;
+  border: 0 !important;
+  padding: 0;
+  background: transparent !important;
+}
+
+.ConversationsList .chat .chat-message {
+  border-radius: 0 0 var(--border-radius) 0;
+}
+
+/* Custom HTG logo/icon sizes intentionally remain consistent on mobile. */
+
+/* ---------- Responsive breakpoints ----------
+   Flarum's actual compiled px values:
+   @screen-tablet: 768px | @screen-desktop: 992px
+   @screen-tablet-max: (@screen-desktop - 0.02) = 991.98px
+*/
+@media (max-width: 991.98px) {
+  .App--conversations {
+    padding-bottom: 0;
+  }
+
+  .App--conversations .App-content {
+    padding-bottom: 0;
+  }
+
+  .ConversationsPage.viewing-conversation .people-list {
+    display: none;
+  }
+
+  .ConversationsList {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 890px;
+  }
+
+  .ConversationsList .chat .chat-message {
+    padding: 1em;
+  }
+}
+
+@media (min-width: 768px) {
+  .ConversationsPage {
+    max-height: calc(100vh - (var(--header-height) * 2));
+  }
+
+  .ConversationsList {
+    margin: 0 auto;
+    max-width: 890px;
+    box-shadow: 0 2px 6px var(--shadow-color);
+  }
+}
+
+.App-header .ConversationsList-list a,
+.ConversationsPage .ConversationsList-list a {
+  color: var(--text-color);
+}
+
+@media (min-width: 992px) {
+  .ConversationsList .chat .chat-history {
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+  }
+}
+
+/* SVG logo rendering: no raster enlargement, no transparent-padding workaround. */
+div#people-list::before,
+.ConversationsList .fa-comment-alt,
+.MessagesDropdown .fa-comment-alt {
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    image-rendering: auto;
+}
