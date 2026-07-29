@@ -10,6 +10,9 @@
    - @screen-tablet/@screen-desktop -> literal 768px / 992px / 991.98px
      (Flarum's actual compiled breakpoint values).
    - All nested LESS selectors flattened to plain CSS.
+   - Empty conversation-state placeholder icon (div#people-list::before)
+     replaced with the Harley's Studios HTG icon in place of the generic
+     Font Awesome glyph.
    ========================================================================== */
 
 span.message-data-name, .ConversationsList .chat .chat-message button {
@@ -102,10 +105,15 @@ vertical-align: middle;
     background: transparent !important;
 }
 div#people-list::before {
-    content: "\f086";
-    font-family: 'Font Awesome 6 Brands';
+    content: "";
+    display: inline-block;
+    width: 90px;
+    height: 90px;
     margin: 4% 6%;
-    font-size: 180%;
+    background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/core/HTG%20Icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
     .ConversationsList {
      background: rgba(0, 0, 0, 0.75) !important;
