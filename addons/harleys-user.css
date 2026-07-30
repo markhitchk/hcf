@@ -9,14 +9,10 @@
 body.User--directory,
 .UserDirectoryPage {
   --hcf-user-accent: var(--cyan-readable, var(--cyan, #00ffff));
-  --hcf-user-accent-soft: rgba(0, 255, 255, 0.14);
-  --hcf-user-card-bg: linear-gradient(
-    145deg,
-    rgba(16, 21, 24, 0.98),
-    rgba(8, 12, 14, 0.98)
-  );
-  --hcf-user-card-border: rgba(0, 255, 255, 0.22);
-  --hcf-user-control-bg: rgba(13, 17, 19, 0.96);
+  --hcf-user-accent-soft: var(--cyan-tint-15, rgba(0, 255, 255, 0.15));
+  --hcf-user-card-bg: var(--surface-translucent-strong, rgba(15, 15, 15, 0.96));
+  --hcf-user-card-border: var(--control-border, rgba(0, 255, 255, 0.24));
+  --hcf-user-control-bg: var(--control-bg, rgba(25, 25, 25, 0.9));
   --hcf-user-text: var(--body-color, var(--text-color, #f2f5f6));
   --hcf-user-muted: var(--muted-color, #98a4aa);
   --hcf-user-radius: 12px;
@@ -72,7 +68,7 @@ body.User--directory .UserDirectorySearchInput,
   min-height: 40px !important;
   color: var(--hcf-user-text) !important;
   background: var(--hcf-user-control-bg) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid var(--hcf-user-card-border) !important;
   border-radius: 10px !important;
   box-shadow:
     0 3px 10px rgba(0, 0, 0, 0.2),
@@ -104,7 +100,9 @@ body.User--directory .UserDirectorySearchInput,
   position: relative !important;
   display: flex !important;
   align-items: center !important;
-  min-width: min(360px, 38vw) !important;
+  width: 360px !important;
+  min-width: 0 !important;
+  max-width: 38vw !important;
   padding: 0 12px !important;
 }
 
@@ -130,11 +128,14 @@ body.User--directory .UserDirectorySearchInput .Dropdown-menu,
 .UserDirectoryPage .IndexPage-toolbar .Dropdown-menu,
 .UserDirectoryPage .UserDirectorySearchInput .Dropdown-menu {
   z-index: 3300 !important;
-  max-height: min(420px, 70vh) !important;
+  max-height: 70vh !important;
   padding: 7px !important;
   overflow: auto !important;
   color: var(--hcf-user-text) !important;
-  background: rgba(9, 13, 15, 0.99) !important;
+  background: var(
+    --surface-translucent-strong,
+    rgba(15, 15, 15, 0.98)
+  ) !important;
   border: 1px solid var(--hcf-user-card-border) !important;
   border-radius: 11px !important;
   box-shadow:
@@ -222,12 +223,14 @@ body.User--directory
 
 body.User--directory .UserDirectoryList .UserCard.UserCard--directory,
 .UserDirectoryPage .UserDirectoryList .UserCard.UserCard--directory {
-  --usercard-bg: #0b1013 !important;
+  --usercard-bg: transparent !important;
   color: var(--hcf-user-text) !important;
   background: var(--hcf-user-card-bg) !important;
-  background-color: #0b1013 !important;
+  background-color: var(--body-bg, #141414) !important;
   border: 1px solid var(--hcf-user-card-border) !important;
   border-radius: var(--hcf-user-radius) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 body.User--directory
@@ -680,7 +683,7 @@ body.User--directory
   padding: 0 !important;
   color: var(--hcf-user-muted) !important;
   background: rgba(255, 255, 255, 0.035) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid var(--hcf-user-card-border) !important;
   border-radius: 8px !important;
   box-shadow: none !important;
 }
@@ -755,12 +758,16 @@ body.User--directory
     left: auto !important;
     z-index: 3200 !important;
     min-width: 190px !important;
-    max-width: min(260px, calc(100vw - 30px)) !important;
+    width: 220px !important;
+    max-width: calc(100vw - 30px) !important;
     margin: 0 !important;
     padding: 7px !important;
     overflow: visible !important;
     color: var(--hcf-user-text) !important;
-    background: rgba(9, 13, 15, 0.99) !important;
+    background: var(
+      --surface-translucent-strong,
+      rgba(15, 15, 15, 0.98)
+    ) !important;
     border: 1px solid var(--hcf-user-card-border) !important;
     border-radius: 11px !important;
     box-shadow:
