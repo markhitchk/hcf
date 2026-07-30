@@ -1,0 +1,702 @@
+/* ==========================================================
+   Harley's Clan Forum — User Directory v5
+   Flarum + FriendsOfFlarum User Directory
+   Full replacement stylesheet for /users only.
+
+   Fixes:
+   - unified equal-size cards
+   - direct-child grid items reset so cards cannot skip columns
+   - badges fixed at top-left
+   - kebab control fixed at bottom-right
+   - card dropdown opens upward and is not clipped
+   - toolbar dropdowns stay above the card list
+   - long usernames and mobile layouts remain contained
+   ========================================================== */
+
+body.User--directory,
+.UserDirectoryPage {
+  --hcf-directory-accent: var(--cyan-readable, var(--cyan, #00ffff));
+  --hcf-directory-accent-soft: var(--cyan-soft, rgba(0, 255, 255, 0.25));
+  --hcf-directory-surface: var(--body-bg, #14181c);
+  --hcf-directory-card: rgba(0, 20, 24, 0.94);
+  --hcf-directory-control: var(--control-bg, rgba(25, 25, 25, 0.94));
+  --hcf-directory-border: color-mix(in srgb, var(--hcf-directory-accent) 34%, transparent);
+  --hcf-directory-text: var(--body-color, var(--text-color, #e8e8e8));
+  --hcf-directory-muted: var(--muted-color, #9aa4aa);
+  --hcf-directory-radius: 14px;
+  --hcf-directory-gap: 14px;
+  --hcf-directory-card-height: 180px;
+}
+
+/* ==========================================================
+   DIRECTORY PAGE STACKING
+   ========================================================== */
+
+body.User--directory .IndexPage-toolbar,
+.UserDirectoryPage .IndexPage-toolbar {
+  position: relative !important;
+  z-index: 3000 !important;
+  overflow: visible !important;
+  padding: 12px 0 16px;
+}
+
+body.User--directory .IndexPage-toolbar-view,
+body.User--directory .IndexPage-toolbar-action,
+.UserDirectoryPage .IndexPage-toolbar-view,
+.UserDirectoryPage .IndexPage-toolbar-action,
+body.User--directory .IndexPage-toolbar li,
+.UserDirectoryPage .IndexPage-toolbar li {
+  overflow: visible !important;
+}
+
+body.User--directory .IndexPage-toolbar .Dropdown,
+body.User--directory .IndexPage-toolbar .Select,
+body.User--directory .UserDirectorySearchInput,
+.UserDirectoryPage .IndexPage-toolbar .Dropdown,
+.UserDirectoryPage .IndexPage-toolbar .Select,
+.UserDirectoryPage .UserDirectorySearchInput {
+  position: relative;
+}
+
+body.User--directory .IndexPage-toolbar .Dropdown.open,
+body.User--directory .IndexPage-toolbar .Dropdown:focus-within,
+body.User--directory .UserDirectorySearchInput:focus-within,
+.UserDirectoryPage .IndexPage-toolbar .Dropdown.open,
+.UserDirectoryPage .IndexPage-toolbar .Dropdown:focus-within,
+.UserDirectoryPage .UserDirectorySearchInput:focus-within {
+  z-index: 3200 !important;
+}
+
+body.User--directory .IndexPage-toolbar .Dropdown-menu,
+body.User--directory .UserDirectorySearchInput .Dropdown-menu,
+.UserDirectoryPage .IndexPage-toolbar .Dropdown-menu,
+.UserDirectoryPage .UserDirectorySearchInput .Dropdown-menu {
+  z-index: 3300 !important;
+  overflow: auto;
+  max-height: min(420px, 70vh);
+  padding: 7px;
+  color: var(--hcf-directory-text);
+  background: var(--hcf-directory-surface) !important;
+  border: 1px solid var(--hcf-directory-border) !important;
+  border-radius: 12px;
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.48),
+    0 0 18px var(--hcf-directory-accent-soft);
+}
+
+body.User--directory .UserDirectoryList,
+body.User--directory .UserDirectoryList-users,
+.UserDirectoryPage .UserDirectoryList,
+.UserDirectoryPage .UserDirectoryList-users {
+  position: relative;
+  z-index: 1;
+  overflow: visible !important;
+}
+
+/* ==========================================================
+   TOOLBAR CONTROLS
+   ========================================================== */
+
+body.User--directory .IndexPage-toolbar .Button,
+body.User--directory .IndexPage-toolbar .FormControl,
+body.User--directory .IndexPage-toolbar .Select-input,
+body.User--directory .UserDirectorySearchInput,
+.UserDirectoryPage .IndexPage-toolbar .Button,
+.UserDirectoryPage .IndexPage-toolbar .FormControl,
+.UserDirectoryPage .IndexPage-toolbar .Select-input,
+.UserDirectoryPage .UserDirectorySearchInput {
+  min-height: 40px;
+  color: var(--hcf-directory-text) !important;
+  background: var(--hcf-directory-control) !important;
+  border: 1px solid var(--hcf-directory-border) !important;
+  border-radius: 999px !important;
+  box-shadow: none;
+}
+
+body.User--directory .IndexPage-toolbar .Button:hover,
+body.User--directory .IndexPage-toolbar .Button:focus-visible,
+body.User--directory .IndexPage-toolbar .FormControl:hover,
+body.User--directory .IndexPage-toolbar .FormControl:focus-visible,
+body.User--directory .IndexPage-toolbar .Select-input:hover,
+body.User--directory .IndexPage-toolbar .Select-input:focus-visible,
+body.User--directory .UserDirectorySearchInput:focus-within,
+.UserDirectoryPage .IndexPage-toolbar .Button:hover,
+.UserDirectoryPage .IndexPage-toolbar .Button:focus-visible,
+.UserDirectoryPage .IndexPage-toolbar .FormControl:hover,
+.UserDirectoryPage .IndexPage-toolbar .FormControl:focus-visible,
+.UserDirectoryPage .IndexPage-toolbar .Select-input:hover,
+.UserDirectoryPage .IndexPage-toolbar .Select-input:focus-visible,
+.UserDirectoryPage .UserDirectorySearchInput:focus-within {
+  border-color: var(--hcf-directory-accent) !important;
+  box-shadow: 0 0 0 3px var(--hcf-directory-accent-soft) !important;
+}
+
+body.User--directory .UserDirectorySearchInput input,
+.UserDirectoryPage .UserDirectorySearchInput input {
+  min-width: 0;
+  color: var(--hcf-directory-text) !important;
+}
+
+body.User--directory .UserDirectorySearchInput input::placeholder,
+.UserDirectoryPage .UserDirectorySearchInput input::placeholder {
+  color: var(--hcf-directory-muted);
+  opacity: 0.9;
+}
+
+/* ==========================================================
+   EXACT FoF USER DIRECTORY GRID
+   Official structure:
+   .UserDirectoryList--small-cards
+     > .UserDirectoryList-users
+       > li
+         > .User
+           > .UserCard.UserCard--directory.UserCard--small
+   ========================================================== */
+
+body.User--directory .UserDirectoryList-users,
+.UserDirectoryPage .UserDirectoryList-users {
+  box-sizing: border-box;
+  clear: both;
+  margin: 0 !important;
+  padding: 4px 0 0 !important;
+  list-style: none !important;
+}
+
+body.User--directory .UserDirectoryList--small-cards > .UserDirectoryList-users,
+.UserDirectoryPage .UserDirectoryList--small-cards > .UserDirectoryList-users {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  grid-auto-flow: row !important;
+  grid-auto-rows: var(--hcf-directory-card-height) !important;
+  gap: var(--hcf-directory-gap) !important;
+  align-items: stretch !important;
+  justify-items: stretch !important;
+}
+
+/* Reset conflicting custom/core placement so visible users cannot
+   land in every second column like the screenshot. */
+body.User--directory .UserDirectoryList--small-cards > .UserDirectoryList-users > li,
+.UserDirectoryPage .UserDirectoryList--small-cards > .UserDirectoryList-users > li {
+  box-sizing: border-box !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  grid-area: auto !important;
+  place-self: stretch !important;
+  display: block !important;
+  float: none !important;
+  clear: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: var(--hcf-directory-card-height) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.User--directory .UserDirectoryList-users > li > .User,
+.UserDirectoryPage .UserDirectoryList-users > li > .User {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* ==========================================================
+   UNIFIED SMALL USER CARDS
+   ========================================================== */
+
+body.User--directory .UserDirectoryList .UserCard.UserCard--directory.UserCard--small,
+.UserDirectoryPage .UserDirectoryList .UserCard.UserCard--directory.UserCard--small {
+  box-sizing: border-box !important;
+  position: relative !important;
+  isolation: auto !important;
+  z-index: 1;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  color: var(--hcf-directory-text);
+  background: var(--hcf-directory-card) !important;
+  border: 1px solid var(--hcf-directory-border) !important;
+  border-radius: var(--hcf-directory-radius) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small:hover,
+body.User--directory .UserDirectoryList .UserCard--small:focus-within,
+.UserDirectoryPage .UserDirectoryList .UserCard--small:hover,
+.UserDirectoryPage .UserDirectoryList .UserCard--small:focus-within {
+  z-index: 50;
+  border-color: var(--hcf-directory-accent) !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.38),
+    0 0 18px var(--hcf-directory-accent-soft);
+}
+
+/* Raise only the active card; toolbar remains above it. */
+body.User--directory .UserDirectoryList .UserCard--small:has(.UserCard-controls .Dropdown.open),
+.UserDirectoryPage .UserDirectoryList .UserCard--small:has(.UserCard-controls .Dropdown.open) {
+  z-index: 2000 !important;
+}
+
+/* IMPORTANT: these wrappers contain the dropdown. They must not clip it. */
+body.User--directory .UserDirectoryList .UserCard--small > .darkenBackground,
+body.User--directory .UserDirectoryList .UserCard--small .darkenBackground,
+.UserDirectoryPage .UserDirectoryList .UserCard--small > .darkenBackground,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .darkenBackground {
+  box-sizing: border-box !important;
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  overflow: visible !important;
+  border-radius: inherit !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(0, 255, 255, 0.08), transparent 45%),
+    linear-gradient(145deg, rgba(0, 28, 33, 0.88), rgba(0, 7, 9, 0.96)) !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .container,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .container {
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 2;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  overflow: visible !important;
+  padding: 34px 42px 42px !important;
+}
+
+/* Decorative corners without clipping content or menus. */
+body.User--directory .UserDirectoryList .UserCard--small::before,
+.UserDirectoryPage .UserDirectoryList .UserCard--small::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 0 0 / 16px 2px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 0 0 / 2px 16px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 100% 0 / 16px 2px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 100% 0 / 2px 16px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 0 100% / 16px 2px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 0 100% / 2px 16px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 100% 100% / 16px 2px no-repeat,
+    linear-gradient(var(--hcf-directory-accent), var(--hcf-directory-accent)) 100% 100% / 2px 16px no-repeat;
+}
+
+/* ==========================================================
+   CENTERED, CONSISTENT PROFILE CONTENT
+   ========================================================== */
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-profile,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-profile {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-profile > a,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-profile > a {
+  display: block !important;
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-avatar,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-avatar {
+  display: block !important;
+  width: 58px !important;
+  height: 58px !important;
+  margin: 0 auto 2px !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar {
+  display: block !important;
+  width: 58px !important;
+  height: 58px !important;
+  line-height: 54px !important;
+  font-size: 22px !important;
+  border: 2px solid var(--hcf-directory-accent) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 14px var(--hcf-directory-accent-soft);
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-content,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-content {
+  display: flex !important;
+  flex: 0 1 auto;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-identity,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-identity {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  color: var(--hcf-directory-accent) !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 0 8px var(--hcf-directory-accent-soft);
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-identity a,
+body.User--directory .UserDirectoryList .UserCard--small .username,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-identity a,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .username {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  color: inherit !important;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-info,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-info {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 18px;
+  max-height: 36px;
+  margin: 5px 0 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  color: var(--hcf-directory-muted) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  text-align: center !important;
+  list-style: none !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-info > li,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-info > li {
+  display: block !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   BADGES — FIXED TOP-LEFT
+   ========================================================== */
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-badges,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-badges {
+  position: absolute !important;
+  top: 10px !important;
+  right: 48px !important;
+  bottom: auto !important;
+  left: 10px !important;
+  z-index: 10 !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 5px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 58px) !important;
+  height: 26px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  list-style: none !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-badges > li,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-badges > li {
+  display: block !important;
+  flex: 0 0 25px !important;
+  width: 25px !important;
+  height: 25px !important;
+  margin: 0 !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-badges .Badge,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-badges .Badge {
+  display: block !important;
+  width: 25px !important;
+  height: 25px !important;
+  line-height: 23px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.28);
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-badges .Badge-icon,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-badges .Badge-icon {
+  font-size: 12px !important;
+}
+
+/* ==========================================================
+   USER CONTROL / KEBAB — FIXED BOTTOM-RIGHT
+   ========================================================== */
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-controls,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-controls {
+  position: absolute !important;
+  top: auto !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  left: auto !important;
+  z-index: 30 !important;
+  display: block !important;
+  width: 34px !important;
+  height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-controls > .item-controls,
+body.User--directory .UserDirectoryList .UserCard--small .UserCard-controls .Dropdown,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-controls > .item-controls,
+.UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-controls .Dropdown {
+  position: relative !important;
+  display: block !important;
+  width: 34px !important;
+  height: 34px !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-toggle,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.68) !important;
+  border: 1px solid color-mix(in srgb, var(--hcf-directory-accent) 42%, transparent) !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-toggle:hover,
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-toggle:focus-visible,
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown.open > .Dropdown-toggle,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-toggle:hover,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-toggle:focus-visible,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown.open > .Dropdown-toggle {
+  color: #001014 !important;
+  background: var(--hcf-directory-accent) !important;
+  border-color: var(--hcf-directory-accent) !important;
+  box-shadow: 0 0 0 3px var(--hcf-directory-accent-soft) !important;
+}
+
+/* Desktop: open the menu upward from the bottom-right button. */
+@media (min-width: 768px) {
+  body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu,
+  .UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu {
+    position: absolute !important;
+    top: auto !important;
+    right: 0 !important;
+    bottom: calc(100% + 8px) !important;
+    left: auto !important;
+    z-index: 2100 !important;
+    min-width: 190px !important;
+    max-width: min(260px, calc(100vw - 30px)) !important;
+    margin: 0 !important;
+    padding: 7px !important;
+    overflow: visible !important;
+    transform: none !important;
+    color: var(--hcf-directory-text) !important;
+    background: var(--hcf-directory-surface) !important;
+    border: 1px solid var(--hcf-directory-border) !important;
+    border-radius: 12px !important;
+    box-shadow:
+      0 16px 38px rgba(0, 0, 0, 0.5),
+      0 0 18px var(--hcf-directory-accent-soft) !important;
+  }
+}
+
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu > li,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu > li {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu > li > a,
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu > li > button,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu > li > a,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu > li > button {
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  width: 100% !important;
+  min-height: 36px;
+  color: var(--hcf-directory-text) !important;
+  border-radius: 8px !important;
+}
+
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu > li > a:hover,
+body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu > li > button:hover,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu > li > a:hover,
+.UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu > li > button:hover {
+  color: var(--hcf-directory-accent) !important;
+  background: color-mix(in srgb, var(--hcf-directory-accent) 11%, transparent) !important;
+}
+
+/* ==========================================================
+   LOAD MORE
+   ========================================================== */
+
+body.User--directory .UserDirectoryList-loadMore,
+.UserDirectoryPage .UserDirectoryList-loadMore {
+  position: relative;
+  z-index: 1;
+  padding-top: 16px;
+  text-align: center;
+}
+
+body.User--directory .UserDirectoryList-loadMore .Button,
+.UserDirectoryPage .UserDirectoryList-loadMore .Button {
+  min-height: 40px;
+  padding: 8px 22px !important;
+  color: var(--hcf-directory-text) !important;
+  background: var(--hcf-directory-control) !important;
+  border: 1px solid var(--hcf-directory-border) !important;
+  border-radius: 999px !important;
+}
+
+/* ==========================================================
+   RESPONSIVE LAYOUT
+   ========================================================== */
+
+@media (max-width: 767px) {
+  body.User--directory .IndexPage-toolbar,
+  .UserDirectoryPage .IndexPage-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  body.User--directory .IndexPage-toolbar-view,
+  body.User--directory .IndexPage-toolbar-action,
+  .UserDirectoryPage .IndexPage-toolbar-view,
+  .UserDirectoryPage .IndexPage-toolbar-action {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+    gap: 8px;
+  }
+
+  body.User--directory .IndexPage-toolbar .item-search,
+  .UserDirectoryPage .IndexPage-toolbar .item-search {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  body.User--directory .UserDirectoryList--small-cards > .UserDirectoryList-users,
+  .UserDirectoryPage .UserDirectoryList--small-cards > .UserDirectoryList-users {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: 172px !important;
+  }
+
+  body.User--directory .UserDirectoryList--small-cards > .UserDirectoryList-users > li,
+  .UserDirectoryPage .UserDirectoryList--small-cards > .UserDirectoryList-users > li {
+    height: 172px !important;
+  }
+
+  body.User--directory .UserDirectoryList .UserCard--small .container,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small .container {
+    padding: 32px 38px 40px !important;
+  }
+
+  body.User--directory .UserDirectoryList .UserCard--small .UserCard-avatar,
+  body.User--directory .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-avatar,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  body.User--directory .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small .UserCard-avatar .Avatar {
+    line-height: 46px !important;
+    font-size: 20px !important;
+  }
+
+  /* Let Flarum use its native mobile dropdown presentation. */
+  body.User--directory .UserDirectoryList .UserCard-controls .Dropdown-menu,
+  .UserDirectoryPage .UserDirectoryList .UserCard-controls .Dropdown-menu {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    transform: none;
+  }
+}
+
+@media (max-width: 520px) {
+  body.User--directory .UserDirectoryList--small-cards > .UserDirectoryList-users,
+  .UserDirectoryPage .UserDirectoryList--small-cards > .UserDirectoryList-users {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.User--directory .UserDirectoryList .UserCard--small:hover,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.User--directory .UserDirectoryList .UserCard--small,
+  .UserDirectoryPage .UserDirectoryList .UserCard--small {
+    transition: none !important;
+  }
+}
