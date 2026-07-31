@@ -1,7 +1,14 @@
 /* ==========================================================
    Harley's Clan Forum - KaiOS Accessibility v1.7
    Standalone 320x240 / 240x320 feature-phone override.
-   No imports and no dependency on older KaiOS files.
+
+   Corrected build:
+   - Restores Flarum's top PostStream scrubber/counter
+   - Removes duplicate in-page scrubber/title layers
+   - Keeps posts in normal vertical flow without rewriting
+     Flarum's required post positioning
+   - No imports or dependencies on older KaiOS files
+
    Author: HarleyTG
    Updated: 2026-07-30
    ========================================================== */
@@ -48,10 +55,6 @@
   .PostStreamScrubber {
     animation: none !important;
     transition: none !important;
-    transform: none !important;
-    filter: none !important;
-    perspective: none !important;
-    will-change: auto !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -75,6 +78,7 @@
   .PostStream,
   .PostStream-item,
   .Post,
+  .Post-content,
   .Post-body {
     min-width: 0 !important;
     max-width: 100% !important;
@@ -157,7 +161,10 @@
   html body .backgrwb.backgrwb.backgrwb,
   html body .backgrwbguest.backgrwbguest.backgrwbguest {
     position: relative !important;
-    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
     display: flex !important;
     width: 200px !important;
     min-width: 0 !important;
@@ -169,6 +176,7 @@
     padding: 8px 6px !important;
     overflow: visible !important;
     border-radius: 16px !important;
+    transform: none !important;
     z-index: auto !important;
   }
 
@@ -258,129 +266,71 @@
     line-height: 1.3 !important;
   }
 
-  html body .DiscussionPage-discussion > .container {
-    display: block !important;
+  html body .containerwb,
+  html body .welcomebox-widget,
+  html body .welcomebox-widget .AfruxWidgets-Widget-content {
+    position: relative !important;
     width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    grid-template: none !important;
-    grid-template-columns: none !important;
-    grid-template-rows: none !important;
-    grid-template-areas: none !important;
-    grid-gap: 0 !important;
-    gap: 0 !important;
-  }
-
-  html body .DiscussionPage-nav,
-  html body .DiscussionPage-stream {
-    display: block !important;
-    position: static !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    transform: none !important;
-    z-index: auto !important;
-  }
-
-  html body .DiscussionPage-nav {
-    margin: 0 0 8px !important;
-    padding: 0 !important;
-    border: 0 !important;
     overflow: visible !important;
-  }
-
-  html body .DiscussionPage-discussion > .container > .DiscussionPage-nav ~ .DiscussionPage-nav,
-  html body .DiscussionPage-nav > ul > li.item-scrubber ~ li.item-scrubber,
-  html body .DiscussionPage-nav .PostStreamScrubber ~ .PostStreamScrubber,
-  html body .App-header .PostStreamScrubber,
-  html body .Header .PostStreamScrubber,
-  html body #header .PostStreamScrubber,
-  html body .DiscussionPage-stream .PostStreamScrubber {
-    display: none !important;
-  }
-
-  html body .DiscussionPage-nav > ul {
-    display: flex !important;
-    align-items: center !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-  }
-
-  html body .DiscussionPage-nav > ul > li.item-scrubber {
-    display: block !important;
-    position: static !important;
-    flex: 1 1 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
-    height: 32px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  html body .DiscussionPage-nav > ul > li.item-controls {
-    display: block !important;
-    position: static !important;
-    flex: 0 0 34px !important;
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 32px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  html body .DiscussionPage-nav .PostStreamScrubber {
-    display: block !important;
-    position: static !important;
-    float: none !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: 32px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
     z-index: auto !important;
   }
 
-  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle {
-    display: flex !important;
+  html body .PostStreamScrubber.App-titleControl {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 50% !important;
+    width: 180px !important;
+    height: var(--header-height-phone, 46px) !important;
+    margin: 0 0 0 -90px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    z-index: 1001 !important;
+  }
+
+  html body .App.affix .PostStreamScrubber.App-titleControl {
+    position: fixed !important;
+  }
+
+  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle {
+    display: block !important;
     position: static !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    max-height: 32px !important;
+    height: var(--header-height-phone, 46px) !important;
+    min-height: var(--header-height-phone, 46px) !important;
+    max-height: var(--header-height-phone, 46px) !important;
     margin: 0 !important;
-    padding: 4px 8px !important;
+    padding: 10px 6px !important;
     overflow: hidden !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--header-color, currentColor) !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    opacity: 1 !important;
     visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
     pointer-events: none !important;
     cursor: default !important;
   }
 
-  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle .Scrubber-index,
-  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle .Scrubber-count {
+  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .Scrubber-index,
+  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .Scrubber-count {
     display: inline !important;
     position: static !important;
     float: none !important;
@@ -388,23 +338,23 @@
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
-    opacity: 1 !important;
     visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle .fa-sort,
-  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle > .icon {
+  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .fa-sort,
+  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle > .icon {
     display: none !important;
   }
 
-  html body .DiscussionPage-nav .PostStreamScrubber > .Dropdown-menu,
-  html body .DiscussionPage-nav .PostStreamScrubber > .dropdown-menu,
-  html body .DiscussionPage-nav .PostStreamScrubber.open > .Dropdown-menu,
-  html body .DiscussionPage-nav .PostStreamScrubber.open > .dropdown-menu,
-  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber,
-  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-info,
-  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-scrollbar,
-  html body .DiscussionPage-nav .PostStreamScrubber .dropdown-backdrop {
+  html body .PostStreamScrubber > .Dropdown-menu,
+  html body .PostStreamScrubber > .dropdown-menu,
+  html body .PostStreamScrubber.open > .Dropdown-menu,
+  html body .PostStreamScrubber.open > .dropdown-menu,
+  html body .PostStreamScrubber .Scrubber,
+  html body .PostStreamScrubber .Scrubber-info,
+  html body .PostStreamScrubber .Scrubber-scrollbar,
+  html body .PostStreamScrubber .dropdown-backdrop {
     display: none !important;
     width: 0 !important;
     min-width: 0 !important;
@@ -415,29 +365,20 @@
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
-    opacity: 0 !important;
     visibility: hidden !important;
+    opacity: 0 !important;
     pointer-events: none !important;
   }
 
-  html body .PostStream,
-  html body .PostStream-item,
-  html body .PostStream-item > article.Post,
-  html body .PostStream-item > .Post,
-  html body .PostStream-item .CommentPost,
-  html body .PostStream-item .CommentPost > div,
-  html body .PostStream .Post-header,
-  html body .PostStream .Post-body,
-  html body .PostStream .Post-signature,
-  html body .PostStream .Post-actions,
-  html body .PostStream .Post-footer,
-  html body .PostStream .Post-quoteButtonContainer {
+  html body .DiscussionPage-nav > ul > li.item-scrubber ~ li.item-scrubber,
+  html body .PostStreamScrubber + .PostStreamScrubber {
+    display: none !important;
+  }
+
+  html body .DiscussionPage-stream,
+  html body .PostStream {
     display: block !important;
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
+    position: relative !important;
     float: none !important;
     clear: both !important;
     width: 100% !important;
@@ -449,15 +390,26 @@
     margin-left: 0 !important;
     margin-right: 0 !important;
     overflow: visible !important;
-    opacity: 1 !important;
     transform: none !important;
     z-index: auto !important;
   }
 
-  html body .PostStream-item > article.Post,
-  html body .PostStream-item > .Post,
-  html body .PostStream-item .CommentPost {
-    padding: 8px 6px !important;
+  html body .PostStream-item {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 1px !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    z-index: auto !important;
   }
 
   html body .PostStream-item:not(:last-child) {
@@ -467,114 +419,44 @@
   }
 
   html body .PostStream-item::after,
-  html body .PostStream-item .CommentPost::after,
-  html body .PostStream-item .CommentPost > div::after {
+  html body .PostStream-item > article.Post::after,
+  html body .PostStream-item > .Post::after {
     content: "" !important;
     display: table !important;
     clear: both !important;
   }
 
-  html body .PostStream .Post-header {
-    margin: 0 0 8px !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream .Post-header > ul,
-  html body .PostStream .Post-actions > ul,
-  html body .PostStream .Post-footer > ul,
-  html body .PostStream .PostUser-badges {
-    list-style: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream .Post-header > ul > li {
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item .CommentPost {
     display: block !important;
-    position: static !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    margin: 0 0 4px !important;
-    padding: 0 !important;
-    list-style: none !important;
-  }
-
-  html body .PostStream .PostUser,
-  html body .PostStream .PostUser-name,
-  html body .PostStream .PostUser-name > a {
-    display: block !important;
-    position: static !important;
-    float: none !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-  }
-
-  html body .PostStream .PostUser-name > a {
-    display: flex !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 4px !important;
-  }
-
-  html body .PostStream .PostUser-avatar {
-    position: static !important;
-    float: none !important;
-    width: 32px !important;
-    min-width: 32px !important;
-    max-width: 32px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    max-height: 32px !important;
-    margin: 0 5px 0 0 !important;
-  }
-
-  html body .PostStream .PostUser-badges {
-    display: inline-flex !important;
-    position: static !important;
-    float: none !important;
-    flex-wrap: wrap !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 3px 0 !important;
-    white-space: normal !important;
-  }
-
-  html body .PostStream .PostUser-badges > li,
-  html body .PostStream .iconbadge > li {
-    display: inline-flex !important;
-    list-style: none !important;
-    margin: 0 2px 2px 0 !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream .PostUser-badges .Badge {
     position: relative !important;
-    float: none !important;
-    margin: 0 !important;
-  }
-
-  html body .PostStream .PostUser-level,
-  html body .PostStream .badgeHolder {
-    display: block !important;
-    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
     float: none !important;
     clear: both !important;
     width: 100% !important;
     min-width: 0 !important;
-    max-width: 150px !important;
+    max-width: 100% !important;
     height: auto !important;
-    margin: 3px 0 !important;
+    min-height: 1px !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 8px 6px !important;
+    overflow: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: auto !important;
   }
 
   html body .PostStream .Post-body {
-    margin: 0 !important;
-    padding: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
     font-size: 14px !important;
     line-height: 1.45 !important;
   }
@@ -585,123 +467,62 @@
   html body .PostStream .LinkPreview,
   html body .PostStream .LinkPreview-main,
   html body .PostStream .LinkPreview-image {
-    display: block !important;
-    position: static !important;
-    float: none !important;
-    clear: both !important;
-    width: auto !important;
-    min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
-    max-height: none !important;
-    transform: none !important;
   }
 
-  html body .PostStream .LinkPreview,
-  html body .PostStream .LinkPreview-main,
-  html body .PostStream .LinkPreview-image {
-    width: 100% !important;
-    overflow: hidden !important;
-  }
-
-  html body .PostStream .Post-signature {
-    margin: 8px 0 0 !important;
-    padding: 6px 0 0 !important;
-  }
-
-  html body .PostStream .Post-actions,
   html body .PostStream .Post-footer {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 6px 0 10px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  html body .PostStream .Post-actions {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    height: auto !important;
     margin: 6px 0 0 !important;
     padding: 0 !important;
+    opacity: 1 !important;
   }
 
   html body .PostStream .Post-actions > ul,
   html body .PostStream .Post-footer > ul {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    gap: 3px !important;
+    display: block !important;
     width: 100% !important;
-  }
-
-  html body .PostStream .Post-actions > ul > li,
-  html body .PostStream .Post-footer > ul > li {
-    display: inline-flex !important;
-    position: static !important;
-    float: none !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     list-style: none !important;
   }
 
-  html body .PostStream .Post-actions .Button,
-  html body .PostStream .Post-vote {
-    width: auto !important;
-    min-width: 28px !important;
-    max-width: 100% !important;
-    min-height: 28px !important;
-    height: auto !important;
-    padding: 4px 6px !important;
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-  }
-
-  html body .PostStream .Dropdown,
-  html body .PostStream .ButtonGroup.Dropdown {
+  html body .PostStream .Post-actions > ul > li,
+  html body .PostStream .Post-footer > ul > li {
+    display: inline-block !important;
     position: relative !important;
-  }
-
-  html body .PostStream .Dropdown .Dropdown-menu,
-  html body .PostStream .Dropdown .dropdown-menu {
-    display: none !important;
-    position: absolute !important;
-    top: 100% !important;
-    right: 0 !important;
-    bottom: auto !important;
-    left: auto !important;
-    width: 210px !important;
-    min-width: 0 !important;
-    max-width: calc(100vw - 12px) !important;
-    height: auto !important;
-    max-height: calc(100vh - 16px) !important;
-    margin: 2px 0 0 !important;
-    padding: 4px 0 !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    transform: none !important;
-    z-index: 50 !important;
-  }
-
-  html body .PostStream .Dropdown.open > .Dropdown-menu,
-  html body .PostStream .Dropdown.open > .dropdown-menu {
-    display: block !important;
-  }
-
-  html body .PostStream .dropdown-backdrop {
-    display: none !important;
-  }
-
-  html body .PostStream .CommentPost--Reactions {
-    position: static !important;
-    inset: auto !important;
-    width: 100% !important;
-    min-width: 0 !important;
+    float: none !important;
+    width: auto !important;
     max-width: 100% !important;
     height: auto !important;
-    margin: 4px 0 0 !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    transform: none !important;
+    margin: 0 3px 3px 0 !important;
+    padding: 0 !important;
+    vertical-align: top !important;
+    list-style: none !important;
   }
 
   html body .PostStream-timeGap,
   html body .PostStream .ReplyPlaceholder {
     display: block !important;
-    position: static !important;
+    position: relative !important;
     float: none !important;
     clear: both !important;
     width: 100% !important;
@@ -709,17 +530,5 @@
     max-width: 100% !important;
     height: auto !important;
     transform: none !important;
-  }
-
-  html body .PostStream-timeGap {
-    margin: 4px 0 8px !important;
-    padding: 6px !important;
-    font-size: 11px !important;
-  }
-
-  html body .PostStream .ReplyPlaceholder {
-    min-height: 40px !important;
-    margin: 10px 0 0 !important;
-    padding: 8px !important;
   }
 }
