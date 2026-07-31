@@ -3,75 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harley's Clan Footer</title>
+<title>Harley's Clan Forum Footer</title>
 
 <style>
-/* =========================================
-   Pull cyan theme variables (Harley forum)
-========================================= */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/messenger.css");
+/* =========================================================
+   HARLEY'S CLAN FORUM FOOTER v3.1
+   Full Device Compatibility Edition
 
-/* ===========================================================
-   HARLEY'S CLAN FOOTER v2 (cyan-matched)
-   Light/Dark Theme Compatible
-=========================================================== */
+   - Self-contained: no external CSS import
+   - Modern glass effects with safe fallbacks
+   - Light/dark theme compatible
+   - Unsupported-device compatibility protocol
+   - Public IP is requested only after user interaction
+========================================================= */
 
 :root{
-    --hc-accent: var(--cyan, #00ffff);
-    --hc-cyan-readable: color-mix(in srgb, var(--cyan, #00ffff) 65%, var(--body-color, #1a1a1a) 35%);
-
-    /* make all "cyan" uses point to the readable cyan */
-    --hc-accent: var(--hc-cyan-readable);
-
+    --hc-accent:#00ffff;
     --hc-bg:#15171b;
+    --hc-bg-strong:#0d0f12;
     --hc-border:#2f3742;
     --hc-text:#eefcff;
     --hc-muted:#9cb7c2;
-
-    --hc-cyan-glow: color-mix(in srgb, var(--cyan, #00ffff) 70%, transparent);
-    --hc-cyan-glow-soft: color-mix(in srgb, var(--cyan, #00ffff) 40%, transparent);
-
-    /* discord-style spoiler */
+    --hc-warning:#ffd400;
+    --hc-warning-bg:#211d08;
+    --hc-warning-border:#665700;
+    --hc-cyan-glow:rgba(0,255,255,.70);
+    --hc-cyan-glow-soft:rgba(0,255,255,.40);
     --hc-spoiler-bg:#202225;
     --hc-spoiler-bg-hover:#4f545c;
+    --hc-spoiler-revealed:rgba(32,34,37,.45);
 }
 
-.hc-simple-footer{
-    width:100%;
-    padding:60px 20px;
-    margin-top:60px;
-    border-top:1px solid var(--control-border,var(--hc-border));
-    background:transparent;
-    color:var(--text-color,var(--hc-text));
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    box-sizing:border-box;
+@supports (color:color-mix(in srgb, red, blue)){
+    :root{
+        --hc-accent:color-mix(
+            in srgb,
+            var(--cyan, #00ffff) 65%,
+            var(--body-color, #1a1a1a) 35%
+        );
+        --hc-cyan-glow:color-mix(
+            in srgb,
+            var(--cyan, #00ffff) 70%,
+            transparent
+        );
+        --hc-cyan-glow-soft:color-mix(
+            in srgb,
+            var(--cyan, #00ffff) 40%,
+            transparent
+        );
+        --hc-spoiler-revealed:color-mix(
+            in srgb,
+            var(--hc-spoiler-bg) 45%,
+            transparent
+        );
+    }
 }
 
+.hc-simple-footer,
 .hc-simple-footer *,
 .hc-simple-footer *::before,
 .hc-simple-footer *::after{
-    box-sizing:inherit;
+    box-sizing:border-box;
 }
 
-/* Scroll Button */
+.hc-simple-footer{
+    position:relative;
+    display:block;
+    width:100%;
+    max-width:100%;
+    margin-top:60px;
+    padding:60px 20px;
+    overflow:hidden;
+    border-top:1px solid var(--control-border, var(--hc-border));
+    background:transparent;
+    color:var(--text-color, var(--body-color, var(--hc-text)));
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    isolation:isolate;
+}
 
+.hc-simple-footer::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-180px;
+    width:600px;
+    height:300px;
+    background:radial-gradient(circle,var(--hc-cyan-glow-soft) 0%,transparent 70%);
+    opacity:.18;
+    pointer-events:none;
+    transform:translateX(-50%);
+    z-index:-1;
+}
+
+/* Compatibility protocol */
+.hc-compatibility-notice{
+    display:none;
+    width:100%;
+    max-width:620px;
+    margin:0 auto 24px;
+    padding:16px 18px;
+    border:1px solid var(--hc-warning-border);
+    border-radius:14px;
+    background:var(--hc-warning-bg);
+    color:#fff4ad;
+    font-family:"JetBrains Mono","Courier New",monospace;
+    text-align:left;
+    box-shadow:0 0 20px rgba(255,212,0,.10),inset 0 0 20px rgba(255,212,0,.03);
+}
+
+.hc-compatibility-notice.is-visible{
+    display:block;
+}
+
+.hc-compatibility-header{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:7px;
+    color:var(--hc-warning);
+    font-size:.78rem;
+    font-weight:800;
+    letter-spacing:.12em;
+    line-height:1.4;
+    text-transform:uppercase;
+}
+
+.hc-compatibility-dot{
+    display:inline-block;
+    flex:0 0 auto;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--hc-warning);
+    box-shadow:0 0 5px var(--hc-warning),0 0 12px rgba(255,212,0,.65);
+    animation:hc-warning-pulse 1.8s ease-in-out infinite;
+}
+
+.hc-compatibility-message{
+    font-size:.73rem;
+    line-height:1.7;
+    letter-spacing:.03em;
+}
+
+.hc-compatibility-message strong{
+    color:var(--hc-warning);
+}
+
+.hc-compatibility-code{
+    display:inline-block;
+    margin-top:7px;
+    color:#c8b95d;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+@keyframes hc-warning-pulse{
+    0%,100%{opacity:.45;transform:scale(.9)}
+    50%{opacity:1;transform:scale(1.1)}
+}
+
+.hc-noscript-notice{
+    width:100%;
+    max-width:620px;
+    margin:0 auto 24px;
+    padding:15px 18px;
+    border:1px solid var(--hc-warning-border);
+    border-radius:14px;
+    background:var(--hc-warning-bg);
+    color:#fff4ad;
+    font-family:"JetBrains Mono","Courier New",monospace;
+    font-size:.73rem;
+    line-height:1.7;
+    letter-spacing:.03em;
+}
+
+/* Return to top */
 .hc-scroll-container{
-    text-align:center;
     margin-bottom:35px;
+    text-align:center;
 }
 
 #hc-top-btn{
     display:inline-flex;
     align-items:center;
+    justify-content:center;
     gap:10px;
+    min-height:42px;
     padding:12px 24px;
+    border:1px solid var(--control-border, var(--hc-border));
     border-radius:999px;
-    border:1px solid var(--control-border,var(--hc-border));
-    background:var(--control-bg,var(--hc-bg));
-    color:var(--text-color,var(--hc-text));
+    background:var(--control-bg, var(--hc-bg));
+    color:var(--text-color, var(--body-color, var(--hc-text)));
     cursor:pointer;
-    font:600 .85rem inherit;
-    transition:.25s ease;
+    font-family:inherit;
+    font-size:.85rem;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:.08em;
+    transition:border-color .25s ease,color .25s ease,box-shadow .25s ease,transform .25s ease;
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
 }
@@ -79,67 +209,154 @@
 #hc-top-btn:hover{
     border-color:var(--hc-accent);
     color:var(--hc-accent);
-    box-shadow:0 0 18px var(--hc-cyan-glow-soft);
+    box-shadow:0 0 18px var(--hc-cyan-glow-soft),inset 0 0 12px rgba(0,255,255,.04);
     transform:translateY(-2px);
 }
 
+#hc-top-btn:active{
+    transform:translateY(0);
+}
+
+#hc-top-btn:focus,
 #hc-top-btn:focus-visible{
     outline:2px solid var(--hc-accent);
     outline-offset:4px;
 }
 
 /* Brand */
-
 .hc-footer-brand{
-    text-align:center;
     margin-bottom:35px;
+    text-align:center;
+}
+
+.hc-footer-logo-wrap{
+    position:relative;
+    width:76px;
+    height:76px;
+    margin:0 auto 18px;
+}
+
+.hc-footer-logo-wrap::before{
+    content:"";
+    position:absolute;
+    inset:-6px;
+    border:1px solid rgba(0,255,255,.24);
+    border-radius:50%;
+    animation:hc-logo-ring 5s linear infinite;
 }
 
 .hc-footer-logo-img{
+    display:block;
     width:72px;
     height:72px;
-    border-radius:50%;
-    object-fit:cover;
+    margin:2px;
     border:2px solid var(--hc-accent);
-    box-shadow:0 0 20px var(--hc-cyan-glow-soft);
-    display:block;
-    margin:0 auto 18px;
+    border-radius:50%;
+    background:var(--hc-bg-strong);
+    object-fit:cover;
+    box-shadow:0 0 10px var(--hc-cyan-glow-soft),0 0 26px rgba(0,255,255,.18);
+}
+
+@keyframes hc-logo-ring{
+    0%{transform:rotate(0deg);opacity:.4}
+    50%{opacity:1}
+    100%{transform:rotate(360deg);opacity:.4}
 }
 
 .hc-footer-text{
     font-size:1.05rem;
+    line-height:1.5;
 }
 
 .hc-footer-text strong{
     color:var(--hc-accent);
     letter-spacing:.6px;
+    text-shadow:0 0 9px var(--hc-cyan-glow-soft);
+}
+
+.hc-footer-subtitle{
+    margin-top:5px;
+    color:var(--muted-color, var(--hc-muted));
+    font-family:"JetBrains Mono","Courier New",monospace;
+    font-size:.67rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
 }
 
 /* Terminal */
-
 .hc-terminal-block{
     display:block;
-    width:min(100%,620px);
-    margin:auto;
+    width:100%;
+    max-width:620px;
+    margin:0 auto;
     padding:22px;
+    border:1px solid var(--control-border, var(--hc-border));
     border-radius:16px;
-    background:var(--control-bg,var(--hc-bg));
-    border:1px solid var(--control-border,var(--hc-border));
+    background:var(--control-bg, var(--hc-bg));
+    color:var(--text-color, var(--body-color, var(--hc-text)));
+    font-family:"JetBrains Mono","Courier New",monospace;
+    font-size:.88rem;
+    font-weight:500;
+    box-shadow:0 16px 50px rgba(0,0,0,.16),inset 0 0 20px rgba(0,255,255,.015);
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
-    font:500 .88rem "JetBrains Mono","Courier New",monospace;
-    color:var(--text-color,var(--hc-text));
+}
+
+.hc-terminal-heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin:-4px 0 18px;
+    padding-bottom:13px;
+    border-bottom:1px solid var(--control-border, var(--hc-border));
+}
+
+.hc-terminal-title{
+    color:var(--hc-accent);
+    font-size:.7rem;
+    font-weight:800;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    text-shadow:0 0 8px var(--hc-cyan-glow-soft);
+}
+
+.hc-terminal-lights{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.hc-terminal-light{
+    display:block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--hc-border);
+}
+
+.hc-terminal-light.is-active{
+    background:var(--hc-accent);
+    box-shadow:0 0 7px var(--hc-cyan-glow);
 }
 
 .hc-data-row{
-    display:grid;
-    grid-template-columns:110px 1fr;
-    gap:14px;
+    display:block;
+    margin-bottom:10px;
     line-height:1.9;
-    align-items:start;
+}
+
+@supports (display:grid){
+    .hc-data-row{
+        display:grid;
+        grid-template-columns:110px minmax(0,1fr);
+        align-items:start;
+        gap:14px;
+    }
 }
 
 .hc-label{
+    display:block;
     color:var(--hc-accent);
     font-weight:700;
     white-space:nowrap;
@@ -150,107 +367,139 @@
 }
 
 .hc-value{
+    display:block;
     min-width:0;
+    overflow-wrap:anywhere;
+    word-wrap:break-word;
     word-break:break-word;
 }
 
 .hc-divider{
     height:1px;
-    background:var(--control-border,var(--hc-border));
     margin:16px 0;
+    background:var(--control-border, var(--hc-border));
     opacity:.65;
 }
 
 .hc-sep{
-    opacity:.45;
     margin:0 8px;
+    opacity:.45;
+}
+
+#hc-device-status{
+    font-weight:800;
+    letter-spacing:.06em;
+}
+
+#hc-device-status.is-full{
+    color:var(--hc-accent);
+}
+
+#hc-device-status.is-limited{
+    color:var(--hc-warning);
+}
+
+.hc-device-indicator{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    margin-right:7px;
+    border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 7px currentColor;
+    vertical-align:middle;
 }
 
 #hc-id{
     font-weight:700;
 }
 
+#hc-id a{
+    color:var(--hc-accent);
+    text-decoration:none;
+}
+
+#hc-id a:hover{
+    text-decoration:underline;
+}
+
+#hc-id a:focus,
+#hc-id a:focus-visible{
+    border-radius:2px;
+    outline:2px solid var(--hc-accent);
+    outline-offset:2px;
+}
+
 .hc-ip-line{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:4px;
+    max-width:100%;
     font-weight:700;
     letter-spacing:.04em;
-    white-space:nowrap;
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
 .hc-bracket{
     opacity:.55;
 }
 
-/* Discord-style spoiler (click to reveal) */
-
 .hc-spoiler{
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
     max-width:100%;
+    min-height:1.5em;
     margin:0 1px;
-    padding:0;
+    padding:1px 5px;
     border:0;
     border-radius:4px;
     background:var(--hc-spoiler-bg);
     color:inherit;
     font:inherit;
     letter-spacing:inherit;
-    font-weight:inherit;
     cursor:pointer;
     vertical-align:baseline;
-    transition:background-color .15s ease;
+    transition:background-color .15s ease,color .15s ease,box-shadow .15s ease;
     -webkit-tap-highlight-color:transparent;
 }
 
 .hc-spoiler-text{
     display:inline-block;
-    padding:0 4px;
-    opacity:0;
-    filter:blur(6px);
-    user-select:none;
-    -webkit-user-select:none;
-    transition:opacity .15s ease,filter .15s ease;
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
 .hc-spoiler:hover{
     background:var(--hc-spoiler-bg-hover);
 }
 
+.hc-spoiler:focus,
 .hc-spoiler:focus-visible{
     outline:2px solid var(--hc-accent);
     outline-offset:2px;
 }
 
 .hc-spoiler.is-revealed{
-    background:color-mix(in srgb, var(--hc-spoiler-bg) 45%, transparent);
+    background:var(--hc-spoiler-revealed);
     cursor:default;
 }
 
-.hc-spoiler.is-revealed .hc-spoiler-text{
-    opacity:1;
-    filter:none;
-    user-select:text;
-    -webkit-user-select:text;
-}
-
-@media(prefers-reduced-motion:reduce){
-    .hc-spoiler,
-    .hc-spoiler-text{
-        transition:none;
-    }
-}
-
 #local-zone{
-    color:var(--muted-color,var(--hc-muted));
+    color:var(--muted-color, var(--hc-muted));
     font-size:.85em;
 }
 
 .hc-system-notice{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
     margin-top:18px;
     padding-top:14px;
-    border-top:1px solid var(--control-border,var(--hc-border));
-    display:flex;
-    gap:8px;
-    align-items:flex-start;
-    color:var(--muted-color,var(--hc-muted));
+    border-top:1px solid var(--control-border, var(--hc-border));
+    color:var(--muted-color, var(--hc-muted));
     font-size:.72rem;
     line-height:1.6;
 }
@@ -261,285 +510,728 @@
     opacity:.7;
 }
 
-/* Mobile */
+/* Limited device mode */
+.hc-simple-footer.hc-limited-device{
+    background:#111419;
+    color:#eefcff;
+}
 
-@media(max-width:600px){
+.hc-simple-footer.hc-limited-device::before{
+    display:none;
+}
+
+.hc-simple-footer.hc-limited-device #hc-top-btn,
+.hc-simple-footer.hc-limited-device .hc-terminal-block{
+    background:#15171b;
+    color:#eefcff;
+    border-color:#2f3742;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+}
+
+.hc-simple-footer.hc-limited-device .hc-footer-logo-wrap::before{
+    animation:none;
+}
+
+.hc-simple-footer.hc-limited-device .hc-footer-logo-img{
+    box-shadow:none;
+}
+
+@media (max-width:600px){
+    .hc-simple-footer{
+        margin-top:40px;
+        padding:40px 12px;
+    }
+
     .hc-terminal-block{
-        padding:18px;
+        padding:18px 14px;
+        border-radius:12px;
+    }
+
+    .hc-terminal-heading{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:8px;
     }
 
     .hc-data-row{
-        grid-template-columns:1fr;
-        gap:2px;
+        display:block;
+        margin-bottom:13px;
     }
 
     .hc-label{
         margin-top:8px;
+        margin-bottom:1px;
+    }
+
+    .hc-sep{
+        margin:0 4px;
+    }
+
+    .hc-compatibility-notice{
+        padding:14px;
+        border-radius:12px;
+    }
+
+    .hc-ip-line{
+        line-height:1.7;
     }
 }
 
-@media(prefers-reduced-motion:reduce){
-    #hc-top-btn{
+@media (prefers-reduced-motion:reduce){
+    #hc-top-btn,
+    .hc-spoiler,
+    .hc-footer-logo-wrap::before,
+    .hc-compatibility-dot{
         transition:none;
+        animation:none;
+    }
+
+    #hc-top-btn:hover{
+        transform:none;
     }
 }
 </style>
 </head>
 <body>
 
-<footer class="hc-simple-footer">
+<footer class="hc-simple-footer" id="hc-simple-footer">
+    <div class="hc-compatibility-notice" id="hc-compatibility-notice" role="status" aria-live="polite">
+        <div class="hc-compatibility-header">
+            <span class="hc-compatibility-dot" aria-hidden="true"></span>
+            <span>Legacy Device Protocol</span>
+        </div>
 
-<div class="hc-scroll-container">
-<button id="hc-top-btn" type="button" aria-label="Back to Top">
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-<polyline points="18 15 12 9 6 15"/>
-</svg>
-<span>TOP</span>
-</button>
-</div>
+        <div class="hc-compatibility-message">
+            <strong>LIMITED VISUAL MODE ACTIVE.</strong><br>
+            This browser does not support every modern interface feature.
+            Core forum access remains online, but glass effects, live
+            information, or smooth animations may be reduced.
+        </div>
 
-<div class="hc-footer-brand">
-<img
-src="https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png"
-alt="Harley's Clan Logo"
-class="hc-footer-logo-img">
-
-<div class="hc-footer-text">
-Owned by <strong>Harley's Studios</strong>
-</div>
-</div>
-
-<div class="hc-terminal-block">
-
-<div class="hc-data-row">
-<div class="hc-label">IDENTITY</div>
-<div class="hc-value" id="hc-id">INITIALIZING...</div>
-</div>
-
-<div class="hc-data-row">
-    <div class="hc-label">ACCESS IP</div>
-
-    <div class="hc-value">
-
-        <span class="hc-ip-line"><span class="hc-bracket">[</span><button
-            id="hc-ip-spoiler"
-            class="hc-spoiler"
-            type="button"
-            aria-expanded="false"
-            aria-label="Reveal IP address"><span class="hc-spoiler-text" id="hc-ip">000.000.000.000</span></button><span class="hc-bracket">]</span>
-            <span class="hc-sep">•</span>
-            <span id="hc-ip-status">CONNECTING...</span></span>
-
+        <span class="hc-compatibility-code">
+            Compatibility fallback successfully initialized
+        </span>
     </div>
-</div>
 
-<div class="hc-divider"></div>
+    <noscript>
+        <div class="hc-noscript-notice">
+            <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
+            The footer remains readable, but identity detection, clocks,
+            public IP reveal, and interactive controls are unavailable.
+        </div>
+    </noscript>
 
-<div class="hc-data-row">
-<div class="hc-label">UTC</div>
-<div class="hc-value">
-<span id="utc-date">---</span>
-<span class="hc-sep">•</span>
-<span id="utc-clock">--:--:--</span>
-</div>
-</div>
+    <div class="hc-scroll-container">
+        <button id="hc-top-btn" type="button" aria-label="Return to top of page">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+            <span>RETURN TO TOP</span>
+        </button>
+    </div>
 
-<div class="hc-data-row">
-<div class="hc-label">LOCAL</div>
-<div class="hc-value">
-<span id="local-date">---</span>
-<span class="hc-sep">•</span>
-<span id="local-time">--:--:--</span>
-<span id="local-zone"></span>
-</div>
-</div>
+    <div class="hc-footer-brand">
+        <div class="hc-footer-logo-wrap">
+            <img src="https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png" alt="Harley's Clan Logo" class="hc-footer-logo-img">
+        </div>
 
-<div class="hc-system-notice">
+        <div class="hc-footer-text">
+            Owned by <strong>Harley's Studios</strong>
+        </div>
 
-<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="8" x2="12" y2="12"/>
-<circle cx="12" cy="16.5" r=".5" fill="currentColor"/>
-</svg>
+        <div class="hc-footer-subtitle">
+            Harley's Clan Forum Network
+        </div>
+    </div>
 
-<span>
-DATA IS PROCESSED LOCALLY IN YOUR BROWSER.<br>
-NOTHING IS TRANSMITTED TO HARLEY'S SERVICES.
-</span>
+    <div class="hc-terminal-block">
+        <div class="hc-terminal-heading">
+            <span class="hc-terminal-title">Harley Network Terminal</span>
+            <span class="hc-terminal-lights" aria-hidden="true">
+                <span class="hc-terminal-light"></span>
+                <span class="hc-terminal-light"></span>
+                <span class="hc-terminal-light is-active"></span>
+            </span>
+        </div>
 
-</div>
+        <div class="hc-data-row">
+            <div class="hc-label">DEVICE MODE</div>
+            <div class="hc-value">
+                <span id="hc-device-status" class="is-full">
+                    <span class="hc-device-indicator" aria-hidden="true"></span>
+                    FULL SYSTEM MODE
+                </span>
+            </div>
+        </div>
 
-</div>
+        <div class="hc-data-row">
+            <div class="hc-label">IDENTITY</div>
+            <div class="hc-value" id="hc-id">GUEST_PROTOCOL</div>
+        </div>
 
+        <div class="hc-data-row">
+            <div class="hc-label">ACCESS IP</div>
+            <div class="hc-value">
+                <span class="hc-ip-line">
+                    <span class="hc-bracket">[</span>
+                    <button id="hc-ip-spoiler" class="hc-spoiler" type="button" aria-expanded="false" aria-label="Reveal public IP address">
+                        <span class="hc-spoiler-text" id="hc-ip">CLICK TO REVEAL</span>
+                    </button>
+                    <span class="hc-bracket">]</span>
+                    <span class="hc-sep">•</span>
+                    <span id="hc-ip-status" aria-live="polite">READY</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="hc-divider"></div>
+
+        <div class="hc-data-row">
+            <div class="hc-label">UTC</div>
+            <div class="hc-value">
+                <span id="utc-date">---</span>
+                <span class="hc-sep">•</span>
+                <span id="utc-clock">--:--:--</span>
+            </div>
+        </div>
+
+        <div class="hc-data-row">
+            <div class="hc-label">LOCAL</div>
+            <div class="hc-value">
+                <span id="local-date">---</span>
+                <span class="hc-sep">•</span>
+                <span id="local-time">--:--:--</span>
+                <span id="local-zone"></span>
+            </div>
+        </div>
+
+        <div class="hc-system-notice">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <circle cx="12" cy="16.5" r=".5" fill="currentColor"></circle>
+            </svg>
+
+            <span>
+                YOUR PUBLIC IP IS REQUESTED ONLY AFTER YOU CHOOSE TO REVEAL IT.<br>
+                THE LOOKUP USES THE THIRD-PARTY IPIFY SERVICE.<br>
+                NO IP INFORMATION IS STORED BY THIS FOOTER.
+            </span>
+        </div>
+    </div>
 </footer>
 
 <script>
 (function(){
+    "use strict";
 
-function $(id){
-  return document.getElementById(id);
-}
-
-function normalizeUsername(s){
-  s = (s ?? "").toString().trim();
-  if(!s) return "";
-
-  const lower = s.toLowerCase();
-
-  if (lower === "guest") return "";
-  if (lower === "guest_protocol") return "";
-  if (lower.includes("guest_protocol")) return "";
-  if (lower.includes("guest")) return "";
-  if (lower === "sign in" || lower === "log in" || lower === "login") return "";
-  if (lower.includes("sign in") || lower.includes("log in") || lower.includes("login")) return "";
-
-  return s;
-}
-
-function getIdentity(){
-  try{
-    if(window.app && app.session){
-      const u = app.session.user;
-      if(!u) return "";
-      const raw = (typeof u.username === "function") ? u.username.call(u) : u.username;
-      return normalizeUsername(raw);
+    function getById(id){
+        return document.getElementById(id);
     }
-  }catch(e){}
 
-  var el = document.querySelector("header .Button--user .username")
-        || document.querySelector(".App-header .Button--user .username");
-  const raw = el ? el.textContent : "";
-  return normalizeUsername(raw);
-}
-
-function getCurrentActiveSessionIpFromSecurityPage(){
-  var legend = document.querySelector('fieldset.UserSecurityPage-sessions > legend');
-  if(!legend) return null;
-
-  var items = document.querySelectorAll('.AccessTokensList-item');
-  for (var i = 0; i < items.length; i++){
-    var titleSub = items[i].querySelector('.AccessTokensList-item-title-sub');
-    if(!titleSub) continue;
-
-    if(titleSub.textContent.trim() === "Current Active Session"){
-      var code = items[i].querySelector('.IPAddress code');
-      if(!code) return null;
-      var ip = code.textContent.trim();
-      return ip || null;
+    function safeTrim(value){
+        var text = value == null ? "" : String(value);
+        if(String.prototype.trim){
+            return text.trim();
+        }
+        return text.replace(/^\s+|\s+$/g,"");
     }
-  }
-  return null;
-}
 
-function setIdentityDisplay(username){
-  var el = $("hc-id");
-  if(!el) return;
+    function setText(element,value){
+        if(!element){
+            return;
+        }
+        if(typeof element.textContent !== "undefined"){
+            element.textContent = value;
+        }else{
+            element.innerText = value;
+        }
+    }
 
-  el.innerHTML = "";
+    function addClass(element,className){
+        if(!element){
+            return;
+        }
+        if(element.classList){
+            element.classList.add(className);
+            return;
+        }
+        if((" " + element.className + " ").indexOf(" " + className + " ") === -1){
+            element.className += " " + className;
+        }
+    }
 
-  if(!username){
-    el.textContent = "GUEST_PROTOCOL";
-    return;
-  }
+    function removeClass(element,className){
+        if(!element){
+            return;
+        }
+        if(element.classList){
+            element.classList.remove(className);
+            return;
+        }
+        var expression = new RegExp("(^|\\s)" + className + "(\\s|$)","g");
+        element.className = element.className.replace(expression," ").replace(/\s+/g," ");
+    }
 
-  var atText = "@" + username;
-  var a = document.createElement("a");
+    function hasClass(element,className){
+        if(!element){
+            return false;
+        }
+        if(element.classList){
+            return element.classList.contains(className);
+        }
+        return (" " + element.className + " ").indexOf(" " + className + " ") !== -1;
+    }
 
-  var hostParts = (location.hostname || "").split(".").filter(Boolean);
-  var domainSuffix = hostParts.length >= 2
-    ? hostParts.slice(-2).join(".")
-    : "harleytg.com";
+    function bindEvent(element,eventName,handler){
+        if(!element){
+            return;
+        }
+        if(element.addEventListener){
+            element.addEventListener(eventName,handler,false);
+        }else if(element.attachEvent){
+            element.attachEvent("on" + eventName,handler);
+        }else{
+            element["on" + eventName] = handler;
+        }
+    }
 
-  a.href = "https://forum." + domainSuffix + "/u/" + encodeURIComponent(username);
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-  a.textContent = atText;
+    function padNumber(number){
+        return number < 10 ? "0" + number : String(number);
+    }
 
-  a.style.color = "var(--hc-accent)";
-  a.style.textDecoration = "none";
+    var footer = getById("hc-simple-footer");
+    var compatibilityNotice = getById("hc-compatibility-notice");
+    var deviceStatus = getById("hc-device-status");
+    var identityElement = getById("hc-id");
+    var spoilerButton = getById("hc-ip-spoiler");
+    var ipElement = getById("hc-ip");
+    var ipStatusElement = getById("hc-ip-status");
+    var topButton = getById("hc-top-btn");
 
-  el.appendChild(a);
-}
+    var lastIdentity = null;
+    var revealedIp = "";
+    var ipRequestStarted = false;
 
-function updateClock(){
-  var now = new Date();
+    function supportsCssFeature(property,value){
+        try{
+            if(window.CSS && typeof window.CSS.supports === "function"){
+                return window.CSS.supports(property,value);
+            }
+        }catch(error){
+            return false;
+        }
+        return false;
+    }
 
-  setIdentityDisplay(getIdentity());
+    function detectCompatibilityMode(){
+        var reasons = [];
 
-  $("utc-date").textContent = now.toLocaleDateString("en-US",{
-    month:"short",
-    day:"numeric",
-    year:"numeric",
-    timeZone:"UTC"
-  });
+        if(!document.querySelector){
+            reasons.push("selectors");
+        }
+        if(!document.addEventListener && !window.attachEvent){
+            reasons.push("events");
+        }
+        if(!window.XMLHttpRequest && !window.XDomainRequest){
+            reasons.push("network");
+        }
+        if(!window.Intl || !window.Intl.DateTimeFormat){
+            reasons.push("international-time");
+        }
+        if(window.CSS && !supportsCssFeature("display","grid")){
+            reasons.push("css-grid");
+        }
 
-  $("utc-clock").textContent = now.toLocaleTimeString("en-US",{
-    timeZone:"UTC",
-    hour:"numeric",
-    minute:"2-digit",
-    second:"2-digit",
-    hour12:true
-  });
+        if(window.CSS){
+            var hasBackdrop =
+                supportsCssFeature("backdrop-filter","blur(2px)") ||
+                supportsCssFeature("-webkit-backdrop-filter","blur(2px)");
 
-  $("local-date").textContent = now.toLocaleDateString("en-US",{
-    month:"short",
-    day:"numeric",
-    year:"numeric"
-  });
+            if(!hasBackdrop){
+                reasons.push("glass-effects");
+            }
+        }
 
-  $("local-time").textContent = now.toLocaleTimeString("en-US",{
-    hour:"numeric",
-    minute:"2-digit",
-    second:"2-digit",
-    hour12:true
-  });
+        if(reasons.length === 0){
+            return;
+        }
 
-  var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  $("local-zone").textContent = "(" + tz + ")";
-}
+        addClass(footer,"hc-limited-device");
+        addClass(compatibilityNotice,"is-visible");
+        removeClass(deviceStatus,"is-full");
+        addClass(deviceStatus,"is-limited");
 
-var spoiler = $("hc-ip-spoiler");
+        if(deviceStatus){
+            deviceStatus.innerHTML =
+                '<span class="hc-device-indicator" aria-hidden="true"></span>' +
+                "COMPATIBILITY MODE";
+        }
+    }
 
-function setIp(ip, status){
-  $("hc-ip").textContent = ip;
-  $("hc-ip-status").textContent = status;
-}
+    function normalizeUsername(value){
+        var username = safeTrim(value);
+        if(!username){
+            return "";
+        }
 
-function loadIp(){
-  var activeIp = getCurrentActiveSessionIpFromSecurityPage();
-  if(activeIp){
-    setIp(activeIp, "SESSION ACTIVE");
-    return;
-  }
+        var lower = username.toLowerCase();
 
-  fetch("https://api.ipify.org?format=json")
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      setIp(d.ip, "SESSION ACTIVE");
-    })
-    .catch(function(){
-      setIp("---.---.---.---", "UNAVAILABLE");
-    });
-}
+        if(
+            lower === "guest" ||
+            lower === "guest_protocol" ||
+            lower === "sign in" ||
+            lower === "log in" ||
+            lower === "login" ||
+            lower.indexOf("guest_protocol") !== -1 ||
+            lower.indexOf("guest") !== -1 ||
+            lower.indexOf("sign in") !== -1 ||
+            lower.indexOf("log in") !== -1 ||
+            lower.indexOf("login") !== -1
+        ){
+            return "";
+        }
 
-function revealIp(){
-  if(spoiler.classList.contains("is-revealed")) return;
+        return username;
+    }
 
-  spoiler.classList.add("is-revealed");
-  spoiler.setAttribute("aria-expanded","true");
-  spoiler.setAttribute("aria-label","IP address revealed");
-}
+    function getIdentity(){
+        try{
+            if(window.app && window.app.session){
+                var user = window.app.session.user;
+                if(!user){
+                    return "";
+                }
 
-spoiler.addEventListener("click", revealIp);
+                var rawUsername =
+                    typeof user.username === "function"
+                        ? user.username.call(user)
+                        : user.username;
 
-$("hc-top-btn").onclick = function(){
-  window.scrollTo({ top:0, behavior:"smooth" });
-};
+                return normalizeUsername(rawUsername);
+            }
+        }catch(error){
+            /* Use the visible-header fallback. */
+        }
 
-updateClock();
-loadIp();
-setInterval(updateClock,1000);
+        if(!document.querySelector){
+            return "";
+        }
 
+        var element =
+            document.querySelector("header .Button--user .username") ||
+            document.querySelector(".App-header .Button--user .username");
+
+        return normalizeUsername(
+            element ? (element.textContent || element.innerText || "") : ""
+        );
+    }
+
+    function setIdentityDisplay(username){
+        if(!identityElement || username === lastIdentity){
+            return;
+        }
+
+        lastIdentity = username;
+
+        while(identityElement.firstChild){
+            identityElement.removeChild(identityElement.firstChild);
+        }
+
+        if(!username){
+            setText(identityElement,"GUEST_PROTOCOL");
+            return;
+        }
+
+        var profileLink = document.createElement("a");
+        profileLink.href = "/u/" + encodeURIComponent(username);
+        setText(profileLink,"@" + username);
+        identityElement.appendChild(profileLink);
+    }
+
+    function refreshIdentity(){
+        setIdentityDisplay(getIdentity());
+    }
+
+    var monthNames = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    function formatManualDate(month,day,year){
+        return monthNames[month] + " " + day + ", " + year;
+    }
+
+    function formatManualTime(hour,minute,second){
+        var period = hour >= 12 ? "PM" : "AM";
+        var displayHour = hour % 12;
+        if(displayHour === 0){
+            displayHour = 12;
+        }
+        return displayHour + ":" + padNumber(minute) + ":" + padNumber(second) + " " + period;
+    }
+
+    function updateClock(){
+        var now = new Date();
+        var utcDate = getById("utc-date");
+        var utcClock = getById("utc-clock");
+        var localDate = getById("local-date");
+        var localTime = getById("local-time");
+        var localZone = getById("local-zone");
+        var intlWorked = false;
+
+        try{
+            if(window.Intl && window.Intl.DateTimeFormat){
+                setText(utcDate,now.toLocaleDateString("en-US",{
+                    month:"short",day:"numeric",year:"numeric",timeZone:"UTC"
+                }));
+
+                setText(utcClock,now.toLocaleTimeString("en-US",{
+                    timeZone:"UTC",hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true
+                }));
+
+                setText(localDate,now.toLocaleDateString("en-US",{
+                    month:"short",day:"numeric",year:"numeric"
+                }));
+
+                setText(localTime,now.toLocaleTimeString("en-US",{
+                    hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true
+                }));
+
+                var timezone = window.Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
+                setText(localZone," (" + timezone + ")");
+                intlWorked = true;
+            }
+        }catch(error){
+            intlWorked = false;
+        }
+
+        if(intlWorked){
+            return;
+        }
+
+        setText(utcDate,formatManualDate(now.getUTCMonth(),now.getUTCDate(),now.getUTCFullYear()));
+        setText(utcClock,formatManualTime(now.getUTCHours(),now.getUTCMinutes(),now.getUTCSeconds()));
+        setText(localDate,formatManualDate(now.getMonth(),now.getDate(),now.getFullYear()));
+        setText(localTime,formatManualTime(now.getHours(),now.getMinutes(),now.getSeconds()));
+        setText(localZone," (Local Time)");
+    }
+
+    function getCurrentActiveSessionIpFromSecurityPage(){
+        if(!document.querySelector || !document.querySelectorAll){
+            return null;
+        }
+
+        var legend = document.querySelector("fieldset.UserSecurityPage-sessions > legend");
+        if(!legend){
+            return null;
+        }
+
+        var items = document.querySelectorAll(".AccessTokensList-item");
+        var i;
+
+        for(i = 0; i < items.length; i++){
+            var titleSub = items[i].querySelector(".AccessTokensList-item-title-sub");
+            var titleText = titleSub
+                ? safeTrim(titleSub.textContent || titleSub.innerText)
+                : "";
+
+            if(titleText !== "Current Active Session"){
+                continue;
+            }
+
+            var code = items[i].querySelector(".IPAddress code");
+            if(!code){
+                return null;
+            }
+
+            var ip = safeTrim(code.textContent || code.innerText);
+            return ip || null;
+        }
+
+        return null;
+    }
+
+    function setIpStatus(status){
+        setText(ipStatusElement,status);
+    }
+
+    function showIp(ip){
+        revealedIp = ip;
+        setText(ipElement,ip);
+        addClass(spoilerButton,"is-revealed");
+
+        if(spoilerButton){
+            spoilerButton.setAttribute("aria-expanded","true");
+            spoilerButton.setAttribute("aria-label","Public IP address revealed");
+        }
+
+        setIpStatus("SESSION ACTIVE");
+    }
+
+    function showIpUnavailable(){
+        setText(ipElement,"UNAVAILABLE");
+        addClass(spoilerButton,"is-revealed");
+
+        if(spoilerButton){
+            spoilerButton.setAttribute("aria-expanded","true");
+            spoilerButton.setAttribute("aria-label","Public IP address unavailable");
+        }
+
+        setIpStatus("SERVICE OFFLINE");
+    }
+
+    function requestIpWithXhr(){
+        if(!window.XMLHttpRequest){
+            return false;
+        }
+
+        try{
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET","https://api.ipify.org?format=json",true);
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState !== 4){
+                    return;
+                }
+
+                if(xhr.status >= 200 && xhr.status < 300){
+                    try{
+                        var data = window.JSON ? JSON.parse(xhr.responseText) : null;
+                        if(data && typeof data.ip === "string" && safeTrim(data.ip)){
+                            showIp(safeTrim(data.ip));
+                            return;
+                        }
+                    }catch(parseError){
+                        showIpUnavailable();
+                        return;
+                    }
+                }
+
+                showIpUnavailable();
+            };
+
+            xhr.onerror = showIpUnavailable;
+            xhr.ontimeout = showIpUnavailable;
+
+            try{
+                xhr.timeout = 10000;
+            }catch(timeoutError){
+                /* Older browser: no timeout property. */
+            }
+
+            xhr.send(null);
+            return true;
+        }catch(error){
+            return false;
+        }
+    }
+
+    function requestIpWithXDomainRequest(){
+        if(!window.XDomainRequest){
+            return false;
+        }
+
+        try{
+            var request = new XDomainRequest();
+            request.open("GET","https://api.ipify.org?format=json");
+
+            request.onload = function(){
+                try{
+                    var data = window.JSON ? JSON.parse(request.responseText) : null;
+                    if(data && typeof data.ip === "string" && safeTrim(data.ip)){
+                        showIp(safeTrim(data.ip));
+                        return;
+                    }
+                }catch(error){
+                    showIpUnavailable();
+                    return;
+                }
+                showIpUnavailable();
+            };
+
+            request.onerror = showIpUnavailable;
+            request.ontimeout = showIpUnavailable;
+            request.timeout = 10000;
+            request.send();
+            return true;
+        }catch(error){
+            return false;
+        }
+    }
+
+    function loadIp(){
+        if(ipRequestStarted){
+            if(revealedIp){
+                showIp(revealedIp);
+            }
+            return;
+        }
+
+        ipRequestStarted = true;
+        setIpStatus("CONNECTING...");
+
+        var activeSessionIp = getCurrentActiveSessionIpFromSecurityPage();
+        if(activeSessionIp){
+            showIp(activeSessionIp);
+            return;
+        }
+
+        if(requestIpWithXhr()){
+            return;
+        }
+
+        if(requestIpWithXDomainRequest()){
+            return;
+        }
+
+        showIpUnavailable();
+    }
+
+    function revealIp(){
+        if(!spoilerButton || hasClass(spoilerButton,"is-revealed")){
+            return;
+        }
+        loadIp();
+    }
+
+    function returnToTop(){
+        var reduceMotion = false;
+
+        try{
+            if(window.matchMedia){
+                reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            }
+        }catch(error){
+            reduceMotion = false;
+        }
+
+        try{
+            window.scrollTo({
+                top:0,
+                left:0,
+                behavior:reduceMotion ? "auto" : "smooth"
+            });
+        }catch(error){
+            try{
+                window.scrollTo(0,0);
+            }catch(secondError){
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }
+        }
+    }
+
+    detectCompatibilityMode();
+    bindEvent(spoilerButton,"click",revealIp);
+    bindEvent(topButton,"click",returnToTop);
+    refreshIdentity();
+    updateClock();
+
+    window.setInterval(updateClock,1000);
+    window.setInterval(refreshIdentity,5000);
 })();
 </script>
 
