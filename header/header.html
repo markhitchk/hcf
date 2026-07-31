@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* =========================
+   HARLEY'S CLAN FORUM SLIM NOTICE
+   Single Alert System
+   Same Page Links
+   ========================= */
+
+#forum-notice{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:5px 10px;
+
+    border-top:1px solid #FFD400;
+    border-bottom:1px solid #FFD400;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.85),
+            rgba(0,0,0,.85)
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            #111 0 10px,
+            #FFD400 10px 20px
+        );
+
+    color:#FFD400;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    text-align:center;
+}
+
+
+/* Animated warning sweep */
+#forum-notice::after{
+    content:"";
+
+    position:absolute;
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,212,0,.3),
+            transparent
+        );
+
+    animation:
+        noticeSweep 5s linear infinite;
+
+    pointer-events:none;
+}
+
+
+.notice-title{
+    position:relative;
+    z-index:2;
+
+    font-size:13px;
+    font-weight:bold;
+
+    letter-spacing:2px;
+    text-transform:uppercase;
+
+    text-shadow:
+        0 0 4px #FFD400;
+}
+
+
+.notice-message{
+    position:relative;
+    z-index:2;
+
+    margin-top:2px;
+
+    font-size:11px;
+    line-height:1.3;
+
+    color:#fff7c2;
+}
+
+
+.notice-message a{
+    color:#FFD400;
+
+    font-weight:bold;
+    text-decoration:none;
+
+    transition:.2s;
+}
+
+
+.notice-message a:hover{
+    color:#fff08a;
+    text-decoration:underline;
+}
+
+
+@keyframes noticeSweep{
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(200%);
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="forum-notice">
+
+    <div class="notice-title">
+        ⚠ HARLEY'S CLAN FORUM NOTICE ⚠
+    </div>
+
+    <div class="notice-message">
+
+        🚧 Under Construction • 
+        💬 DM issues? Open:
+
+        <a href="https://forum.harleytg.com/conversations">
+            Direct Messages
+        </a>
+
+        • 🌐 Domain Expiration:
+        <strong>October 12, 2026</strong>
+
+        <a href="https://forum.harleytg.com/d/77-domain-expiration-alert">
+            Info
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
