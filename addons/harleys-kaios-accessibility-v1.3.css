@@ -1,8 +1,9 @@
 /* ==========================================================
    Harley's Clan Forum - KaiOS Accessibility v1.3
 
-   Standalone feature-phone override for 320x240 / 240x320-style
-   displays. It contains no desktop, tablet, or normal-phone rules.
+   Standalone KaiOS/feature-phone override.
+   Applies only to very small 320x240 / 240x320-style displays.
+   Does not contain desktop, tablet, or normal-smartphone rules.
 
    Author: HarleyTG
    Updated: 2026-07-30
@@ -36,6 +37,7 @@
     max-width: 100% !important;
   }
 
+  /* Remove effects that are unreliable or expensive on KaiOS. */
   .Alert,
   .backgrwb,
   .backgrwbguest,
@@ -48,6 +50,7 @@
     -webkit-backdrop-filter: none !important;
   }
 
+  /* Strong D-pad/keypad focus indicator. */
   a:focus,
   button:focus,
   input:focus,
@@ -168,7 +171,12 @@
     font-size: 12px !important;
   }
 
-  /* Keep the Welcome Box profile card in page flow on KaiOS. */
+  /*
+     KaiOS-only Welcome Box correction.
+     The main V5 <=700px rule makes .backgrwb fixed and full-width.
+     This higher-specificity rule keeps the card in normal page flow
+     so it cannot cover the entire forum screen.
+  */
   html body .backgrwb.backgrwb.backgrwb,
   html body .backgrwbguest.backgrwbguest.backgrwbguest {
     position: relative !important;
@@ -176,6 +184,7 @@
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
+
     display: flex !important;
     width: 200px !important;
     min-width: 0 !important;
@@ -183,6 +192,7 @@
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
+
     margin: 8px auto !important;
     padding: 8px 6px !important;
     overflow: visible !important;
@@ -294,7 +304,7 @@
     line-height: 1.3 !important;
   }
 
-  /* Keep avatar Upload/Remove inside the small display. */
+  /* Keep the avatar Upload/Remove menu inside the small display. */
   html body .backgrwb.backgrwb.backgrwb .AvatarEditor.Dropdown .Dropdown-menu {
     position: absolute !important;
     top: 100% !important;
