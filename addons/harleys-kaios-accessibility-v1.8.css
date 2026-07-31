@@ -1,13 +1,13 @@
 /* ==========================================================
-   Harley's Clan Forum - KaiOS Accessibility v1.7
+   Harley's Clan Forum - KaiOS Accessibility v1.8
    Standalone 320x240 / 240x320 feature-phone override.
 
    Corrected build:
-   - Restores Flarum's top PostStream scrubber/counter
-   - Removes duplicate in-page scrubber/title layers
-   - Keeps posts in normal vertical flow without rewriting
-     Flarum's required post positioning
-   - No imports or dependencies on older KaiOS files
+   - Keeps the single top post counter
+   - Restores the complete PostStream wrapper chain
+   - Prevents article > div from collapsing into a thin bar
+   - Keeps posts in normal vertical document flow
+   - No imports or dependency on older KaiOS files
 
    Author: HarleyTG
    Updated: 2026-07-30
@@ -86,6 +86,9 @@
     word-wrap: break-word !important;
   }
 
+  /* ----------------------------------------------------------
+     Compact KaiOS header
+     ---------------------------------------------------------- */
   .Header .container {
     padding-left: 5px !important;
     padding-right: 5px !important;
@@ -158,6 +161,9 @@
     text-overflow: ellipsis !important;
   }
 
+  /* ----------------------------------------------------------
+     Welcome/profile widget
+     ---------------------------------------------------------- */
   html body .backgrwb.backgrwb.backgrwb,
   html body .backgrwbguest.backgrwbguest.backgrwbguest {
     position: relative !important;
@@ -279,6 +285,9 @@
     z-index: auto !important;
   }
 
+  /* ----------------------------------------------------------
+     Keep one Flarum post counter in the phone header
+     ---------------------------------------------------------- */
   html body .PostStreamScrubber.App-titleControl {
     display: block !important;
     position: absolute !important;
@@ -375,28 +384,32 @@
     display: none !important;
   }
 
-  html body .DiscussionPage-stream,
-  html body .PostStream {
+  /* ----------------------------------------------------------
+     PostStream collapse rescue
+
+     Actual DOM:
+     .PostStream-item > article.Post > div > header/body/actions/footer
+     The direct article child must have a real height on old Gecko.
+     ---------------------------------------------------------- */
+  html body .DiscussionPage-discussion > .container {
     display: block !important;
-    position: relative !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    overflow: visible !important;
-    transform: none !important;
-    z-index: auto !important;
+    grid-template: none !important;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-template-areas: none !important;
+    grid-gap: 0 !important;
   }
 
-  html body .PostStream-item {
+  html body .DiscussionPage-stream,
+  html body .PostStream,
+  html body .PostStream > .PostStream-item,
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > article.Post > div,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item > .Post > div,
+  html body .PostStream-item .CommentPost,
+  html body .PostStream-item .CommentPost > div {
     display: block !important;
-    position: relative !important;
     float: none !important;
     clear: both !important;
     width: 100% !important;
@@ -405,56 +418,96 @@
     height: auto !important;
     min-height: 1px !important;
     max-height: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    clip: auto !important;
+    clip-path: none !important;
     transform: none !important;
-    z-index: auto !important;
+    contain: none !important;
+    content-visibility: visible !important;
   }
 
-  html body .PostStream-item:not(:last-child) {
-    margin-bottom: 10px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 1px solid var(--control-bg, rgba(255,255,255,.12)) !important;
-  }
-
-  html body .PostStream-item::after,
-  html body .PostStream-item > article.Post::after,
-  html body .PostStream-item > .Post::after {
-    content: "" !important;
-    display: table !important;
-    clear: both !important;
-  }
-
+  html body .DiscussionPage-stream,
+  html body .PostStream,
+  html body .PostStream > .PostStream-item,
   html body .PostStream-item > article.Post,
   html body .PostStream-item > .Post,
   html body .PostStream-item .CommentPost {
-    display: block !important;
     position: relative !important;
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
+    z-index: auto !important;
+  }
+
+  html body .PostStream-item > article.Post > div,
+  html body .PostStream-item > .Post > div,
+  html body .PostStream-item .CommentPost > div {
+    position: static !important;
+    padding: 0 !important;
+  }
+
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item .CommentPost {
+    margin: 0 !important;
+    padding: 8px 6px !important;
+  }
+
+  html body .PostStream .Post-header,
+  html body .PostStream .Post-content,
+  html body .PostStream .Post-body,
+  html body .PostStream .Post-signature,
+  html body .PostStream .Post-actions,
+  html body .PostStream .Post-footer,
+  html body .PostStream .Post-quoteButtonContainer,
+  html body .PostStream-timeGap,
+  html body .PostStream-loadMore,
+  html body .PostStream .ReplyPlaceholder {
+    display: block !important;
+    position: relative !important;
     float: none !important;
     clear: both !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
-    min-height: 1px !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    clip: auto !important;
+    clip-path: none !important;
+    transform: none !important;
+  }
+
+  html body .PostStream .Post-header > ul,
+  html body .PostStream .Post-actions > ul,
+  html body .PostStream .Post-footer > ul {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
     max-height: none !important;
     margin: 0 !important;
-    padding: 8px 6px !important;
-    overflow: visible !important;
-    transform: none !important;
+    padding: 0 !important;
+    visibility: visible !important;
     opacity: 1 !important;
-    z-index: auto !important;
+    list-style: none !important;
+  }
+
+  html body .PostStream .Post-body,
+  html body .PostStream .Post-body > * {
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100% !important;
   }
 
   html body .PostStream .Post-body {
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
     overflow-x: auto !important;
     overflow-y: visible !important;
     font-size: 14px !important;
@@ -469,40 +522,23 @@
   html body .PostStream .LinkPreview-image {
     max-width: 100% !important;
     height: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   html body .PostStream .Post-footer {
-    display: block !important;
-    position: relative !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
     margin: 6px 0 10px !important;
     padding: 0 !important;
-    overflow: visible !important;
   }
 
   html body .PostStream .Post-actions {
-    display: block !important;
-    position: relative !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    height: auto !important;
     margin: 6px 0 0 !important;
     padding: 0 !important;
-    opacity: 1 !important;
   }
 
   html body .PostStream .Post-actions > ul,
   html body .PostStream .Post-footer > ul {
     display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
   }
 
   html body .PostStream .Post-actions > ul > li,
@@ -519,16 +555,25 @@
     list-style: none !important;
   }
 
-  html body .PostStream-timeGap,
-  html body .PostStream .ReplyPlaceholder {
+  /* The old divider was the thin black bar visible after collapse. */
+  html body .PostStream-item::after,
+  html body .PostStream-item > article.Post::after,
+  html body .PostStream-item > .Post::after {
+    content: "" !important;
     display: block !important;
-    position: relative !important;
-    float: none !important;
     clear: both !important;
     width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    transform: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+  }
+
+  html body .PostStream-item:not(:last-child) {
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid var(--control-bg, rgba(255,255,255,.12)) !important;
   }
 }
