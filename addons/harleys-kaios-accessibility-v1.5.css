@@ -3,120 +3,156 @@
 /* ==========================================================
    Harley's Clan Forum - KaiOS Accessibility v1.5
 
-   Post scrubber zoom/duplication correction for small
-   KaiOS feature-phone displays.
+   KaiOS post-stream zoom and duplicate-title correction.
 
-   Flarum renders the current post counter in both the scrubber
-   toggle and the scrubber panel. Older KaiOS Gecko can expose
-   both layers when browser zoom changes the CSS viewport.
+   Keeps one compact post counter above the stream, prevents
+   the scrubber's repeated inner counter from rendering, and
+   keeps posts in one normal vertical flow while zooming.
+
+   Desktop, tablets, and normal smartphones are not affected.
 
    Author: HarleyTG
    Updated: 2026-07-30
    ========================================================== */
 
 /*
-   The max-device-* alternatives keep this correction active when
-   KaiOS zoom changes the CSS viewport width or height.
+   max-device-* keeps the KaiOS correction active when browser
+   zoom changes the CSS viewport dimensions.
 */
 @media screen and (max-width: 360px) and (max-height: 480px),
        screen and (max-width: 480px) and (max-height: 360px),
        screen and (max-device-width: 360px) and (max-device-height: 480px),
        screen and (max-device-width: 480px) and (max-device-height: 360px) {
 
-  /* Stop zoom from switching the discussion into tablet/grid mode. */
+  /* ----------------------------------------------------------
+     Force one non-grid discussion layout at every zoom level.
+     ---------------------------------------------------------- */
   html body .DiscussionPage-discussion > .container {
     display: block !important;
     width: 100% !important;
+    min-width: 0 !important;
     max-width: 100% !important;
     grid-template-columns: none !important;
+    grid-template-rows: none !important;
     grid-template-areas: none !important;
     grid-gap: 0 !important;
+    gap: 0 !important;
   }
 
   html body .DiscussionPage-nav,
   html body .DiscussionPage-stream {
     display: block !important;
-    position: relative !important;
+    position: static !important;
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
     float: none !important;
     clear: both !important;
+    grid-area: auto !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
-    margin: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
     transform: none !important;
     z-index: auto !important;
   }
 
+  /* ----------------------------------------------------------
+     One title/control row above the posts.
+     ---------------------------------------------------------- */
   html body .DiscussionPage-nav {
+    margin: 0 0 8px !important;
     padding: 0 !important;
+    border: 0 !important;
+    overflow: visible !important;
   }
 
-  html body .DiscussionPage-nav > ul,
-  html body .DiscussionPage-nav > ul > li.item-scrubber {
-    display: block !important;
-    position: relative !important;
-    float: none !important;
-    clear: both !important;
+  html body .DiscussionPage-nav > ul {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
     width: 100% !important;
     min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  html body .DiscussionPage-nav > ul > li.item-scrubber {
+    display: block !important;
+    position: static !important;
+    flex: 1 1 auto !important;
+    order: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 32px !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  /* Keep one stable scrubber control at every KaiOS zoom level. */
-  html body .PostStreamScrubber.PostStreamScrubber {
+  html body .DiscussionPage-nav > ul > li.item-controls {
     display: block !important;
-    position: relative !important;
+    position: static !important;
+    flex: 0 0 34px !important;
+    order: 2 !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 32px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .DiscussionPage-nav .PostStreamScrubber.App-titleControl,
+  html body .DiscussionPage-nav .App-primaryControl {
+    display: block !important;
+    position: static !important;
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
     float: none !important;
-    clear: both !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    height: auto !important;
+    height: 32px !important;
     margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
     transform: none !important;
     opacity: 1 !important;
     z-index: auto !important;
   }
 
-  html body .PostStreamScrubber.PostStreamScrubber > button.Dropdown-toggle {
+  /* Keep exactly one visible “1 of 2 posts” control. */
+  html body .DiscussionPage-nav .PostStreamScrubber > button.Dropdown-toggle {
     display: flex !important;
-    position: relative !important;
+    position: static !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 4px !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    height: auto !important;
+    height: 32px !important;
     min-height: 32px !important;
+    max-height: 32px !important;
     margin: 0 !important;
-    padding: 5px 8px !important;
+    padding: 4px 7px !important;
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
-    font-size: 13px !important;
-    line-height: 1.25 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
     visibility: visible !important;
     transform: none !important;
     opacity: 1 !important;
   }
 
-  html body .PostStreamScrubber .Scrubber-index,
-  html body .PostStreamScrubber .Scrubber-count {
+  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-index,
+  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-count {
     display: inline !important;
     position: static !important;
     float: none !important;
@@ -125,77 +161,190 @@
     margin: 0 !important;
     padding: 0 !important;
     visibility: visible !important;
-    transform: none !important;
     opacity: 1 !important;
   }
 
   /*
-     The same viewing text exists inside .Scrubber-info. Hide that copy on
-     KaiOS so only the button's “1 of 2 posts” counter can be visible.
+     Flarum repeats the viewing text inside the scrubber dropdown.
+     On KaiOS that hidden layer can repaint as a second title area.
+     Never render that second layer, even when .open is added.
   */
-  html body .PostStreamScrubber .Scrubber-info > strong {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  /* Closed means genuinely removed from layout and painting. */
-  html body .PostStreamScrubber.PostStreamScrubber > .Dropdown-menu,
-  html body .PostStreamScrubber.PostStreamScrubber > .dropdown-menu {
+  html body .DiscussionPage-nav .PostStreamScrubber > .Dropdown-menu,
+  html body .DiscussionPage-nav .PostStreamScrubber > .dropdown-menu,
+  html body .DiscussionPage-nav .PostStreamScrubber.open > .Dropdown-menu,
+  html body .DiscussionPage-nav .PostStreamScrubber.open > .dropdown-menu,
+  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber,
+  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-info,
+  html body .DiscussionPage-nav .PostStreamScrubber .Scrubber-scrollbar {
     display: none !important;
     position: absolute !important;
-    top: 100% !important;
-    right: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: -9999px !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: none !important;
+    z-index: -1 !important;
+  }
+
+  html body .DiscussionPage-nav .PostStreamScrubber .dropdown-backdrop {
+    display: none !important;
+  }
+
+  /* Hide a real second scrubber/title control if an extension adds one. */
+  html body .DiscussionPage-nav > ul > li.item-scrubber ~ li.item-scrubber,
+  html body .DiscussionPage-nav .PostStreamScrubber ~ .PostStreamScrubber {
+    display: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     Keep every post in one real vertical flow during zoom.
+     ---------------------------------------------------------- */
+  html body .PostStream,
+  html body .PostStream-item,
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item .CommentPost,
+  html body .PostStream-item .CommentPost > div {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
     bottom: auto !important;
     left: auto !important;
-    width: 210px !important;
-    min-width: 0 !important;
-    max-width: calc(100vw - 12px) !important;
-    height: auto !important;
-    max-height: calc(100vh - 12px) !important;
-    margin: 2px 0 0 !important;
-    padding: 8px !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    visibility: hidden !important;
-    transform: none !important;
-    transition: none !important;
-    border-radius: 8px !important;
-    z-index: 60 !important;
-  }
-
-  /* Only the actual open scrubber may render its panel. */
-  html body .PostStreamScrubber.PostStreamScrubber.open > .Dropdown-menu,
-  html body .PostStreamScrubber.PostStreamScrubber.open > .dropdown-menu {
-    display: block !important;
-    visibility: visible !important;
-    transform: none !important;
-  }
-
-  html body .PostStreamScrubber .Scrubber {
-    display: block !important;
-    position: relative !important;
+    float: none !important;
+    clear: both !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: auto !important;
+    min-height: 1px !important;
+    max-height: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     overflow: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: auto !important;
   }
 
-  html body .PostStreamScrubber .Scrubber-scrollbar {
+  html body .PostStream-item:not(:last-child) {
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid var(--control-bg, rgba(255,255,255,.12)) !important;
+  }
+
+  html body .PostStream-item::after,
+  html body .PostStream-item .CommentPost::after,
+  html body .PostStream-item .CommentPost > div::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+  }
+
+  html body .PostStream .Post-header,
+  html body .PostStream .Post-body,
+  html body .PostStream .Post-signature,
+  html body .PostStream .Post-actions,
+  html body .PostStream .Post-footer,
+  html body .PostStream .Post-quoteButtonContainer {
     display: block !important;
     position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    float: none !important;
+    clear: both !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    height: 110px !important;
-    min-height: 50px !important;
-    max-height: 110px !important;
-    margin: 6px 0 6px 3px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
+    transform: none !important;
+    z-index: auto !important;
+  }
+
+  html body .PostStream .Post-actions,
+  html body .PostStream .Post-footer {
+    margin: 6px 0 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+  }
+
+  html body .PostStream .Post-actions > ul,
+  html body .PostStream .Post-footer > ul {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 3px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  html body .PostStream .Post-actions > ul > li,
+  html body .PostStream .Post-footer > ul > li {
+    display: inline-flex !important;
+    position: relative !important;
+    float: none !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .PostStream .Post-body img,
+  html body .PostStream .Post-body iframe,
+  html body .PostStream .Post-body video,
+  html body .PostStream .LinkPreview,
+  html body .PostStream .LinkPreview-main,
+  html body .PostStream .LinkPreview-image {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
     transform: none !important;
   }
 
-  html body .PostStreamScrubber .dropdown-backdrop {
-    display: none !important;
+  html body .PostStream .LinkPreview,
+  html body .PostStream .LinkPreview-main,
+  html body .PostStream .LinkPreview-image {
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  html body .PostStream-timeGap,
+  html body .PostStream .ReplyPlaceholder {
+    display: block !important;
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    transform: none !important;
   }
 }
