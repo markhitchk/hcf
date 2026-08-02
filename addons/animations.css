@@ -1,0 +1,1052 @@
+/* =========================================================
+   HARLEY'S CLAN FORUM — ANIMATIONS ADD-ON
+   Standalone motion layer for Flarum
+
+   Load this file AFTER custom css/master.css.
+   This file contains animations only and does not replace
+   the master theme.
+
+   Version: 1.0
+   Author: HarleyTG
+   Updated: 2026-08-02
+========================================================= */
+
+:root {
+  --hc-motion-fast: 180ms;
+  --hc-motion-normal: 320ms;
+  --hc-motion-slow: 700ms;
+  --hc-motion-ease: cubic-bezier(.2, .8, .2, 1);
+  --hc-motion-spring: cubic-bezier(.18, .89, .32, 1.28);
+  --hc-animation-cyan: var(--cyan-readable, var(--cyan, #00ffff));
+  --hc-animation-glow: rgba(0, 255, 255, .30);
+  --hc-animation-glow-strong: rgba(0, 255, 255, .52);
+  --hc-animation-surface: rgba(0, 255, 255, .045);
+}
+
+/* =========================================================
+   GLOBAL PAGE MOTION
+========================================================= */
+
+.App-content {
+  animation: hc-page-enter .72s var(--hc-motion-ease) both;
+}
+
+.App-content > .container,
+.IndexPage-results,
+.DiscussionPage-discussion,
+.UserPage-content {
+  animation: hc-content-rise .72s .08s var(--hc-motion-ease) both;
+}
+
+@keyframes hc-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hc-content-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   MAIN HEADER
+========================================================= */
+
+.App-header {
+  position: relative;
+  animation: hc-header-drop .65s var(--hc-motion-ease) both;
+}
+
+.App-header::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  bottom: 0;
+  width: 35%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--hc-animation-cyan),
+    #ffffff,
+    var(--hc-animation-cyan),
+    transparent
+  );
+  box-shadow:
+    0 0 7px var(--hc-animation-glow-strong),
+    0 0 16px var(--hc-animation-glow);
+  animation: hc-header-beam 6s ease-in-out infinite;
+}
+
+.Header-title::before {
+  box-shadow:
+    0 0 10px var(--hc-animation-glow),
+    0 0 24px rgba(0, 255, 255, .18);
+  animation: hc-logo-energy 4s ease-in-out infinite;
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    box-shadow var(--hc-motion-normal) ease,
+    filter var(--hc-motion-normal) ease;
+}
+
+.Header-title:hover::before {
+  transform: rotate(-5deg) scale(1.08);
+  filter: brightness(1.12);
+  box-shadow:
+    0 0 16px var(--hc-animation-glow-strong),
+    0 0 38px rgba(0, 255, 255, .30);
+}
+
+.Header-title a {
+  background: linear-gradient(
+    90deg,
+    var(--hc-animation-cyan) 0%,
+    #ffffff 38%,
+    var(--hc-animation-cyan) 62%,
+    var(--hc-animation-cyan) 100%
+  );
+  background-size: 240% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: hc-title-shimmer 6s ease-in-out infinite;
+}
+
+.App-header .Button,
+.Header-primary .Button,
+.Header-secondary .Button {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease,
+    border-color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease;
+}
+
+.App-header .Button:hover,
+.Header-primary .Button:hover,
+.Header-secondary .Button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 14px var(--hc-animation-glow);
+}
+
+.App-header .Button-icon {
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    color var(--hc-motion-fast) ease,
+    filter var(--hc-motion-fast) ease;
+}
+
+.App-header .Button:hover .Button-icon {
+  transform: scale(1.14);
+  filter: drop-shadow(0 0 4px var(--hc-animation-glow));
+}
+
+@keyframes hc-header-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hc-header-beam {
+  0% {
+    left: -35%;
+    opacity: 0;
+  }
+  12%, 62% {
+    opacity: .9;
+  }
+  76%, 100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes hc-logo-energy {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    box-shadow:
+      0 0 9px var(--hc-animation-glow),
+      0 0 22px rgba(0, 255, 255, .15);
+  }
+  50% {
+    transform: translateY(-2px) rotate(2deg);
+    box-shadow:
+      0 0 16px var(--hc-animation-glow-strong),
+      0 0 34px rgba(0, 255, 255, .25);
+  }
+}
+
+@keyframes hc-title-shimmer {
+  0%, 58% { background-position: 100% 0; }
+  82% { background-position: 0 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* =========================================================
+   BADGES AND NOTIFICATIONS
+========================================================= */
+
+.Badge,
+.Button-badge,
+.item-notifications .Button-badge,
+.item-privateDiscussions .Button-badge,
+.NotificationsDropdown-unread,
+.NotificationGrid-unread {
+  animation: hc-badge-pulse 2.35s ease-in-out infinite;
+}
+
+.Notification,
+.NotificationList .Notification {
+  animation: hc-notification-enter .42s var(--hc-motion-ease) both;
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    background-color var(--hc-motion-fast) ease;
+}
+
+.Notification:hover,
+.NotificationList .Notification:hover {
+  transform: translateX(4px);
+}
+
+@keyframes hc-badge-pulse {
+  0%, 100% {
+    transform: scale(.94);
+    box-shadow: 0 0 0 rgba(0, 255, 255, 0);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px var(--hc-animation-glow-strong);
+  }
+}
+
+@keyframes hc-notification-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   HEROES AND PAGE TITLES
+========================================================= */
+
+.Hero {
+  position: relative;
+  overflow: hidden;
+  animation: hc-hero-enter .72s .08s var(--hc-motion-ease) both;
+}
+
+.Hero::after {
+  content: "";
+  position: absolute;
+  inset: -70% -20%;
+  pointer-events: none;
+  opacity: .32;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(0, 255, 255, .13), transparent 23%),
+    radial-gradient(circle at 80% 55%, rgba(0, 255, 255, .09), transparent 27%);
+  animation: hc-hero-aurora 12s ease-in-out infinite alternate;
+}
+
+.Hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.Hero-title,
+.DiscussionHero-title,
+.UserHero-name,
+.Page-title {
+  animation: hc-heading-signal 4.8s ease-in-out infinite;
+}
+
+@keyframes hc-hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hc-hero-aurora {
+  from { transform: translate3d(-2%, 0, 0) scale(1); }
+  to { transform: translate3d(3%, -2%, 0) scale(1.08); }
+}
+
+@keyframes hc-heading-signal {
+  0%, 88%, 100% {
+    text-shadow: 0 0 0 transparent;
+  }
+  92% {
+    text-shadow:
+      0 0 8px var(--hc-animation-glow-strong),
+      0 0 18px var(--hc-animation-glow);
+  }
+}
+
+/* =========================================================
+   BUTTONS AND CONTROLS
+========================================================= */
+
+.Button,
+.Dropdown-toggle {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    box-shadow var(--hc-motion-fast) ease,
+    border-color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease,
+    color var(--hc-motion-fast) ease;
+}
+
+.Button:hover,
+.Dropdown-toggle:hover {
+  transform: translateY(-2px);
+}
+
+.Button:active,
+.Dropdown-toggle:active {
+  transform: translateY(0) scale(.98);
+}
+
+.Button:not(.Button--icon),
+.Dropdown-toggle:not(.Button--icon) {
+  position: relative;
+  overflow: hidden;
+}
+
+.Button:not(.Button--icon)::after,
+.Dropdown-toggle:not(.Button--icon)::after {
+  content: "";
+  position: absolute;
+  top: -70%;
+  left: -85%;
+  width: 42%;
+  height: 240%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .06),
+    rgba(0, 255, 255, .22),
+    rgba(255, 255, 255, .06),
+    transparent
+  );
+  transform: rotate(18deg);
+}
+
+.Button:not(.Button--icon):hover::after,
+.Dropdown-toggle:not(.Button--icon):hover::after {
+  animation: hc-button-shine .72s ease-out both;
+}
+
+@keyframes hc-button-shine {
+  from {
+    left: -85%;
+    opacity: 0;
+  }
+  20% { opacity: 1; }
+  to {
+    left: 140%;
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   DROPDOWNS AND MENUS
+========================================================= */
+
+.Dropdown-menu,
+.SelectDropdown-menu,
+.NotificationList,
+.Search-results {
+  transform-origin: top center;
+  animation: hc-dropdown-open .28s var(--hc-motion-ease) both;
+}
+
+.Dropdown-menu > li,
+.SelectDropdown-menu > li,
+.NotificationList .Notification {
+  animation: hc-menu-item .38s var(--hc-motion-ease) both;
+}
+
+.Dropdown-menu > li:nth-child(2),
+.SelectDropdown-menu > li:nth-child(2),
+.NotificationList .Notification:nth-child(2) { animation-delay: .035s; }
+
+.Dropdown-menu > li:nth-child(3),
+.SelectDropdown-menu > li:nth-child(3),
+.NotificationList .Notification:nth-child(3) { animation-delay: .07s; }
+
+.Dropdown-menu > li:nth-child(4),
+.SelectDropdown-menu > li:nth-child(4),
+.NotificationList .Notification:nth-child(4) { animation-delay: .105s; }
+
+.Dropdown-menu > li:nth-child(5),
+.SelectDropdown-menu > li:nth-child(5),
+.NotificationList .Notification:nth-child(5) { animation-delay: .14s; }
+
+.Dropdown-menu > li > a,
+.Dropdown-menu > li > button,
+.SelectDropdown-menu > li > button {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    background-color var(--hc-motion-fast) ease,
+    color var(--hc-motion-fast) ease;
+}
+
+.Dropdown-menu > li > a:hover,
+.Dropdown-menu > li > button:hover,
+.SelectDropdown-menu > li > button:hover {
+  transform: translateX(5px);
+}
+
+@keyframes hc-dropdown-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hc-menu-item {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   DISCUSSION LIST
+========================================================= */
+
+.DiscussionListItem {
+  position: relative;
+  animation: hc-card-enter .58s var(--hc-motion-ease) both;
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-ease),
+    box-shadow var(--hc-motion-normal) ease,
+    background-color var(--hc-motion-normal) ease;
+}
+
+.DiscussionListItem:nth-child(2) { animation-delay: .035s; }
+.DiscussionListItem:nth-child(3) { animation-delay: .07s; }
+.DiscussionListItem:nth-child(4) { animation-delay: .105s; }
+.DiscussionListItem:nth-child(5) { animation-delay: .14s; }
+.DiscussionListItem:nth-child(6) { animation-delay: .175s; }
+.DiscussionListItem:nth-child(7) { animation-delay: .21s; }
+.DiscussionListItem:nth-child(8) { animation-delay: .245s; }
+
+.DiscussionListItem:hover {
+  transform: translateY(-3px) scale(1.003);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, .16),
+    0 0 16px var(--hc-animation-glow);
+}
+
+.DiscussionListItem-title,
+.DiscussionListItem-info,
+.DiscussionListItem-count {
+  transition:
+    color var(--hc-motion-fast) ease,
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    text-shadow var(--hc-motion-fast) ease;
+}
+
+.DiscussionListItem:hover .DiscussionListItem-title {
+  transform: translateX(3px);
+  text-shadow: 0 0 8px var(--hc-animation-glow);
+}
+
+@keyframes hc-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.992);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   POSTS AND COMMENTS
+========================================================= */
+
+.PostStream-item,
+.Post {
+  animation: hc-post-enter .62s var(--hc-motion-ease) both;
+}
+
+.PostStream-item:nth-child(2) { animation-delay: .04s; }
+.PostStream-item:nth-child(3) { animation-delay: .08s; }
+.PostStream-item:nth-child(4) { animation-delay: .12s; }
+.PostStream-item:nth-child(5) { animation-delay: .16s; }
+
+.Post-body,
+.Post-header,
+.Post-footer {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease;
+}
+
+.Post:hover .Post-body {
+  transform: translateX(2px);
+}
+
+.PostUser-avatar .Avatar,
+.Post .Avatar,
+.UserHero-avatar .Avatar,
+.AvatarEditor .Avatar,
+.UserCard .Avatar {
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    box-shadow var(--hc-motion-normal) ease,
+    filter var(--hc-motion-normal) ease;
+}
+
+.PostUser-avatar:hover .Avatar,
+.Post .Avatar:hover,
+.UserHero-avatar:hover .Avatar,
+.AvatarEditor:hover .Avatar,
+.UserCard:hover .Avatar {
+  transform: translateY(-2px) scale(1.055);
+  filter: brightness(1.08);
+  box-shadow: 0 0 16px var(--hc-animation-glow-strong);
+}
+
+@keyframes hc-post-enter {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   USER CARDS, TAGS, AND SIDE NAVIGATION
+========================================================= */
+
+.UserCard,
+.UserListItem,
+.TagTile,
+.AfruxWidgets-Widget,
+.sideNav li,
+.SideNav li {
+  animation: hc-card-enter .55s var(--hc-motion-ease) both;
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-ease),
+    box-shadow var(--hc-motion-normal) ease,
+    background-color var(--hc-motion-normal) ease;
+}
+
+.UserCard:hover,
+.UserListItem:hover,
+.TagTile:hover,
+.AfruxWidgets-Widget:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, .16),
+    0 0 14px var(--hc-animation-glow);
+}
+
+.TagLabel,
+.Badge {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-spring),
+    box-shadow var(--hc-motion-fast) ease,
+    filter var(--hc-motion-fast) ease;
+}
+
+.TagLabel:hover,
+.Badge:hover {
+  transform: translateY(-1px) scale(1.05);
+  filter: brightness(1.08);
+  box-shadow: 0 0 10px var(--hc-animation-glow);
+}
+
+.sideNav li a,
+.SideNav li a {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease;
+}
+
+.sideNav li a:hover,
+.SideNav li a:hover {
+  transform: translateX(5px);
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.Modal-content,
+.Modal-dialog {
+  transform-origin: center top;
+  animation: hc-modal-enter .42s var(--hc-motion-ease) both;
+}
+
+.Modal-header {
+  position: relative;
+  overflow: hidden;
+}
+
+.Modal-header::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  bottom: 0;
+  width: 35%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--hc-animation-cyan), transparent);
+  box-shadow: 0 0 8px var(--hc-animation-glow);
+  animation: hc-modal-line 4.5s ease-in-out infinite;
+}
+
+.Modal-close {
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease;
+}
+
+.Modal-close:hover {
+  transform: rotate(90deg) scale(1.08);
+}
+
+@keyframes hc-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.97);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes hc-modal-line {
+  0% {
+    left: -35%;
+    opacity: 0;
+  }
+  18%, 65% { opacity: .9; }
+  82%, 100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   FORMS AND SEARCH
+========================================================= */
+
+.FormControl,
+.Search-input,
+.TextEditor-editor,
+.ComposerBody-editor {
+  transition:
+    border-color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    background-color var(--hc-motion-fast) ease;
+}
+
+.FormControl:focus,
+.Search-input:focus,
+.TextEditor-editor:focus-within,
+.ComposerBody-editor:focus-within {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 255, .08),
+    0 0 15px var(--hc-animation-glow);
+}
+
+.Search-input input,
+.FormControl input {
+  transition: color var(--hc-motion-fast) ease;
+}
+
+/* =========================================================
+   COMPOSER
+========================================================= */
+
+.Composer {
+  transform-origin: bottom center;
+  animation: hc-composer-enter .48s var(--hc-motion-ease) both;
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-ease),
+    box-shadow var(--hc-motion-normal) ease;
+}
+
+.Composer:hover,
+.Composer.active {
+  box-shadow:
+    0 -8px 30px rgba(0, 0, 0, .18),
+    0 0 18px var(--hc-animation-glow);
+}
+
+.Composer-controls .Button-icon {
+  transition: transform var(--hc-motion-normal) var(--hc-motion-spring);
+}
+
+.Composer-controls .Button:hover .Button-icon {
+  transform: scale(1.15);
+}
+
+@keyframes hc-composer-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   ALERTS AND LOADING
+========================================================= */
+
+.Alert {
+  position: relative;
+  overflow: hidden;
+  animation: hc-alert-enter .42s var(--hc-motion-ease) both;
+}
+
+.Alert::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 35%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 255, .12),
+    transparent
+  );
+  animation: hc-alert-scan 5s ease-in-out infinite;
+}
+
+.Alert-dismiss {
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    background-color var(--hc-motion-fast) ease,
+    color var(--hc-motion-fast) ease;
+}
+
+.Alert-dismiss:hover {
+  transform: rotate(90deg) scale(1.08);
+}
+
+.LoadingIndicator-container,
+.LoadingIndicator {
+  filter: drop-shadow(0 0 6px var(--hc-animation-glow));
+}
+
+.LoadingIndicator-container {
+  animation: hc-loading-breathe 1.5s ease-in-out infinite;
+}
+
+@keyframes hc-alert-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hc-alert-scan {
+  0%, 18% {
+    left: -40%;
+    opacity: 0;
+  }
+  28% { opacity: .8; }
+  72% { opacity: .5; }
+  84%, 100% {
+    left: 115%;
+    opacity: 0;
+  }
+}
+
+@keyframes hc-loading-breathe {
+  0%, 100% {
+    opacity: .65;
+    transform: scale(.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+/* =========================================================
+   PROFILE AND CUSTOM WELCOME BOX
+========================================================= */
+
+.backgrwb,
+.backgrwbguest {
+  position: relative;
+  overflow: hidden;
+}
+
+.backgrwb::after,
+.backgrwbguest::after {
+  content: "";
+  position: absolute;
+  top: -80%;
+  left: -90%;
+  width: 42%;
+  height: 270%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .05),
+    rgba(0, 255, 255, .17),
+    rgba(255, 255, 255, .05),
+    transparent
+  );
+  transform: rotate(18deg);
+  animation: hc-profile-shine 7s ease-in-out infinite;
+}
+
+.backgrwb .avatarwb,
+.backgrwbguest .Avatar {
+  animation: hc-avatar-breathe 4s ease-in-out infinite;
+}
+
+.backgrwb .circletop a,
+.backgrwb .ulwb li,
+.backgrwb button,
+.backgrwbguest a,
+.backgrwbguest button {
+  transition:
+    transform var(--hc-motion-fast) var(--hc-motion-ease),
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease,
+    filter var(--hc-motion-fast) ease;
+}
+
+@keyframes hc-profile-shine {
+  0%, 62% {
+    left: -90%;
+    opacity: 0;
+  }
+  70% { opacity: .85; }
+  90%, 100% {
+    left: 145%;
+    opacity: 0;
+  }
+}
+
+@keyframes hc-avatar-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 0 rgba(0, 255, 255, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--hc-animation-glow));
+  }
+}
+
+/* =========================================================
+   LINKS AND ICONS
+========================================================= */
+
+.App-content a:not(.Button):not(.Dropdown-toggle) {
+  transition:
+    color var(--hc-motion-fast) ease,
+    text-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease;
+}
+
+.App-content a:not(.Button):not(.Dropdown-toggle):hover {
+  text-shadow: 0 0 7px var(--hc-animation-glow);
+}
+
+.icon,
+.Button-icon,
+.PostMeta-number,
+.DiscussionListItem-count {
+  transition:
+    transform var(--hc-motion-normal) var(--hc-motion-spring),
+    color var(--hc-motion-fast) ease,
+    filter var(--hc-motion-fast) ease;
+}
+
+.Button:hover .Button-icon,
+a:hover > .icon {
+  filter: drop-shadow(0 0 4px var(--hc-animation-glow));
+}
+
+/* =========================================================
+   MOBILE MOTION TUNING
+========================================================= */
+
+@media (max-width: 700px) {
+  .App-content {
+    animation-duration: .5s;
+  }
+
+  .DiscussionListItem:hover,
+  .UserCard:hover,
+  .UserListItem:hover,
+  .TagTile:hover,
+  .AfruxWidgets-Widget:hover {
+    transform: translateY(-1px);
+  }
+
+  .App-header::after,
+  .Hero::after {
+    opacity: .2;
+  }
+
+  .Button:hover,
+  .Dropdown-toggle:hover,
+  .App-header .Button:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .App-content,
+  .App-content > .container,
+  .IndexPage-results,
+  .DiscussionPage-discussion,
+  .UserPage-content,
+  .App-header,
+  .App-header::after,
+  .Header-title::before,
+  .Header-title a,
+  .Badge,
+  .Button-badge,
+  .Notification,
+  .Hero,
+  .Hero::after,
+  .Hero-title,
+  .DiscussionHero-title,
+  .UserHero-name,
+  .Page-title,
+  .Dropdown-menu,
+  .SelectDropdown-menu,
+  .NotificationList,
+  .Search-results,
+  .Dropdown-menu > li,
+  .SelectDropdown-menu > li,
+  .DiscussionListItem,
+  .PostStream-item,
+  .Post,
+  .UserCard,
+  .UserListItem,
+  .TagTile,
+  .AfruxWidgets-Widget,
+  .sideNav li,
+  .SideNav li,
+  .Modal-content,
+  .Modal-dialog,
+  .Modal-header::after,
+  .Composer,
+  .Alert,
+  .Alert::after,
+  .LoadingIndicator-container,
+  .backgrwb::after,
+  .backgrwbguest::after,
+  .backgrwb .avatarwb,
+  .backgrwbguest .Avatar {
+    animation: none !important;
+  }
+
+  .Button,
+  .Dropdown-toggle,
+  .App-header .Button,
+  .DiscussionListItem,
+  .Post-body,
+  .Avatar,
+  .UserCard,
+  .UserListItem,
+  .TagTile,
+  .Modal-close,
+  .Composer,
+  .FormControl,
+  .Search-input,
+  .backgrwb *,
+  .backgrwbguest * {
+    transition: none !important;
+  }
+
+  .Button:hover,
+  .Dropdown-toggle:hover,
+  .App-header .Button:hover,
+  .DiscussionListItem:hover,
+  .UserCard:hover,
+  .UserListItem:hover,
+  .TagTile:hover,
+  .Avatar:hover,
+  .Modal-close:hover,
+  .Alert-dismiss:hover {
+    transform: none !important;
+  }
+
+  .Button::after,
+  .Dropdown-toggle::after {
+    display: none !important;
+  }
+}
