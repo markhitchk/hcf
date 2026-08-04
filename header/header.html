@@ -7,8 +7,8 @@
 
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM HEADER v2.1
-   Birthday Header Edition
+   HARLEY'S CLAN FORUM HEADER v2.2
+   Birthday Header + Full-Page Confetti Edition
    Author: HarleyTG
    Updated: 2026-08-04
 ========================================================= */
@@ -20,7 +20,6 @@
     --notice-dark:#090a0c;
     --notice-glow:rgba(255,212,0,.72);
     --notice-glow-soft:rgba(255,212,0,.24);
-
     --birthday-cyan:#00ffff;
     --birthday-blue:#5ea1ff;
     --birthday-purple:#b86cff;
@@ -31,12 +30,15 @@
 .hc-header-stack,
 .hc-header-stack *,
 .hc-header-stack *::before,
-.hc-header-stack *::after{
+.hc-header-stack *::after,
+#hc-birthday-page-confetti,
+#hc-birthday-page-confetti *{
     box-sizing:border-box;
 }
 
 .hc-header-stack{
     position:relative;
+    z-index:901;
     isolation:isolate;
     width:100%;
     max-width:100%;
@@ -52,9 +54,7 @@
    Ends:   Aug 5, 2026 at 12:00 AM Pacific
 ========================================================= */
 
-#hc-birthday-header[hidden]{
-    display:none!important;
-}
+#hc-birthday-header[hidden]{display:none!important}
 
 #hc-birthday-header{
     position:relative;
@@ -70,24 +70,11 @@
     overflow:hidden;
     border-top:1px solid rgba(255,255,255,.72);
     border-bottom:1px solid rgba(255,255,255,.72);
-    background:
-        linear-gradient(
-            115deg,
-            rgba(0,210,220,.98),
-            rgba(79,140,255,.98),
-            rgba(184,108,255,.98),
-            rgba(255,95,200,.98)
-        );
+    background:linear-gradient(115deg,rgba(0,210,220,.98),rgba(79,140,255,.98),rgba(184,108,255,.98),rgba(255,95,200,.98));
     color:#fff;
     text-align:center;
-    box-shadow:
-        0 7px 22px rgba(0,0,0,.32),
-        0 0 20px rgba(0,255,255,.24),
-        inset 0 1px 0 rgba(255,255,255,.18),
-        inset 0 -1px 0 rgba(255,255,255,.12);
-    animation:
-        hcBirthdayHeaderEnter .65s cubic-bezier(.2,.8,.2,1) both,
-        hcBirthdayHeaderGlow 3s ease-in-out .65s infinite;
+    box-shadow:0 7px 22px rgba(0,0,0,.32),0 0 20px rgba(0,255,255,.24),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.12);
+    animation:hcBirthdayHeaderEnter .65s cubic-bezier(.2,.8,.2,1) both,hcBirthdayHeaderGlow 3s ease-in-out .65s infinite;
 }
 
 #hc-birthday-header::before{
@@ -96,9 +83,7 @@
     inset:0;
     z-index:-2;
     pointer-events:none;
-    background:
-        radial-gradient(circle at 15% 40%,rgba(255,255,255,.20),transparent 22%),
-        radial-gradient(circle at 82% 50%,rgba(255,215,106,.18),transparent 26%);
+    background:radial-gradient(circle at 15% 40%,rgba(255,255,255,.20),transparent 22%),radial-gradient(circle at 82% 50%,rgba(255,215,106,.18),transparent 26%);
 }
 
 #hc-birthday-header::after{
@@ -111,14 +96,7 @@
     height:190%;
     pointer-events:none;
     opacity:0;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.08),
-        rgba(255,255,255,.42),
-        rgba(255,255,255,.08),
-        transparent
-    );
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),rgba(255,255,255,.42),rgba(255,255,255,.08),transparent);
     transform:skewX(-18deg);
     animation:hcBirthdayHeaderSweep 4.8s ease-in-out infinite;
 }
@@ -147,19 +125,14 @@
     font-weight:900;
     line-height:1.2;
     letter-spacing:.055em;
-    text-shadow:
-        0 1px 2px rgba(0,0,0,.55),
-        0 0 9px rgba(255,255,255,.3);
+    text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 9px rgba(255,255,255,.3);
 }
 
 .hc-birthday-copy small{
     display:block;
     margin-top:3px;
     color:rgba(255,255,255,.94);
-    font-family:"Courier New",monospace;
-    font-size:9px;
-    font-weight:700;
-    line-height:1.35;
+    font:700 9px/1.35 "Courier New",monospace;
     letter-spacing:.12em;
     text-transform:uppercase;
     text-shadow:0 1px 2px rgba(0,0,0,.42);
@@ -182,10 +155,7 @@
     cursor:pointer;
     font:700 20px/1 Arial,sans-serif;
     transform:translateY(-50%);
-    transition:
-        background-color .18s ease,
-        transform .18s ease,
-        border-color .18s ease;
+    transition:background-color .18s ease,transform .18s ease,border-color .18s ease;
 }
 
 #hc-birthday-header-close:hover,
@@ -196,7 +166,8 @@
     transform:translateY(-50%) scale(1.08);
 }
 
-.hc-birthday-confetti{
+/* Confetti contained inside the birthday notification. */
+.hc-birthday-header-confetti{
     position:absolute;
     inset:0;
     z-index:1;
@@ -204,7 +175,7 @@
     pointer-events:none;
 }
 
-.hc-birthday-confetti i{
+.hc-birthday-header-confetti i{
     position:absolute;
     top:-16px;
     left:var(--x);
@@ -213,43 +184,46 @@
     height:calc(var(--size) * 1.7);
     border-radius:2px;
     background:var(--color);
-    opacity:.78;
+    opacity:.82;
     transform:rotate(var(--rotate));
-    animation:hcBirthdayConfettiFall var(--duration) linear infinite;
+    animation:hcBirthdayHeaderConfettiFall var(--duration) linear infinite;
+    animation-delay:var(--delay);
+}
+
+/* Separate confetti layer over the rest of the forum body. */
+#hc-birthday-page-confetti{
+    position:fixed;
+    inset:0;
+    z-index:800;
+    overflow:hidden;
+    pointer-events:none;
+    contain:strict;
+}
+
+#hc-birthday-page-confetti i{
+    position:absolute;
+    top:-36px;
+    left:var(--x);
+    display:block;
+    width:var(--size);
+    height:calc(var(--size) * 1.75);
+    border-radius:2px;
+    background:var(--color);
+    opacity:var(--opacity);
+    filter:drop-shadow(0 0 2px rgba(255,255,255,.16));
+    transform:rotate(var(--rotate));
+    animation:hcBirthdayPageConfettiFall var(--duration) linear infinite;
     animation-delay:var(--delay);
 }
 
 @keyframes hcBirthdayHeaderEnter{
-    from{
-        opacity:0;
-        transform:translateY(-100%) scaleY(.72);
-        filter:blur(3px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0) scaleY(1);
-        filter:blur(0);
-    }
+    from{opacity:0;transform:translateY(-100%) scaleY(.72);filter:blur(3px)}
+    to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
 }
 
 @keyframes hcBirthdayHeaderGlow{
-    0%,100%{
-        box-shadow:
-            0 7px 22px rgba(0,0,0,.32),
-            0 0 18px rgba(0,255,255,.22),
-            inset 0 1px 0 rgba(255,255,255,.18),
-            inset 0 -1px 0 rgba(255,255,255,.12);
-    }
-
-    50%{
-        box-shadow:
-            0 8px 25px rgba(0,0,0,.35),
-            0 0 28px rgba(0,255,255,.4),
-            0 0 38px rgba(255,95,200,.22),
-            inset 0 1px 0 rgba(255,255,255,.24),
-            inset 0 -1px 0 rgba(255,255,255,.18);
-    }
+    0%,100%{box-shadow:0 7px 22px rgba(0,0,0,.32),0 0 18px rgba(0,255,255,.22),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.12)}
+    50%{box-shadow:0 8px 25px rgba(0,0,0,.35),0 0 28px rgba(0,255,255,.4),0 0 38px rgba(255,95,200,.22),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.18)}
 }
 
 @keyframes hcBirthdayHeaderSweep{
@@ -264,14 +238,15 @@
     50%{transform:translateY(-3px) rotate(5deg) scale(1.06)}
 }
 
-@keyframes hcBirthdayConfettiFall{
-    0%{
-        transform:translate3d(0,-18px,0) rotate(var(--rotate));
-    }
+@keyframes hcBirthdayHeaderConfettiFall{
+    0%{transform:translate3d(0,-18px,0) rotate(var(--rotate))}
+    100%{transform:translate3d(var(--drift),78px,0) rotate(calc(var(--rotate) + 430deg))}
+}
 
-    100%{
-        transform:translate3d(var(--drift),78px,0) rotate(calc(var(--rotate) + 430deg));
-    }
+@keyframes hcBirthdayPageConfettiFall{
+    0%{transform:translate3d(0,-8vh,0) rotate(var(--rotate))}
+    45%{transform:translate3d(var(--drift),48vh,0) rotate(calc(var(--rotate) + 360deg))}
+    100%{transform:translate3d(var(--drift-end),112vh,0) rotate(calc(var(--rotate) + 780deg))}
 }
 
 /* =========================================================
@@ -291,18 +266,11 @@
     overflow:hidden;
     border-top:1px solid var(--notice-yellow);
     border-bottom:1px solid var(--notice-yellow);
-    background:
-        linear-gradient(180deg,rgba(255,212,0,.035),transparent 48%),
-        var(--notice-dark);
+    background:linear-gradient(180deg,rgba(255,212,0,.035),transparent 48%),var(--notice-dark);
     color:var(--notice-yellow);
     text-align:center;
-    box-shadow:
-        0 0 16px rgba(255,212,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.035),
-        inset 0 -1px 0 rgba(255,212,0,.06);
-    animation:
-        noticeEnter .72s cubic-bezier(.2,.8,.2,1) both,
-        noticeBorderPulse 3.4s ease-in-out .72s infinite;
+    box-shadow:0 0 16px rgba(255,212,0,.08),inset 0 1px 0 rgba(255,255,255,.035),inset 0 -1px 0 rgba(255,212,0,.06);
+    animation:noticeEnter .72s cubic-bezier(.2,.8,.2,1) both,noticeBorderPulse 3.4s ease-in-out .72s infinite;
 }
 
 #forum-notice::before{
@@ -312,11 +280,7 @@
     z-index:-1;
     pointer-events:none;
     opacity:.22;
-    background:repeating-linear-gradient(
-        -45deg,
-        transparent 0 10px,
-        rgba(255,212,0,.5) 10px 20px
-    );
+    background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(255,212,0,.5) 10px 20px);
     background-size:28px 28px;
     animation:noticeStripes 2.8s linear infinite;
 }
@@ -331,23 +295,13 @@
     height:170%;
     pointer-events:none;
     opacity:0;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,212,0,.07),
-        rgba(255,245,180,.42),
-        rgba(255,212,0,.07),
-        transparent
-    );
+    background:linear-gradient(90deg,transparent,rgba(255,212,0,.07),rgba(255,245,180,.42),rgba(255,212,0,.07),transparent);
     transform:skewX(-18deg);
     animation:noticeSweep 5.2s ease-in-out infinite;
 }
 
 .notice-title,
-.notice-message{
-    position:relative;
-    z-index:2;
-}
+.notice-message{position:relative;z-index:2}
 
 .notice-title{
     display:flex;
@@ -370,29 +324,14 @@
     height:6px;
     border-radius:50%;
     background:var(--notice-yellow);
-    box-shadow:
-        0 0 5px var(--notice-yellow),
-        0 0 12px var(--notice-glow);
+    box-shadow:0 0 5px var(--notice-yellow),0 0 12px var(--notice-glow);
     animation:noticeBeacon 1.65s ease-in-out infinite;
 }
 
-.notice-beacon:last-child{
-    animation-delay:.42s;
-}
-
-.notice-warning-icon,
-.notice-message-icon{
-    display:inline-block;
-    transform-origin:center;
-}
-
-.notice-warning-icon:first-of-type{
-    animation:noticeWarningLeft 2.4s ease-in-out infinite;
-}
-
-.notice-warning-icon:last-of-type{
-    animation:noticeWarningRight 2.4s ease-in-out infinite;
-}
+.notice-beacon:last-child{animation-delay:.42s}
+.notice-warning-icon,.notice-message-icon{display:inline-block;transform-origin:center}
+.notice-warning-icon:first-of-type{animation:noticeWarningLeft 2.4s ease-in-out infinite}
+.notice-warning-icon:last-of-type{animation:noticeWarningRight 2.4s ease-in-out infinite}
 
 .notice-message{
     margin-top:3px;
@@ -402,18 +341,10 @@
     animation:noticeMessageFade 5s ease-in-out infinite;
 }
 
-.notice-message-icon{
-    margin-right:1px;
-    animation:noticeIconFloat 2.1s ease-in-out infinite;
-}
-
+.notice-message-icon{margin-right:1px;animation:noticeIconFloat 2.1s ease-in-out infinite}
 .notice-message-icon:nth-of-type(2){animation-delay:.3s}
 .notice-message-icon:nth-of-type(3){animation-delay:.6s}
-
-.notice-message strong{
-    color:#fff2a4;
-    text-shadow:0 0 5px rgba(255,212,0,.18);
-}
+.notice-message strong{color:#fff2a4;text-shadow:0 0 5px rgba(255,212,0,.18)}
 
 .notice-message a{
     position:relative;
@@ -422,10 +353,7 @@
     font-weight:800;
     text-decoration:none;
     text-shadow:0 0 5px rgba(255,212,0,.2);
-    transition:
-        color .2s ease,
-        text-shadow .2s ease,
-        transform .2s ease;
+    transition:color .2s ease,text-shadow .2s ease,transform .2s ease;
 }
 
 .notice-message a::after{
@@ -442,174 +370,53 @@
 
 .notice-message a:hover{
     color:var(--notice-yellow-light);
-    text-shadow:
-        0 0 6px var(--notice-glow),
-        0 0 12px var(--notice-glow-soft);
+    text-shadow:0 0 6px var(--notice-glow),0 0 12px var(--notice-glow-soft);
     transform:translateY(-1px);
 }
 
-.notice-message a:hover::after{
-    right:0;
-}
-
-.notice-message a:focus-visible{
-    border-radius:2px;
-    outline:2px solid var(--notice-yellow);
-    outline-offset:3px;
-}
+.notice-message a:hover::after{right:0}
+.notice-message a:focus-visible{border-radius:2px;outline:2px solid var(--notice-yellow);outline-offset:3px}
 
 @keyframes noticeEnter{
-    from{
-        opacity:0;
-        transform:translateY(-100%) scaleY(.7);
-        filter:blur(3px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0) scaleY(1);
-        filter:blur(0);
-    }
+    from{opacity:0;transform:translateY(-100%) scaleY(.7);filter:blur(3px)}
+    to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
 }
 
 @keyframes noticeBorderPulse{
-    0%,100%{
-        border-color:rgba(255,212,0,.55);
-        box-shadow:
-            0 0 10px rgba(255,212,0,.05),
-            inset 0 1px 0 rgba(255,255,255,.025),
-            inset 0 -1px 0 rgba(255,212,0,.04);
-    }
-
-    50%{
-        border-color:var(--notice-yellow);
-        box-shadow:
-            0 0 20px rgba(255,212,0,.16),
-            inset 0 1px 0 rgba(255,255,255,.055),
-            inset 0 -1px 0 rgba(255,212,0,.12);
-    }
+    0%,100%{border-color:rgba(255,212,0,.55);box-shadow:0 0 10px rgba(255,212,0,.05),inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(255,212,0,.04)}
+    50%{border-color:var(--notice-yellow);box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px 0 rgba(255,255,255,.055),inset 0 -1px 0 rgba(255,212,0,.12)}
 }
 
-@keyframes noticeStripes{
-    from{background-position:0 0}
-    to{background-position:28px 28px}
-}
-
-@keyframes noticeSweep{
-    0%,12%{left:-45%;opacity:0}
-    20%{opacity:.9}
-    66%{opacity:.65}
-    78%,100%{left:115%;opacity:0}
-}
+@keyframes noticeStripes{from{background-position:0 0}to{background-position:28px 28px}}
+@keyframes noticeSweep{0%,12%{left:-45%;opacity:0}20%{opacity:.9}66%{opacity:.65}78%,100%{left:115%;opacity:0}}
 
 @keyframes noticeTitleSignal{
-    0%,86%,100%{
-        opacity:1;
-        letter-spacing:2px;
-        text-shadow:0 0 5px var(--notice-glow);
-    }
-
-    89%{
-        opacity:.58;
-        text-shadow:none;
-    }
-
-    92%{
-        opacity:1;
-        letter-spacing:2.4px;
-        text-shadow:
-            0 0 7px var(--notice-yellow),
-            0 0 15px var(--notice-glow);
-    }
-
+    0%,86%,100%{opacity:1;letter-spacing:2px;text-shadow:0 0 5px var(--notice-glow)}
+    89%{opacity:.58;text-shadow:none}
+    92%{opacity:1;letter-spacing:2.4px;text-shadow:0 0 7px var(--notice-yellow),0 0 15px var(--notice-glow)}
     95%{opacity:.76}
 }
 
 @keyframes noticeBeacon{
-    0%,100%{
-        opacity:.35;
-        transform:scale(.72);
-        box-shadow:0 0 4px var(--notice-yellow);
-    }
-
-    50%{
-        opacity:1;
-        transform:scale(1.25);
-        box-shadow:
-            0 0 6px var(--notice-yellow),
-            0 0 15px var(--notice-glow);
-    }
+    0%,100%{opacity:.35;transform:scale(.72);box-shadow:0 0 4px var(--notice-yellow)}
+    50%{opacity:1;transform:scale(1.25);box-shadow:0 0 6px var(--notice-yellow),0 0 15px var(--notice-glow)}
 }
 
-@keyframes noticeWarningLeft{
-    0%,100%{transform:rotate(-4deg) scale(.96)}
-    50%{transform:rotate(4deg) scale(1.08)}
-}
-
-@keyframes noticeWarningRight{
-    0%,100%{transform:rotate(4deg) scale(.96)}
-    50%{transform:rotate(-4deg) scale(1.08)}
-}
-
-@keyframes noticeIconFloat{
-    0%,100%{transform:translateY(1px) scale(.96)}
-    50%{transform:translateY(-2px) scale(1.07)}
-}
-
-@keyframes noticeMessageFade{
-    0%,100%{opacity:.82}
-    50%{opacity:1}
-}
+@keyframes noticeWarningLeft{0%,100%{transform:rotate(-4deg) scale(.96)}50%{transform:rotate(4deg) scale(1.08)}}
+@keyframes noticeWarningRight{0%,100%{transform:rotate(4deg) scale(.96)}50%{transform:rotate(-4deg) scale(1.08)}}
+@keyframes noticeIconFloat{0%,100%{transform:translateY(1px) scale(.96)}50%{transform:translateY(-2px) scale(1.07)}}
+@keyframes noticeMessageFade{0%,100%{opacity:.82}50%{opacity:1}}
 
 @media(max-width:600px){
-    #hc-birthday-header{
-        min-height:52px;
-        gap:8px;
-        padding:7px 40px 7px 9px;
-    }
-
-    .hc-birthday-cake{
-        font-size:22px;
-    }
-
-    .hc-birthday-copy strong{
-        font-size:12px;
-        letter-spacing:.025em;
-    }
-
-    .hc-birthday-copy small{
-        font-size:8px;
-        letter-spacing:.07em;
-    }
-
-    #hc-birthday-header-close{
-        right:6px;
-        width:29px;
-        height:29px;
-        font-size:17px;
-    }
-
-    #forum-notice{
-        min-height:50px;
-        padding:7px 10px 8px;
-    }
-
-    .notice-title{
-        gap:5px;
-        font-size:11px;
-        letter-spacing:1.25px;
-    }
-
-    .notice-message{
-        max-width:100%;
-        font-size:10px;
-        line-height:1.45;
-    }
-
-    .notice-beacon{
-        width:5px;
-        height:5px;
-    }
+    #hc-birthday-header{min-height:52px;gap:8px;padding:7px 40px 7px 9px}
+    .hc-birthday-cake{font-size:22px}
+    .hc-birthday-copy strong{font-size:12px;letter-spacing:.025em}
+    .hc-birthday-copy small{font-size:8px;letter-spacing:.07em}
+    #hc-birthday-header-close{right:6px;width:29px;height:29px;font-size:17px}
+    #forum-notice{min-height:50px;padding:7px 10px 8px}
+    .notice-title{gap:5px;font-size:11px;letter-spacing:1.25px}
+    .notice-message{max-width:100%;font-size:10px;line-height:1.45}
+    .notice-beacon{width:5px;height:5px}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -617,7 +424,8 @@
     #hc-birthday-header::before,
     #hc-birthday-header::after,
     .hc-birthday-cake,
-    .hc-birthday-confetti i,
+    .hc-birthday-header-confetti i,
+    #hc-birthday-page-confetti i,
     #forum-notice,
     #forum-notice::before,
     #forum-notice::after,
@@ -625,32 +433,18 @@
     .notice-beacon,
     .notice-warning-icon,
     .notice-message,
-    .notice-message-icon{
-        animation:none!important;
-    }
+    .notice-message-icon{animation:none!important}
 
-    .notice-message a,
-    #hc-birthday-header-close{
-        transition:none;
-    }
-
-    .notice-message a:hover,
-    #hc-birthday-header-close:hover{
-        transform:none;
-    }
+    #hc-birthday-page-confetti{display:none!important}
+    .notice-message a,#hc-birthday-header-close{transition:none}
+    .notice-message a:hover,#hc-birthday-header-close:hover{transform:none}
 }
 </style>
 </head>
 
 <body>
 <div class="hc-header-stack" id="hc-header-stack">
-    <section
-        id="hc-birthday-header"
-        role="status"
-        aria-live="polite"
-        aria-label="Harley's birthday celebration"
-        hidden
-    >
+    <section id="hc-birthday-header" role="status" aria-live="polite" aria-label="Harley's birthday celebration" hidden>
         <span class="hc-birthday-cake" aria-hidden="true">🎂</span>
 
         <div class="hc-birthday-copy">
@@ -658,13 +452,8 @@
             <small>August 4 • Harley’s Clan Birthday Celebration</small>
         </div>
 
-        <button
-            id="hc-birthday-header-close"
-            type="button"
-            aria-label="Close birthday announcement"
-        >×</button>
-
-        <span class="hc-birthday-confetti" id="hc-birthday-confetti" aria-hidden="true"></span>
+        <button id="hc-birthday-header-close" type="button" aria-label="Close birthday announcement">×</button>
+        <span class="hc-birthday-header-confetti" id="hc-birthday-header-confetti" aria-hidden="true"></span>
     </section>
 
     <div id="forum-notice" role="status" aria-label="Harley's Clan Forum notice">
@@ -700,56 +489,75 @@
     var BIRTHDAY_END=new Date("2026-08-05T00:00:00-07:00").getTime();
     var CHECK_INTERVAL=30000;
     var DISMISS_KEY="hc-birthday-header-dismissed-2026";
+    var PAGE_CONFETTI_ID="hc-birthday-page-confetti";
 
     var banner=document.getElementById("hc-birthday-header");
     var closeButton=document.getElementById("hc-birthday-header-close");
-    var confetti=document.getElementById("hc-birthday-confetti");
-    var legacyObserver=null;
+    var headerConfetti=document.getElementById("hc-birthday-header-confetti");
 
-    var colors=[
-        "#00ffff",
-        "#5ea1ff",
-        "#b86cff",
-        "#ff5fc8",
-        "#ffd76a",
-        "#ffffff"
-    ];
-
-    function removeLegacyBirthdayUi(){
-        var legacyBanner=document.getElementById("hc-birthday-banner");
-        var legacyEffects=document.getElementById("hc-birthday-effects");
-        var legacyStyle=document.getElementById("hc-birthday-style");
-
-        if(legacyBanner){legacyBanner.remove()}
-        if(legacyEffects){legacyEffects.remove()}
-        if(legacyStyle){legacyStyle.remove()}
-    }
+    var colors=["#00ffff","#5ea1ff","#b86cff","#ff5fc8","#ffd76a","#ffffff"];
 
     function birthdayIsActive(){
         var now=Date.now();
         return now>=BIRTHDAY_START&&now<BIRTHDAY_END;
     }
 
-    function buildConfetti(){
-        if(!confetti||confetti.children.length){return}
+    function createPiece(container,pageMode){
+        var piece=document.createElement("i");
+        var size=(pageMode?5:3)+Math.random()*(pageMode?7:5);
+        var drift=(pageMode?-95:-18)+Math.random()*(pageMode?190:36);
 
-        for(var i=0;i<24;i++){
-            var piece=document.createElement("i");
-            var size=3+Math.random()*5;
-            var drift=-18+Math.random()*36;
+        piece.style.setProperty("--x",Math.random()*100+"%");
+        piece.style.setProperty("--size",size+"px");
+        piece.style.setProperty("--color",colors[Math.floor(Math.random()*colors.length)]);
+        piece.style.setProperty("--rotate",Math.random()*360+"deg");
+        piece.style.setProperty("--duration",(pageMode?7:2.8)+Math.random()*(pageMode?8:3.2)+"s");
+        piece.style.setProperty("--delay",-Math.random()*(pageMode?14:5)+"s");
+        piece.style.setProperty("--drift",drift+"px");
 
-            piece.style.setProperty("--x",Math.random()*100+"%");
-            piece.style.setProperty("--size",size+"px");
-            piece.style.setProperty("--color",colors[i%colors.length]);
-            piece.style.setProperty("--rotate",Math.random()*360+"deg");
-            piece.style.setProperty("--duration",2.8+Math.random()*3.2+"s");
-            piece.style.setProperty("--delay",-Math.random()*5+"s");
-            piece.style.setProperty("--drift",drift+"px");
-            confetti.appendChild(piece);
+        if(pageMode){
+            piece.style.setProperty("--drift-end",(-drift*.45)+"px");
+            piece.style.setProperty("--opacity",(.48+Math.random()*.42).toFixed(2));
+        }
+
+        container.appendChild(piece);
+    }
+
+    function buildHeaderConfetti(){
+        if(!headerConfetti||headerConfetti.children.length){return}
+        for(var i=0;i<26;i++){createPiece(headerConfetti,false)}
+    }
+
+    function buildPageConfetti(){
+        var layer=document.getElementById(PAGE_CONFETTI_ID);
+
+        if(!layer){
+            layer=document.createElement("div");
+            layer.id=PAGE_CONFETTI_ID;
+            layer.setAttribute("aria-hidden","true");
+            document.body.appendChild(layer);
+        }
+
+        if(layer.children.length){return}
+
+        var amount=window.innerWidth<=600?34:58;
+        for(var i=0;i<amount;i++){createPiece(layer,true)}
+    }
+
+    function removePageConfetti(){
+        var layer=document.getElementById(PAGE_CONFETTI_ID);
+        if(layer){layer.remove()}
+    }
+
+    function removeLegacyBirthdayUi(){
+        var ids=["hc-birthday-banner","hc-birthday-effects","hc-birthday-style"];
+        for(var i=0;i<ids.length;i++){
+            var element=document.getElementById(ids[i]);
+            if(element){element.remove()}
         }
     }
 
-    function updateBirthdayHeader(){
+    function updateBirthdayMode(){
         removeLegacyBirthdayUi();
 
         if(!banner){return}
@@ -757,32 +565,14 @@
         if(!birthdayIsActive()){
             banner.hidden=true;
             document.body.classList.remove("hc-birthday-active");
-
-            if(Date.now()>=BIRTHDAY_END&&legacyObserver){
-                legacyObserver.disconnect();
-                legacyObserver=null;
-            }
-
+            removePageConfetti();
             return;
         }
 
         document.body.classList.add("hc-birthday-active");
-        buildConfetti();
-
+        buildHeaderConfetti();
+        buildPageConfetti();
         banner.hidden=sessionStorage.getItem(DISMISS_KEY)==="yes";
-    }
-
-    function watchForLegacyCache(){
-        if(!("MutationObserver" in window)){return}
-
-        legacyObserver=new MutationObserver(function(){
-            removeLegacyBirthdayUi();
-        });
-
-        legacyObserver.observe(document.documentElement,{
-            childList:true,
-            subtree:true
-        });
     }
 
     if(closeButton){
@@ -792,9 +582,8 @@
         });
     }
 
-    watchForLegacyCache();
-    updateBirthdayHeader();
-    window.setInterval(updateBirthdayHeader,CHECK_INTERVAL);
+    updateBirthdayMode();
+    window.setInterval(updateBirthdayMode,CHECK_INTERVAL);
 })();
 </script>
 </body>
