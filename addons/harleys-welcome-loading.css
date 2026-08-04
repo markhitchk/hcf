@@ -3,25 +3,21 @@
 
    Load AFTER addons/animations.css so these targeted fixes win.
 
-   Version: 1.0
+   Version: 1.1
    Author: HarleyTG
    Updated: 2026-08-04
 ========================================================= */
 
 :root {
   --hc-welcome-cyan: var(--cyan-readable, var(--cyan, #00ffff));
-  --hc-welcome-glow: rgba(0, 255, 255, 0.36);
+  --hc-welcome-glow: rgba(0, 255, 255, 0.38);
   --hc-welcome-glow-soft: rgba(0, 255, 255, 0.16);
-  --hc-loader-bg: var(--body-bg, #090d10);
+  --hc-loader-bg: var(--body-bg, #080c10);
   --hc-loader-text: var(--body-color, #e8ffff);
 }
 
 /* =========================================================
-   WELCOME BOX — EXACT CARD-SHAPED OUTLINE
-
-   Replaces the old oversized diagonal ::after shine from
-   animations.css. The new effect stays inset to the real
-   .backgrwb border and inherits its desktop/mobile radius.
+   WELCOME BOX — CARD-SHAPED ANIMATED OUTLINE
 ========================================================= */
 
 .AfruxWidgets-sideNavAlt
@@ -51,17 +47,11 @@
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: auto !important;
-  height: auto !important;
   box-sizing: border-box !important;
-  border: 1px solid rgba(0, 255, 255, 0.55) !important;
+  border: 1px solid rgba(0, 255, 255, 0.58) !important;
   border-radius: inherit !important;
   background: none !important;
-  opacity: 0.92 !important;
+  opacity: 0.94 !important;
   pointer-events: none !important;
   transform: none !important;
   z-index: 20 !important;
@@ -71,7 +61,6 @@
   animation: hc-welcome-outline-pulse 3.6s ease-in-out infinite !important;
 }
 
-/* Animated gradient edge for browsers that support mask compositing. */
 @supports ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
   .AfruxWidgets-sideNavAlt
   .AfruxWidgets-Widget.welcomebox-widget
@@ -85,21 +74,19 @@
   .backgrwbguest::after {
     border: 0 !important;
     padding: 1px !important;
-    background:
-      linear-gradient(
-        115deg,
-        transparent 0%,
-        transparent 25%,
-        rgba(255, 255, 255, 0.30) 40%,
-        var(--hc-welcome-cyan) 47%,
-        #ffffff 50%,
-        var(--hc-welcome-cyan) 53%,
-        rgba(255, 255, 255, 0.30) 60%,
-        transparent 75%,
-        transparent 100%
-      ) !important;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 24%,
+      rgba(255, 255, 255, 0.28) 40%,
+      var(--hc-welcome-cyan) 47%,
+      #ffffff 50%,
+      var(--hc-welcome-cyan) 53%,
+      rgba(255, 255, 255, 0.28) 60%,
+      transparent 76%,
+      transparent 100%
+    ) !important;
     background-size: 300% 300% !important;
-    background-position: 100% 100% !important;
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0) !important;
@@ -115,50 +102,32 @@
 }
 
 @keyframes hc-welcome-outline-flow {
-  0% {
-    background-position: 120% 120%;
-  }
-  100% {
-    background-position: -120% -120%;
-  }
+  from { background-position: 125% 125%; }
+  to { background-position: -125% -125%; }
 }
 
 @keyframes hc-welcome-outline-pulse {
   0%, 100% {
-    opacity: 0.62;
+    opacity: 0.68;
     filter: brightness(0.92);
+    box-shadow:
+      inset 0 0 6px var(--hc-welcome-glow-soft),
+      0 0 8px var(--hc-welcome-glow-soft);
   }
   50% {
     opacity: 1;
-    filter: brightness(1.22);
-  }
-}
-
-/* Keep the outline attached to the mobile bottom-sheet radius. */
-@media (max-width: 700px) {
-  .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwb::after,
-  .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwbguest::after {
-    border-radius: 20px 20px 0 0 !important;
+    filter: brightness(1.18);
     box-shadow:
-      inset 0 0 6px var(--hc-welcome-glow-soft),
-      0 -2px 12px var(--hc-welcome-glow-soft) !important;
+      inset 0 0 11px var(--hc-welcome-glow-soft),
+      0 0 17px var(--hc-welcome-glow);
   }
 }
 
 /* =========================================================
    FLARUM LOADING SCREEN
 
-   The :not() selector allows CSS to replace an inline
-   display:block while respecting Flarum's inline display:none
-   after loading has finished.
+   Expected HTML:
+   <div id="flarum-loading" style="display: none;">Loading...</div>
 ========================================================= */
 
 #flarum-loading {
@@ -170,9 +139,11 @@
   min-height: 100vh !important;
   min-height: 100svh !important;
   min-height: 100dvh !important;
-  padding: 150px 24px 24px !important;
+  padding: 28px !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 18px !important;
   overflow: hidden !important;
   isolation: isolate !important;
   text-align: center !important;
@@ -181,7 +152,7 @@
   font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1.4 !important;
-  letter-spacing: 0.22em !important;
+  letter-spacing: 0.24em !important;
   color: var(--hc-loader-text) !important;
   text-shadow:
     0 0 8px var(--hc-welcome-glow),
@@ -190,8 +161,8 @@
     radial-gradient(
       circle at center,
       rgba(0, 255, 255, 0.13) 0,
-      rgba(0, 255, 255, 0.055) 135px,
-      transparent 260px
+      rgba(0, 255, 255, 0.055) 145px,
+      transparent 300px
     ),
     repeating-linear-gradient(
       0deg,
@@ -201,123 +172,105 @@
       transparent 4px
     ),
     var(--hc-loader-bg) !important;
-  animation: hc-loader-text 1.8s ease-in-out infinite !important;
 }
 
+/* Show the loader while Flarum has not explicitly hidden it. */
 #flarum-loading:not([style*="display: none"]):not([style*="display:none"]) {
   display: flex !important;
 }
 
+/* Always respect Flarum's completed-loading state. */
+#flarum-loading[style*="display: none"],
+#flarum-loading[style*="display:none"] {
+  display: none !important;
+}
+
+/* Site logo and forum name. */
 #flarum-loading::before {
-  content: "" !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  width: 86px !important;
-  height: 86px !important;
+  content: "Harley's Clan Forum" !important;
+  display: block !important;
   box-sizing: border-box !important;
-  border: 1px solid rgba(0, 255, 255, 0.62) !important;
-  border-radius: 50% !important;
+  width: min(420px, 90vw) !important;
+  min-height: 132px !important;
+  padding-top: 108px !important;
+  text-transform: none !important;
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.035em !important;
+  color: var(--hc-loader-text) !important;
   background:
     url("https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png")
-    center / cover no-repeat !important;
-  box-shadow:
-    0 0 0 5px rgba(0, 255, 255, 0.045),
-    0 0 22px var(--hc-welcome-glow),
-    0 0 52px var(--hc-welcome-glow-soft) !important;
-  transform: translate(-50%, -88px) !important;
-  animation: hc-loader-logo 2.2s ease-in-out infinite !important;
-  z-index: 2 !important;
+    center top / 92px 92px no-repeat !important;
+  filter: drop-shadow(0 0 11px var(--hc-welcome-glow));
+  text-shadow:
+    0 0 8px var(--hc-welcome-glow),
+    0 0 22px var(--hc-welcome-glow-soft) !important;
+  animation: hc-loader-logo-pulse 2.2s ease-in-out infinite !important;
 }
 
+/* Animated indeterminate loading bar. */
 #flarum-loading::after {
   content: "" !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  width: 116px !important;
-  height: 116px !important;
+  display: block !important;
   box-sizing: border-box !important;
-  border-radius: 50% !important;
+  width: min(320px, 76vw) !important;
+  height: 11px !important;
+  margin-top: 2px !important;
+  border: 1px solid rgba(0, 255, 255, 0.55) !important;
+  border-radius: 999px !important;
   background:
-    conic-gradient(
-      from 0deg,
-      transparent 0deg,
-      rgba(0, 255, 255, 0.10) 80deg,
-      var(--hc-welcome-cyan) 155deg,
-      #ffffff 180deg,
-      var(--hc-welcome-cyan) 205deg,
-      rgba(0, 255, 255, 0.10) 280deg,
-      transparent 360deg
-    ) !important;
-  -webkit-mask:
-    radial-gradient(
-      farthest-side,
-      transparent calc(100% - 4px),
-      #000 calc(100% - 3px)
-    ) !important;
-  mask:
-    radial-gradient(
-      farthest-side,
-      transparent calc(100% - 4px),
-      #000 calc(100% - 3px)
-    ) !important;
-  filter: drop-shadow(0 0 7px var(--hc-welcome-glow)) !important;
-  transform: translate(-50%, -103px) rotate(0deg) !important;
-  animation: hc-loader-ring 1.35s linear infinite !important;
-  z-index: 1 !important;
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.20) 15%,
+      var(--hc-welcome-cyan) 40%,
+      #ffffff 50%,
+      var(--hc-welcome-cyan) 60%,
+      rgba(0, 255, 255, 0.20) 85%,
+      transparent 100%
+    ) -55% 0 / 46% 100% no-repeat,
+    rgba(0, 255, 255, 0.055) !important;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.72),
+    0 0 8px var(--hc-welcome-glow-soft),
+    0 0 17px rgba(0, 255, 255, 0.11) !important;
+  animation: hc-loader-bar 1.45s cubic-bezier(.45, 0, .55, 1) infinite !important;
 }
 
-@keyframes hc-loader-ring {
-  from {
-    transform: translate(-50%, -103px) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -103px) rotate(360deg);
-  }
-}
-
-@keyframes hc-loader-logo {
+@keyframes hc-loader-logo-pulse {
   0%, 100% {
-    transform: translate(-50%, -88px) scale(0.97);
-    filter: brightness(0.94);
+    transform: translateY(0) scale(0.98);
+    filter: brightness(0.95) drop-shadow(0 0 8px var(--hc-welcome-glow-soft));
   }
   50% {
-    transform: translate(-50%, -91px) scale(1.04);
-    filter: brightness(1.12);
+    transform: translateY(-3px) scale(1.025);
+    filter: brightness(1.12) drop-shadow(0 0 16px var(--hc-welcome-glow));
   }
 }
 
-@keyframes hc-loader-text {
-  0%, 100% {
-    letter-spacing: 0.20em;
-    text-shadow:
-      0 0 5px var(--hc-welcome-glow-soft),
-      0 0 12px transparent;
-  }
-  50% {
-    letter-spacing: 0.25em;
-    text-shadow:
-      0 0 9px var(--hc-welcome-glow),
-      0 0 22px var(--hc-welcome-glow-soft);
-  }
+@keyframes hc-loader-bar {
+  0% { background-position: -65% 0, 0 0; }
+  50% { background-position: 50% 0, 0 0; }
+  100% { background-position: 165% 0, 0 0; }
 }
 
 /* =========================================================
-   MOBILE LOADER
+   MOBILE LOADING SCREEN
 ========================================================= */
 
 @media (max-width: 700px) {
   #flarum-loading {
-    padding: 124px 18px 24px !important;
+    padding: 22px 18px !important;
+    gap: 14px !important;
     font-size: 10.5px !important;
-    letter-spacing: 0.18em !important;
+    letter-spacing: 0.20em !important;
     background:
       radial-gradient(
         circle at center,
         rgba(0, 255, 255, 0.12) 0,
-        rgba(0, 255, 255, 0.045) 95px,
-        transparent 185px
+        rgba(0, 255, 255, 0.045) 105px,
+        transparent 205px
       ),
       repeating-linear-gradient(
         0deg,
@@ -330,54 +283,46 @@
   }
 
   #flarum-loading::before {
-    width: 66px !important;
-    height: 66px !important;
-    transform: translate(-50%, -70px) !important;
+    width: min(330px, 92vw) !important;
+    min-height: 108px !important;
+    padding-top: 86px !important;
+    font-size: 20px !important;
+    background-size: 72px 72px !important;
   }
 
   #flarum-loading::after {
-    width: 92px !important;
-    height: 92px !important;
-    transform: translate(-50%, -83px) rotate(0deg) !important;
-    animation-name: hc-loader-ring-mobile !important;
+    width: min(270px, 78vw) !important;
+    height: 10px !important;
   }
 
-  @keyframes hc-loader-ring-mobile {
-    from {
-      transform: translate(-50%, -83px) rotate(0deg);
-    }
-    to {
-      transform: translate(-50%, -83px) rotate(360deg);
-    }
-  }
-
-  @keyframes hc-loader-logo {
-    0%, 100% {
-      transform: translate(-50%, -70px) scale(0.97);
-      filter: brightness(0.94);
-    }
-    50% {
-      transform: translate(-50%, -73px) scale(1.04);
-      filter: brightness(1.12);
-    }
+  .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwb::after,
+  .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwbguest::after {
+    border-radius: 20px 20px 0 0 !important;
   }
 }
 
 @media (max-height: 520px) {
   #flarum-loading {
-    padding-top: 94px !important;
+    gap: 8px !important;
   }
 
   #flarum-loading::before {
-    width: 56px !important;
-    height: 56px !important;
-    transform: translate(-50%, -56px) !important;
+    min-height: 82px !important;
+    padding-top: 64px !important;
+    font-size: 18px !important;
+    background-size: 54px 54px !important;
   }
 
   #flarum-loading::after {
-    width: 78px !important;
-    height: 78px !important;
-    transform: translate(-50%, -67px) rotate(0deg) !important;
+    height: 8px !important;
   }
 }
 
@@ -396,17 +341,12 @@
   .AfruxWidgets-Widget-content
   .containerwb
   .backgrwbguest::after,
-  #flarum-loading,
   #flarum-loading::before,
   #flarum-loading::after {
     animation: none !important;
   }
 
-  #flarum-loading::before {
-    transform: translate(-50%, -88px) !important;
-  }
-
   #flarum-loading::after {
-    transform: translate(-50%, -103px) !important;
+    background-position: 50% 0, 0 0 !important;
   }
 }
