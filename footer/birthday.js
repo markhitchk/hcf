@@ -1,6 +1,6 @@
 /* =========================================================
    HARLEY'S CLAN FORUM — BIRTHDAY MODE
-   Active: August 4, 2026 in America/Los_Angeles
+   Active: August 4, 2026 at 12:00 AM Pacific Time
    Ends:   August 5, 2026 at 12:00 AM Pacific Time
    Author: HarleyTG
 ========================================================= */
@@ -82,35 +82,36 @@
         "box-shadow:0 0 16px rgba(255,215,106,.13),0 0 22px rgba(255,95,200,.08);",
         "}",
 
+        "/* Bottom-left alert position */",
         "#hc-birthday-banner{",
         "position:fixed;",
-        "top:70px;",
-        "left:50%;",
+        "left:20px;",
+        "bottom:20px;",
         "z-index:1055;",
         "display:flex;",
         "align-items:center;",
-        "justify-content:center;",
+        "justify-content:flex-start;",
         "gap:11px;",
-        "width:calc(100% - 30px);",
-        "max-width:760px;",
-        "min-height:52px;",
-        "padding:8px 46px 8px 16px;",
+        "width:calc(100% - 40px);",
+        "max-width:430px;",
+        "min-height:58px;",
+        "padding:10px 48px 10px 15px;",
         "overflow:hidden;",
         "color:#fff;",
-        "text-align:center;",
+        "text-align:left;",
         "border:1px solid rgba(255,255,255,.66);",
-        "border-radius:16px;",
+        "border-radius:14px;",
         "background:linear-gradient(115deg,rgba(0,212,220,.96),rgba(79,140,255,.96),rgba(184,108,255,.96),rgba(255,95,200,.96));",
-        "box-shadow:0 10px 36px rgba(0,0,0,.38),0 0 22px rgba(0,255,255,.31),0 0 34px rgba(255,95,200,.22);",
+        "box-shadow:0 10px 36px rgba(0,0,0,.42),0 0 22px rgba(0,255,255,.31),0 0 34px rgba(255,95,200,.22);",
         "backdrop-filter:blur(16px);",
         "-webkit-backdrop-filter:blur(16px);",
-        "transform:translateX(-50%);",
         "animation:hc-birthday-enter .65s cubic-bezier(.2,.8,.2,1) both,hc-birthday-glow 3s ease-in-out infinite;",
         "}",
 
         "#hc-birthday-banner::before{",
         "content:'🎂';",
         "display:inline-block;",
+        "flex:0 0 auto;",
         "font-size:25px;",
         "animation:hc-birthday-cake 1.6s ease-in-out infinite;",
         "}",
@@ -126,11 +127,12 @@
         "animation:hc-birthday-shine 4.5s ease-in-out infinite;",
         "}",
 
+        ".hc-birthday-copy{min-width:0;}",
         ".hc-birthday-copy strong{",
         "display:block;",
         "color:#fff;",
-        "font:900 15px/1.2 Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;",
-        "letter-spacing:.045em;",
+        "font:900 14px/1.25 Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;",
+        "letter-spacing:.035em;",
         "text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 9px rgba(255,255,255,.28);",
         "}",
 
@@ -138,8 +140,8 @@
         "display:block;",
         "margin-top:3px;",
         "color:rgba(255,255,255,.94);",
-        "font:700 9px/1.3 'JetBrains Mono','Courier New',monospace;",
-        "letter-spacing:.12em;",
+        "font:700 9px/1.35 'JetBrains Mono','Courier New',monospace;",
+        "letter-spacing:.1em;",
         "text-transform:uppercase;",
         "}",
 
@@ -191,13 +193,13 @@
         "}",
 
         "@keyframes hc-birthday-enter{",
-        "from{opacity:0;transform:translate(-50%,-24px) scale(.96)}",
-        "to{opacity:1;transform:translate(-50%,0) scale(1)}",
+        "from{opacity:0;transform:translate3d(-24px,18px,0) scale(.96)}",
+        "to{opacity:1;transform:translate3d(0,0,0) scale(1)}",
         "}",
 
         "@keyframes hc-birthday-glow{",
-        "0%,100%{box-shadow:0 10px 36px rgba(0,0,0,.38),0 0 20px rgba(0,255,255,.28),0 0 30px rgba(255,95,200,.18)}",
-        "50%{box-shadow:0 10px 36px rgba(0,0,0,.4),0 0 30px rgba(0,255,255,.45),0 0 44px rgba(255,95,200,.32)}",
+        "0%,100%{box-shadow:0 10px 36px rgba(0,0,0,.42),0 0 20px rgba(0,255,255,.28),0 0 30px rgba(255,95,200,.18)}",
+        "50%{box-shadow:0 10px 36px rgba(0,0,0,.44),0 0 30px rgba(0,255,255,.45),0 0 44px rgba(255,95,200,.32)}",
         "}",
 
         "@keyframes hc-birthday-cake{",
@@ -218,17 +220,17 @@
         "}",
 
         "@media(max-width:767px){",
-        "#hc-birthday-banner{top:58px;width:calc(100% - 18px);min-height:48px;padding:7px 40px 7px 10px;border-radius:13px}",
+        "#hc-birthday-banner{left:10px;right:10px;bottom:10px;width:auto;max-width:none;min-height:52px;padding:8px 42px 8px 11px;border-radius:13px}",
         "#hc-birthday-banner::before{font-size:21px}",
-        ".hc-birthday-copy strong{font-size:12px;letter-spacing:.025em}",
-        ".hc-birthday-copy small{font-size:8px}",
+        ".hc-birthday-copy strong{font-size:12px;letter-spacing:.02em}",
+        ".hc-birthday-copy small{font-size:8px;letter-spacing:.07em}",
         "#hc-birthday-close{right:6px;width:29px;height:29px;font-size:17px}",
         "}",
 
         "@media(prefers-reduced-motion:reduce){",
         "#hc-birthday-banner,#hc-birthday-banner::before,#hc-birthday-banner::after,.hc-birthday-confetti{animation:none!important}",
         ".hc-birthday-confetti{display:none!important}",
-        "}",
+        "}"
     ].join("");
 
     function isActive() {
@@ -258,6 +260,7 @@
         var banner = document.createElement("section");
         banner.id = BANNER_ID;
         banner.setAttribute("role", "status");
+        banner.setAttribute("aria-live", "polite");
         banner.setAttribute("aria-label", "Harley's birthday celebration");
         banner.innerHTML =
             '<div class="hc-birthday-copy">' +
@@ -307,7 +310,9 @@
     }
 
     function removeBirthdayMode() {
-        document.body.classList.remove("hc-birthday-active");
+        if (document.body) {
+            document.body.classList.remove("hc-birthday-active");
+        }
 
         var banner = document.getElementById(BANNER_ID);
         var effects = document.getElementById(EFFECTS_ID);
