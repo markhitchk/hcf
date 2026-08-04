@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Harley's Clan Forum Header</title>
 
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM SLIM NOTICE v2.0
-   Animated Warning Network Edition
+   HARLEY'S CLAN FORUM HEADER v2.1
+   Birthday Header Edition
    Author: HarleyTG
-   Updated: 2026-08-02
+   Updated: 2026-08-04
 ========================================================= */
 
 :root{
@@ -19,14 +20,263 @@
     --notice-dark:#090a0c;
     --notice-glow:rgba(255,212,0,.72);
     --notice-glow-soft:rgba(255,212,0,.24);
+
+    --birthday-cyan:#00ffff;
+    --birthday-blue:#5ea1ff;
+    --birthday-purple:#b86cff;
+    --birthday-pink:#ff5fc8;
+    --birthday-gold:#ffd76a;
 }
 
-#forum-notice,
-#forum-notice *,
-#forum-notice *::before,
-#forum-notice *::after{
+.hc-header-stack,
+.hc-header-stack *,
+.hc-header-stack *::before,
+.hc-header-stack *::after{
     box-sizing:border-box;
 }
+
+.hc-header-stack{
+    position:relative;
+    isolation:isolate;
+    width:100%;
+    max-width:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+/* =========================================================
+   TIMED BIRTHDAY HEADER
+   Active: Aug 4, 2026 at 12:00 AM Pacific
+   Ends:   Aug 5, 2026 at 12:00 AM Pacific
+========================================================= */
+
+#hc-birthday-header[hidden]{
+    display:none!important;
+}
+
+#hc-birthday-header{
+    position:relative;
+    isolation:isolate;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    width:100%;
+    min-height:54px;
+    margin:0;
+    padding:8px 48px 8px 16px;
+    overflow:hidden;
+    border-top:1px solid rgba(255,255,255,.72);
+    border-bottom:1px solid rgba(255,255,255,.72);
+    background:
+        linear-gradient(
+            115deg,
+            rgba(0,210,220,.98),
+            rgba(79,140,255,.98),
+            rgba(184,108,255,.98),
+            rgba(255,95,200,.98)
+        );
+    color:#fff;
+    text-align:center;
+    box-shadow:
+        0 7px 22px rgba(0,0,0,.32),
+        0 0 20px rgba(0,255,255,.24),
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -1px 0 rgba(255,255,255,.12);
+    animation:
+        hcBirthdayHeaderEnter .65s cubic-bezier(.2,.8,.2,1) both,
+        hcBirthdayHeaderGlow 3s ease-in-out .65s infinite;
+}
+
+#hc-birthday-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 15% 40%,rgba(255,255,255,.20),transparent 22%),
+        radial-gradient(circle at 82% 50%,rgba(255,215,106,.18),transparent 26%);
+}
+
+#hc-birthday-header::after{
+    content:"";
+    position:absolute;
+    top:-45%;
+    left:-40%;
+    z-index:-1;
+    width:34%;
+    height:190%;
+    pointer-events:none;
+    opacity:0;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.08),
+        rgba(255,255,255,.42),
+        rgba(255,255,255,.08),
+        transparent
+    );
+    transform:skewX(-18deg);
+    animation:hcBirthdayHeaderSweep 4.8s ease-in-out infinite;
+}
+
+.hc-birthday-cake{
+    position:relative;
+    z-index:3;
+    display:inline-block;
+    flex:0 0 auto;
+    font-size:27px;
+    line-height:1;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));
+    animation:hcBirthdayCake 1.55s ease-in-out infinite;
+}
+
+.hc-birthday-copy{
+    position:relative;
+    z-index:3;
+    min-width:0;
+}
+
+.hc-birthday-copy strong{
+    display:block;
+    color:#fff;
+    font-size:15px;
+    font-weight:900;
+    line-height:1.2;
+    letter-spacing:.055em;
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.55),
+        0 0 9px rgba(255,255,255,.3);
+}
+
+.hc-birthday-copy small{
+    display:block;
+    margin-top:3px;
+    color:rgba(255,255,255,.94);
+    font-family:"Courier New",monospace;
+    font-size:9px;
+    font-weight:700;
+    line-height:1.35;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    text-shadow:0 1px 2px rgba(0,0,0,.42);
+}
+
+#hc-birthday-header-close{
+    position:absolute;
+    top:50%;
+    right:10px;
+    z-index:5;
+    display:grid;
+    place-items:center;
+    width:32px;
+    height:32px;
+    padding:0;
+    border:1px solid rgba(255,255,255,.46);
+    border-radius:50%;
+    background:rgba(0,0,0,.22);
+    color:#fff;
+    cursor:pointer;
+    font:700 20px/1 Arial,sans-serif;
+    transform:translateY(-50%);
+    transition:
+        background-color .18s ease,
+        transform .18s ease,
+        border-color .18s ease;
+}
+
+#hc-birthday-header-close:hover,
+#hc-birthday-header-close:focus-visible{
+    border-color:#fff;
+    background:rgba(0,0,0,.44);
+    outline:none;
+    transform:translateY(-50%) scale(1.08);
+}
+
+.hc-birthday-confetti{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.hc-birthday-confetti i{
+    position:absolute;
+    top:-16px;
+    left:var(--x);
+    display:block;
+    width:var(--size);
+    height:calc(var(--size) * 1.7);
+    border-radius:2px;
+    background:var(--color);
+    opacity:.78;
+    transform:rotate(var(--rotate));
+    animation:hcBirthdayConfettiFall var(--duration) linear infinite;
+    animation-delay:var(--delay);
+}
+
+@keyframes hcBirthdayHeaderEnter{
+    from{
+        opacity:0;
+        transform:translateY(-100%) scaleY(.72);
+        filter:blur(3px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scaleY(1);
+        filter:blur(0);
+    }
+}
+
+@keyframes hcBirthdayHeaderGlow{
+    0%,100%{
+        box-shadow:
+            0 7px 22px rgba(0,0,0,.32),
+            0 0 18px rgba(0,255,255,.22),
+            inset 0 1px 0 rgba(255,255,255,.18),
+            inset 0 -1px 0 rgba(255,255,255,.12);
+    }
+
+    50%{
+        box-shadow:
+            0 8px 25px rgba(0,0,0,.35),
+            0 0 28px rgba(0,255,255,.4),
+            0 0 38px rgba(255,95,200,.22),
+            inset 0 1px 0 rgba(255,255,255,.24),
+            inset 0 -1px 0 rgba(255,255,255,.18);
+    }
+}
+
+@keyframes hcBirthdayHeaderSweep{
+    0%,12%{left:-40%;opacity:0}
+    20%{opacity:.95}
+    68%{opacity:.55}
+    80%,100%{left:115%;opacity:0}
+}
+
+@keyframes hcBirthdayCake{
+    0%,100%{transform:translateY(1px) rotate(-5deg) scale(.97)}
+    50%{transform:translateY(-3px) rotate(5deg) scale(1.06)}
+}
+
+@keyframes hcBirthdayConfettiFall{
+    0%{
+        transform:translate3d(0,-18px,0) rotate(var(--rotate));
+    }
+
+    100%{
+        transform:translate3d(var(--drift),78px,0) rotate(calc(var(--rotate) + 430deg));
+    }
+}
+
+/* =========================================================
+   STANDARD FORUM NOTICE
+========================================================= */
 
 #forum-notice{
     position:relative;
@@ -45,7 +295,6 @@
         linear-gradient(180deg,rgba(255,212,0,.035),transparent 48%),
         var(--notice-dark);
     color:var(--notice-yellow);
-    font-family:Arial,Helvetica,sans-serif;
     text-align:center;
     box-shadow:
         0 0 16px rgba(255,212,0,.08),
@@ -56,7 +305,6 @@
         noticeBorderPulse 3.4s ease-in-out .72s infinite;
 }
 
-/* Moving hazard stripes behind the content */
 #forum-notice::before{
     content:"";
     position:absolute;
@@ -73,7 +321,6 @@
     animation:noticeStripes 2.8s linear infinite;
 }
 
-/* Bright scanner traveling across the full notice */
 #forum-notice::after{
     content:"";
     position:absolute;
@@ -92,7 +339,6 @@
         rgba(255,212,0,.07),
         transparent
     );
-    filter:blur(.3px);
     transform:skewX(-18deg);
     animation:noticeSweep 5.2s ease-in-out infinite;
 }
@@ -161,13 +407,8 @@
     animation:noticeIconFloat 2.1s ease-in-out infinite;
 }
 
-.notice-message-icon:nth-of-type(2){
-    animation-delay:.3s;
-}
-
-.notice-message-icon:nth-of-type(3){
-    animation-delay:.6s;
-}
+.notice-message-icon:nth-of-type(2){animation-delay:.3s}
+.notice-message-icon:nth-of-type(3){animation-delay:.6s}
 
 .notice-message strong{
     color:#fff2a4;
@@ -255,23 +496,10 @@
 }
 
 @keyframes noticeSweep{
-    0%,12%{
-        left:-45%;
-        opacity:0;
-    }
-
-    20%{
-        opacity:.9;
-    }
-
-    66%{
-        opacity:.65;
-    }
-
-    78%,100%{
-        left:115%;
-        opacity:0;
-    }
+    0%,12%{left:-45%;opacity:0}
+    20%{opacity:.9}
+    66%{opacity:.65}
+    78%,100%{left:115%;opacity:0}
 }
 
 @keyframes noticeTitleSignal{
@@ -294,9 +522,7 @@
             0 0 15px var(--notice-glow);
     }
 
-    95%{
-        opacity:.76;
-    }
+    95%{opacity:.76}
 }
 
 @keyframes noticeBeacon{
@@ -335,7 +561,34 @@
     50%{opacity:1}
 }
 
-@media (max-width:600px){
+@media(max-width:600px){
+    #hc-birthday-header{
+        min-height:52px;
+        gap:8px;
+        padding:7px 40px 7px 9px;
+    }
+
+    .hc-birthday-cake{
+        font-size:22px;
+    }
+
+    .hc-birthday-copy strong{
+        font-size:12px;
+        letter-spacing:.025em;
+    }
+
+    .hc-birthday-copy small{
+        font-size:8px;
+        letter-spacing:.07em;
+    }
+
+    #hc-birthday-header-close{
+        right:6px;
+        width:29px;
+        height:29px;
+        font-size:17px;
+    }
+
     #forum-notice{
         min-height:50px;
         padding:7px 10px 8px;
@@ -359,7 +612,12 @@
     }
 }
 
-@media (prefers-reduced-motion:reduce){
+@media(prefers-reduced-motion:reduce){
+    #hc-birthday-header,
+    #hc-birthday-header::before,
+    #hc-birthday-header::after,
+    .hc-birthday-cake,
+    .hc-birthday-confetti i,
     #forum-notice,
     #forum-notice::before,
     #forum-notice::after,
@@ -368,14 +626,16 @@
     .notice-warning-icon,
     .notice-message,
     .notice-message-icon{
-        animation:none !important;
+        animation:none!important;
     }
 
-    .notice-message a{
+    .notice-message a,
+    #hc-birthday-header-close{
         transition:none;
     }
 
-    .notice-message a:hover{
+    .notice-message a:hover,
+    #hc-birthday-header-close:hover{
         transform:none;
     }
 }
@@ -383,28 +643,159 @@
 </head>
 
 <body>
-<div id="forum-notice" role="status" aria-label="Harley's Clan Forum notice">
-    <div class="notice-title">
-        <span class="notice-beacon" aria-hidden="true"></span>
-        <span class="notice-warning-icon" aria-hidden="true">⚠</span>
-        <span>Harley's Clan Forum Notice</span>
-        <span class="notice-warning-icon" aria-hidden="true">⚠</span>
-        <span class="notice-beacon" aria-hidden="true"></span>
-    </div>
+<div class="hc-header-stack" id="hc-header-stack">
+    <section
+        id="hc-birthday-header"
+        role="status"
+        aria-live="polite"
+        aria-label="Harley's birthday celebration"
+        hidden
+    >
+        <span class="hc-birthday-cake" aria-hidden="true">🎂</span>
 
-    <div class="notice-message">
-        <span class="notice-message-icon" aria-hidden="true">🚧</span>
-        Under Construction
-        <span aria-hidden="true">•</span>
-        <span class="notice-message-icon" aria-hidden="true">💬</span>
-        DM issues? Open:
-        <a href="https://forum.harleytg.com/conversations">Direct Messages</a>
-        <span aria-hidden="true">•</span>
-        <span class="notice-message-icon" aria-hidden="true">🌐</span>
-        Domain Expiration:
-        <strong>October 12, 2026</strong>
-        <a href="https://forum.harleytg.com/d/77-domain-expiration-alert">Info</a>
+        <div class="hc-birthday-copy">
+            <strong>HAPPY BIRTHDAY, HARLEYTG! 🎉</strong>
+            <small>August 4 • Harley’s Clan Birthday Celebration</small>
+        </div>
+
+        <button
+            id="hc-birthday-header-close"
+            type="button"
+            aria-label="Close birthday announcement"
+        >×</button>
+
+        <span class="hc-birthday-confetti" id="hc-birthday-confetti" aria-hidden="true"></span>
+    </section>
+
+    <div id="forum-notice" role="status" aria-label="Harley's Clan Forum notice">
+        <div class="notice-title">
+            <span class="notice-beacon" aria-hidden="true"></span>
+            <span class="notice-warning-icon" aria-hidden="true">⚠</span>
+            <span>Harley's Clan Forum Notice</span>
+            <span class="notice-warning-icon" aria-hidden="true">⚠</span>
+            <span class="notice-beacon" aria-hidden="true"></span>
+        </div>
+
+        <div class="notice-message">
+            <span class="notice-message-icon" aria-hidden="true">🚧</span>
+            Under Construction
+            <span aria-hidden="true">•</span>
+            <span class="notice-message-icon" aria-hidden="true">💬</span>
+            DM issues? Open:
+            <a href="https://forum.harleytg.com/conversations">Direct Messages</a>
+            <span aria-hidden="true">•</span>
+            <span class="notice-message-icon" aria-hidden="true">🌐</span>
+            Domain Expiration:
+            <strong>October 12, 2026</strong>
+            <a href="https://forum.harleytg.com/d/77-domain-expiration-alert">Info</a>
+        </div>
     </div>
 </div>
+
+<script>
+(function(){
+    "use strict";
+
+    var BIRTHDAY_START=new Date("2026-08-04T00:00:00-07:00").getTime();
+    var BIRTHDAY_END=new Date("2026-08-05T00:00:00-07:00").getTime();
+    var CHECK_INTERVAL=30000;
+    var DISMISS_KEY="hc-birthday-header-dismissed-2026";
+
+    var banner=document.getElementById("hc-birthday-header");
+    var closeButton=document.getElementById("hc-birthday-header-close");
+    var confetti=document.getElementById("hc-birthday-confetti");
+    var legacyObserver=null;
+
+    var colors=[
+        "#00ffff",
+        "#5ea1ff",
+        "#b86cff",
+        "#ff5fc8",
+        "#ffd76a",
+        "#ffffff"
+    ];
+
+    function removeLegacyBirthdayUi(){
+        var legacyBanner=document.getElementById("hc-birthday-banner");
+        var legacyEffects=document.getElementById("hc-birthday-effects");
+        var legacyStyle=document.getElementById("hc-birthday-style");
+
+        if(legacyBanner){legacyBanner.remove()}
+        if(legacyEffects){legacyEffects.remove()}
+        if(legacyStyle){legacyStyle.remove()}
+    }
+
+    function birthdayIsActive(){
+        var now=Date.now();
+        return now>=BIRTHDAY_START&&now<BIRTHDAY_END;
+    }
+
+    function buildConfetti(){
+        if(!confetti||confetti.children.length){return}
+
+        for(var i=0;i<24;i++){
+            var piece=document.createElement("i");
+            var size=3+Math.random()*5;
+            var drift=-18+Math.random()*36;
+
+            piece.style.setProperty("--x",Math.random()*100+"%");
+            piece.style.setProperty("--size",size+"px");
+            piece.style.setProperty("--color",colors[i%colors.length]);
+            piece.style.setProperty("--rotate",Math.random()*360+"deg");
+            piece.style.setProperty("--duration",2.8+Math.random()*3.2+"s");
+            piece.style.setProperty("--delay",-Math.random()*5+"s");
+            piece.style.setProperty("--drift",drift+"px");
+            confetti.appendChild(piece);
+        }
+    }
+
+    function updateBirthdayHeader(){
+        removeLegacyBirthdayUi();
+
+        if(!banner){return}
+
+        if(!birthdayIsActive()){
+            banner.hidden=true;
+            document.body.classList.remove("hc-birthday-active");
+
+            if(Date.now()>=BIRTHDAY_END&&legacyObserver){
+                legacyObserver.disconnect();
+                legacyObserver=null;
+            }
+
+            return;
+        }
+
+        document.body.classList.add("hc-birthday-active");
+        buildConfetti();
+
+        banner.hidden=sessionStorage.getItem(DISMISS_KEY)==="yes";
+    }
+
+    function watchForLegacyCache(){
+        if(!("MutationObserver" in window)){return}
+
+        legacyObserver=new MutationObserver(function(){
+            removeLegacyBirthdayUi();
+        });
+
+        legacyObserver.observe(document.documentElement,{
+            childList:true,
+            subtree:true
+        });
+    }
+
+    if(closeButton){
+        closeButton.addEventListener("click",function(){
+            sessionStorage.setItem(DISMISS_KEY,"yes");
+            banner.hidden=true;
+        });
+    }
+
+    watchForLegacyCache();
+    updateBirthdayHeader();
+    window.setInterval(updateBirthdayHeader,CHECK_INTERVAL);
+})();
+</script>
 </body>
 </html>
