@@ -1,579 +1,167 @@
 /* ==========================================================
-   Harley's Clan Forum - KaiOS Accessibility v1.9
-   Standalone 320x240 / 240x320 feature-phone override.
+   Harley's Clan Forum - KaiOS Accessibility v1.9.1
+   320x240 / 240x320 feature-phone compatibility layer.
 
-   Corrected build:
-   - Keeps the single top post counter
-   - Restores the complete PostStream wrapper chain
-   - Prevents article > div from collapsing into a thin bar
-   - Keeps posts in normal vertical document flow
-   - No imports or dependency on older KaiOS files
+   The complete v1.9 layout repair is pinned below. These local
+   overrides add compatibility for animations.css v1.1 and the
+   welcome/loading animation add-on without changing the working
+   post-stream, header, or welcome-card layout fixes.
 
    Author: HarleyTG
-   Updated: 2026-07-30
+   Updated: 2026-08-04
    ========================================================== */
+
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@2ddc63e5bafb8bbd8aa960e42abaf2a4c91e1e92/addons/harleys-kaios-accessibility-v1.9.css");
 
 @media screen and (max-width: 360px) and (max-height: 480px),
        screen and (max-width: 480px) and (max-height: 360px),
        screen and (max-device-width: 360px) and (max-device-height: 480px),
        screen and (max-device-width: 480px) and (max-device-height: 360px) {
 
-  html,
-  body {
-    min-width: 0 !important;
-    max-width: 100% !important;
-    overflow-x: hidden !important;
-    font-size: 14px !important;
-    line-height: 1.4 !important;
-    text-size-adjust: 100% !important;
-    -webkit-text-size-adjust: 100% !important;
-  }
+  /* ----------------------------------------------------------
+     NEW ANIMATION LAYER — COMPLETE KAIOS MOTION SHUTDOWN
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box !important;
-  }
-
-  img,
-  video,
-  iframe,
-  canvas,
-  svg {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-
-  .Alert,
-  .Modal-content,
-  .Dropdown-menu,
-  .backgrwb,
-  .backgrwbguest,
-  .Post,
-  .PostStream,
-  .PostStream-item,
-  .PostStreamScrubber {
+     This intentionally uses a broad App-scoped rule so newly
+     added forum animations cannot bypass the KaiOS override.
+     Layout transforms are not removed globally.
+     ---------------------------------------------------------- */
+  html body .App,
+  html body .App *,
+  html body .App *::before,
+  html body .App *::after,
+  html body #flarum-loading,
+  html body #flarum-loading::before,
+  html body #flarum-loading::after {
     animation: none !important;
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
     transition: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    scroll-behavior: auto !important;
   }
 
-  a:focus,
-  button:focus,
-  input:focus,
-  textarea:focus,
-  select:focus,
-  [tabindex]:focus {
-    outline: 2px solid #00ffff !important;
-    outline-offset: 1px !important;
+  /* Restore stable header text on old Gecko. The animation add-on
+     uses clipped gradient text, which can become transparent on
+     feature-phone browser builds with incomplete clip support. */
+  html body .Header-title a {
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
   }
 
-  .App,
-  .App-content,
-  .container,
-  .DiscussionPage,
-  .DiscussionPage-discussion,
-  .DiscussionPage-stream,
-  .PostStream,
-  .PostStream-item,
-  .Post,
-  .Post-content,
-  .Post-body {
-    min-width: 0 !important;
-    max-width: 100% !important;
-    overflow-wrap: break-word !important;
-    word-wrap: break-word !important;
-  }
-
-  /* ----------------------------------------------------------
-     Compact KaiOS header
-     ---------------------------------------------------------- */
-  .Header .container {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-  }
-
-  .Header-title {
-    min-width: 0 !important;
-    max-width: 190px !important;
-    gap: 5px !important;
-    font-size: 16px !important;
-    line-height: 1.15 !important;
-  }
-
-  .Header-title::before {
-    width: 28px !important;
-    height: 28px !important;
-    flex: 0 0 28px !important;
-  }
-
-  .Header-title a,
-  .Header-title span {
-    min-width: 0 !important;
-    max-width: 155px !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-  }
-
-  #header-secondary .Header-controls {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    flex-wrap: wrap !important;
-    gap: 3px !important;
-  }
-
-  #header-secondary .Header-controls > li {
-    width: auto !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-  }
-
-  #header-secondary .Button--flat {
-    width: auto !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
-    padding: 4px 6px !important;
-    font-size: 12px !important;
-  }
-
-  li.item-session .Dropdown-toggle.Button--user {
-    width: auto !important;
-    max-width: 126px !important;
-    min-height: 32px !important;
-    height: 32px !important;
-    padding: 2px 6px 2px 2px !important;
-    gap: 4px !important;
-  }
-
-  li.item-session .Dropdown-toggle.Button--user .Avatar {
-    width: 26px !important;
-    height: 26px !important;
-  }
-
-  #header-secondary .item-session .username {
-    max-width: 70px !important;
-    font-size: 12px !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-  }
-
-  /* ----------------------------------------------------------
-     Welcome/profile widget
-     ---------------------------------------------------------- */
-  html body .backgrwb.backgrwb.backgrwb,
-  html body .backgrwbguest.backgrwbguest.backgrwbguest {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    display: flex !important;
-    width: 200px !important;
-    min-width: 0 !important;
-    max-width: calc(100vw - 12px) !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    margin: 8px auto !important;
-    padding: 8px 6px !important;
-    overflow: visible !important;
-    border-radius: 16px !important;
+  /* Keep the actual logo but remove its animated movement and
+     expensive glow/filter processing. */
+  html body .Header-title::before,
+  html body .Header-title:hover::before {
+    animation: none !important;
     transform: none !important;
-    z-index: auto !important;
+    filter: none !important;
+    box-shadow: none !important;
   }
 
-  html body .backgrwb.backgrwb.backgrwb::before,
-  html body .backgrwbguest.backgrwbguest.backgrwbguest::before {
+  /* Remove decorative scanning/shimmer layers only. These are not
+     required for navigation or content and are costly on KaiOS. */
+  html body .App-header::after,
+  html body .Hero::after,
+  html body .Modal-header::after,
+  html body .Alert::after,
+  html body .Button:not(.Button--icon)::after,
+  html body .Dropdown-toggle:not(.Button--icon)::after {
     content: none !important;
     display: none !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb > div {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb > button.logwbox {
-    position: absolute !important;
-    top: 4px !important;
-    right: 4px !important;
-    bottom: auto !important;
-    left: auto !important;
-    width: 28px !important;
-    min-width: 28px !important;
-    max-width: 28px !important;
-    height: 28px !important;
-    min-height: 28px !important;
-    max-height: 28px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    line-height: 28px !important;
-    z-index: 5 !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .avatarwb,
-  html body .backgrwb.backgrwb.backgrwb .AvatarEditor {
-    position: relative !important;
-    width: 72px !important;
-    max-width: 72px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .avatarwb .Avatar {
-    display: block !important;
-    width: 68px !important;
-    min-width: 68px !important;
-    max-width: 68px !important;
-    height: 68px !important;
-    min-height: 68px !important;
-    max-height: 68px !important;
-    margin: 6px auto 4px !important;
-    padding: 0 !important;
-    transform: none !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .contentwb,
-  html body .backgrwb.backgrwb.backgrwb .ulwb.contentwb {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 3px 6px !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .circletop,
-  html body .backgrwb.backgrwb.backgrwb .iconbadge {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 3px !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .circletop a {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 30px !important;
-    min-width: 30px !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    padding: 0 !important;
-  }
-
-  html body .backgrwb.backgrwb.backgrwb .ulwb li {
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 2px 0 !important;
-    font-size: 11px !important;
-    line-height: 1.3 !important;
-  }
-
-  html body .containerwb,
-  html body .welcomebox-widget,
-  html body .welcomebox-widget .AfruxWidgets-Widget-content {
-    position: relative !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    z-index: auto !important;
-  }
-
-  /* ----------------------------------------------------------
-     Keep one Flarum post counter in the phone header
-     ---------------------------------------------------------- */
-  html body .PostStreamScrubber.App-titleControl {
-    display: block !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: 50% !important;
-    width: 180px !important;
-    height: var(--header-height-phone, 46px) !important;
-    margin: 0 0 0 -90px !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: none !important;
-    z-index: 1001 !important;
-  }
-
-  html body .App.affix .PostStreamScrubber.App-titleControl {
-    position: fixed !important;
-  }
-
-  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle {
-    display: block !important;
-    position: static !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: var(--header-height-phone, 46px) !important;
-    min-height: var(--header-height-phone, 46px) !important;
-    max-height: var(--header-height-phone, 46px) !important;
-    margin: 0 !important;
-    padding: 10px 6px !important;
-    overflow: hidden !important;
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    color: var(--header-color, currentColor) !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: none !important;
-    pointer-events: none !important;
-    cursor: default !important;
-  }
-
-  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .Scrubber-index,
-  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .Scrubber-count {
-    display: inline !important;
-    position: static !important;
-    float: none !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle .fa-sort,
-  html body .PostStreamScrubber.App-titleControl > button.Dropdown-toggle > .icon {
-    display: none !important;
-  }
-
-  html body .PostStreamScrubber > .Dropdown-menu,
-  html body .PostStreamScrubber > .dropdown-menu,
-  html body .PostStreamScrubber.open > .Dropdown-menu,
-  html body .PostStreamScrubber.open > .dropdown-menu,
-  html body .PostStreamScrubber .Scrubber,
-  html body .PostStreamScrubber .Scrubber-info,
-  html body .PostStreamScrubber .Scrubber-scrollbar,
-  html body .PostStreamScrubber .dropdown-backdrop {
-    display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    max-width: 0 !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    visibility: hidden !important;
+    animation: none !important;
     opacity: 0 !important;
-    pointer-events: none !important;
   }
 
-  html body .DiscussionPage-nav > ul > li.item-scrubber ~ li.item-scrubber,
-  html body .PostStreamScrubber + .PostStreamScrubber {
+  /* The welcome/loading add-on is loaded after animations.css.
+     Higher specificity keeps its animated card outline disabled
+     even when both files use !important. */
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwb::after,
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwbguest::after {
+    content: none !important;
     display: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+    filter: none !important;
+    box-shadow: none !important;
   }
 
-  /* ----------------------------------------------------------
-     PostStream collapse rescue
-
-     Actual DOM:
-     .PostStream-item > article.Post > div > header/body/actions/footer
-     The direct article child must have a real height on old Gecko.
-     ---------------------------------------------------------- */
-  html body .DiscussionPage-discussion > .container {
-    display: block !important;
-    grid-template: none !important;
-    grid-template-columns: none !important;
-    grid-template-rows: none !important;
-    grid-template-areas: none !important;
-    grid-gap: 0 !important;
-  }
-
-  html body .DiscussionPage-stream,
-  html body .PostStream,
-  html body .PostStream > .PostStream-item,
-  html body .PostStream-item > article.Post,
-  html body .PostStream-item > article.Post > div,
-  html body .PostStream-item > .Post,
-  html body .PostStream-item > .Post > div,
-  html body .PostStream-item .CommentPost,
-  html body .PostStream-item .CommentPost > div {
-    display: block !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 1px !important;
-    max-height: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    overflow: visible !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    clip: auto !important;
-    clip-path: none !important;
+  /* Remove movement from hover/focus states introduced by the new
+     animation add-on while preserving the controls themselves. */
+  html body .Button:hover,
+  html body .Button:active,
+  html body .Dropdown-toggle:hover,
+  html body .Dropdown-toggle:active,
+  html body .App-header .Button:hover,
+  html body .Header-primary .Button:hover,
+  html body .Header-secondary .Button:hover,
+  html body .Notification:hover,
+  html body .NotificationList .Notification:hover,
+  html body .Dropdown-menu > li > a:hover,
+  html body .Dropdown-menu > li > button:hover,
+  html body .SelectDropdown-menu > li > button:hover,
+  html body .DiscussionListItem:hover,
+  html body .DiscussionListItem:hover .DiscussionListItem-title,
+  html body .Post:hover .Post-body,
+  html body .PostUser-avatar:hover .Avatar,
+  html body .Post .Avatar:hover,
+  html body .UserHero-avatar:hover .Avatar,
+  html body .AvatarEditor:hover .Avatar,
+  html body .UserCard:hover .Avatar,
+  html body .UserCard:hover,
+  html body .UserListItem:hover,
+  html body .TagTile:hover,
+  html body .AfruxWidgets-Widget:hover,
+  html body .TagLabel:hover,
+  html body .Badge:hover,
+  html body .sideNav li a:hover,
+  html body .SideNav li a:hover,
+  html body .Modal-close:hover,
+  html body .FormControl:focus,
+  html body .Search-input:focus,
+  html body .TextEditor-editor:focus-within,
+  html body .ComposerBody-editor:focus-within,
+  html body .Composer-controls .Button:hover .Button-icon,
+  html body .Alert-dismiss:hover {
     transform: none !important;
-    contain: none !important;
-    content-visibility: visible !important;
+    filter: none !important;
   }
 
-  html body .DiscussionPage-stream,
-  html body .PostStream,
-  html body .PostStream > .PostStream-item,
-  html body .PostStream-item > article.Post,
-  html body .PostStream-item > .Post,
-  html body .PostStream-item .CommentPost {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    z-index: auto !important;
+  /* Prevent pulsing badges, avatars, loading indicators, and icon
+     drop shadows from leaving static GPU-heavy effects behind. */
+  html body .Badge,
+  html body .Button-badge,
+  html body .NotificationsDropdown-unread,
+  html body .NotificationGrid-unread,
+  html body .PostUser-avatar .Avatar,
+  html body .Post .Avatar,
+  html body .UserHero-avatar .Avatar,
+  html body .AvatarEditor .Avatar,
+  html body .UserCard .Avatar,
+  html body .LoadingIndicator-container,
+  html body .LoadingIndicator,
+  html body .icon,
+  html body .Button-icon {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
   }
 
-  html body .PostStream-item > article.Post > div,
-  html body .PostStream-item > .Post > div,
-  html body .PostStream-item .CommentPost > div {
-    position: static !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream-item > article.Post,
-  html body .PostStream-item > .Post,
-  html body .PostStream-item .CommentPost {
-    margin: 0 !important;
-    padding: 8px 6px !important;
-  }
-
-  html body .PostStream .Post-header,
-  html body .PostStream .Post-content,
-  html body .PostStream .Post-body,
-  html body .PostStream .Post-signature,
-  html body .PostStream .Post-actions,
-  html body .PostStream .Post-footer,
-  html body .PostStream .Post-quoteButtonContainer,
-  html body .PostStream-timeGap,
-  html body .PostStream-loadMore,
-  html body .PostStream .ReplyPlaceholder {
-    display: block !important;
-    position: relative !important;
-    float: none !important;
-    clear: both !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    clip: auto !important;
-    clip-path: none !important;
+  /* Keep the custom loading screen readable but static. */
+  html body #flarum-loading::before,
+  html body #flarum-loading::after {
+    animation: none !important;
     transform: none !important;
-  }
-
-  html body .PostStream .Post-header > ul,
-  html body .PostStream .Post-actions > ul,
-  html body .PostStream .Post-footer > ul {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: auto !important;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    list-style: none !important;
-  }
-
-  html body .PostStream .Post-body,
-  html body .PostStream .Post-body > * {
-    visibility: visible !important;
-    opacity: 1 !important;
-    max-width: 100% !important;
-  }
-
-  html body .PostStream .Post-body {
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-    font-size: 14px !important;
-    line-height: 1.45 !important;
-  }
-
-  html body .PostStream .Post-body img,
-  html body .PostStream .Post-body iframe,
-  html body .PostStream .Post-body video,
-  html body .PostStream .LinkPreview,
-  html body .PostStream .LinkPreview-main,
-  html body .PostStream .LinkPreview-image {
-    max-width: 100% !important;
-    height: auto !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  html body .PostStream .Post-footer {
-    margin: 6px 0 10px !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream .Post-actions {
-    margin: 6px 0 0 !important;
-    padding: 0 !important;
-  }
-
-  html body .PostStream .Post-actions > ul,
-  html body .PostStream .Post-footer > ul {
-    display: block !important;
-  }
-
-  html body .PostStream .Post-actions > ul > li,
-  html body .PostStream .Post-footer > ul > li {
-    display: inline-block !important;
-    position: relative !important;
-    float: none !important;
-    width: auto !important;
-    max-width: 100% !important;
-    height: auto !important;
-    margin: 0 3px 3px 0 !important;
-    padding: 0 !important;
-    vertical-align: top !important;
-    list-style: none !important;
-  }
-
-  /* The old divider was the thin black bar visible after collapse. */
-  html body .PostStream-item::after,
-  html body .PostStream-item > article.Post::after,
-  html body .PostStream-item > .Post::after {
-    content: "" !important;
-    display: block !important;
-    clear: both !important;
-    width: 100% !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: none !important;
-  }
-
-  html body .PostStream-item:not(:last-child) {
-    margin-bottom: 10px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 1px solid var(--control-bg, rgba(255,255,255,.12)) !important;
+    filter: none !important;
   }
 }
