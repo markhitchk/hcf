@@ -1,11 +1,11 @@
 /* =========================================================
-   HARLEY'S CLAN FORUM — AUTOMATIC HOLIDAY BANNERS
+   HARLEY'S CLAN FORUM — AUTOMATIC CELEBRATION BANNERS
    Time zone: America/Los_Angeles
 
-   Test every celebration one at a time:
+   Test every celebration:
    https://forum.harleytg.com/?hcHoliday=all
 
-   Optional test speed in milliseconds:
+   Optional visible time per banner:
    https://forum.harleytg.com/?hcHoliday=all&hcSpeed=5000
 ========================================================= */
 (function () {
@@ -32,8 +32,14 @@
   var sequenceMode = false;
   var sequenceIndex = 0;
   var sequenceDelayMs = 6000;
+  var sequenceTransitioning = false;
+  var sequenceTransitionMs = 700;
   var bannerObserver = null;
   var stackObserver = null;
+  var reduceMotion = !!(
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   var holidays = [
     h("new-years-day", "New Year's Day", "Happy New Year! 🎉", "A new year begins with Harley’s Clan", "🎆", fixed(1, 1), ["#061b4d", "#234fd0", "#7a35d6", "#e9a918"], ["✦", "★", "●", "◆"]),
@@ -261,7 +267,10 @@
       ".hc-banner-slide[hidden]{display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}",
       "#hc-holiday-header,#hc-holiday-header *,#hc-holiday-effects,#hc-holiday-effects *{box-sizing:border-box}",
       "#hc-holiday-header[hidden]{display:none!important}",
-      "#hc-holiday-header{--g:linear-gradient(115deg,#083b4d,#166b87,#7a35d6,#d45c98);position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;margin:0;padding:8px 48px 8px 16px;overflow:hidden;border-top:1px solid rgba(255,255,255,.72);border-bottom:1px solid rgba(255,255,255,.72);background:var(--g);color:#fff;text-align:center;box-shadow:0 7px 22px rgba(0,0,0,.32),0 0 22px rgba(0,255,255,.24),inset 0 1px rgba(255,255,255,.18);animation:hcHolidayIn .65s cubic-bezier(.2,.8,.2,1) both,hcHolidayGlow 3s ease-in-out .65s infinite}",
+      "#hc-holiday-header{--g:linear-gradient(115deg,#083b4d,#166b87,#7a35d6,#d45c98);position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;margin:0;padding:8px 48px 8px 16px;overflow:hidden;border-top:1px solid rgba(255,255,255,.72);border-bottom:1px solid rgba(255,255,255,.72);background:var(--g);color:#fff;text-align:center;box-shadow:0 7px 22px rgba(0,0,0,.32),0 0 22px rgba(0,255,255,.24),inset 0 1px rgba(255,255,255,.18);animation:hcHolidayIn .65s cubic-bezier(.2,.8,.2,1) both,hcHolidayGlow 3s ease-in-out .65s infinite;will-change:transform,opacity}",
+      "#hc-holiday-header.hc-sequence-leaving{animation:none!important;transform:translate3d(-100%,0,0)!important;opacity:0!important;transition:transform .7s cubic-bezier(.22,.61,.36,1),opacity .5s ease!important}",
+      "#hc-holiday-header.hc-sequence-entering{animation:none!important;transform:translate3d(100%,0,0)!important;opacity:0!important;transition:none!important}",
+      "#hc-holiday-header.hc-sequence-entering.hc-sequence-entering-active{transform:translate3d(0,0,0)!important;opacity:1!important;transition:transform .7s cubic-bezier(.22,.61,.36,1),opacity .5s ease!important}",
       "#hc-holiday-header:before{content:\"\";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(circle at 15% 40%,rgba(255,255,255,.2),transparent 22%),radial-gradient(circle at 82% 50%,rgba(255,255,255,.16),transparent 26%)}",
       "#hc-holiday-header:after{content:\"\";position:absolute;top:-45%;left:-40%;z-index:-1;width:34%;height:190%;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),rgba(255,255,255,.42),rgba(255,255,255,.08),transparent);transform:skewX(-18deg);animation:hcHolidaySweep 4.8s ease-in-out infinite}",
       ".hc-holiday-icon{position:relative;z-index:3;flex:0 0 auto;font-size:27px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));animation:hcHolidayFloat 1.55s ease-in-out infinite}",
@@ -279,7 +288,7 @@
       "@keyframes hcHolidayFloat{0%,100%{transform:translateY(1px) rotate(-5deg) scale(.97)}50%{transform:translateY(-3px) rotate(5deg) scale(1.06)}}",
       "@keyframes hcHolidayFall{from{transform:translate3d(0,-8vh,0) rotate(0)}to{transform:translate3d(var(--drift),112vh,0) rotate(780deg)}}",
       "@media(max-width:600px){#hc-holiday-header{min-height:52px;gap:8px;padding:7px 40px 7px 9px}.hc-holiday-icon{font-size:22px}.hc-holiday-copy strong{font-size:12px;letter-spacing:.025em}.hc-holiday-copy small{font-size:8px;letter-spacing:.07em}#hc-holiday-close{right:6px;width:29px;height:29px;font-size:17px}}",
-      "@media(prefers-reduced-motion:reduce){#hc-holiday-header,#hc-holiday-header:after,.hc-holiday-icon,.hc-holiday-particles i,#hc-holiday-effects i{animation:none!important}#hc-holiday-effects{display:none!important}}"
+      "@media(prefers-reduced-motion:reduce){#hc-holiday-header,#hc-holiday-header:after,.hc-holiday-icon,.hc-holiday-particles i,#hc-holiday-effects i{animation:none!important;transition:none!important}#hc-holiday-effects{display:none!important}}"
     ].join("");
     document.head.appendChild(style);
   }
@@ -326,7 +335,16 @@
     }
   }
 
+  function resetSequenceClasses(banner) {
+    banner.classList.remove(
+      "hc-sequence-leaving",
+      "hc-sequence-entering",
+      "hc-sequence-entering-active"
+    );
+  }
+
   function hideBanner(banner) {
+    resetSequenceClasses(banner);
     banner.hidden = true;
     queueSlotSync(banner);
   }
@@ -407,8 +425,6 @@
   }
 
   function buildEffects(item) {
-    /* Always remove the previous celebration first. This guarantees that
-       only the currently visible banner has particles on the page. */
     removeEffects();
 
     if (!config.pageEffects) {
@@ -434,8 +450,7 @@
       return;
     }
 
-    var otherIds = ["forum-notice", "hc-birthday-header"];
-    otherIds.forEach(function (id) {
+    ["forum-notice", "hc-birthday-header"].forEach(function (id) {
       var other = document.getElementById(id);
       if (other) {
         other.hidden = true;
@@ -449,16 +464,10 @@
     }
   }
 
-  function renderItem(item, testPosition) {
+  function setBannerContent(item, testPosition) {
     var banner = makeBanner();
-    if (!item) {
-      currentId = "";
-      hideBanner(banner);
-      removeEffects();
-      return;
-    }
-
     currentId = item.id;
+
     banner.style.setProperty(
       "--g",
       "linear-gradient(115deg," + item.gradient.join(",") + ")"
@@ -473,9 +482,21 @@
     banner.querySelector("small").textContent = subtitle;
     banner.setAttribute("aria-label", item.label + " celebration");
 
-    /* Clears old banner particles before adding the current set. */
     particles(banner.querySelector(".hc-holiday-particles"), item, 24, false);
     showBanner(banner);
+  }
+
+  function renderItem(item, testPosition) {
+    var banner = makeBanner();
+    if (!item) {
+      currentId = "";
+      hideBanner(banner);
+      removeEffects();
+      return;
+    }
+
+    resetSequenceClasses(banner);
+    setBannerContent(item, testPosition);
     buildEffects(item);
   }
 
@@ -522,7 +543,22 @@
     sequenceTimer = null;
   }
 
-  function showSequenceItem() {
+  function scheduleSequenceAdvance() {
+    clearSequenceTimer();
+    if (!sequenceMode) {
+      return;
+    }
+    sequenceTimer = window.setTimeout(nextSequence, sequenceDelayMs);
+  }
+
+  function sequencePosition(list) {
+    return {
+      current: sequenceIndex + 1,
+      total: list.length
+    };
+  }
+
+  function showSequenceItem(immediate) {
     if (!sequenceMode) {
       return;
     }
@@ -539,41 +575,82 @@
       sequenceIndex = 0;
     }
 
-    renderItem(list[sequenceIndex], {
-      current: sequenceIndex + 1,
-      total: list.length
-    });
+    var item = list[sequenceIndex];
+    var position = sequencePosition(list);
+    var banner = makeBanner();
 
-    sequenceTimer = window.setTimeout(nextSequence, sequenceDelayMs);
+    if (
+      immediate ||
+      reduceMotion ||
+      banner.hidden ||
+      !currentId
+    ) {
+      sequenceTransitioning = false;
+      renderItem(item, position);
+      scheduleSequenceAdvance();
+      return;
+    }
+
+    sequenceTransitioning = true;
+    removeEffects();
+    resetSequenceClasses(banner);
+    banner.classList.add("hc-sequence-leaving");
+
+    window.setTimeout(function () {
+      if (!sequenceMode) {
+        sequenceTransitioning = false;
+        return;
+      }
+
+      banner.classList.remove("hc-sequence-leaving");
+      banner.classList.add("hc-sequence-entering");
+      setBannerContent(item, position);
+      void banner.offsetWidth;
+      banner.classList.add("hc-sequence-entering-active");
+      buildEffects(item);
+
+      window.setTimeout(function () {
+        resetSequenceClasses(banner);
+        sequenceTransitioning = false;
+        scheduleSequenceAdvance();
+      }, sequenceTransitionMs + 40);
+    }, sequenceTransitionMs);
   }
 
   function nextSequence() {
-    if (!sequenceMode) {
+    if (!sequenceMode || sequenceTransitioning) {
       return;
     }
+
     clearSequenceTimer();
-    removeEffects();
-    sequenceIndex = (sequenceIndex + 1) % allTestCelebrations().length;
-    showSequenceItem();
+    var list = allTestCelebrations();
+    if (!list.length) {
+      return;
+    }
+    sequenceIndex = (sequenceIndex + 1) % list.length;
+    showSequenceItem(false);
   }
 
   function startSequence(delay) {
     sequenceMode = true;
     forcedId = "";
     sequenceIndex = 0;
+    sequenceTransitioning = false;
     sequenceDelayMs = Math.max(
       2500,
       Math.min(30000, Number(delay) || requestedSpeed())
     );
     window.clearTimeout(timer);
     timer = null;
-    showSequenceItem();
+    showSequenceItem(true);
   }
 
   function stopSequence() {
     sequenceMode = false;
+    sequenceTransitioning = false;
     clearSequenceTimer();
     removeEffects();
+    resetSequenceClasses(makeBanner());
     refresh();
     schedule();
   }
@@ -637,12 +714,14 @@
     },
     force: function (id) {
       sequenceMode = false;
+      sequenceTransitioning = false;
       clearSequenceTimer();
       forcedId = String(id || "").toLowerCase();
       refresh();
     },
     clearForce: function () {
       sequenceMode = false;
+      sequenceTransitioning = false;
       clearSequenceTimer();
       forcedId = "";
       refresh();
