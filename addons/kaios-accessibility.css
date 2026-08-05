@@ -1,34 +1,54 @@
 /* ==========================================================
-   Harley's Clan Forum - KaiOS Accessibility v2.0
-   320x240 / 240x320 feature-phone compatibility layer.
+   Harley's Clan Forum - KaiOS Accessibility v2.1
+   Standalone 320x240 / 240x320 feature-phone compatibility.
 
-   The complete v1.9 post-stream and layout repair remains pinned
-   below. This v2.0 layer adds support for the current animation
-   addon, imported rotating banners, birthday/holiday effects,
-   messenger and conversations, notifications, authentication
-   sheets, file cards, the welcome widget, and the loading screen.
+   This build no longer imports the older v1.9 stylesheet.
+   KaiOS rules are restricted to very small, low-resolution
+   feature-phone viewports so they do not compete with the
+   upcoming modern mobile.css layer.
+
+   Navigation, communication, notification, and account items
+   are restored to the older one-item-per-line vertical layout.
 
    Author: HarleyTG
    Updated: 2026-08-04
    ========================================================== */
 
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@2ddc63e5bafb8bbd8aa960e42abaf2a4c91e1e92/addons/harleys-kaios-accessibility-v1.9.css");
-
-@media screen and (max-width: 360px) and (max-height: 480px),
-       screen and (max-width: 480px) and (max-height: 360px),
-       screen and (max-device-width: 360px) and (max-device-height: 480px),
-       screen and (max-device-width: 480px) and (max-device-height: 360px) {
+@media screen and (max-width: 360px) and (max-height: 480px) and (max-resolution: 1.5dppx),
+       screen and (max-width: 480px) and (max-height: 360px) and (max-resolution: 1.5dppx) {
 
   :root {
     --hc-banner-height: 48px !important;
   }
 
-  /* ----------------------------------------------------------
-     CURRENT MOTION LAYER - COMPLETE FEATURE-PHONE SHUTDOWN
+  html,
+  body {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    text-size-adjust: 100% !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
 
-     The broad App rule covers the forum. Extra roots are listed
-     because the imported header, celebration effects, modals, and
-     loading screen may be mounted outside .App.
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box !important;
+  }
+
+  img,
+  video,
+  iframe,
+  canvas,
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* ----------------------------------------------------------
+     COMPLETE KAIOS MOTION / GPU EFFECT SHUTDOWN
      ---------------------------------------------------------- */
   html body .App,
   html body .App *,
@@ -42,10 +62,6 @@
   html body #hc-header-stack *,
   html body #hc-header-stack *::before,
   html body #hc-header-stack *::after,
-  html body #hc-birthday-effects,
-  html body #hc-birthday-effects *,
-  html body #hc-holiday-effects,
-  html body #hc-holiday-effects *,
   html body .Modal,
   html body .Modal *,
   html body .Modal *::before,
@@ -64,9 +80,46 @@
     scroll-behavior: auto !important;
   }
 
+  html body .Alert,
+  html body .Dropdown-menu,
+  html body .NotificationList,
+  html body .ConversationsList,
+  html body .MessagesDropdown .Dropdown-menu,
+  html body .Modal-content,
+  html body .backgrwb,
+  html body .backgrwbguest,
+  html body .Post-body .wrapper,
+  html body #flarum-loading {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  html body .App-header::after,
+  html body .Hero::after,
+  html body .Modal-header::after,
+  html body .Alert::after,
+  html body .Button:not(.Button--icon)::after,
+  html body .Dropdown-toggle:not(.Button--icon)::after,
+  html body #forum-notice::before,
+  html body #hc-birthday-header::after,
+  html body #hc-holiday-header::after,
+  html body .backgrwb::after,
+  html body .backgrwbguest::after {
+    content: none !important;
+    display: none !important;
+    opacity: 0 !important;
+  }
+
   /* ----------------------------------------------------------
-     MAIN FLARUM HEADER + LOGO
+     MAIN HEADER AND LOGO
      ---------------------------------------------------------- */
+  html body .Header .container {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+
   html body .Header-title {
     display: flex !important;
     align-items: center !important;
@@ -113,10 +166,180 @@
     flex: 0 0 28px !important;
     align-self: center !important;
     margin: 0 !important;
-    animation: none !important;
     transform: translateY(-2px) !important;
     filter: none !important;
     box-shadow: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     VERTICAL NAVIGATION / COMMUNICATION ICON ROWS
+
+     Restores the older KaiOS pattern: one navigation item per
+     line, with its icon on the left and label beside it.
+     ---------------------------------------------------------- */
+  html body .sideNav,
+  html body .SideNav,
+  html body .App-nav,
+  html body .IndexPage-nav,
+  html body .DiscussionPage-nav,
+  html body .UserPage-nav,
+  html body .SettingsPage-nav,
+  html body .TagsPage-nav,
+  html body .App-drawer,
+  html body .Drawer {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body .sideNav > ul,
+  html body .SideNav > ul,
+  html body .sideNav ul,
+  html body .SideNav ul,
+  html body .App-nav .Dropdown-menu,
+  html body .IndexPage-nav .Dropdown-menu,
+  html body .DiscussionPage-nav .Dropdown-menu,
+  html body .UserPage-nav .Dropdown-menu,
+  html body .SettingsPage-nav .Dropdown-menu,
+  html body .TagsPage-nav .Dropdown-menu,
+  html body .App-drawer .Header-controls,
+  html body .Drawer .Header-controls,
+  html body .App-drawer ul,
+  html body .Drawer ul {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .sideNav li,
+  html body .SideNav li,
+  html body .App-nav .Dropdown-menu > li,
+  html body .IndexPage-nav .Dropdown-menu > li,
+  html body .DiscussionPage-nav .Dropdown-menu > li,
+  html body .UserPage-nav .Dropdown-menu > li,
+  html body .SettingsPage-nav .Dropdown-menu > li,
+  html body .TagsPage-nav .Dropdown-menu > li,
+  html body .App-drawer .Header-controls > li,
+  html body .Drawer .Header-controls > li,
+  html body .App-drawer li,
+  html body .Drawer li {
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .sideNav li > a,
+  html body .sideNav li > button,
+  html body .SideNav li > a,
+  html body .SideNav li > button,
+  html body .App-nav .Dropdown-menu > li > a,
+  html body .App-nav .Dropdown-menu > li > button,
+  html body .IndexPage-nav .Dropdown-menu > li > a,
+  html body .IndexPage-nav .Dropdown-menu > li > button,
+  html body .DiscussionPage-nav .Dropdown-menu > li > a,
+  html body .DiscussionPage-nav .Dropdown-menu > li > button,
+  html body .UserPage-nav .Dropdown-menu > li > a,
+  html body .UserPage-nav .Dropdown-menu > li > button,
+  html body .SettingsPage-nav .Dropdown-menu > li > a,
+  html body .SettingsPage-nav .Dropdown-menu > li > button,
+  html body .TagsPage-nav .Dropdown-menu > li > a,
+  html body .TagsPage-nav .Dropdown-menu > li > button,
+  html body .App-drawer .Header-controls > li > a,
+  html body .App-drawer .Header-controls > li > button,
+  html body .Drawer .Header-controls > li > a,
+  html body .Drawer .Header-controls > li > button {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 5px 7px !important;
+    overflow: hidden !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    transform: none !important;
+  }
+
+  html body .sideNav li .icon,
+  html body .sideNav li .Button-icon,
+  html body .SideNav li .icon,
+  html body .SideNav li .Button-icon,
+  html body .App-nav li .icon,
+  html body .App-nav li .Button-icon,
+  html body .App-drawer li .icon,
+  html body .App-drawer li .Button-icon,
+  html body .Drawer li .icon,
+  html body .Drawer li .Button-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 22px !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    margin: 0 6px 0 0 !important;
+    line-height: 22px !important;
+    text-align: center !important;
+  }
+
+  html body .sideNav li .Button-label,
+  html body .SideNav li .Button-label,
+  html body .App-nav li .Button-label,
+  html body .App-drawer li .Button-label,
+  html body .Drawer li .Button-label {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Keep top-bar controls compact; only drawer/navigation items
+     become vertical. This avoids a tall broken main header. */
+  html body #header-primary .Header-controls,
+  html body #header-secondary .Header-controls {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+  }
+
+  html body #header-primary .Header-controls > li,
+  html body #header-secondary .Header-controls > li {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  html body #header-primary .Button,
+  html body #header-secondary .Button {
+    width: auto !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    padding: 4px 6px !important;
   }
 
   /* ----------------------------------------------------------
@@ -140,7 +363,6 @@
   }
 
   html body #hc-header-stack .hc-slide,
-  html body #hc-header-stack .hc-banner-slide,
   html body #forum-notice,
   html body #hc-birthday-header,
   html body #hc-holiday-header {
@@ -151,32 +373,23 @@
     min-height: var(--hc-banner-height) !important;
     max-height: var(--hc-banner-height) !important;
     margin: 0 !important;
+    padding: 4px 28px 4px 6px !important;
     box-shadow: none !important;
     filter: none !important;
   }
 
-  html body #forum-notice,
-  html body #hc-birthday-header,
-  html body #hc-holiday-header {
-    gap: 4px !important;
-    padding: 4px 30px 4px 6px !important;
-  }
-
   html body .hc-notice-title,
-  html body .notice-title,
   html body .hc-birthday-copy strong,
   html body .hc-holiday-copy strong {
     font-size: 10px !important;
     line-height: 1.1 !important;
-    letter-spacing: 0.04em !important;
+    letter-spacing: 0.03em !important;
   }
 
   html body .hc-notice-message,
-  html body .notice-message,
   html body .hc-birthday-copy small,
   html body .hc-holiday-copy small {
     display: block !important;
-    max-width: 100% !important;
     max-height: 22px !important;
     margin-top: 1px !important;
     overflow: hidden !important;
@@ -186,146 +399,88 @@
     white-space: normal !important;
   }
 
-  html body .hc-birthday-icon,
-  html body .hc-birthday-cake,
-  html body .hc-holiday-icon {
-    font-size: 18px !important;
-    transform: none !important;
-    filter: none !important;
-  }
-
-  html body #hc-birthday-close,
-  html body #hc-birthday-header-close,
-  html body #hc-holiday-close {
-    right: 3px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    padding: 0 !important;
-    font-size: 15px !important;
-    line-height: 24px !important;
-    transform: translateY(-50%) !important;
-  }
-
-  /* Celebration particles and page overlays are intentionally
-     removed on feature phones. The announcement text remains. */
   html body #hc-birthday-header-particles,
-  html body .hc-birthday-header-confetti,
   html body #hc-birthday-effects,
-  html body #hc-birthday-page-confetti,
   html body .hc-holiday-particles,
   html body #hc-holiday-effects {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
-    animation: none !important;
   }
 
   /* ----------------------------------------------------------
-     DECORATIVE ANIMATION AND GPU EFFECT REMOVAL
+     POST STREAM FLOW REPAIR
      ---------------------------------------------------------- */
-  html body .App-header::after,
-  html body .Hero::after,
-  html body .Modal-header::after,
-  html body .Alert::after,
-  html body .Button:not(.Button--icon)::after,
-  html body .Dropdown-toggle:not(.Button--icon)::after,
-  html body #forum-notice::before,
-  html body #hc-birthday-header::after,
-  html body #hc-holiday-header::after,
-  html body .backgrwb::after,
-  html body .backgrwbguest::after {
-    content: none !important;
-    display: none !important;
-    animation: none !important;
-    opacity: 0 !important;
+  html body .App,
+  html body .App-content,
+  html body .container,
+  html body .DiscussionPage,
+  html body .DiscussionPage-discussion,
+  html body .DiscussionPage-stream,
+  html body .PostStream,
+  html body .PostStream-item,
+  html body .Post,
+  html body .Post-content,
+  html body .Post-body {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-wrap: break-word !important;
   }
 
-  html body .Alert,
-  html body .Dropdown-menu,
-  html body .NotificationList,
-  html body .ConversationsList,
-  html body .MessagesDropdown .Dropdown-menu,
-  html body .Modal-content,
-  html body .backgrwb,
-  html body .backgrwbguest,
-  html body .Post-body .wrapper,
-  html body #flarum-loading {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    box-shadow: none !important;
-  }
-
-  /* ----------------------------------------------------------
-     HOVER / FOCUS MOVEMENT FROM CURRENT ANIMATIONS.CSS
-     ---------------------------------------------------------- */
-  html body .Button:hover,
-  html body .Button:active,
-  html body .Dropdown-toggle:hover,
-  html body .Dropdown-toggle:active,
-  html body .App-header .Button:hover,
-  html body .Header-primary .Button:hover,
-  html body .Header-secondary .Button:hover,
-  html body .Notification:hover,
-  html body .NotificationList .Notification:hover,
-  html body .Dropdown-menu > li > a:hover,
-  html body .Dropdown-menu > li > button:hover,
-  html body .SelectDropdown-menu > li > button:hover,
-  html body .DiscussionListItem:hover,
-  html body .DiscussionListItem:hover .DiscussionListItem-title,
-  html body .Post:hover .Post-body,
-  html body .PostUser-avatar:hover .Avatar,
-  html body .Post .Avatar:hover,
-  html body .UserHero-avatar:hover .Avatar,
-  html body .AvatarEditor:hover .Avatar,
-  html body .UserCard:hover .Avatar,
-  html body .UserCard:hover,
-  html body .UserListItem:hover,
-  html body .TagTile:hover,
-  html body .AfruxWidgets-Widget:hover,
-  html body .TagLabel:hover,
-  html body .Badge:hover,
-  html body .sideNav li a:hover,
-  html body .SideNav li a:hover,
-  html body .Modal-close:hover,
-  html body .FormControl:focus,
-  html body .Search-input:focus,
-  html body .TextEditor-editor:focus-within,
-  html body .ComposerBody-editor:focus-within,
-  html body .Composer-controls .Button:hover .Button-icon,
-  html body .Alert-dismiss:hover,
-  html body .Post-body .wrapper:hover,
-  html body .Post-body .wrapper:hover .data .Button--primary,
-  html body .backgrwb .ulwb li:hover,
-  html body .backgrwb .avatarwb:hover,
-  html body .backgrwbguest a:hover,
-  html body .backgrwbguest .Button:hover {
+  html body .DiscussionPage-discussion > .container,
+  html body .DiscussionPage-stream,
+  html body .PostStream,
+  html body .PostStream > .PostStream-item,
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > article.Post > div,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item > .Post > div,
+  html body .PostStream-item .CommentPost,
+  html body .PostStream-item .CommentPost > div {
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 1px !important;
+    max-height: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    clip: auto !important;
+    clip-path: none !important;
     transform: none !important;
-    filter: none !important;
+    contain: none !important;
+    content-visibility: visible !important;
   }
 
-  html body .Badge,
-  html body .Button-badge,
-  html body .NotificationsDropdown-unread,
-  html body .NotificationGrid-unread,
-  html body .PostUser-avatar .Avatar,
-  html body .Post .Avatar,
-  html body .UserHero-avatar .Avatar,
-  html body .AvatarEditor .Avatar,
-  html body .UserCard .Avatar,
-  html body .LoadingIndicator-container,
-  html body .LoadingIndicator,
-  html body .icon,
-  html body .Button-icon {
-    animation: none !important;
-    transition: none !important;
-    filter: none !important;
+  html body .DiscussionPage-stream,
+  html body .PostStream,
+  html body .PostStream-item,
+  html body .PostStream-item > article.Post,
+  html body .PostStream-item > .Post,
+  html body .PostStream-item .CommentPost {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+  }
+
+  html body .PostStream-item > article.Post > div,
+  html body .PostStream-item > .Post > div,
+  html body .PostStream-item .CommentPost > div {
+    position: static !important;
   }
 
   /* ----------------------------------------------------------
-     PRIVATE MESSAGES / CONVERSATIONS
+     MESSENGER / CONVERSATIONS
      ---------------------------------------------------------- */
   html body .MessagesDropdown .tidot,
   html body .ConversationsList .tidot,
@@ -351,25 +506,7 @@
 
   html body .ConversationsPage,
   html body .MessagesPage,
-  html body .ConversationsList {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  html body .ConversationsList {
-    grid-template-columns: none !important;
-    grid-template-rows: none !important;
-    grid-auto-rows: auto !important;
-    padding: 4px !important;
-    border-radius: 8px !important;
-  }
-
+  html body .ConversationsList,
   html body .ConversationsList .people-list,
   html body .ConversationsList .chat {
     display: block !important;
@@ -378,7 +515,16 @@
     max-width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
     border-radius: 8px !important;
+  }
+
+  html body .ConversationsList {
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-auto-rows: auto !important;
+    padding: 4px !important;
   }
 
   html body div#people-list::before {
@@ -393,13 +539,17 @@
   }
 
   html body .ConversationsList .people-list .ConversationsList-list {
-    padding: 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 4px !important;
-    max-height: 90px !important;
+    max-height: 96px !important;
+    padding: 4px !important;
     overflow-y: auto !important;
   }
 
   html body .ConversationsList .people-list .UserListItem {
+    display: block !important;
+    width: 100% !important;
     padding: 5px !important;
     border-radius: 8px !important;
   }
@@ -412,16 +562,17 @@
   }
 
   html body .ConversationsList .chat .chat-history {
-    max-height: 110px !important;
+    max-height: 112px !important;
     overflow-y: auto !important;
   }
 
   html body .ConversationsList .chat .chat-history ul {
+    display: flex !important;
+    flex-direction: column !important;
     gap: 5px !important;
   }
 
-  html body .ConversationsList .chat .message-content .message-text,
-  html body .ConversationsList .chat .chat-history .message-text {
+  html body .ConversationsList .chat .message-text {
     max-width: 92% !important;
     padding: 5px 8px !important;
     border-radius: 10px !important;
@@ -437,7 +588,6 @@
     min-height: 36px !important;
     max-height: 72px !important;
     padding: 7px 9px !important;
-    border-radius: 10px !important;
     overflow-y: auto !important;
   }
 
@@ -454,10 +604,6 @@
     border-radius: 8px !important;
   }
 
-  html body .NotificationList-header {
-    padding: 5px !important;
-  }
-
   html body .NotificationList-content {
     max-height: 150px !important;
     overflow-y: auto !important;
@@ -465,18 +611,15 @@
 
   html body .Notification,
   html body .NotificationList .Notification {
+    display: block !important;
+    width: 100% !important;
     padding: 6px !important;
-    animation: none !important;
     transform: none !important;
   }
 
   /* ----------------------------------------------------------
-     AUTH MODALS / MOBILE SHEETS
+     MODALS / FORMS / FILE CONTROLS
      ---------------------------------------------------------- */
-  html body .Modal {
-    padding: 0 !important;
-  }
-
   html body .Modal-content,
   html body .LogInModal .Modal-content,
   html body .SignUpModal .Modal-content,
@@ -492,34 +635,11 @@
     max-width: calc(100vw - 8px) !important;
     max-height: calc(100vh - 8px) !important;
     margin: 4px auto !important;
-    padding: 0 !important;
     overflow-y: auto !important;
     border-radius: 8px !important;
   }
 
   html body .Modal-content::before,
-  html body .LogInModal .Modal-content::before,
-  html body .SignUpModal .Modal-content::before,
-  html body .ForgotPasswordModal .Modal-content::before {
-    content: none !important;
-    display: none !important;
-  }
-
-  html body .Modal-header,
-  html body .Modal-body,
-  html body .Modal-footer,
-  html body .LogInModal .Modal-header,
-  html body .LogInModal .Modal-body,
-  html body .LogInModal .Modal-footer,
-  html body .SignUpModal .Modal-header,
-  html body .SignUpModal .Modal-body,
-  html body .SignUpModal .Modal-footer,
-  html body .ForgotPasswordModal .Modal-header,
-  html body .ForgotPasswordModal .Modal-body,
-  html body .ForgotPasswordModal .Modal-footer {
-    padding: 8px !important;
-  }
-
   html body .LogInModal .Modal-header::before,
   html body .LogInModal .Modal-header::after,
   html body .SignUpModal .Modal-header::before,
@@ -528,50 +648,12 @@
     display: none !important;
   }
 
-  /* ----------------------------------------------------------
-     FILE CARDS / TOUCH-ONLY CONTROLS
-     ---------------------------------------------------------- */
-  html body .Post-body .wrapper {
-    position: relative !important;
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 96px !important;
-    aspect-ratio: auto !important;
-    margin: 6px 0 !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
+  html body .Modal-header,
+  html body .Modal-body,
+  html body .Modal-footer {
+    padding: 8px !important;
   }
 
-  html body .Post-body .wrapper::before {
-    display: none !important;
-    content: none !important;
-  }
-
-  html body .Post-body .wrapper .data {
-    padding: 6px !important;
-  }
-
-  html body .Post-body .wrapper .data .Button--primary,
-  html body .Post-body .wrapper:hover .data .Button--primary,
-  html body .Post-body .wrapper:focus-within .data .Button--primary {
-    position: relative !important;
-    display: inline-flex !important;
-    width: auto !important;
-    min-width: 34px !important;
-    min-height: 34px !important;
-    padding: 5px 8px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    border-radius: 8px !important;
-  }
-
-  /* ----------------------------------------------------------
-     FORM CONTROLS AND TAP TARGETS
-     ---------------------------------------------------------- */
   html body .Button,
   html body button,
   html body input,
@@ -597,29 +679,35 @@
     overflow-y: auto !important;
   }
 
-  /* ----------------------------------------------------------
-     CURRENT WELCOME WIDGET OUTLINE
-     ---------------------------------------------------------- */
-  html body .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwb::after,
-  html body .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwbguest::after {
-    content: none !important;
-    display: none !important;
-    animation: none !important;
-    opacity: 0 !important;
-    filter: none !important;
-    box-shadow: none !important;
+  html body .Post-body .wrapper {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 96px !important;
+    aspect-ratio: auto !important;
+    margin: 6px 0 !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+  }
+
+  html body .Post-body .wrapper .data .Button--primary,
+  html body .Post-body .wrapper:hover .data .Button--primary,
+  html body .Post-body .wrapper:focus-within .data .Button--primary {
+    display: inline-flex !important;
+    width: auto !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    padding: 5px 8px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    border-radius: 8px !important;
   }
 
   /* ----------------------------------------------------------
-     CURRENT LOADING SCREEN - COMPACT STATIC FALLBACK
+     STATIC LOADING SCREEN
      ---------------------------------------------------------- */
   html body #flarum-loading {
     width: 100vw !important;
@@ -656,7 +744,6 @@
     height: 7px !important;
     margin: 0 auto !important;
     background-position: 50% 0, 0 0 !important;
-    animation: none !important;
     filter: none !important;
     transform: none !important;
     box-shadow: none !important;
