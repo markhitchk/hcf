@@ -1,0 +1,1230 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — MODERN MOBILE + TABLET OVERRIDES
+
+   Purpose:
+   - One final responsive layer for the main theme and add-ons.
+   - Coordinates Flarum core, conversations/messenger,
+     notifications, welcome/loading, user lists, modals,
+     posts, composer, tables, media, and the custom footer.
+   - Modern phones and tablets only.
+
+   IMPORTANT:
+   - KaiOS is intentionally NOT handled in this file.
+   - Keep addons/kaios-accessibility.css as its own stylesheet.
+   - Import this file after the other modern add-ons.
+   - Import kaios-accessibility.css after this file when KaiOS
+     support is still enabled, so its dedicated rules remain last.
+
+   Version: 1.0
+   Author: HarleyTG
+   Updated: 2026-08-04
+========================================================== */
+
+:root {
+  --hc-mobile-page-gap: 12px;
+  --hc-mobile-card-radius: 16px;
+  --hc-mobile-sheet-radius: 20px;
+  --hc-mobile-control-height: 44px;
+  --hc-mobile-header-height: var(--header-height, 52px);
+  --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/*
+ * This feature gate deliberately excludes old/legacy browsers,
+ * including the KaiOS layer. Modern mobile browsers support :is()
+ * and at least one dynamic/small viewport unit.
+ */
+@supports selector(:is(*)) and ((height: 100dvh) or (height: 100svh)) {
+
+  /* ========================================================
+     COMPACT TABLETS + ALL MOBILE DEVICES (<= 991.98px)
+  ======================================================== */
+  @media screen and (max-width: 991.98px) {
+
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body,
+    .App,
+    .App-content,
+    .App-content > div {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: hidden;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    img,
+    video,
+    iframe,
+    canvas,
+    svg {
+      max-width: 100%;
+    }
+
+    img,
+    video,
+    canvas {
+      height: auto;
+    }
+
+    iframe {
+      width: 100%;
+      border: 0;
+    }
+
+    .container,
+    .containerNarrow,
+    .App-content .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      padding-left: var(--hc-mobile-page-gap) !important;
+      padding-right: var(--hc-mobile-page-gap) !important;
+    }
+
+    .Button,
+    button,
+    input,
+    select,
+    textarea {
+      max-width: 100%;
+      font: inherit;
+    }
+
+    .Button,
+    .Dropdown-toggle,
+    .FormControl,
+    input,
+    select,
+    textarea {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .Button:not(.Button--icon),
+    .Dropdown-toggle:not(.Button--icon),
+    .FormControl,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="url"],
+    select {
+      min-height: var(--hc-mobile-control-height);
+    }
+
+    textarea.FormControl,
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .FormControl,
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-width: 0;
+    }
+
+    /* Prevent long text, links, filenames, and usernames from
+       forcing horizontal page overflow. */
+    .Post-body,
+    .Post-body *,
+    .DiscussionListItem,
+    .DiscussionListItem *,
+    .Notification,
+    .Notification *,
+    .UserListItem,
+    .UserListItem *,
+    .ConversationsList,
+    .ConversationsList * {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    pre,
+    code {
+      max-width: 100%;
+    }
+
+    pre {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Tables remain readable without widening the entire page. */
+    .Post-body table,
+    .MarkdownTable {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      border-collapse: collapse;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .Post-body table th,
+    .Post-body table td {
+      min-width: 110px;
+      white-space: normal;
+    }
+
+    /* ======================================================
+       HEADER
+    ====================================================== */
+    .App-header,
+    .App-header .container,
+    .Header-navigation,
+    .Header-title,
+    .Header-primary,
+    .Header-secondary,
+    #header-primary,
+    #header-secondary {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .App-header .container {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .Header-navigation {
+      flex: 0 0 auto !important;
+    }
+
+    .Header-title {
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+    }
+
+    .Header-title > a,
+    .Header-title > a#home-link,
+    .Header-title span {
+      min-width: 0 !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+    }
+
+    #header-primary,
+    #header-secondary {
+      flex: 0 1 auto !important;
+    }
+
+    #header-primary .Header-controls,
+    #header-secondary .Header-controls {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      flex-wrap: nowrap !important;
+      gap: 4px !important;
+      min-width: 0 !important;
+    }
+
+    #header-primary .Header-controls > li,
+    #header-secondary .Header-controls > li {
+      flex: 0 1 auto !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+    }
+
+    .App-header .Button--icon,
+    .App-header .Button--flat {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 42px !important;
+      min-width: 42px !important;
+      height: 42px !important;
+      min-height: 42px !important;
+      padding: 0 !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user {
+      max-width: min(190px, 32vw) !important;
+      min-width: 42px !important;
+      padding-right: 9px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user .Button-label,
+    li.item-session .Dropdown-toggle.Button--user .username {
+      min-width: 0 !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+    }
+
+    /* ======================================================
+       DROPDOWNS, NOTIFICATIONS, MESSAGES, SEARCH
+    ====================================================== */
+    .NotificationsDropdown .Dropdown-menu,
+    .MessagesDropdown .Dropdown-menu {
+      position: fixed !important;
+      top: calc(var(--hc-mobile-header-height) + 8px) !important;
+      right: 8px !important;
+      bottom: 8px !important;
+      left: 8px !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      max-height: none !important;
+      margin: 0 !important;
+      border-radius: var(--hc-mobile-sheet-radius) !important;
+      overflow: hidden !important;
+      z-index: 1050 !important;
+    }
+
+    .NotificationsDropdown .NotificationList,
+    .MessagesDropdown .ConversationsList {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      min-height: 0 !important;
+      border-radius: inherit !important;
+    }
+
+    .NotificationList-content {
+      max-height: none !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .NotificationList-header {
+      flex: 0 0 auto;
+      gap: 8px;
+    }
+
+    .NotificationList-header .App-primaryControl {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .Notification {
+      padding: 12px !important;
+    }
+
+    .Search {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    .Search-input,
+    .Search-input input {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .Search-results {
+      width: min(520px, calc(100vw - 16px)) !important;
+      max-width: calc(100vw - 16px) !important;
+      max-height: calc(100dvh - var(--hc-mobile-header-height) - 24px) !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ======================================================
+       CONVERSATIONS / MESSENGER PAGE
+    ====================================================== */
+    .App--conversations,
+    .App--conversations .App-content {
+      padding-bottom: 0 !important;
+    }
+
+    .ConversationsPage {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: calc(100dvh - var(--hc-mobile-header-height)) !important;
+    }
+
+    .ConversationsList {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-rows: minmax(0, 1fr) !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      height: calc(100dvh - var(--hc-mobile-header-height) - 16px) !important;
+      min-height: 420px !important;
+      padding: 6px !important;
+      border-radius: var(--hc-mobile-card-radius) !important;
+      overflow: hidden !important;
+    }
+
+    .ConversationsPage:not(.viewing-conversation) .people-list {
+      display: flex !important;
+    }
+
+    .ConversationsPage:not(.viewing-conversation) .chat {
+      display: none !important;
+    }
+
+    .ConversationsPage.viewing-conversation .people-list {
+      display: none !important;
+    }
+
+    .ConversationsPage.viewing-conversation .chat {
+      display: flex !important;
+    }
+
+    .ConversationsList .people-list,
+    .ConversationsList .chat {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      max-width: 100% !important;
+      border-radius: 14px !important;
+      overflow: hidden !important;
+    }
+
+    .ConversationsList .people-list .ConversationsList-list {
+      min-height: 0 !important;
+      padding: 8px !important;
+      gap: 8px !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .ConversationsList .people-list .Button--primary {
+      width: calc(100% - 16px) !important;
+      min-height: 44px !important;
+      margin: 8px !important;
+    }
+
+    .ConversationsList .people-list .UserListItem {
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      min-height: 58px !important;
+      padding: 9px !important;
+      border-radius: 14px !important;
+    }
+
+    .ConversationsList .people-list .UserListItem .Avatar {
+      flex: 0 0 42px !important;
+      width: 42px !important;
+      height: 42px !important;
+      line-height: 42px !important;
+    }
+
+    .ConversationsList .people-list .UserListItem .info,
+    .ConversationsList .people-list .about {
+      float: none !important;
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      margin: 0 0 0 9px !important;
+      padding: 0 !important;
+    }
+
+    div#people-list::before {
+      width: 72px !important;
+      min-width: 72px !important;
+      height: 72px !important;
+      min-height: 72px !important;
+      flex-basis: 72px !important;
+      margin: 10px auto 6px !important;
+    }
+
+    .ConversationsList .chat .chat-header {
+      flex: 0 0 auto !important;
+      min-height: 58px !important;
+      padding: 9px 10px !important;
+      overflow: hidden !important;
+    }
+
+    .ConversationsList .chat .chat-header .Avatar,
+    .ConversationsList .chat .chat-header img {
+      float: none !important;
+      width: 40px !important;
+      height: 40px !important;
+    }
+
+    .ConversationsList .chat .chat-header .chat-about {
+      float: none !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding-left: 9px !important;
+    }
+
+    .ConversationsList .chat .chat-history {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      padding: 8px !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .ConversationsList .chat .chat-history ul {
+      gap: 8px !important;
+    }
+
+    .ConversationsList .chat .message-content {
+      max-width: 92% !important;
+    }
+
+    .ConversationsList .chat .message-content .message-text-and-indicators {
+      min-width: 0 !important;
+      gap: 6px !important;
+    }
+
+    .ConversationsList .chat .message-content .message-text {
+      max-width: 100% !important;
+      padding: 8px 12px !important;
+      line-height: 1.45 !important;
+      border-radius: 18px !important;
+      white-space: pre-wrap !important;
+    }
+
+    .ConversationsList .chat .chat-message,
+    .ConversationsList form.chat-message.clearfix {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 64px !important;
+      padding: 8px !important;
+      border-radius: 14px !important;
+    }
+
+    .ConversationsList .chat .chat-message textarea {
+      width: 100% !important;
+      min-height: 44px !important;
+      max-height: 140px !important;
+      padding: 11px 14px !important;
+      overflow-y: auto !important;
+    }
+
+    /* ======================================================
+       ALERTS / BANNERS
+    ====================================================== */
+    .AlertManager:empty,
+    .AlertManager .Alert[hidden],
+    .AlertManager .Alert[style*="display: none"],
+    .AlertManager .Alert[style*="display:none"] {
+      display: none !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .AlertManager {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .Alert {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 0 8px !important;
+      padding: 12px 48px 12px 14px !important;
+      border-radius: 12px !important;
+    }
+
+    .Alert:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .Alert-controls {
+      width: 100% !important;
+      gap: 6px !important;
+    }
+
+    .Alert-controls .Button--link {
+      flex: 1 1 140px !important;
+      min-height: 42px !important;
+      justify-content: center !important;
+    }
+
+    .Alert-dismiss {
+      top: 8px !important;
+      right: 8px !important;
+      width: 38px !important;
+      min-width: 38px !important;
+      height: 38px !important;
+      min-height: 38px !important;
+    }
+
+    /* ======================================================
+       MODALS
+    ====================================================== */
+    .ModalManager,
+    .Modal {
+      max-width: 100%;
+    }
+
+    .Modal {
+      padding: 0 !important;
+    }
+
+    .Modal-content {
+      max-width: calc(100vw - 16px) !important;
+      max-height: calc(100dvh - 16px) !important;
+      margin: 8px auto !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) {
+      align-items: flex-end !important;
+    }
+
+    :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content {
+      width: 100% !important;
+      max-width: 100% !important;
+      max-height: 90dvh !important;
+      margin: 0 !important;
+      border-radius: var(--hc-mobile-sheet-radius)
+        var(--hc-mobile-sheet-radius) 0 0 !important;
+      padding-bottom: var(--hc-mobile-safe-bottom) !important;
+    }
+
+    :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body,
+    :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer {
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+
+    /* ======================================================
+       WELCOME / PROFILE WIDGET
+       Keep the sidebar welcome card in normal document flow.
+       Only a copy rendered inside an actual dropdown becomes
+       a mobile sheet.
+    ====================================================== */
+    .AfruxWidgets-sideNavAlt
+    .AfruxWidgets-Widget.welcomebox-widget
+    .containerwb,
+    .AfruxWidgets-sideNavAlt
+    .AfruxWidgets-Widget.welcomebox-widget
+    .backgrwb,
+    .AfruxWidgets-sideNavAlt
+    .AfruxWidgets-Widget.welcomebox-widget
+    .backgrwbguest {
+      position: relative !important;
+      inset: auto !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      border-radius: var(--hc-mobile-card-radius) !important;
+      z-index: auto !important;
+    }
+
+    .Dropdown-menu .backgrwb,
+    .Dropdown-menu .backgrwbguest {
+      position: fixed !important;
+      top: auto !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      max-height: 82dvh !important;
+      overflow-y: auto !important;
+      border-radius: var(--hc-mobile-sheet-radius)
+        var(--hc-mobile-sheet-radius) 0 0 !important;
+      padding-bottom: calc(14px + var(--hc-mobile-safe-bottom)) !important;
+      z-index: 1100 !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ======================================================
+       DISCUSSION LIST + SIDE NAV
+    ====================================================== */
+    .IndexPage-nav,
+    .SettingsPage-nav,
+    .UserPage-nav {
+      width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 0 10px !important;
+    }
+
+    .sideNav,
+    .SideNav {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .sideNav > ul,
+    .SideNav > ul {
+      display: flex !important;
+      gap: 6px !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 2px 0 6px !important;
+      overflow-x: auto !important;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .sideNav > ul > li,
+    .SideNav > ul > li {
+      flex: 0 0 auto !important;
+    }
+
+    .sideNav > ul > li > a,
+    .SideNav > ul > li > a {
+      min-height: 40px !important;
+      white-space: nowrap !important;
+    }
+
+    .IndexPage-results,
+    .DiscussionList,
+    .DiscussionList-discussions {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .DiscussionListItem {
+      width: 100% !important;
+      min-width: 0 !important;
+      border-radius: 14px !important;
+    }
+
+    .DiscussionListItem-content {
+      min-width: 0 !important;
+      padding-left: 58px !important;
+      padding-right: 10px !important;
+    }
+
+    .DiscussionListItem-title,
+    .DiscussionListItem-info {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    /* ======================================================
+       DISCUSSION / POSTS
+    ====================================================== */
+    .DiscussionPage,
+    .DiscussionPage-discussion,
+    .PostStream,
+    .PostStream-item,
+    .Post,
+    .Post-body {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .PostStream {
+      margin: 0 !important;
+    }
+
+    .PostStream-item {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .Post {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .Post-header,
+    .Post-body,
+    .Post-actions {
+      max-width: 100% !important;
+    }
+
+    .Post-body {
+      font-size: 15px !important;
+      line-height: 1.58 !important;
+    }
+
+    .Post-body .wrapper {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .Post-body blockquote {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding: 10px 12px !important;
+    }
+
+    /* ======================================================
+       COMPOSER
+    ====================================================== */
+    .Composer {
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      border-radius: var(--hc-mobile-sheet-radius)
+        var(--hc-mobile-sheet-radius) 0 0 !important;
+      padding-bottom: var(--hc-mobile-safe-bottom) !important;
+    }
+
+    .Composer-content,
+    .ComposerBody,
+    .ComposerBody-editor,
+    .TextEditor,
+    .TextEditor-editor {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    .ComposerBody-header {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      min-width: 0 !important;
+    }
+
+    .ComposerBody-header h3 {
+      min-width: 0 !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .TextEditor-controls {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 6px !important;
+    }
+
+    .TextEditor-controls .Button {
+      min-height: 40px !important;
+    }
+
+    /* ======================================================
+       USER DIRECTORY / USER CARDS
+    ====================================================== */
+    :is(.UserDirectoryPage, .UsersPage, .UserListPage)
+    :is(.UserList, .UserDirectoryList, .UserList-grid),
+    .UserDirectoryList,
+    .UserList-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 10px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    :is(.UserDirectoryPage, .UsersPage, .UserListPage)
+    :is(.UserCard, .UserListItem),
+    .UserDirectoryList .UserListItem,
+    .UserList-grid .UserCard {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .UserCard,
+    .UserListItem {
+      overflow: hidden;
+    }
+
+    .UserCard-identity,
+    .UserCard-info,
+    .UserListItem-info {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    /* ======================================================
+       CUSTOM FOOTER
+    ====================================================== */
+    .hc-simple-footer {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding-left: var(--hc-mobile-page-gap) !important;
+      padding-right: var(--hc-mobile-page-gap) !important;
+      padding-bottom: calc(16px + var(--hc-mobile-safe-bottom)) !important;
+    }
+
+    .hc-simple-footer img {
+      max-width: min(96px, 32vw) !important;
+      height: auto !important;
+    }
+
+    .hc-simple-footer pre,
+    .hc-simple-footer code,
+    .hc-simple-footer .terminal {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      white-space: pre-wrap !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    #hc-top-btn {
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+      right: max(12px, env(safe-area-inset-right, 0px)) !important;
+      bottom: calc(12px + var(--hc-mobile-safe-bottom)) !important;
+    }
+
+    /* ======================================================
+       LOADING SCREEN
+    ====================================================== */
+    #flarum-loading {
+      min-height: 100dvh !important;
+      padding-left: max(18px, env(safe-area-inset-left, 0px)) !important;
+      padding-right: max(18px, env(safe-area-inset-right, 0px)) !important;
+      padding-bottom: calc(22px + var(--hc-mobile-safe-bottom)) !important;
+    }
+  }
+
+  /* ========================================================
+     PHONES (<= 700px)
+  ======================================================== */
+  @media screen and (max-width: 700px) {
+
+    :root {
+      --hc-mobile-page-gap: 10px;
+    }
+
+    .App-header .container {
+      min-height: 50px !important;
+      padding-left: 6px !important;
+      padding-right: 6px !important;
+    }
+
+    .Header-title {
+      gap: 6px !important;
+      height: 46px !important;
+      min-height: 46px !important;
+      font-size: 17px !important;
+    }
+
+    .Header-title::before {
+      width: 31px !important;
+      min-width: 31px !important;
+      max-width: 31px !important;
+      height: 31px !important;
+      min-height: 31px !important;
+      max-height: 31px !important;
+      flex-basis: 31px !important;
+      transform: translateY(-2px) !important;
+    }
+
+    #header-primary .Header-controls,
+    #header-secondary .Header-controls {
+      gap: 2px !important;
+    }
+
+    .App-header .Button--icon,
+    .App-header .Button--flat {
+      width: 40px !important;
+      min-width: 40px !important;
+      height: 40px !important;
+      min-height: 40px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user {
+      max-width: 132px !important;
+      height: 40px !important;
+      padding: 3px 7px 3px 3px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user .Avatar {
+      width: 32px !important;
+      min-width: 32px !important;
+      height: 32px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user .username {
+      max-width: 78px !important;
+      font-size: 13px !important;
+    }
+
+    #header-secondary .item-logIn,
+    #header-secondary .item-signUp {
+      flex: 0 1 auto !important;
+      min-width: 0 !important;
+    }
+
+    #header-secondary .item-logIn .Button,
+    #header-secondary .item-signUp .Button {
+      width: auto !important;
+      min-width: 64px !important;
+      min-height: 40px !important;
+      padding: 7px 10px !important;
+      font-size: 13px !important;
+    }
+
+    .NotificationsDropdown .Dropdown-menu,
+    .MessagesDropdown .Dropdown-menu {
+      top: calc(var(--hc-mobile-header-height) + 4px) !important;
+      right: 4px !important;
+      bottom: calc(4px + var(--hc-mobile-safe-bottom)) !important;
+      left: 4px !important;
+      border-radius: 16px !important;
+    }
+
+    .NotificationList {
+      padding: 5px !important;
+    }
+
+    .NotificationList-header {
+      padding: 8px !important;
+    }
+
+    .Notification {
+      padding: 10px 8px !important;
+    }
+
+    .ConversationsList {
+      height: calc(100dvh - var(--hc-mobile-header-height) - 8px) !important;
+      min-height: 360px !important;
+      padding: 4px !important;
+      border-radius: 12px !important;
+    }
+
+    div#people-list::before {
+      width: 58px !important;
+      min-width: 58px !important;
+      height: 58px !important;
+      min-height: 58px !important;
+      flex-basis: 58px !important;
+      margin-top: 6px !important;
+    }
+
+    .ConversationsList .chat .message-content {
+      max-width: 96% !important;
+    }
+
+    .ConversationsList .chat .chat-history .message-data {
+      margin-bottom: 5px !important;
+      font-size: 11px !important;
+    }
+
+    .ConversationsList .chat .chat-message,
+    .ConversationsList form.chat-message.clearfix {
+      padding: 6px !important;
+    }
+
+    .Alert {
+      padding: 11px 46px 11px 12px !important;
+      font-size: 13px !important;
+    }
+
+    .Alert-body {
+      font-size: 13px !important;
+      line-height: 1.45 !important;
+    }
+
+    .Modal-content {
+      max-width: 100% !important;
+      max-height: 100dvh !important;
+      margin: 0 !important;
+      border-radius: var(--hc-mobile-sheet-radius)
+        var(--hc-mobile-sheet-radius) 0 0 !important;
+    }
+
+    .Modal-body {
+      padding-left: 14px !important;
+      padding-right: 14px !important;
+    }
+
+    .DiscussionListItem-content {
+      padding-left: 52px !important;
+      padding-right: 8px !important;
+    }
+
+    .DiscussionListItem-title {
+      font-size: 15px !important;
+      line-height: 1.35 !important;
+    }
+
+    .DiscussionListItem-info {
+      font-size: 12px !important;
+    }
+
+    .Post-body {
+      font-size: 14.5px !important;
+      line-height: 1.55 !important;
+    }
+
+    :is(.UserDirectoryPage, .UsersPage, .UserListPage)
+    :is(.UserList, .UserDirectoryList, .UserList-grid),
+    .UserDirectoryList,
+    .UserList-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .hc-simple-footer {
+      text-align: center !important;
+    }
+  }
+
+  /* ========================================================
+     VERY SMALL MODERN PHONES (<= 380px)
+  ======================================================== */
+  @media screen and (max-width: 380px) {
+
+    .Header-title {
+      font-size: 15px !important;
+      gap: 4px !important;
+    }
+
+    .Header-title::before {
+      width: 28px !important;
+      min-width: 28px !important;
+      max-width: 28px !important;
+      height: 28px !important;
+      min-height: 28px !important;
+      max-height: 28px !important;
+      flex-basis: 28px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user {
+      max-width: 88px !important;
+      padding-right: 4px !important;
+    }
+
+    li.item-session .Dropdown-toggle.Button--user .username {
+      max-width: 42px !important;
+    }
+
+    #header-secondary .item-logIn .Button,
+    #header-secondary .item-signUp .Button {
+      min-width: 54px !important;
+      padding-left: 7px !important;
+      padding-right: 7px !important;
+      font-size: 12px !important;
+    }
+
+    .NotificationList-header .App-titleControl {
+      font-size: 13px !important;
+    }
+
+    .ConversationsList .people-list .UserListItem {
+      min-height: 54px !important;
+      padding: 7px !important;
+    }
+
+    .ConversationsList .people-list .UserListItem .Avatar {
+      flex-basis: 38px !important;
+      width: 38px !important;
+      height: 38px !important;
+      line-height: 38px !important;
+    }
+  }
+
+  /* ========================================================
+     SHORT LANDSCAPE PHONE WINDOWS
+  ======================================================== */
+  @media screen and (max-width: 900px) and (max-height: 520px) {
+
+    .NotificationsDropdown .Dropdown-menu,
+    .MessagesDropdown .Dropdown-menu {
+      top: 4px !important;
+    }
+
+    .ConversationsList {
+      height: calc(100dvh - 8px) !important;
+      min-height: 260px !important;
+    }
+
+    :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+    .Dropdown-menu .backgrwb,
+    .Dropdown-menu .backgrwbguest {
+      max-height: 96dvh !important;
+    }
+
+    #flarum-loading {
+      gap: 7px !important;
+      padding-top: 10px !important;
+      padding-bottom: calc(10px + var(--hc-mobile-safe-bottom)) !important;
+    }
+  }
+
+  /* ========================================================
+     TOUCH DEVICES: DO NOT DEPEND ON HOVER
+  ======================================================== */
+  @media (hover: none), (pointer: coarse) {
+
+    .Post-body .wrapper .data .Button--primary {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .Button:hover,
+    .Dropdown-toggle:hover,
+    .DiscussionListItem:hover,
+    .UserListItem:hover,
+    .Notification:hover,
+    .Post-body .wrapper:hover,
+    .backgrwb a:hover,
+    .backgrwb button:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ========================================================
+     REDUCED MOTION
+  ======================================================== */
+  @media (prefers-reduced-motion: reduce) {
+
+    .App *,
+    .App *::before,
+    .App *::after,
+    #flarum-loading,
+    #flarum-loading::before,
+    #flarum-loading::after {
+      scroll-behavior: auto !important;
+    }
+
+    .NotificationsDropdown .Dropdown-menu,
+    .MessagesDropdown .Dropdown-menu,
+    .Dropdown-menu .backgrwb,
+    .Dropdown-menu .backgrwbguest,
+    .Composer,
+    .Modal-content {
+      animation: none !important;
+    }
+  }
+}
+
+/* Modern-only cleanup for an AlertManager that still contains
+   hidden dismissed alerts. This is separate because :has() is
+   intentionally not required by the main mobile feature gate. */
+@supports selector(.AlertManager:has(> .Alert)) {
+  @media screen and (max-width: 991.98px) {
+    .AlertManager:not(:has(> .Alert:not([hidden]):not([style*="display: none"]):not([style*="display:none"]))) {
+      display: none !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+}
