@@ -1,0 +1,167 @@
+/* ==========================================================
+   Harley's Clan Forum - KaiOS Accessibility v1.9.1
+   320x240 / 240x320 feature-phone compatibility layer.
+
+   The complete v1.9 layout repair is pinned below. These local
+   overrides add compatibility for animations.css v1.1 and the
+   welcome/loading animation add-on without changing the working
+   post-stream, header, or welcome-card layout fixes.
+
+   Author: HarleyTG
+   Updated: 2026-08-04
+   ========================================================== */
+
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@2ddc63e5bafb8bbd8aa960e42abaf2a4c91e1e92/addons/harleys-kaios-accessibility-v1.9.css");
+
+@media screen and (max-width: 360px) and (max-height: 480px),
+       screen and (max-width: 480px) and (max-height: 360px),
+       screen and (max-device-width: 360px) and (max-device-height: 480px),
+       screen and (max-device-width: 480px) and (max-device-height: 360px) {
+
+  /* ----------------------------------------------------------
+     NEW ANIMATION LAYER — COMPLETE KAIOS MOTION SHUTDOWN
+
+     This intentionally uses a broad App-scoped rule so newly
+     added forum animations cannot bypass the KaiOS override.
+     Layout transforms are not removed globally.
+     ---------------------------------------------------------- */
+  html body .App,
+  html body .App *,
+  html body .App *::before,
+  html body .App *::after,
+  html body #flarum-loading,
+  html body #flarum-loading::before,
+  html body #flarum-loading::after {
+    animation: none !important;
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Restore stable header text on old Gecko. The animation add-on
+     uses clipped gradient text, which can become transparent on
+     feature-phone browser builds with incomplete clip support. */
+  html body .Header-title a {
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
+  }
+
+  /* Keep the actual logo but remove its animated movement and
+     expensive glow/filter processing. */
+  html body .Header-title::before,
+  html body .Header-title:hover::before {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove decorative scanning/shimmer layers only. These are not
+     required for navigation or content and are costly on KaiOS. */
+  html body .App-header::after,
+  html body .Hero::after,
+  html body .Modal-header::after,
+  html body .Alert::after,
+  html body .Button:not(.Button--icon)::after,
+  html body .Dropdown-toggle:not(.Button--icon)::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* The welcome/loading add-on is loaded after animations.css.
+     Higher specificity keeps its animated card outline disabled
+     even when both files use !important. */
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwb::after,
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwbguest::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove movement from hover/focus states introduced by the new
+     animation add-on while preserving the controls themselves. */
+  html body .Button:hover,
+  html body .Button:active,
+  html body .Dropdown-toggle:hover,
+  html body .Dropdown-toggle:active,
+  html body .App-header .Button:hover,
+  html body .Header-primary .Button:hover,
+  html body .Header-secondary .Button:hover,
+  html body .Notification:hover,
+  html body .NotificationList .Notification:hover,
+  html body .Dropdown-menu > li > a:hover,
+  html body .Dropdown-menu > li > button:hover,
+  html body .SelectDropdown-menu > li > button:hover,
+  html body .DiscussionListItem:hover,
+  html body .DiscussionListItem:hover .DiscussionListItem-title,
+  html body .Post:hover .Post-body,
+  html body .PostUser-avatar:hover .Avatar,
+  html body .Post .Avatar:hover,
+  html body .UserHero-avatar:hover .Avatar,
+  html body .AvatarEditor:hover .Avatar,
+  html body .UserCard:hover .Avatar,
+  html body .UserCard:hover,
+  html body .UserListItem:hover,
+  html body .TagTile:hover,
+  html body .AfruxWidgets-Widget:hover,
+  html body .TagLabel:hover,
+  html body .Badge:hover,
+  html body .sideNav li a:hover,
+  html body .SideNav li a:hover,
+  html body .Modal-close:hover,
+  html body .FormControl:focus,
+  html body .Search-input:focus,
+  html body .TextEditor-editor:focus-within,
+  html body .ComposerBody-editor:focus-within,
+  html body .Composer-controls .Button:hover .Button-icon,
+  html body .Alert-dismiss:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Prevent pulsing badges, avatars, loading indicators, and icon
+     drop shadows from leaving static GPU-heavy effects behind. */
+  html body .Badge,
+  html body .Button-badge,
+  html body .NotificationsDropdown-unread,
+  html body .NotificationGrid-unread,
+  html body .PostUser-avatar .Avatar,
+  html body .Post .Avatar,
+  html body .UserHero-avatar .Avatar,
+  html body .AvatarEditor .Avatar,
+  html body .UserCard .Avatar,
+  html body .LoadingIndicator-container,
+  html body .LoadingIndicator,
+  html body .icon,
+  html body .Button-icon {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+
+  /* Keep the custom loading screen readable but static. */
+  html body #flarum-loading::before,
+  html body #flarum-loading::after {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
