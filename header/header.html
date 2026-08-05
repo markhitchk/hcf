@@ -11,6 +11,7 @@
 --birthday-purple:#b86cff;
 --birthday-pink:#ff5fc8;
 --birthday-gold:#ffd76a;
+--hc-banner-height:58px;
 }
 .hc-header-stack,
 .hc-header-stack *,
@@ -31,10 +32,28 @@ padding:0;
 overflow:hidden;
 font-family:Arial,Helvetica,sans-serif;
 }
-.hc-banner-slide{width:100%;max-width:100%}
+.hc-header-stack #forum-notice,
+.hc-header-stack #hc-birthday-header,
+.hc-header-stack #hc-holiday-header,
+.hc-header-stack [data-hc-banner]{
+height:var(--hc-banner-height)!important;
+min-height:var(--hc-banner-height)!important;
+max-height:var(--hc-banner-height)!important;
+}
+.hc-banner-slide{
+width:100%;
+max-width:100%;
+height:var(--hc-banner-height);
+min-height:var(--hc-banner-height);
+max-height:var(--hc-banner-height);
+overflow:hidden;
+}
 .hc-header-stack.hc-banner-rotator{
 position:relative;
-transition:height 1.15s ease;
+height:var(--hc-banner-height)!important;
+min-height:var(--hc-banner-height);
+max-height:var(--hc-banner-height);
+transition:height 1.8s ease;
 }
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide{
 position:absolute;
@@ -45,7 +64,7 @@ width:100%;
 opacity:0;
 pointer-events:none;
 transform:translate3d(100%,0,0);
-transition:transform 1.15s cubic-bezier(.22,.61,.36,1),opacity .9s ease;
+transition:transform 1.8s cubic-bezier(.22,.61,.36,1),opacity 1.35s ease;
 will-change:transform,opacity;
 }
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active{
@@ -384,6 +403,7 @@ to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
 @keyframes noticeIconFloat{0%,100%{transform:translateY(1px) scale(.96)}50%{transform:translateY(-2px) scale(1.07)}}
 @keyframes noticeMessageFade{0%,100%{opacity:.82}50%{opacity:1}}
 @media(max-width:600px){
+:root{--hc-banner-height:64px}
 #hc-birthday-header{min-height:52px;gap:8px;padding:7px 40px 7px 9px}
 .hc-birthday-cake{font-size:22px}
 .hc-birthday-copy strong{font-size:12px;letter-spacing:.025em}
@@ -600,8 +620,8 @@ window.setInterval(updateBirthdayMode,CHECK_INTERVAL);
 "use strict";
 var stack=document.getElementById("hc-header-stack");
 if(!stack){return}
-var ROTATE_EVERY=10000;
-var TRANSITION_TIME=1150;
+var ROTATE_EVERY=12000;
+var TRANSITION_TIME=1800;
 var timer=null;
 var currentSlide=null;
 var transitioning=false;
