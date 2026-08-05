@@ -144,7 +144,7 @@
   color:var(--notice-yellow);
   text-align:center;
   box-shadow:0 0 16px rgba(255,212,0,.08),inset 0 1px rgba(255,255,255,.035);
-  animation:noticeEnter .72s cubic-bezier(.2,.8,.2,1) both,noticePulse 3.4s ease-in-out .72s infinite;
+  animation:noticePulse 3.4s ease-in-out infinite;
 }
 
 #forum-notice::before{
@@ -213,7 +213,7 @@
   color:#fff;
   text-align:center;
   box-shadow:0 7px 22px rgba(0,0,0,.32),0 0 20px rgba(0,255,255,.24),inset 0 1px rgba(255,255,255,.18);
-  animation:hcBirthdayEnter .65s cubic-bezier(.2,.8,.2,1) both,hcBirthdayGlow 3s ease-in-out .65s infinite;
+  animation:hcBirthdayGlow 3s ease-in-out infinite;
 }
 #hc-birthday-header::before{
   content:"";
@@ -322,10 +322,6 @@
   contain:strict;
 }
 
-@keyframes noticeEnter{
-  from{opacity:0;transform:translateY(-100%) scaleY(.7);filter:blur(3px)}
-  to{opacity:1;transform:none;filter:none}
-}
 @keyframes noticePulse{
   50%{border-color:var(--notice-yellow);box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
 }
@@ -333,10 +329,6 @@
 @keyframes noticeBeacon{
   0%,100%{opacity:.35;transform:scale(.72)}
   50%{opacity:1;transform:scale(1.25)}
-}
-@keyframes hcBirthdayEnter{
-  from{opacity:0;transform:translateY(-100%) scaleY(.72);filter:blur(3px)}
-  to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
 }
 @keyframes hcBirthdayGlow{
   50%{box-shadow:0 8px 25px rgba(0,0,0,.35),0 0 28px rgba(0,255,255,.4),0 0 38px rgba(255,95,200,.22),inset 0 1px rgba(255,255,255,.24)}
@@ -590,10 +582,17 @@
 })();
 </script>
 
-<!-- External celebration engine. The first test item is the birthday banner. -->
 <script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@11e1bc7855fcf948095039453db18c22f1ddafb2/addons/celebrations/holidays.js"></script>
 <script>
 (function startCelebrationTest(remaining){
+  var style=document.getElementById("hc-slide-only-override");
+  if(!style){
+    style=document.createElement("style");
+    style.id="hc-slide-only-override";
+    style.textContent="html body #hc-holiday-header{animation:hcHolidayGlow 3s ease-in-out infinite!important}html body #hc-birthday-header{animation:hcBirthdayGlow 3s ease-in-out infinite!important}html body #forum-notice{animation:noticePulse 3.4s ease-in-out infinite!important}";
+    document.head.appendChild(style);
+  }
+
   if(window.HCHolidays&&typeof window.HCHolidays.testAll==="function"){
     window.HCHolidays.testAll(6000);
     return;
@@ -624,9 +623,7 @@
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function bannerFor(slide){return slide&&slide.querySelector(selector)}
-  function visible(item){
-    return !!item&&!item.hidden&&window.getComputedStyle(item).display!=="none";
-  }
+  function visible(item){return !!item&&!item.hidden&&window.getComputedStyle(item).display!=="none"}
   function wrap(){
     Array.prototype.slice.call(stack.children).forEach(function(child){
       if(child.classList&&child.classList.contains("hc-banner-slide")){return}
@@ -638,9 +635,7 @@
       wrapper.appendChild(child);
     });
   }
-  function allSlides(){
-    return Array.prototype.slice.call(stack.querySelectorAll(":scope > .hc-banner-slide"));
-  }
+  function allSlides(){return Array.prototype.slice.call(stack.querySelectorAll(":scope > .hc-banner-slide"))}
   function visibleSlides(){
     return allSlides().filter(function(slide){
       var item=bannerFor(slide);
@@ -711,34 +706,18 @@
     var slides=visibleSlides();
     if(slides.length<2){single(slides);return}
     stack.classList.add("hc-banner-rotator");
-    if(!currentSlide||slides.indexOf(currentSlide)===-1){
-      activate(slides[0],slides);
-    }
+    if(!currentSlide||slides.indexOf(currentSlide)===-1){activate(slides[0],slides)}
     restart();
   }
   function queueSync(){
     if(syncQueued){return}
     syncQueued=true;
-    window.setTimeout(function(){
-      syncQueued=false;
-      sync();
-    },0);
+    window.setTimeout(function(){syncQueued=false;sync()},0);
   }
 
-  stack.addEventListener("mouseenter",function(){
-    paused=true;
-    window.clearInterval(timer);
-    timer=null;
-  });
-  stack.addEventListener("mouseleave",function(){
-    paused=false;
-    restart();
-  });
-  stack.addEventListener("focusin",function(){
-    paused=true;
-    window.clearInterval(timer);
-    timer=null;
-  });
+  stack.addEventListener("mouseenter",function(){paused=true;window.clearInterval(timer);timer=null});
+  stack.addEventListener("mouseleave",function(){paused=false;restart()});
+  stack.addEventListener("focusin",function(){paused=true;window.clearInterval(timer);timer=null});
   stack.addEventListener("focusout",function(event){
     if(stack.contains(event.relatedTarget)){return}
     paused=false;
@@ -746,12 +725,7 @@
   });
   document.addEventListener("visibilitychange",function(){
     paused=document.hidden;
-    if(paused){
-      window.clearInterval(timer);
-      timer=null;
-    }else{
-      restart();
-    }
+    if(paused){window.clearInterval(timer);timer=null}else{restart()}
   });
 
   new MutationObserver(queueSync).observe(stack,{
