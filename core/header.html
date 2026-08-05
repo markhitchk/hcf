@@ -78,17 +78,9 @@
   overflow:hidden!important;
 }
 
-.hc-header-stack.hc-banner-rotator{
-  position:relative;
-  height:var(--hc-banner-height)!important;
-  min-height:var(--hc-banner-height);
-  max-height:var(--hc-banner-height);
-}
-
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide{
   position:absolute;
-  top:0;
-  left:0;
+  inset:0;
   z-index:0;
   width:100%;
   opacity:0;
@@ -99,15 +91,13 @@
 }
 
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active{
-  position:relative;
   z-index:2;
   opacity:1;
   pointer-events:auto;
   transform:translate3d(0,0,0);
 }
 
-.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active.is-leaving{
-  position:absolute;
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-leaving{
   z-index:1;
   opacity:0;
   pointer-events:none;
@@ -115,7 +105,6 @@
 }
 
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-entering{
-  position:absolute;
   z-index:3;
   opacity:0;
   transform:translate3d(100%,0,0);
@@ -322,7 +311,7 @@
   contain:strict;
 }
 
-/* Keep the external holiday banner horizontal-only. */
+/* External holiday banner must remain horizontal-only. */
 html body #hc-holiday-header{
   animation:hcHolidayGlow 3s ease-in-out infinite!important;
 }
@@ -366,7 +355,6 @@ html body #hc-holiday-header{
 }
 
 @media(prefers-reduced-motion:reduce){
-  .hc-header-stack.hc-banner-rotator,
   .hc-header-stack.hc-banner-rotator>.hc-banner-slide{transition:none!important}
   #forum-notice,
   #forum-notice::before,
@@ -419,6 +407,7 @@ html body #hc-holiday-header{
   var TIME_ZONE="America/Los_Angeles";
   var CHECK_INTERVAL=30000;
   var PAGE_ID="hc-birthday-page-confetti";
+  var DISMISS_VERSION="v2";
   var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var fallback=[
     {displayName:"Comander Forrest",month:1,day:28},
@@ -487,6 +476,9 @@ html body #hc-holiday-header{
     if(names.length===2){return names[0]+" & "+names[1]}
     return names.slice(0,-1).join(", ")+" & "+names[names.length-1];
   }
+  function dismissalKey(date){
+    return "hc-birthday-header-dismissed-"+DISMISS_VERSION+"-"+date.iso;
+  }
   function getStorage(key){
     try{return sessionStorage.getItem(key)}catch(error){return null}
   }
@@ -524,6 +516,9 @@ html body #hc-holiday-header{
     var amount=window.innerWidth<=600?34:58;
     for(var index=0;index<amount;index++){piece(layer,true)}
   }
+  function announceChange(){
+    document.dispatchEvent(new CustomEvent("hc-banners-changed"));
+  }
   function syncSlot(){
     var slot=banner.closest(".hc-banner-slide");
     if(slot){
@@ -535,6 +530,7 @@ html body #hc-holiday-header{
     banner.hidden=hidden;
     syncSlot();
     window.setTimeout(syncSlot,0);
+    window.setTimeout(announceChange,0);
   }
   function update(){
     var date=dateNow();
@@ -547,16 +543,15 @@ html body #hc-holiday-header{
     }
 
     var names=formatNames(birthdays);
-    var key="hc-birthday-header-dismissed-"+date.iso;
     title.textContent="Happy Birthday, "+names+"! 🎉";
     dateLabel.textContent=MONTHS[date.month-1]+" "+date.day+" • Harley’s Clan Birthday Celebration";
     banner.setAttribute("aria-label","Birthday celebration for "+names);
     document.body.classList.add("hc-birthday-active");
     buildHeaderPieces();
 
-    var dismissed=getStorage(key)==="yes";
+    var dismissed=getStorage(dismissalKey(date))==="yes";
     setHidden(dismissed);
-    if(dismissed){removePagePieces()}else{buildPagePieces()}
+    if(dismissed){removePagePieces()}
   }
   function load(){
     if(typeof fetch!=="function"){update();return}
@@ -571,15 +566,23 @@ html body #hc-holiday-header{
 
   close.addEventListener("click",function(){
     var date=dateNow();
-    setStorage("hc-birthday-header-dismissed-"+date.iso,"yes");
+    setStorage(dismissalKey(date),"yes");
     setHidden(true);
     removePagePieces();
   });
 
-  new MutationObserver(syncSlot).observe(banner,{
+  new MutationObserver(function(){
+    syncSlot();
+    announceChange();
+  }).observe(banner,{
     attributes:true,
     attributeFilter:["hidden"]
   });
+
+  window.HCBirthdayEffects={
+    show:buildPagePieces,
+    hide:removePagePieces
+  };
 
   update();
   load();
@@ -602,13 +605,14 @@ html body #hc-holiday-header{
   var timer=null;
   var currentSlide=null;
   var transitioning=false;
-  var paused=false;
   var syncQueued=false;
   var selector="#forum-notice,#hc-birthday-header,#hc-holiday-header,[data-hc-banner]";
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function bannerFor(slide){return slide&&slide.querySelector(selector)}
-  function visible(item){return !!item&&!item.hidden&&window.getComputedStyle(item).display!=="none"}
+  function bannerVisible(banner){
+    return !!banner&&!banner.hidden&&window.getComputedStyle(banner).display!=="none";
+  }
   function wrap(){
     Array.prototype.slice.call(stack.children).forEach(function(child){
       if(child.classList&&child.classList.contains("hc-banner-slide")){return}
@@ -620,97 +624,147 @@ html body #hc-holiday-header{
       wrapper.appendChild(child);
     });
   }
-  function allSlides(){return Array.prototype.slice.call(stack.querySelectorAll(":scope > .hc-banner-slide"))}
-  function visibleSlides(){
-    return allSlides().filter(function(slide){
-      var item=bannerFor(slide);
-      slide.hidden=!visible(item);
-      return visible(item);
+  function allSlides(){
+    return Array.prototype.slice.call(stack.children).filter(function(child){
+      return child.classList&&child.classList.contains("hc-banner-slide");
     });
   }
-  function clear(slide){
+  function visibleSlides(){
+    return allSlides().filter(function(slide){
+      var banner=bannerFor(slide);
+      var visible=bannerVisible(banner);
+      slide.hidden=!visible;
+      return visible;
+    });
+  }
+  function clearClasses(slide){
+    if(!slide){return}
     slide.classList.remove("is-active","is-leaving","is-entering","is-entering-active");
     slide.removeAttribute("aria-hidden");
   }
-  function single(slides){
-    window.clearInterval(timer);
+  function activeBanner(){
+    return bannerFor(currentSlide);
+  }
+  function updateEffects(){
+    var banner=activeBanner();
+    var birthdayActive=banner&&banner.id==="hc-birthday-header";
+    var holidayActive=banner&&banner.id==="hc-holiday-header";
+
+    if(window.HCBirthdayEffects){
+      if(birthdayActive){window.HCBirthdayEffects.show()}
+      else{window.HCBirthdayEffects.hide()}
+    }
+
+    if(!holidayActive){
+      var holidayEffects=document.getElementById("hc-holiday-effects");
+      if(holidayEffects){holidayEffects.remove()}
+    }else if(window.HCHolidays&&typeof window.HCHolidays.refresh==="function"){
+      window.HCHolidays.refresh();
+    }
+  }
+  function schedule(){
+    window.clearTimeout(timer);
     timer=null;
-    transitioning=false;
-    stack.classList.remove("hc-banner-rotator");
-    allSlides().forEach(clear);
-    currentSlide=slides.length?slides[0]:null;
+    if(document.hidden||transitioning||visibleSlides().length<2){return}
+    timer=window.setTimeout(next,ROTATE_EVERY);
   }
   function activate(slide,slides){
     slides.forEach(function(item){
-      clear(item);
+      clearClasses(item);
       if(item!==slide){item.setAttribute("aria-hidden","true")}
     });
     slide.classList.add("is-active");
     slide.removeAttribute("aria-hidden");
     currentSlide=slide;
     stack.classList.add("hc-banner-rotator");
+    updateEffects();
   }
-  function restart(){
-    window.clearInterval(timer);
+  function showSingle(slides){
+    window.clearTimeout(timer);
     timer=null;
-    if(paused||visibleSlides().length<2){return}
-    timer=window.setInterval(next,ROTATE_EVERY);
+    transitioning=false;
+    stack.classList.remove("hc-banner-rotator");
+    allSlides().forEach(clearClasses);
+    currentSlide=slides.length?slides[0]:null;
+    if(currentSlide){currentSlide.classList.add("is-active")}
+    updateEffects();
   }
   function next(){
-    if(paused||transitioning){return}
+    window.clearTimeout(timer);
+    timer=null;
+    if(document.hidden||transitioning){schedule();return}
+
     var slides=visibleSlides();
     if(slides.length<2){sync();return}
 
     var currentIndex=slides.indexOf(currentSlide);
-    if(currentIndex<0){activate(slides[0],slides);restart();return}
+    if(currentIndex<0){
+      activate(slides[0],slides);
+      schedule();
+      return;
+    }
 
     var following=slides[(currentIndex+1)%slides.length];
-    if(following===currentSlide){return}
-    if(reduceMotion){activate(following,slides);return}
+    if(!following||following===currentSlide){schedule();return}
+
+    if(reduceMotion){
+      activate(following,slides);
+      schedule();
+      return;
+    }
 
     transitioning=true;
-    var current=currentSlide;
+    var leaving=currentSlide;
     following.classList.add("is-entering");
     following.removeAttribute("aria-hidden");
     void following.offsetWidth;
-    current.classList.add("is-leaving");
+    leaving.classList.add("is-leaving");
     following.classList.add("is-entering-active");
 
     window.setTimeout(function(){
-      clear(current);
-      current.setAttribute("aria-hidden","true");
-      clear(following);
+      clearClasses(leaving);
+      leaving.setAttribute("aria-hidden","true");
+      clearClasses(following);
       following.classList.add("is-active");
       following.removeAttribute("aria-hidden");
       currentSlide=following;
       transitioning=false;
+      updateEffects();
+      schedule();
     },TRANSITION_TIME+60);
   }
   function sync(){
     wrap();
     var slides=visibleSlides();
-    if(slides.length<2){single(slides);return}
+
+    if(slides.length<2){
+      showSingle(slides);
+      return;
+    }
+
     stack.classList.add("hc-banner-rotator");
-    if(!currentSlide||slides.indexOf(currentSlide)===-1){activate(slides[0],slides)}
-    restart();
+    if(!currentSlide||slides.indexOf(currentSlide)===-1){
+      activate(slides[0],slides);
+    }
+    schedule();
   }
   function queueSync(){
     if(syncQueued){return}
     syncQueued=true;
-    window.setTimeout(function(){syncQueued=false;sync()},0);
+    window.setTimeout(function(){
+      syncQueued=false;
+      sync();
+    },0);
   }
 
-  stack.addEventListener("mouseenter",function(){paused=true;window.clearInterval(timer);timer=null});
-  stack.addEventListener("mouseleave",function(){paused=false;restart()});
-  stack.addEventListener("focusin",function(){paused=true;window.clearInterval(timer);timer=null});
-  stack.addEventListener("focusout",function(event){
-    if(stack.contains(event.relatedTarget)){return}
-    paused=false;
-    restart();
-  });
+  document.addEventListener("hc-banners-changed",queueSync);
   document.addEventListener("visibilitychange",function(){
-    paused=document.hidden;
-    if(paused){window.clearInterval(timer);timer=null}else{restart()}
+    if(document.hidden){
+      window.clearTimeout(timer);
+      timer=null;
+    }else{
+      sync();
+    }
   });
 
   new MutationObserver(queueSync).observe(stack,{
@@ -721,6 +775,8 @@ html body #hc-holiday-header{
   });
 
   sync();
+  window.setTimeout(sync,250);
+  window.setTimeout(sync,1000);
 })();
 </script>
 </body>
