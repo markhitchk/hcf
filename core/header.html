@@ -590,13 +590,20 @@
 })();
 </script>
 
-<!--
-  Holidays and their particles remain in the external celebrations file.
-  The header starts the complete sliding preview automatically—no URL needed.
--->
-<script
-  src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@11e1bc7855fcf948095039453db18c22f1ddafb2/addons/celebrations/holidays.js"
-  onload="window.HCHolidays&amp;&amp;window.HCHolidays.testAll(6000)">
+<!-- External celebration engine. The first test item is the birthday banner. -->
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@11e1bc7855fcf948095039453db18c22f1ddafb2/addons/celebrations/holidays.js"></script>
+<script>
+(function startCelebrationTest(remaining){
+  if(window.HCHolidays&&typeof window.HCHolidays.testAll==="function"){
+    window.HCHolidays.testAll(6000);
+    return;
+  }
+  if(remaining>0){
+    window.setTimeout(function(){
+      startCelebrationTest(remaining-1);
+    },100);
+  }
+})(50);
 </script>
 
 <script>
