@@ -11,30 +11,41 @@
   --notice-text:#fff7c2;
   --notice-dark:#090a0c;
   --notice-glow:rgba(255,212,0,.72);
-  --birthday-cyan:#00ffff;
-  --birthday-blue:#5ea1ff;
-  --birthday-purple:#b86cff;
-  --birthday-pink:#ff5fc8;
-  --birthday-gold:#ffd76a;
   --hc-banner-height:58px;
 }
+
 .hc-header-stack,
 .hc-header-stack *,
 .hc-header-stack *::before,
 .hc-header-stack *::after,
 #hc-birthday-page-confetti,
 #hc-birthday-page-confetti *{box-sizing:border-box}
+
 .hc-header-stack{
   position:relative;
   z-index:901;
   isolation:isolate;
   width:100%;
   max-width:100%;
+  height:var(--hc-banner-height);
+  min-height:var(--hc-banner-height);
+  max-height:var(--hc-banner-height);
   margin:0;
   padding:0;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
 }
+
+.hc-header-stack[hidden],
+.hc-header-stack:empty{
+  display:none!important;
+  height:0!important;
+  min-height:0!important;
+  max-height:0!important;
+  margin:0!important;
+  padding:0!important;
+}
+
 .hc-header-stack #forum-notice,
 .hc-header-stack #hc-birthday-header,
 .hc-header-stack #hc-holiday-header,
@@ -43,6 +54,7 @@
   min-height:var(--hc-banner-height)!important;
   max-height:var(--hc-banner-height)!important;
 }
+
 .hc-banner-slide{
   width:100%;
   max-width:100%;
@@ -53,6 +65,7 @@
   padding:0;
   overflow:hidden;
 }
+
 .hc-banner-slide[hidden]{
   display:none!important;
   width:0!important;
@@ -62,20 +75,16 @@
   margin:0!important;
   padding:0!important;
   border:0!important;
+  overflow:hidden!important;
 }
-.hc-header-stack:empty{
-  display:none!important;
-  height:0!important;
-  min-height:0!important;
-  margin:0!important;
-  padding:0!important;
-}
+
 .hc-header-stack.hc-banner-rotator{
   position:relative;
   height:var(--hc-banner-height)!important;
   min-height:var(--hc-banner-height);
   max-height:var(--hc-banner-height);
 }
+
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide{
   position:absolute;
   top:0;
@@ -88,6 +97,7 @@
   transition:transform .75s cubic-bezier(.22,.61,.36,1),opacity .55s ease;
   will-change:transform,opacity;
 }
+
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active{
   position:relative;
   z-index:2;
@@ -95,6 +105,7 @@
   pointer-events:auto;
   transform:translate3d(0,0,0);
 }
+
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active.is-leaving{
   position:absolute;
   z-index:1;
@@ -102,17 +113,88 @@
   pointer-events:none;
   transform:translate3d(-100%,0,0);
 }
+
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-entering{
   position:absolute;
   z-index:3;
   opacity:0;
   transform:translate3d(100%,0,0);
 }
+
 .hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-entering.is-entering-active{
   opacity:1;
   pointer-events:auto;
   transform:translate3d(0,0,0);
 }
+
+#forum-notice{
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  margin:0;
+  padding:6px 44px 7px;
+  overflow:hidden;
+  border-top:1px solid var(--notice-yellow);
+  border-bottom:1px solid var(--notice-yellow);
+  background:linear-gradient(180deg,rgba(255,212,0,.035),transparent 48%),var(--notice-dark);
+  color:var(--notice-yellow);
+  text-align:center;
+  box-shadow:0 0 16px rgba(255,212,0,.08),inset 0 1px rgba(255,255,255,.035);
+  animation:noticeEnter .72s cubic-bezier(.2,.8,.2,1) both,noticePulse 3.4s ease-in-out .72s infinite;
+}
+
+#forum-notice::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.22;
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(255,212,0,.5) 10px 20px);
+  background-size:28px 28px;
+  animation:noticeStripes 2.8s linear infinite;
+}
+
+.notice-title,.notice-message{position:relative;z-index:2}
+.notice-title{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  text-shadow:0 0 5px var(--notice-glow);
+}
+.notice-beacon{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--notice-yellow);
+  box-shadow:0 0 5px var(--notice-yellow),0 0 12px var(--notice-glow);
+  animation:noticeBeacon 1.65s ease-in-out infinite;
+}
+.notice-message{
+  margin-top:3px;
+  color:var(--notice-text);
+  font-size:11px;
+  line-height:1.35;
+}
+.notice-message a{
+  margin-left:.35em;
+  color:var(--notice-yellow);
+  font-weight:800;
+  text-decoration:none;
+}
+.notice-message a:hover{color:var(--notice-yellow-light)}
+.notice-message strong{color:#fff2a4}
+
 #hc-birthday-header[hidden]{display:none!important}
 #hc-birthday-header{
   position:relative;
@@ -239,6 +321,19 @@
   pointer-events:none;
   contain:strict;
 }
+
+@keyframes noticeEnter{
+  from{opacity:0;transform:translateY(-100%) scaleY(.7);filter:blur(3px)}
+  to{opacity:1;transform:none;filter:none}
+}
+@keyframes noticePulse{
+  50%{border-color:var(--notice-yellow);box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
+}
+@keyframes noticeStripes{to{background-position:28px 28px}}
+@keyframes noticeBeacon{
+  0%,100%{opacity:.35;transform:scale(.72)}
+  50%{opacity:1;transform:scale(1.25)}
+}
 @keyframes hcBirthdayEnter{
   from{opacity:0;transform:translateY(-100%) scaleY(.72);filter:blur(3px)}
   to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
@@ -260,105 +355,30 @@
   from{transform:translate3d(0,-8vh,0) rotate(var(--rotate))}
   to{transform:translate3d(var(--drift),112vh,0) rotate(calc(var(--rotate) + 780deg))}
 }
-#forum-notice{
-  position:relative;
-  isolation:isolate;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  margin:0;
-  padding:6px 44px 7px;
-  overflow:hidden;
-  border-top:1px solid var(--notice-yellow);
-  border-bottom:1px solid var(--notice-yellow);
-  background:linear-gradient(180deg,rgba(255,212,0,.035),transparent 48%),var(--notice-dark);
-  color:var(--notice-yellow);
-  text-align:center;
-  box-shadow:0 0 16px rgba(255,212,0,.08),inset 0 1px rgba(255,255,255,.035);
-  animation:noticeEnter .72s cubic-bezier(.2,.8,.2,1) both,noticePulse 3.4s ease-in-out .72s infinite;
-}
-#forum-notice::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
-  opacity:.22;
-  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(255,212,0,.5) 10px 20px);
-  background-size:28px 28px;
-  animation:noticeStripes 2.8s linear infinite;
-}
-.notice-title,.notice-message{position:relative;z-index:2}
-.notice-title{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  font-size:13px;
-  font-weight:800;
-  line-height:1.2;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  text-shadow:0 0 5px var(--notice-glow);
-}
-.notice-beacon{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--notice-yellow);
-  box-shadow:0 0 5px var(--notice-yellow),0 0 12px var(--notice-glow);
-  animation:noticeBeacon 1.65s ease-in-out infinite;
-}
-.notice-message{
-  margin-top:3px;
-  color:var(--notice-text);
-  font-size:11px;
-  line-height:1.35;
-}
-.notice-message a{
-  margin-left:.35em;
-  color:var(--notice-yellow);
-  font-weight:800;
-  text-decoration:none;
-}
-.notice-message a:hover{color:var(--notice-yellow-light)}
-.notice-message strong{color:#fff2a4}
-@keyframes noticeEnter{
-  from{opacity:0;transform:translateY(-100%) scaleY(.7);filter:blur(3px)}
-  to{opacity:1;transform:none;filter:none}
-}
-@keyframes noticePulse{
-  50%{border-color:var(--notice-yellow);box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
-}
-@keyframes noticeStripes{to{background-position:28px 28px}}
-@keyframes noticeBeacon{
-  0%,100%{opacity:.35;transform:scale(.72)}
-  50%{opacity:1;transform:scale(1.25)}
-}
+
 @media(max-width:600px){
   :root{--hc-banner-height:64px}
+  #forum-notice{padding:7px 10px 8px}
+  .notice-title{gap:5px;font-size:11px;letter-spacing:1.25px}
+  .notice-message{font-size:10px;line-height:1.45}
   #hc-birthday-header{gap:8px;padding:7px 40px 7px 9px}
   .hc-birthday-cake{font-size:22px}
   .hc-birthday-copy strong{font-size:12px;letter-spacing:.025em}
   .hc-birthday-copy small{font-size:8px;letter-spacing:.07em}
   #hc-birthday-header-close{right:6px;width:29px;height:29px;font-size:17px}
-  #forum-notice{padding:7px 10px 8px}
-  .notice-title{gap:5px;font-size:11px;letter-spacing:1.25px}
-  .notice-message{font-size:10px;line-height:1.45}
 }
+
 @media(prefers-reduced-motion:reduce){
   .hc-header-stack.hc-banner-rotator,
   .hc-header-stack.hc-banner-rotator>.hc-banner-slide{transition:none!important}
+  #forum-notice,
+  #forum-notice::before,
+  .notice-beacon,
   #hc-birthday-header,
   #hc-birthday-header::after,
   .hc-birthday-cake,
   .hc-birthday-header-confetti i,
-  #hc-birthday-page-confetti i,
-  #forum-notice,
-  #forum-notice::before,
-  .notice-beacon{animation:none!important}
+  #hc-birthday-page-confetti i{animation:none!important}
   #hc-birthday-page-confetti{display:none!important}
 }
 </style>
@@ -416,6 +436,7 @@
     {displayName:"KING OF HEARTS",month:12,day:8},
     {displayName:"xeqtmツ",month:12,day:28}
   ];
+
   var records=fallback.slice();
   var banner=document.getElementById("hc-birthday-header");
   var title=document.getElementById("hc-birthday-title");
@@ -424,35 +445,34 @@
   var headerPieces=document.getElementById("hc-birthday-header-confetti");
   var colors=["#00ffff","#5ea1ff","#b86cff","#ff5fc8","#ffd76a","#ffffff"];
 
+  if(!banner||!title||!dateLabel||!close||!headerPieces){return}
+
   function pad(value){return value<10?"0"+value:String(value)}
   function dateNow(){
     var parts=new Intl.DateTimeFormat("en-US",{
-      timeZone:TIME_ZONE,year:"numeric",month:"numeric",day:"numeric"
+      timeZone:TIME_ZONE,
+      year:"numeric",
+      month:"numeric",
+      day:"numeric"
     }).formatToParts(new Date());
-    var out={year:0,month:0,day:0};
+    var date={year:0,month:0,day:0};
     parts.forEach(function(part){
       if(part.type==="year"||part.type==="month"||part.type==="day"){
-        out[part.type]=Number(part.value);
+        date[part.type]=Number(part.value);
       }
     });
-    out.iso=out.year+"-"+pad(out.month)+"-"+pad(out.day);
-    return out;
-  }
-  function getStorage(key){
-    try{return sessionStorage.getItem(key)}catch(error){return null}
-  }
-  function setStorage(key,value){
-    try{sessionStorage.setItem(key,value)}catch(error){}
+    date.iso=date.year+"-"+pad(date.month)+"-"+pad(date.day);
+    return date;
   }
   function valid(record){
-    return record&&typeof record.displayName==="string"&&record.displayName.trim()&&
+    return record&&typeof record.displayName==="string"&&record.displayName.trim()!==""&&
       Number(record.month)>=1&&Number(record.month)<=12&&
       Number(record.day)>=1&&Number(record.day)<=31;
   }
   function clean(list){
     if(!Array.isArray(list)){return fallback.slice()}
     return list.filter(valid).map(function(record){
-      return{
+      return {
         displayName:record.displayName.trim(),
         month:Number(record.month),
         day:Number(record.day)
@@ -470,15 +490,22 @@
     if(names.length===2){return names[0]+" & "+names[1]}
     return names.slice(0,-1).join(", ")+" & "+names[names.length-1];
   }
-  function piece(container,page){
+  function getStorage(key){
+    try{return sessionStorage.getItem(key)}catch(error){return null}
+  }
+  function setStorage(key,value){
+    try{sessionStorage.setItem(key,value)}catch(error){}
+  }
+  function piece(container,pageMode){
     var item=document.createElement("i");
-    var drift=-90+Math.random()*180;
+    var size=(pageMode?5:3)+Math.random()*(pageMode?7:5);
+    var drift=(pageMode?-95:-18)+Math.random()*(pageMode?190:36);
     item.style.setProperty("--x",Math.random()*100+"%");
-    item.style.setProperty("--size",(page?5:3)+Math.random()*(page?7:5)+"px");
+    item.style.setProperty("--size",size+"px");
     item.style.setProperty("--color",colors[Math.floor(Math.random()*colors.length)]);
     item.style.setProperty("--rotate",Math.random()*360+"deg");
-    item.style.setProperty("--duration",(page?7:2.8)+Math.random()*(page?8:3.2)+"s");
-    item.style.setProperty("--delay",-Math.random()*(page?14:5)+"s");
+    item.style.setProperty("--duration",(pageMode?7:2.8)+Math.random()*(pageMode?8:3.2)+"s");
+    item.style.setProperty("--delay",-Math.random()*(pageMode?14:5)+"s");
     item.style.setProperty("--drift",drift+"px");
     item.style.setProperty("--opacity",(.48+Math.random()*.42).toFixed(2));
     container.appendChild(item);
@@ -563,8 +590,14 @@
 })();
 </script>
 
-<!-- Sliding celebration test: ?hcHoliday=all -->
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@11e1bc7855fcf948095039453db18c22f1ddafb2/addons/celebrations/holidays.js"></script>
+<!--
+  Holidays and their particles remain in the external celebrations file.
+  The header starts the complete sliding preview automatically—no URL needed.
+-->
+<script
+  src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@11e1bc7855fcf948095039453db18c22f1ddafb2/addons/celebrations/holidays.js"
+  onload="window.HCHolidays&amp;&amp;window.HCHolidays.testAll(6000)">
+</script>
 
 <script>
 (function(){
@@ -584,8 +617,8 @@
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function bannerFor(slide){return slide&&slide.querySelector(selector)}
-  function visible(banner){
-    return !!banner&&!banner.hidden&&window.getComputedStyle(banner).display!=="none";
+  function visible(item){
+    return !!item&&!item.hidden&&window.getComputedStyle(item).display!=="none";
   }
   function wrap(){
     Array.prototype.slice.call(stack.children).forEach(function(child){
@@ -603,9 +636,9 @@
   }
   function visibleSlides(){
     return allSlides().filter(function(slide){
-      var banner=bannerFor(slide);
-      slide.hidden=!visible(banner);
-      return visible(banner);
+      var item=bannerFor(slide);
+      slide.hidden=!visible(item);
+      return visible(item);
     });
   }
   function clear(slide){
@@ -641,10 +674,10 @@
     var slides=visibleSlides();
     if(slides.length<2){sync();return}
 
-    var index=slides.indexOf(currentSlide);
-    if(index<0){activate(slides[0],slides);restart();return}
+    var currentIndex=slides.indexOf(currentSlide);
+    if(currentIndex<0){activate(slides[0],slides);restart();return}
 
-    var following=slides[(index+1)%slides.length];
+    var following=slides[(currentIndex+1)%slides.length];
     if(following===currentSlide){return}
     if(reduceMotion){activate(following,slides);return}
 
