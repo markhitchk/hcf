@@ -43,9 +43,7 @@
 }
 
 #hc-header-stack .hc-slide[hidden],
-#hc-header-stack [hidden]{
-  display:none!important;
-}
+#hc-header-stack [hidden]{display:none!important}
 
 #hc-header-stack.hc-rotating .hc-slide{
   position:absolute;
@@ -68,6 +66,7 @@
 #hc-header-stack.hc-rotating .hc-slide.is-leaving{
   z-index:1;
   opacity:0;
+  pointer-events:none;
   transform:translate3d(-100%,0,0);
 }
 
@@ -211,11 +210,7 @@
   animation:hcBirthdayIcon 1.55s ease-in-out infinite;
 }
 
-.hc-birthday-copy{
-  position:relative;
-  z-index:3;
-  min-width:0;
-}
+.hc-birthday-copy{position:relative;z-index:3;min-width:0}
 
 .hc-birthday-copy strong{
   display:block;
@@ -241,7 +236,7 @@
   position:absolute;
   top:50%;
   right:10px;
-  z-index:5;
+  z-index:12;
   display:grid;
   place-items:center;
   width:32px;
@@ -256,15 +251,16 @@
   transform:translateY(-50%);
 }
 
-.hc-birthday-particles{
+/* Persistent header-level birthday particles. They stay above every slide. */
+#hc-birthday-header-particles{
   position:absolute;
   inset:0;
-  z-index:1;
+  z-index:10;
   overflow:hidden;
   pointer-events:none;
 }
 
-.hc-birthday-particles i,
+#hc-birthday-header-particles i,
 #hc-birthday-effects i{
   position:absolute;
   top:-30px;
@@ -341,7 +337,7 @@ html body #hc-holiday-header{
   #hc-birthday-header,
   #hc-birthday-header::after,
   .hc-birthday-icon,
-  .hc-birthday-particles i,
+  #hc-birthday-header-particles i,
   #hc-birthday-effects i{animation:none!important}
   #hc-birthday-effects{display:none!important}
 }
@@ -377,9 +373,10 @@ html body #hc-holiday-header{
         <small id="hc-birthday-date">Harley’s Clan Birthday Celebration</small>
       </div>
       <button id="hc-birthday-close" type="button" aria-label="Close birthday announcement">×</button>
-      <span class="hc-birthday-particles" id="hc-birthday-particles" aria-hidden="true"></span>
     </section>
   </div>
+
+  <span id="hc-birthday-header-particles" aria-hidden="true" hidden></span>
 </div>
 
 <script>
@@ -393,9 +390,7 @@ html body #hc-holiday-header{
         changed=true;
       }
     });
-    if(changed){
-      history.replaceState(history.state,"",url.pathname+url.search+url.hash);
-    }
+    if(changed){history.replaceState(history.state,"",url.pathname+url.search+url.hash)}
   }catch(error){}
 })();
 </script>
@@ -423,12 +418,13 @@ html body #hc-holiday-header{
 
   var records=fallback.slice();
   var dismissedThisPage=false;
+  var activeToday=false;
   var slide=document.querySelector('[data-hc-slide="birthday"]');
   var banner=document.getElementById("hc-birthday-header");
   var title=document.getElementById("hc-birthday-title");
   var dateLabel=document.getElementById("hc-birthday-date");
   var close=document.getElementById("hc-birthday-close");
-  var particles=document.getElementById("hc-birthday-particles");
+  var headerParticles=document.getElementById("hc-birthday-header-particles");
   var colors=["#00ffff","#5ea1ff","#b86cff","#ff5fc8","#ffd76a","#ffffff"];
 
   function dateNow(){
@@ -454,11 +450,7 @@ html body #hc-holiday-header{
         Number(item.month)>=1&&Number(item.month)<=12&&
         Number(item.day)>=1&&Number(item.day)<=31;
     }).map(function(item){
-      return {
-        displayName:item.displayName.trim(),
-        month:Number(item.month),
-        day:Number(item.day)
-      };
+      return {displayName:item.displayName.trim(),month:Number(item.month),day:Number(item.day)};
     });
   }
 
@@ -487,9 +479,18 @@ html body #hc-holiday-header{
     container.appendChild(item);
   }
 
-  function buildBannerPieces(){
-    if(particles.children.length){return}
-    for(var i=0;i<26;i++){makePiece(particles,false)}
+  function buildHeaderParticles(){
+    if(headerParticles.children.length){return}
+    for(var i=0;i<26;i++){makePiece(headerParticles,false)}
+  }
+
+  function showHeaderParticles(){
+    buildHeaderParticles();
+    headerParticles.hidden=false;
+  }
+
+  function hideHeaderParticles(){
+    headerParticles.hidden=true;
   }
 
   function removePageEffects(){
@@ -498,7 +499,7 @@ html body #hc-holiday-header{
   }
 
   function buildPageEffects(){
-    removePageEffects();
+    if(document.getElementById("hc-birthday-effects")){return}
     var layer=document.createElement("div");
     layer.id="hc-birthday-effects";
     layer.setAttribute("aria-hidden","true");
@@ -514,10 +515,12 @@ html body #hc-holiday-header{
   function showToday(){
     var date=dateNow();
     var birthdays=matching(date);
+    activeToday=birthdays.length>0&&!dismissedThisPage;
 
-    if(!birthdays.length||dismissedThisPage){
+    if(!activeToday){
       slide.hidden=true;
       banner.hidden=true;
+      hideHeaderParticles();
       removePageEffects();
       notify();
       return false;
@@ -529,23 +532,31 @@ html body #hc-holiday-header{
     banner.setAttribute("aria-label","Birthday celebration for "+names);
     banner.hidden=false;
     slide.hidden=false;
-    buildBannerPieces();
+    showHeaderParticles();
+    buildPageEffects();
     notify();
     return true;
   }
 
   close.addEventListener("click",function(){
     dismissedThisPage=true;
+    activeToday=false;
     slide.hidden=true;
     banner.hidden=true;
+    hideHeaderParticles();
     removePageEffects();
     notify();
   });
 
   window.HCBirthday={
     refresh:showToday,
-    showEffects:buildPageEffects,
-    hideEffects:removePageEffects
+    isActive:function(){return activeToday},
+    showEffects:function(){
+      if(activeToday){showHeaderParticles();buildPageEffects()}
+    },
+    hideEffects:function(){
+      if(!activeToday){hideHeaderParticles();removePageEffects()}
+    }
   };
 
   showToday();
@@ -556,14 +567,8 @@ html body #hc-holiday-header{
         if(!response.ok){throw new Error("Birthday records unavailable")}
         return response.json();
       })
-      .then(function(data){
-        records=clean(data&&data.records);
-        showToday();
-      })
-      .catch(function(){
-        records=fallback.slice();
-        showToday();
-      });
+      .then(function(data){records=clean(data&&data.records);showToday()})
+      .catch(function(){records=fallback.slice();showToday()});
   }
 
   window.setInterval(showToday,30000);
@@ -578,14 +583,10 @@ html body #hc-holiday-header{
   if(window.HCHolidays){
     if(typeof window.HCHolidays.stopTest==="function"){window.HCHolidays.stopTest()}
     if(typeof window.HCHolidays.clearForce==="function"){window.HCHolidays.clearForce()}
-    if(window.HCBirthday&&typeof window.HCBirthday.refresh==="function"){
-      window.HCBirthday.refresh();
-    }
+    if(window.HCBirthday&&typeof window.HCBirthday.refresh==="function"){window.HCBirthday.refresh()}
     return;
   }
-  if(remaining>0){
-    window.setTimeout(function(){normalizeHolidayMode(remaining-1)},100);
-  }
+  if(remaining>0){window.setTimeout(function(){normalizeHolidayMode(remaining-1)},100)}
 })(60);
 </script>
 
@@ -613,6 +614,7 @@ html body #hc-holiday-header{
   function wrapDynamicBanners(){
     Array.prototype.slice.call(stack.children).forEach(function(child){
       if(child.classList&&child.classList.contains("hc-slide")){return}
+      if(child.id==="hc-birthday-header-particles"){return}
       if(!child.matches||!child.matches("#hc-holiday-header,[data-hc-banner]")){return}
       var wrapper=document.createElement("div");
       wrapper.className="hc-slide";
@@ -629,9 +631,7 @@ html body #hc-holiday-header{
     });
   }
 
-  function visibleSlides(){
-    return slides().filter(isVisible);
-  }
+  function visibleSlides(){return slides().filter(isVisible)}
 
   function clear(slide){
     if(!slide){return}
@@ -648,12 +648,14 @@ html body #hc-holiday-header{
 
   function updateEffects(){
     var banner=bannerFor(current);
-    var birthdayActive=banner&&banner.id==="hc-birthday-header";
     var holidayActive=banner&&banner.id==="hc-holiday-header";
 
     if(window.HCBirthday){
-      if(birthdayActive){window.HCBirthday.showEffects()}
-      else{window.HCBirthday.hideEffects()}
+      if(typeof window.HCBirthday.isActive==="function"&&window.HCBirthday.isActive()){
+        window.HCBirthday.showEffects();
+      }else{
+        window.HCBirthday.hideEffects();
+      }
     }
 
     if(!holidayActive){
@@ -698,28 +700,18 @@ html body #hc-holiday-header{
   function next(){
     window.clearTimeout(timer);
     timer=null;
-
     var list=visibleSlides();
-    if(list.length<2){
-      sync();
-      return;
-    }
+
+    if(list.length<2){sync();return}
 
     var index=list.indexOf(current);
-    if(index<0){
-      activate(preferredFirst(list),list);
-      return;
-    }
+    if(index<0){activate(preferredFirst(list),list);return}
 
     var incoming=list[(index+1)%list.length];
-    if(!incoming||incoming===current){
-      schedule();
-      return;
-    }
+    if(!incoming||incoming===current){schedule();return}
 
     transitioning=true;
     var outgoing=current;
-
     incoming.classList.add("is-entering");
     incoming.removeAttribute("aria-hidden");
     void incoming.offsetWidth;
@@ -741,38 +733,22 @@ html body #hc-holiday-header{
 
   function sync(){
     var list=visibleSlides();
-
-    if(list.length<2){
-      showSingle(list);
-      return;
-    }
-
-    if(!current||list.indexOf(current)===-1){
-      activate(preferredFirst(list),list);
-      return;
-    }
-
+    if(list.length<2){showSingle(list);return}
+    if(!current||list.indexOf(current)===-1){activate(preferredFirst(list),list);return}
     stack.classList.add("hc-rotating");
+    updateEffects();
     schedule();
   }
 
   function queueSync(){
     if(queued){return}
     queued=true;
-    window.setTimeout(function(){
-      queued=false;
-      sync();
-    },0);
+    window.setTimeout(function(){queued=false;sync()},0);
   }
 
   document.addEventListener("hc-banners-changed",queueSync);
   document.addEventListener("visibilitychange",function(){
-    if(document.hidden){
-      window.clearTimeout(timer);
-      timer=null;
-    }else{
-      sync();
-    }
+    if(document.hidden){window.clearTimeout(timer);timer=null}else{sync()}
   });
 
   new MutationObserver(queueSync).observe(stack,{
