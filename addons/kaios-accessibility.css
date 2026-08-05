@@ -1,11 +1,12 @@
 /* ==========================================================
-   Harley's Clan Forum - KaiOS Accessibility v1.9.1
+   Harley's Clan Forum - KaiOS Accessibility v2.0
    320x240 / 240x320 feature-phone compatibility layer.
 
-   The complete v1.9 layout repair is pinned below. These local
-   overrides add compatibility for animations.css v1.1 and the
-   welcome/loading animation add-on without changing the working
-   post-stream, header, or welcome-card layout fixes.
+   The complete v1.9 post-stream and layout repair remains pinned
+   below. This v2.0 layer adds support for the current animation
+   addon, imported rotating banners, birthday/holiday effects,
+   messenger and conversations, notifications, authentication
+   sheets, file cards, the welcome widget, and the loading screen.
 
    Author: HarleyTG
    Updated: 2026-08-04
@@ -18,31 +19,81 @@
        screen and (max-device-width: 360px) and (max-device-height: 480px),
        screen and (max-device-width: 480px) and (max-device-height: 360px) {
 
-  /* ----------------------------------------------------------
-     NEW ANIMATION LAYER — COMPLETE KAIOS MOTION SHUTDOWN
+  :root {
+    --hc-banner-height: 48px !important;
+  }
 
-     This intentionally uses a broad App-scoped rule so newly
-     added forum animations cannot bypass the KaiOS override.
-     Layout transforms are not removed globally.
+  /* ----------------------------------------------------------
+     CURRENT MOTION LAYER - COMPLETE FEATURE-PHONE SHUTDOWN
+
+     The broad App rule covers the forum. Extra roots are listed
+     because the imported header, celebration effects, modals, and
+     loading screen may be mounted outside .App.
      ---------------------------------------------------------- */
   html body .App,
   html body .App *,
   html body .App *::before,
   html body .App *::after,
+  html body #hc-header-import-root,
+  html body #hc-header-import-root *,
+  html body #hc-header-import-root *::before,
+  html body #hc-header-import-root *::after,
+  html body #hc-header-stack,
+  html body #hc-header-stack *,
+  html body #hc-header-stack *::before,
+  html body #hc-header-stack *::after,
+  html body #hc-birthday-effects,
+  html body #hc-birthday-effects *,
+  html body #hc-holiday-effects,
+  html body #hc-holiday-effects *,
+  html body .Modal,
+  html body .Modal *,
+  html body .Modal *::before,
+  html body .Modal *::after,
+  html body .Modal-backdrop,
   html body #flarum-loading,
   html body #flarum-loading::before,
   html body #flarum-loading::after {
     animation: none !important;
+    animation-name: none !important;
     animation-delay: 0s !important;
     animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
     transition: none !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 
-  /* Restore stable header text on old Gecko. The animation add-on
-     uses clipped gradient text, which can become transparent on
-     feature-phone browser builds with incomplete clip support. */
-  html body .Header-title a {
+  /* ----------------------------------------------------------
+     MAIN FLARUM HEADER + LOGO
+     ---------------------------------------------------------- */
+  html body .Header-title {
+    display: flex !important;
+    align-items: center !important;
+    min-width: 0 !important;
+    max-width: 190px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    gap: 5px !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+  }
+
+  html body .Header-title > a,
+  html body .Header-title > a#home-link {
+    display: flex !important;
+    align-items: center !important;
+    align-self: stretch !important;
+    min-width: 0 !important;
+    max-width: 155px !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    line-height: 1 !important;
     background: none !important;
     background-image: none !important;
     -webkit-background-clip: border-box !important;
@@ -51,53 +102,165 @@
     color: var(--cyan-readable, var(--cyan, #00ffff)) !important;
   }
 
-  /* Keep the actual logo but remove its animated movement and
-     expensive glow/filter processing. */
   html body .Header-title::before,
   html body .Header-title:hover::before {
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    max-height: 28px !important;
+    flex: 0 0 28px !important;
+    align-self: center !important;
+    margin: 0 !important;
     animation: none !important;
-    transform: none !important;
+    transform: translateY(-2px) !important;
     filter: none !important;
     box-shadow: none !important;
   }
 
-  /* Remove decorative scanning/shimmer layers only. These are not
-     required for navigation or content and are costly on KaiOS. */
+  /* ----------------------------------------------------------
+     IMPORTED NOTICE / BIRTHDAY / HOLIDAY BANNER
+     ---------------------------------------------------------- */
+  html body #hc-header-import-root,
+  html body #hc-header-stack {
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: var(--hc-banner-height) !important;
+    min-height: var(--hc-banner-height) !important;
+    max-height: var(--hc-banner-height) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  html body #hc-header-stack .hc-slide,
+  html body #hc-header-stack .hc-banner-slide,
+  html body #forum-notice,
+  html body #hc-birthday-header,
+  html body #hc-holiday-header {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: var(--hc-banner-height) !important;
+    min-height: var(--hc-banner-height) !important;
+    max-height: var(--hc-banner-height) !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  html body #forum-notice,
+  html body #hc-birthday-header,
+  html body #hc-holiday-header {
+    gap: 4px !important;
+    padding: 4px 30px 4px 6px !important;
+  }
+
+  html body .hc-notice-title,
+  html body .notice-title,
+  html body .hc-birthday-copy strong,
+  html body .hc-holiday-copy strong {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  html body .hc-notice-message,
+  html body .notice-message,
+  html body .hc-birthday-copy small,
+  html body .hc-holiday-copy small {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 22px !important;
+    margin-top: 1px !important;
+    overflow: hidden !important;
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+  }
+
+  html body .hc-birthday-icon,
+  html body .hc-birthday-cake,
+  html body .hc-holiday-icon {
+    font-size: 18px !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  html body #hc-birthday-close,
+  html body #hc-birthday-header-close,
+  html body #hc-holiday-close {
+    right: 3px !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    padding: 0 !important;
+    font-size: 15px !important;
+    line-height: 24px !important;
+    transform: translateY(-50%) !important;
+  }
+
+  /* Celebration particles and page overlays are intentionally
+     removed on feature phones. The announcement text remains. */
+  html body #hc-birthday-header-particles,
+  html body .hc-birthday-header-confetti,
+  html body #hc-birthday-effects,
+  html body #hc-birthday-page-confetti,
+  html body .hc-holiday-particles,
+  html body #hc-holiday-effects {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    animation: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     DECORATIVE ANIMATION AND GPU EFFECT REMOVAL
+     ---------------------------------------------------------- */
   html body .App-header::after,
   html body .Hero::after,
   html body .Modal-header::after,
   html body .Alert::after,
   html body .Button:not(.Button--icon)::after,
-  html body .Dropdown-toggle:not(.Button--icon)::after {
+  html body .Dropdown-toggle:not(.Button--icon)::after,
+  html body #forum-notice::before,
+  html body #hc-birthday-header::after,
+  html body #hc-holiday-header::after,
+  html body .backgrwb::after,
+  html body .backgrwbguest::after {
     content: none !important;
     display: none !important;
     animation: none !important;
     opacity: 0 !important;
   }
 
-  /* The welcome/loading add-on is loaded after animations.css.
-     Higher specificity keeps its animated card outline disabled
-     even when both files use !important. */
-  html body .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwb::after,
-  html body .AfruxWidgets-sideNavAlt
-  .AfruxWidgets-Widget.welcomebox-widget
-  .AfruxWidgets-Widget-content
-  .containerwb
-  .backgrwbguest::after {
-    content: none !important;
-    display: none !important;
-    animation: none !important;
-    opacity: 0 !important;
+  html body .Alert,
+  html body .Dropdown-menu,
+  html body .NotificationList,
+  html body .ConversationsList,
+  html body .MessagesDropdown .Dropdown-menu,
+  html body .Modal-content,
+  html body .backgrwb,
+  html body .backgrwbguest,
+  html body .Post-body .wrapper,
+  html body #flarum-loading {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     filter: none !important;
     box-shadow: none !important;
   }
 
-  /* Remove movement from hover/focus states introduced by the new
-     animation add-on while preserving the controls themselves. */
+  /* ----------------------------------------------------------
+     HOVER / FOCUS MOVEMENT FROM CURRENT ANIMATIONS.CSS
+     ---------------------------------------------------------- */
   html body .Button:hover,
   html body .Button:active,
   html body .Dropdown-toggle:hover,
@@ -132,13 +295,17 @@
   html body .TextEditor-editor:focus-within,
   html body .ComposerBody-editor:focus-within,
   html body .Composer-controls .Button:hover .Button-icon,
-  html body .Alert-dismiss:hover {
+  html body .Alert-dismiss:hover,
+  html body .Post-body .wrapper:hover,
+  html body .Post-body .wrapper:hover .data .Button--primary,
+  html body .backgrwb .ulwb li:hover,
+  html body .backgrwb .avatarwb:hover,
+  html body .backgrwbguest a:hover,
+  html body .backgrwbguest .Button:hover {
     transform: none !important;
     filter: none !important;
   }
 
-  /* Prevent pulsing badges, avatars, loading indicators, and icon
-     drop shadows from leaving static GPU-heavy effects behind. */
   html body .Badge,
   html body .Button-badge,
   html body .NotificationsDropdown-unread,
@@ -157,11 +324,341 @@
     filter: none !important;
   }
 
-  /* Keep the custom loading screen readable but static. */
-  html body #flarum-loading::before,
-  html body #flarum-loading::after {
+  /* ----------------------------------------------------------
+     PRIVATE MESSAGES / CONVERSATIONS
+     ---------------------------------------------------------- */
+  html body .MessagesDropdown .tidot,
+  html body .ConversationsList .tidot,
+  html body .tiblock .tidot {
+    animation: none !important;
+    -webkit-animation: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body .MessagesDropdown .Dropdown-menu,
+  html body .NotificationsDropdown .Dropdown-menu {
+    display: block !important;
+    width: calc(100vw - 8px) !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 8px) !important;
+    max-height: calc(100vh - 50px) !important;
+    margin: 0 4px !important;
+    padding: 0 !important;
+    overflow: auto !important;
+    border-radius: 8px !important;
+  }
+
+  html body .ConversationsPage,
+  html body .MessagesPage,
+  html body .ConversationsList {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  html body .ConversationsList {
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-auto-rows: auto !important;
+    padding: 4px !important;
+    border-radius: 8px !important;
+  }
+
+  html body .ConversationsList .people-list,
+  html body .ConversationsList .chat {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-radius: 8px !important;
+  }
+
+  html body div#people-list::before {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    flex: 0 0 48px !important;
+    margin: 4px auto !important;
+  }
+
+  html body .ConversationsList .people-list .ConversationsList-list {
+    padding: 4px !important;
+    gap: 4px !important;
+    max-height: 90px !important;
+    overflow-y: auto !important;
+  }
+
+  html body .ConversationsList .people-list .UserListItem {
+    padding: 5px !important;
+    border-radius: 8px !important;
+  }
+
+  html body .ConversationsList .chat .chat-header,
+  html body .ConversationsList .chat .chat-history,
+  html body .ConversationsList .chat .chat-message {
+    padding: 5px !important;
+    border-radius: 8px !important;
+  }
+
+  html body .ConversationsList .chat .chat-history {
+    max-height: 110px !important;
+    overflow-y: auto !important;
+  }
+
+  html body .ConversationsList .chat .chat-history ul {
+    gap: 5px !important;
+  }
+
+  html body .ConversationsList .chat .message-content .message-text,
+  html body .ConversationsList .chat .chat-history .message-text {
+    max-width: 92% !important;
+    padding: 5px 8px !important;
+    border-radius: 10px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body form.chat-message.clearfix {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  html body .ConversationsList .chat .chat-message textarea {
+    min-height: 36px !important;
+    max-height: 72px !important;
+    padding: 7px 9px !important;
+    border-radius: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  /* ----------------------------------------------------------
+     NOTIFICATIONS
+     ---------------------------------------------------------- */
+  html body .NotificationList {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    max-height: calc(100vh - 50px) !important;
+    padding: 4px !important;
+    overflow: auto !important;
+    border-radius: 8px !important;
+  }
+
+  html body .NotificationList-header {
+    padding: 5px !important;
+  }
+
+  html body .NotificationList-content {
+    max-height: 150px !important;
+    overflow-y: auto !important;
+  }
+
+  html body .Notification,
+  html body .NotificationList .Notification {
+    padding: 6px !important;
     animation: none !important;
     transform: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     AUTH MODALS / MOBILE SHEETS
+     ---------------------------------------------------------- */
+  html body .Modal {
+    padding: 0 !important;
+  }
+
+  html body .Modal-content,
+  html body .LogInModal .Modal-content,
+  html body .SignUpModal .Modal-content,
+  html body .ForgotPasswordModal .Modal-content,
+  html body .StartConversationModal .Modal-content {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: calc(100vw - 8px) !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 8px) !important;
+    max-height: calc(100vh - 8px) !important;
+    margin: 4px auto !important;
+    padding: 0 !important;
+    overflow-y: auto !important;
+    border-radius: 8px !important;
+  }
+
+  html body .Modal-content::before,
+  html body .LogInModal .Modal-content::before,
+  html body .SignUpModal .Modal-content::before,
+  html body .ForgotPasswordModal .Modal-content::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body .Modal-header,
+  html body .Modal-body,
+  html body .Modal-footer,
+  html body .LogInModal .Modal-header,
+  html body .LogInModal .Modal-body,
+  html body .LogInModal .Modal-footer,
+  html body .SignUpModal .Modal-header,
+  html body .SignUpModal .Modal-body,
+  html body .SignUpModal .Modal-footer,
+  html body .ForgotPasswordModal .Modal-header,
+  html body .ForgotPasswordModal .Modal-body,
+  html body .ForgotPasswordModal .Modal-footer {
+    padding: 8px !important;
+  }
+
+  html body .LogInModal .Modal-header::before,
+  html body .LogInModal .Modal-header::after,
+  html body .SignUpModal .Modal-header::before,
+  html body .SignUpModal .Modal-header::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     FILE CARDS / TOUCH-ONLY CONTROLS
+     ---------------------------------------------------------- */
+  html body .Post-body .wrapper {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 96px !important;
+    aspect-ratio: auto !important;
+    margin: 6px 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+
+  html body .Post-body .wrapper::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  html body .Post-body .wrapper .data {
+    padding: 6px !important;
+  }
+
+  html body .Post-body .wrapper .data .Button--primary,
+  html body .Post-body .wrapper:hover .data .Button--primary,
+  html body .Post-body .wrapper:focus-within .data .Button--primary {
+    position: relative !important;
+    display: inline-flex !important;
+    width: auto !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    padding: 5px 8px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    border-radius: 8px !important;
+  }
+
+  /* ----------------------------------------------------------
+     FORM CONTROLS AND TAP TARGETS
+     ---------------------------------------------------------- */
+  html body .Button,
+  html body button,
+  html body input,
+  html body select,
+  html body textarea,
+  html body .FormControl {
+    max-width: 100% !important;
+    font-size: 13px !important;
+  }
+
+  html body .Button,
+  html body button,
+  html body input.FormControl,
+  html body select.FormControl {
+    min-height: 34px !important;
+  }
+
+  html body textarea.FormControl,
+  html body .TextEditor-editor,
+  html body .ComposerBody-editor {
+    min-height: 54px !important;
+    max-height: 120px !important;
+    overflow-y: auto !important;
+  }
+
+  /* ----------------------------------------------------------
+     CURRENT WELCOME WIDGET OUTLINE
+     ---------------------------------------------------------- */
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwb::after,
+  html body .AfruxWidgets-sideNavAlt
+  .AfruxWidgets-Widget.welcomebox-widget
+  .AfruxWidgets-Widget-content
+  .containerwb
+  .backgrwbguest::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+    opacity: 0 !important;
     filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ----------------------------------------------------------
+     CURRENT LOADING SCREEN - COMPACT STATIC FALLBACK
+     ---------------------------------------------------------- */
+  html body #flarum-loading {
+    width: 100vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    min-height: 100vh !important;
+    padding: 10px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.08em !important;
+    text-shadow: none !important;
+    background: var(--body-bg, #080c10) !important;
+  }
+
+  html body #flarum-loading::before {
+    display: block !important;
+    width: 100% !important;
+    min-height: 66px !important;
+    padding-top: 48px !important;
+    font-size: 15px !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0 !important;
+    background-size: 42px 42px !important;
+    filter: none !important;
+    text-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body #flarum-loading::after {
+    display: block !important;
+    width: 78% !important;
+    height: 7px !important;
+    margin: 0 auto !important;
+    background-position: 50% 0, 0 0 !important;
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
+    box-shadow: none !important;
   }
 }
