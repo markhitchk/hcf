@@ -1,2 +1,88 @@
-/* Compatibility entry point. Canonical file: addons/notifications.css */
-@import url("./notifications.css");
+/* ===================================
+   NOTIFICATIONS — matched to messenger.css
+   (verbatim rgba(0,0,0,0.75) + blur(10px) — the exact
+   values messenger.css itself uses on .ConversationsList,
+   not an approximation — 30px radius, white text,
+   muted opacity)
+
+   Drop this in alongside messenger.css. The old
+   cyan/glassmorphic .NotificationList block has been
+   removed from master.css — see that file's diff.
+=================================== */
+
+/* The panel's own transparency does nothing if the dropdown
+   wrapper Flarum renders around it is already opaque — kill
+   that wrapper's own background/shadow so .NotificationList's
+   rgba + blur is what actually shows. */
+.NotificationsDropdown .Dropdown-menu {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.NotificationList {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px !important;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+    overflow: hidden !important;
+    padding: 8px !important;
+}
+
+.NotificationList * {
+    color: white !important;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.NotificationList-header {
+    padding: 10px !important;
+    border-bottom: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.NotificationList-header .App-titleControl {
+    margin: 0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+.NotificationList-header .App-primaryControl {
+    display: flex;
+    gap: 4px;
+}
+
+.NotificationList-header .App-primaryControl .Button {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-radius: 30px !important;
+    border: none !important;
+}
+
+.NotificationList-header .App-primaryControl .Button:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+}
+
+.NotificationList-content {
+    background: transparent !important;
+    padding: 4px 0 !important;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.NotificationGroup-content {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.NotificationList-empty {
+    opacity: 0.5 !important;
+    font-size: 11px;
+    text-align: center;
+    padding: 20px 10px !important;
+}

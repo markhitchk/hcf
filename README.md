@@ -1,15 +1,12 @@
 # HCF — Harley's Clan Forum
 
-Custom CSS, HTML components, add-ons, assets, and branded error pages for Harley's Clan Forum.
+Custom forum styling, optional addons, shared assets, and branded error pages for Harley's Clan Forum.
 
 ## Repository structure
 
 ```text
 core/
 ├── master.css
-├── master-v5.css
-├── master-modern.css
-├── master-animated.css
 ├── admin.css
 ├── header.html
 └── footer.html
@@ -17,13 +14,12 @@ core/
 addons/
 ├── animations.css
 ├── conversations.css
+├── kaios-accessibility.css
 ├── messenger.css
-├── notifications.css
+├── notifications-messenger-style.css
 ├── user-directory.css
 ├── welcome-loading.css
-├── kaios-accessibility.css
 └── celebrations/
-    ├── birthday.js
     ├── birthdays.json
     ├── holidays.js
     ├── holidays.json
@@ -32,7 +28,9 @@ addons/
 
 assets/
 └── logos/
-    └── HTG.svg
+    ├── HTG.svg
+    ├── HTG-Icon.svg
+    └── HTG-Icon.png
 
 pages/
 └── errors/
@@ -48,26 +46,36 @@ pages/
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/master.css">
 ```
 
-## Add-ons
+`core/master.css` loads the required messenger and notification styling.
+
+## Optional addons
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/conversations.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/user-directory.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/conversations.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/kaios-accessibility.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/user-directory.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css">
 ```
+
+## Core HTML
+
+- Paste `core/header.html` into the forum custom header.
+- Paste `core/footer.html` into the forum custom footer.
+- Use `core/admin.css` for the Flarum administration panel.
 
 ## Celebrations
 
-Birthdays and holidays are kept together in `addons/celebrations/`.
+Birthday records and automatic holiday banners are grouped in `addons/celebrations`.
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/celebrations/holidays.js"></script>
-```
+## Error pages
 
-## Compatibility
+The FoF HTML error pages are stored under `pages/errors` by HTTP status code.
 
-Small compatibility entry files keep the previous CSS and holiday URLs working while the canonical files use the organized names above.
+## Browser support
+
+Designed for current desktop and mobile browsers. KaiOS support is available as an optional active addon.
+
+---
+
+**Author:** HarleyTG
