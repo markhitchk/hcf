@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "timeZone": "America/Los_Angeles",
+  "checkIntervalMs": 30000,
+  "pageEffects": true,
+  "showWithBirthday": true,
+  "customHolidays": []
+}
