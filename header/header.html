@@ -31,6 +31,48 @@ padding:0;
 overflow:hidden;
 font-family:Arial,Helvetica,sans-serif;
 }
+.hc-banner-slide{width:100%;max-width:100%}
+.hc-header-stack.hc-banner-rotator{
+position:relative;
+transition:height 1.15s ease;
+}
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide{
+position:absolute;
+top:0;
+left:0;
+z-index:0;
+width:100%;
+opacity:0;
+pointer-events:none;
+transform:translate3d(100%,0,0);
+transition:transform 1.15s cubic-bezier(.22,.61,.36,1),opacity .9s ease;
+will-change:transform,opacity;
+}
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active{
+position:relative;
+z-index:2;
+opacity:1;
+pointer-events:auto;
+transform:translate3d(0,0,0);
+}
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-active.is-leaving{
+position:absolute;
+z-index:1;
+opacity:0;
+pointer-events:none;
+transform:translate3d(-100%,0,0);
+}
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-entering{
+position:absolute;
+z-index:3;
+opacity:0;
+transform:translate3d(100%,0,0);
+}
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide.is-entering.is-entering-active{
+opacity:1;
+pointer-events:auto;
+transform:translate3d(0,0,0);
+}
 #hc-birthday-header[hidden]{display:none!important}
 #hc-birthday-header{
 position:relative;
@@ -353,6 +395,8 @@ to{opacity:1;transform:translateY(0) scaleY(1);filter:blur(0)}
 .notice-beacon{width:5px;height:5px}
 }
 @media(prefers-reduced-motion:reduce){
+.hc-header-stack.hc-banner-rotator,
+.hc-header-stack.hc-banner-rotator>.hc-banner-slide{transition:none!important}
 #hc-birthday-header,
 #hc-birthday-header::before,
 #hc-birthday-header::after,
@@ -548,5 +592,131 @@ banner.hidden=true;
 updateBirthdayMode();
 loadBirthdayRecords();
 window.setInterval(updateBirthdayMode,CHECK_INTERVAL);
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/holidays/holidays.js"></script>
+<script>
+(function(){
+"use strict";
+var stack=document.getElementById("hc-header-stack");
+if(!stack){return}
+var ROTATE_EVERY=10000;
+var TRANSITION_TIME=1150;
+var timer=null;
+var currentSlide=null;
+var transitioning=false;
+var paused=false;
+var syncQueued=false;
+var bannerSelector="#forum-notice,#hc-birthday-header,#hc-holiday-header,[data-hc-banner]";
+var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function bannerForSlide(slide){return slide&&slide.querySelector(bannerSelector)}
+function isVisibleBanner(banner){
+return !!banner&&!banner.hidden&&window.getComputedStyle(banner).display!=="none";
+}
+function wrapBanners(){
+var children=Array.prototype.slice.call(stack.children);
+children.forEach(function(child){
+if(child.classList&&child.classList.contains("hc-banner-slide")){return}
+if(!child.matches||!child.matches(bannerSelector)){return}
+var wrapper=document.createElement("div");
+wrapper.className="hc-banner-slide";
+wrapper.setAttribute("data-hc-banner-slide","");
+stack.insertBefore(wrapper,child);
+wrapper.appendChild(child);
+});
+}
+function allSlides(){return Array.prototype.slice.call(stack.querySelectorAll(":scope > .hc-banner-slide"))}
+function visibleSlides(){return allSlides().filter(function(slide){return isVisibleBanner(bannerForSlide(slide))})}
+function clearClasses(slide){
+slide.classList.remove("is-active","is-leaving","is-entering","is-entering-active");
+slide.removeAttribute("aria-hidden");
+}
+function setSingleMode(slides){
+window.clearInterval(timer);
+timer=null;
+transitioning=false;
+stack.classList.remove("hc-banner-rotator");
+stack.style.height="";
+allSlides().forEach(clearClasses);
+currentSlide=slides.length?slides[0]:null;
+}
+function activate(slide,slides){
+slides.forEach(function(item){
+clearClasses(item);
+if(item!==slide){item.setAttribute("aria-hidden","true")}
+});
+slide.classList.add("is-active");
+slide.removeAttribute("aria-hidden");
+currentSlide=slide;
+stack.classList.add("hc-banner-rotator");
+stack.style.height="";
+}
+function restartTimer(){
+window.clearInterval(timer);
+timer=null;
+if(paused||visibleSlides().length<2){return}
+timer=window.setInterval(showNext,ROTATE_EVERY);
+}
+function showNext(){
+if(paused||transitioning){return}
+var slides=visibleSlides();
+if(slides.length<2){sync();return}
+var currentIndex=slides.indexOf(currentSlide);
+if(currentIndex<0){activate(slides[0],slides);restartTimer();return}
+var next=slides[(currentIndex+1)%slides.length];
+if(next===currentSlide){return}
+if(reduceMotion){activate(next,slides);return}
+transitioning=true;
+var current=currentSlide;
+var currentHeight=current.offsetHeight;
+next.classList.add("is-entering");
+next.removeAttribute("aria-hidden");
+stack.style.height=currentHeight+"px";
+void next.offsetWidth;
+stack.style.height=next.offsetHeight+"px";
+current.classList.add("is-leaving");
+next.classList.add("is-entering-active");
+window.setTimeout(function(){
+clearClasses(current);
+current.setAttribute("aria-hidden","true");
+clearClasses(next);
+next.classList.add("is-active");
+next.removeAttribute("aria-hidden");
+currentSlide=next;
+stack.style.height="";
+transitioning=false;
+},TRANSITION_TIME+60);
+}
+function sync(){
+wrapBanners();
+var slides=visibleSlides();
+if(slides.length<2){setSingleMode(slides);return}
+stack.classList.add("hc-banner-rotator");
+if(!currentSlide||slides.indexOf(currentSlide)===-1){activate(slides[0],slides)}
+restartTimer();
+}
+function queueSync(){
+if(syncQueued){return}
+syncQueued=true;
+window.setTimeout(function(){syncQueued=false;sync()},0);
+}
+stack.addEventListener("mouseenter",function(){paused=true;window.clearInterval(timer);timer=null});
+stack.addEventListener("mouseleave",function(){paused=false;restartTimer()});
+stack.addEventListener("focusin",function(){paused=true;window.clearInterval(timer);timer=null});
+stack.addEventListener("focusout",function(event){
+if(stack.contains(event.relatedTarget)){return}
+paused=false;
+restartTimer();
+});
+document.addEventListener("visibilitychange",function(){
+paused=document.hidden;
+if(paused){window.clearInterval(timer);timer=null}else{restartTimer()}
+});
+var observer=new MutationObserver(queueSync);
+observer.observe(stack,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
+window.addEventListener("resize",function(){
+if(currentSlide&&stack.classList.contains("hc-banner-rotator")){stack.style.height=currentSlide.offsetHeight+"px";window.setTimeout(function(){stack.style.height=""},TRANSITION_TIME)}
+});
+sync();
 })();
 </script></body></html>
