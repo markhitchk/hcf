@@ -14,7 +14,8 @@ core/
 addons/
 ├── animations.css
 ├── conversations.css
-├── kaios-accessibility.css
+├── mobile-v2.css
+├── kaios-accessibility-v2.css
 ├── messenger.css
 ├── notifications-messenger-style.css
 ├── user-directory.css
@@ -53,10 +54,13 @@ pages/
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/conversations.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/kaios-accessibility.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/mobile-v2.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/kaios-accessibility-v2.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/user-directory.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css">
 ```
+
+Load `kaios-accessibility-v2.css` after `mobile-v2.css` so the KaiOS-specific rules remain last.
 
 ## Core HTML
 
@@ -74,7 +78,7 @@ The FoF HTML error pages are stored under `pages/errors` by HTTP status code.
 
 ## Browser support
 
-Designed for current desktop and mobile browsers. KaiOS support is available as an optional active addon.
+Designed for current desktop and mobile browsers. KaiOS support is available through the optional `kaios-accessibility-v2.css` addon.
 
 ---
 
