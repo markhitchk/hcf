@@ -1,37 +1,63 @@
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@659caa8c06c2c11b0561e1f673a6110f91493fa9/addons/mobile.css");
-
 /* ==========================================================
-   HARLEY'S CLAN FORUM — MODERN MOBILE BOTTOM NAVIGATION
+   HARLEY'S CLAN FORUM — MODERN MOBILE LAYOUT
 
-   Keeps the existing modern mobile stylesheet above, then
-   moves Flarum's secondary Header-controls to the bottom of
-   regular phone screens. KaiOS remains handled separately by
-   addons/kaios-accessibility.css.
+   Standalone stylesheet for modern mobile browsers.
+   - Uses Flarum's native phone breakpoint: 767.98px
+   - Places secondary forum controls at the bottom of the screen
+   - Keeps dropdowns, search results, composer, and footer clear
+     of the bottom navigation
+   - Does not target KaiOS
 
-   Version: 1.1
+   Version: 2.0
    Updated: 2026-08-05
 ========================================================== */
 
 :root {
-  --hc-mobile-bottom-nav-height: 62px;
-  --hc-mobile-bottom-safe: env(safe-area-inset-bottom, 0px);
+  --hc-mobile-nav-height: 104px;
+  --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --hc-mobile-edge-gap: 8px;
 }
 
 @supports selector(:is(*)) and ((height: 100dvh) or (height: 100svh)) {
   @media screen and (max-width: 767.98px) {
 
-    html body .App,
-    html body .App-content {
+    html,
+    body,
+    .App,
+    .App-content {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    body,
+    .App,
+    .App-content {
       padding-bottom: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe)
+        var(--hc-mobile-nav-height) +
+        var(--hc-mobile-safe-bottom)
       ) !important;
     }
 
-    /* Flarum normally keeps these controls in the off-canvas
-       drawer on phones. Keep the parent available so the
-       secondary controls can be fixed to the viewport. */
-    html body .App:not(.drawerOpen) .App-drawer {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    img,
+    video,
+    iframe,
+    canvas,
+    svg {
+      max-width: 100%;
+    }
+
+    /* ------------------------------------------------------
+       BOTTOM NAVIGATION
+    ------------------------------------------------------ */
+
+    .App:not(.drawerOpen) .App-drawer {
       visibility: visible !important;
       width: 0 !important;
       min-width: 0 !important;
@@ -40,233 +66,241 @@
       background: transparent !important;
       box-shadow: none !important;
       transform: none !important;
-      -webkit-transform: none !important;
       pointer-events: none !important;
     }
 
-    html body .App:not(.drawerOpen) .App-header {
+    .App:not(.drawerOpen) .App-drawer .App-header,
+    .App:not(.drawerOpen) .App-drawer .App-header .container,
+    .App:not(.drawerOpen) .App-drawer .Header-secondary,
+    .App:not(.drawerOpen) .App-drawer #header-secondary {
+      overflow: visible !important;
       pointer-events: none !important;
     }
 
-    html body .App:not(.drawerOpen) .App-header .Header-title,
-    html body .App:not(.drawerOpen) #header-primary {
-      display: none !important;
-    }
-
-    html body .App:not(.drawerOpen) #header-secondary {
+    .Header-secondary,
+    #header-secondary {
       position: fixed !important;
-      top: auto !important;
       right: 0 !important;
       bottom: 0 !important;
       left: 0 !important;
-      z-index: calc(var(--zindex-header, 1000) + 20) !important;
+      z-index: 1045 !important;
       display: block !important;
-      visibility: visible !important;
       width: 100vw !important;
-      min-width: 0 !important;
       max-width: 100vw !important;
-      height: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe)
-      ) !important;
-      margin: 0 !important;
-      padding: 0 3px var(--hc-mobile-bottom-safe) !important;
-      overflow: visible !important;
-      border-top: 1px solid var(--control-bg, rgba(127,127,127,.3)) !important;
+      min-width: 0 !important;
+      padding: 6px var(--hc-mobile-edge-gap)
+        calc(6px + var(--hc-mobile-safe-bottom)) !important;
+      border-top: 1px solid var(--control-bg, rgba(127, 127, 127, .28)) !important;
       background: var(--header-bg, var(--body-bg, #fff)) !important;
-      box-shadow: 0 -3px 12px var(--shadow-color, rgba(0,0,0,.25)) !important;
+      box-shadow: 0 -4px 16px var(--shadow-color, rgba(0, 0, 0, .22)) !important;
       pointer-events: auto !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls {
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: stretch !important;
-      justify-content: stretch !important;
-      flex-wrap: nowrap !important;
-      gap: 0 !important;
+    .Header-secondary .Header-controls,
+    #header-secondary .Header-controls {
+      display: grid !important;
+      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      grid-template-rows: 40px 48px !important;
+      gap: 4px !important;
       width: 100% !important;
-      height: var(--hc-mobile-bottom-nav-height) !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
       margin: 0 !important;
       padding: 0 !important;
-      overflow: visible !important;
       list-style: none !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li {
-      position: relative !important;
+    .Header-secondary .Header-controls > li,
+    #header-secondary .Header-controls > li {
+      position: static !important;
       display: block !important;
-      flex: 1 1 0 !important;
+      float: none !important;
       width: auto !important;
       min-width: 0 !important;
-      max-width: none !important;
-      height: var(--hc-mobile-bottom-nav-height) !important;
+      max-width: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
-      overflow: visible !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li > .Button,
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li > .ButtonGroup,
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li > .Dropdown,
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li > .Search {
+    .Header-secondary .Header-controls > li.item-search,
+    #header-secondary .Header-controls > li.item-search {
+      grid-column: 1 / -1 !important;
+      grid-row: 1 !important;
+    }
+
+    .Header-secondary .Header-controls > li:not(.item-search),
+    #header-secondary .Header-controls > li:not(.item-search) {
+      grid-row: 2 !important;
+    }
+
+    .Header-secondary .Search,
+    #header-secondary .Search,
+    .Header-secondary .Search-input,
+    #header-secondary .Search-input {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      height: 40px !important;
+    }
+
+    .Header-secondary .Search-input input,
+    #header-secondary .Search-input input {
+      width: 100% !important;
+      height: 40px !important;
+      min-height: 40px !important;
+      padding: 8px 12px !important;
+      font-size: 14px !important;
+    }
+
+    .Header-secondary .ButtonGroup,
+    #header-secondary .ButtonGroup,
+    .Header-secondary .Dropdown,
+    #header-secondary .Dropdown {
       width: 100% !important;
       min-width: 0 !important;
-      max-width: 100% !important;
       height: 100% !important;
-      min-height: 0 !important;
-      margin: 0 !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Dropdown-toggle.Button,
-    html body .App:not(.drawerOpen) #header-secondary .Header-controls > li > .Button {
+    .Header-secondary .Dropdown-toggle.Button,
+    #header-secondary .Dropdown-toggle.Button {
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
-      gap: 3px !important;
+      gap: 2px !important;
       width: 100% !important;
       min-width: 0 !important;
       max-width: 100% !important;
-      height: 100% !important;
-      min-height: 0 !important;
+      height: 48px !important;
+      min-height: 48px !important;
       margin: 0 !important;
-      padding: 4px 2px !important;
+      padding: 3px 2px !important;
       overflow: hidden !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
+      border-radius: var(--border-radius, 4px) !important;
       text-align: center !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Button-icon {
+    .Header-secondary .Dropdown-toggle .Button-icon,
+    #header-secondary .Dropdown-toggle .Button-icon {
       display: block !important;
-      flex: 0 0 auto !important;
       width: auto !important;
-      min-width: 0 !important;
-      height: auto !important;
+      height: 20px !important;
       margin: 0 !important;
       font-size: 18px !important;
-      line-height: 1 !important;
+      line-height: 20px !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Button-label,
-    html body .App:not(.drawerOpen) #header-secondary .username {
+    .Header-secondary .Dropdown-toggle .Button-label,
+    #header-secondary .Dropdown-toggle .Button-label,
+    .Header-secondary .Dropdown-toggle .username,
+    #header-secondary .Dropdown-toggle .username {
       display: block !important;
       width: 100% !important;
       min-width: 0 !important;
       max-width: 100% !important;
-      margin: 0 !important;
       overflow: hidden !important;
-      color: inherit !important;
       font-size: 9px !important;
-      line-height: 1.1 !important;
-      text-align: center !important;
+      line-height: 11px !important;
       white-space: nowrap !important;
       text-overflow: ellipsis !important;
     }
 
-    html body .App:not(.drawerOpen) #header-secondary .Button--user .Avatar {
-      display: block !important;
-      flex: 0 0 24px !important;
-      width: 24px !important;
-      min-width: 24px !important;
-      height: 24px !important;
-      margin: 0 auto !important;
-      line-height: 24px !important;
+    .Header-secondary .SessionDropdown .Avatar,
+    #header-secondary .SessionDropdown .Avatar {
+      width: 22px !important;
+      min-width: 22px !important;
+      height: 22px !important;
+      margin: 0 !important;
     }
 
-    /* Compact search control inside the bottom bar. */
-    html body .App:not(.drawerOpen) #header-secondary .item-search {
-      flex: 1.25 1 0 !important;
-    }
+    /* ------------------------------------------------------
+       MENUS AND SEARCH OPEN ABOVE THE BOTTOM BAR
+    ------------------------------------------------------ */
 
-    html body .App:not(.drawerOpen) #header-secondary .item-search .Search,
-    html body .App:not(.drawerOpen) #header-secondary .item-search .Search-input {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 100% !important;
-      height: 100% !important;
-      min-width: 0 !important;
-    }
-
-    html body .App:not(.drawerOpen) #header-secondary .item-search input.FormControl {
-      width: calc(100% - 6px) !important;
-      min-width: 0 !important;
-      height: 36px !important;
-      min-height: 36px !important;
-      margin: 0 3px !important;
-      padding: 6px !important;
-      overflow: hidden !important;
-      font-size: 10px !important;
-      text-align: center !important;
-      white-space: nowrap !important;
-      text-overflow: ellipsis !important;
-    }
-
-    html body .App:not(.drawerOpen) #header-secondary .item-search .Search-results {
+    .Header-secondary .Dropdown-menu,
+    #header-secondary .Dropdown-menu,
+    .Header-secondary .Search-results,
+    #header-secondary .Search-results {
       position: fixed !important;
       top: auto !important;
-      right: 6px !important;
+      right: var(--hc-mobile-edge-gap) !important;
       bottom: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe) + 6px
+        var(--hc-mobile-nav-height) +
+        var(--hc-mobile-safe-bottom) +
+        var(--hc-mobile-edge-gap)
       ) !important;
-      left: 6px !important;
+      left: var(--hc-mobile-edge-gap) !important;
       width: auto !important;
       min-width: 0 !important;
       max-width: none !important;
       max-height: calc(
-        100dvh - var(--hc-mobile-bottom-nav-height) - 20px
+        100dvh -
+        var(--hc-mobile-nav-height) -
+        var(--hc-mobile-safe-bottom) -
+        24px
       ) !important;
       margin: 0 !important;
+      overflow-x: hidden !important;
       overflow-y: auto !important;
-      z-index: calc(var(--zindex-modal, 1050) + 2) !important;
+      border-radius: 14px !important;
+      z-index: 1055 !important;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Dropdowns and notification panels open above the bar. */
-    html body .App:not(.drawerOpen) #header-secondary .Dropdown > .Dropdown-menu,
-    html body .App:not(.drawerOpen) #header-secondary .NotificationsDropdown > .Dropdown-menu,
-    html body .App:not(.drawerOpen) #header-secondary .MessagesDropdown > .Dropdown-menu {
-      top: auto !important;
-      right: 0 !important;
+    .Header-secondary .NotificationsDropdown .Dropdown-menu,
+    #header-secondary .NotificationsDropdown .Dropdown-menu,
+    .Header-secondary .MessagesDropdown .Dropdown-menu,
+    #header-secondary .MessagesDropdown .Dropdown-menu {
+      padding-bottom: 0 !important;
+    }
+
+    /* ------------------------------------------------------
+       OTHER FIXED ELEMENTS
+    ------------------------------------------------------ */
+
+    .Composer {
       bottom: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe)
+        var(--hc-mobile-nav-height) +
+        var(--hc-mobile-safe-bottom)
       ) !important;
-      left: 0 !important;
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: 100% !important;
-      max-height: calc(
-        100dvh - var(--hc-mobile-bottom-nav-height) -
-        var(--hc-mobile-bottom-safe) - 6px
-      ) !important;
-      margin: 0 !important;
-      border-radius: 16px 16px 0 0 !important;
     }
 
-    html body .Composer {
+    #hc-top-btn {
       bottom: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe)
+        var(--hc-mobile-nav-height) +
+        var(--hc-mobile-safe-bottom) +
+        12px
       ) !important;
     }
 
-    html body #hc-top-btn {
-      bottom: calc(
-        var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe) + 12px
-      ) !important;
-    }
-
-    html body .hc-simple-footer {
+    .hc-simple-footer {
       padding-bottom: calc(
-        22px + var(--hc-mobile-bottom-nav-height) +
-        var(--hc-mobile-bottom-safe)
+        20px +
+        var(--hc-mobile-nav-height) +
+        var(--hc-mobile-safe-bottom)
       ) !important;
+    }
+
+    .Post-body,
+    .DiscussionListItem,
+    .Notification,
+    .UserListItem {
+      min-width: 0 !important;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @media screen and (max-width: 380px) {
+    :root {
+      --hc-mobile-edge-gap: 4px;
+    }
+
+    .Header-secondary .Dropdown-toggle .Button-label,
+    #header-secondary .Dropdown-toggle .Button-label,
+    .Header-secondary .Dropdown-toggle .username,
+    #header-secondary .Dropdown-toggle .username {
+      font-size: 8px !important;
     }
   }
 }
