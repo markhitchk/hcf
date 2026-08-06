@@ -1,0 +1,643 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — DEVICE NAVIGATION FIXES
+
+   Load this stylesheet AFTER mobile.css and
+   kaios-accessibility.css.
+
+   Modern mobile:
+   - Places the secondary forum controls at the bottom.
+   - Keeps dropdowns, search results, composer and top button
+     above the bottom navigation.
+
+   KaiOS:
+   - Restores a simple one-item-per-line header menu.
+   - Keeps dropdowns in normal page flow.
+   - Repairs the post scrubber control.
+   - Forces the custom header and footer to remain visible.
+
+   Version: 1.0
+   Updated: 2026-08-05
+========================================================== */
+
+:root {
+  --hc-device-bottom-nav-height: 62px;
+  --hc-device-bottom-safe: env(safe-area-inset-bottom, 0px);
+}
+
+/* ==========================================================
+   MODERN MOBILE — FIXED BOTTOM FORUM CONTROLS
+   Flarum phone breakpoint: 767.98px
+   The @supports gate keeps this section away from KaiOS.
+========================================================== */
+@supports selector(:is(*)) and ((height: 100dvh) or (height: 100svh)) {
+  @media screen and (max-width: 767.98px) {
+
+    html body .App,
+    html body .App-content {
+      padding-bottom: calc(
+        var(--hc-device-bottom-nav-height) +
+        var(--hc-device-bottom-safe)
+      ) !important;
+    }
+
+    /* Flarum normally puts these controls inside its phone
+       drawer. Keep that parent from hiding the fixed bar. */
+    html body .App:not(.drawerOpen) .App-drawer {
+      visibility: visible !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      max-width: 0 !important;
+      overflow: visible !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+      pointer-events: none !important;
+    }
+
+    html body #header-secondary {
+      position: fixed !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      z-index: 1040 !important;
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: calc(
+        var(--hc-device-bottom-nav-height) +
+        var(--hc-device-bottom-safe)
+      ) !important;
+      margin: 0 !important;
+      padding: 4px 4px calc(4px + var(--hc-device-bottom-safe)) !important;
+      border-top: 1px solid var(--control-bg, rgba(127, 127, 127, .28)) !important;
+      background: var(--header-bg, var(--body-bg, #111)) !important;
+      box-shadow: 0 -3px 14px var(--shadow-color, rgba(0, 0, 0, .3)) !important;
+      pointer-events: auto !important;
+    }
+
+    html body #header-secondary .Header-controls {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      justify-content: space-around !important;
+      flex-wrap: nowrap !important;
+      gap: 2px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: 54px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      list-style: none !important;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    html body #header-secondary .Header-controls::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    html body #header-secondary .Header-controls > li {
+      position: static !important;
+      display: flex !important;
+      flex: 1 1 0 !important;
+      align-items: stretch !important;
+      justify-content: center !important;
+      width: auto !important;
+      min-width: 48px !important;
+      max-width: 92px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    html body #header-secondary .ButtonGroup,
+    html body #header-secondary .Dropdown,
+    html body #header-secondary .Search,
+    html body #header-secondary .Search-input {
+      position: static !important;
+      display: flex !important;
+      align-items: stretch !important;
+      justify-content: center !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    html body #header-secondary .Dropdown-toggle.Button,
+    html body #header-secondary .Button--user,
+    html body #header-secondary .Header-controls > li > .Button,
+    html body #header-secondary .Header-controls > li > a {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      height: 54px !important;
+      min-height: 54px !important;
+      margin: 0 !important;
+      padding: 4px 3px !important;
+      overflow: hidden !important;
+      border: 0 !important;
+      border-radius: 8px !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: var(--header-control-color, var(--text-color, #ddd)) !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+    }
+
+    html body #header-secondary .Button-icon,
+    html body #header-secondary .Dropdown-toggle .Button-icon {
+      display: block !important;
+      width: auto !important;
+      min-width: 0 !important;
+      height: auto !important;
+      margin: 0 !important;
+      font-size: 18px !important;
+      line-height: 1 !important;
+    }
+
+    html body #header-secondary .Button-label,
+    html body #header-secondary .username {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      font-size: 9px !important;
+      line-height: 1.15 !important;
+      text-align: center !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+
+    html body #header-secondary .Button--user .Avatar {
+      width: 24px !important;
+      min-width: 24px !important;
+      height: 24px !important;
+      margin: 0 !important;
+    }
+
+    /* Compact the older Flarum search input so it can occupy
+       one bottom-navigation slot. */
+    html body #header-secondary .item-search .Search-input input,
+    html body #header-secondary .item-search input.FormControl {
+      width: 100% !important;
+      min-width: 48px !important;
+      max-width: 92px !important;
+      height: 54px !important;
+      min-height: 54px !important;
+      margin: 0 !important;
+      padding: 25px 3px 3px !important;
+      overflow: hidden !important;
+      border: 0 !important;
+      border-radius: 8px !important;
+      background-color: transparent !important;
+      color: var(--header-control-color, var(--text-color, #ddd)) !important;
+      font-size: 9px !important;
+      line-height: 1.1 !important;
+      text-align: center !important;
+      text-overflow: ellipsis !important;
+      box-shadow: none !important;
+    }
+
+    html body #header-secondary .item-search .Search::before {
+      content: "\f002";
+      position: absolute !important;
+      top: 10px !important;
+      left: 50% !important;
+      z-index: 1 !important;
+      display: block !important;
+      pointer-events: none !important;
+      color: var(--header-control-color, var(--text-color, #ddd)) !important;
+      font-family: "Font Awesome 5 Free", FontAwesome, sans-serif !important;
+      font-size: 17px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      transform: translateX(-50%) !important;
+    }
+
+    html body #header-secondary .item-search .Search {
+      position: relative !important;
+    }
+
+    html body #header-secondary .item-search input::placeholder {
+      color: var(--header-control-color, var(--text-color, #ddd)) !important;
+      opacity: .9 !important;
+    }
+
+    /* Dropdowns and search panels open above the fixed bar. */
+    html body #header-secondary .Dropdown .Dropdown-menu,
+    html body #header-secondary .NotificationsDropdown .Dropdown-menu,
+    html body #header-secondary .MessagesDropdown .Dropdown-menu,
+    html body #header-secondary .SessionDropdown .Dropdown-menu,
+    html body #header-secondary .Search-results {
+      position: fixed !important;
+      top: auto !important;
+      right: 6px !important;
+      bottom: calc(
+        var(--hc-device-bottom-nav-height) +
+        var(--hc-device-bottom-safe) + 6px
+      ) !important;
+      left: 6px !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      max-height: min(70vh, calc(100dvh - 92px)) !important;
+      margin: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      border-radius: 14px !important;
+      z-index: 1050 !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    html body .Composer {
+      bottom: calc(
+        var(--hc-device-bottom-nav-height) +
+        var(--hc-device-bottom-safe)
+      ) !important;
+    }
+
+    html body #hc-top-btn {
+      bottom: calc(
+        var(--hc-device-bottom-nav-height) +
+        var(--hc-device-bottom-safe) + 12px
+      ) !important;
+    }
+  }
+}
+
+/* ==========================================================
+   KAIOS — SIMPLE VERTICAL CONTROLS
+   Restricted to tiny low-resolution feature-phone viewports.
+   This section intentionally avoids :is(), :has(), dvh/svh,
+   min(), max() and other newer CSS syntax.
+========================================================== */
+@media screen and (max-width: 360px) and (max-height: 480px) and (max-resolution: 1.5dppx),
+       screen and (max-width: 480px) and (max-height: 360px) and (max-resolution: 1.5dppx) {
+
+  html body .App,
+  html body .App-content {
+    padding-bottom: 0 !important;
+  }
+
+  html body .App-drawer,
+  html body .App:not(.drawerOpen) .App-drawer {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: var(--body-bg, #111) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  html body .App-header,
+  html body .App-header .container,
+  html body #header-primary,
+  html body #header-secondary {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body #header-primary .Header-controls,
+  html body #header-secondary .Header-controls,
+  html body .App-drawer .Header-controls {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 2px 4px !important;
+    overflow: visible !important;
+    list-style: none !important;
+  }
+
+  html body #header-primary .Header-controls > li,
+  html body #header-secondary .Header-controls > li,
+  html body .App-drawer .Header-controls > li {
+    position: relative !important;
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 0 3px !important;
+    padding: 0 !important;
+  }
+
+  html body #header-primary .ButtonGroup,
+  html body #header-secondary .ButtonGroup,
+  html body #header-primary .Dropdown,
+  html body #header-secondary .Dropdown,
+  html body #header-secondary .Search,
+  html body #header-secondary .Search-input {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+
+  html body #header-primary .Button,
+  html body #header-secondary .Button,
+  html body #header-primary .Dropdown-toggle,
+  html body #header-secondary .Dropdown-toggle,
+  html body #header-secondary .Header-controls > li > a,
+  html body #header-secondary .Header-controls > li > button {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 5px 7px !important;
+    overflow: hidden !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body #header-primary .Button-icon,
+  html body #header-secondary .Button-icon {
+    display: inline-block !important;
+    flex: 0 0 22px !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    margin: 0 6px 0 0 !important;
+    font-size: 15px !important;
+    line-height: 22px !important;
+    text-align: center !important;
+  }
+
+  html body #header-primary .Button-label,
+  html body #header-secondary .Button-label,
+  html body #header-secondary .username {
+    display: block !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    text-align: left !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  html body #header-secondary .Button--user .Avatar {
+    width: 26px !important;
+    min-width: 26px !important;
+    height: 26px !important;
+    margin: 0 7px 0 0 !important;
+  }
+
+  html body #header-secondary .item-search input.FormControl,
+  html body #header-secondary .item-search input[type="search"] {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+    text-align: left !important;
+  }
+
+  /* Keep closed menus closed. Existing KaiOS rules were
+     forcing notification and message menus to display. */
+  html body #header-primary .Dropdown:not(.open) > .Dropdown-menu,
+  html body #header-secondary .Dropdown:not(.open) > .Dropdown-menu,
+  html body .PostStreamScrubber .Dropdown:not(.open) > .Dropdown-menu,
+  html body .Search-results[aria-hidden="true"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  html body #header-primary .Dropdown.open > .Dropdown-menu,
+  html body #header-secondary .Dropdown.open > .Dropdown-menu,
+  html body .PostStreamScrubber .Dropdown.open > .Dropdown-menu,
+  html body .Search-results[aria-hidden="false"] {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    max-height: 150px !important;
+    margin: 3px 0 0 !important;
+    padding: 2px 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    border-radius: 4px !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
+  html body #header-primary .Dropdown-menu > li,
+  html body #header-secondary .Dropdown-menu > li,
+  html body .PostStreamScrubber .Dropdown-menu > li {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body #header-primary .Dropdown-menu > li > a,
+  html body #header-primary .Dropdown-menu > li > button,
+  html body #header-secondary .Dropdown-menu > li > a,
+  html body #header-secondary .Dropdown-menu > li > button,
+  html body .PostStreamScrubber .Dropdown-menu > li > a,
+  html body .PostStreamScrubber .Dropdown-menu > li > button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 32px !important;
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+
+  /* KaiOS post scrubber */
+  html body .PostStreamScrubber,
+  html body .PostStreamScrubber .Dropdown {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 4px 0 !important;
+    overflow: visible !important;
+  }
+
+  html body .PostStreamScrubber .Dropdown-toggle.Button {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    overflow: hidden !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body .PostStreamScrubber .Scrubber-scrollbar {
+    width: 100% !important;
+    height: 110px !important;
+    min-height: 70px !important;
+    max-height: 110px !important;
+    margin: 5px 0 !important;
+  }
+
+  html body .PostStreamScrubber .Scrubber-info {
+    left: 12px !important;
+    width: auto !important;
+    max-width: 85% !important;
+    font-size: 11px !important;
+  }
+
+  /* Custom imported forum header */
+  html body #hc-header-import-root,
+  html body #hc-header-stack,
+  html body #forum-notice,
+  html body #hc-birthday-header,
+  html body #hc-holiday-header {
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body #hc-header-stack .hc-slide:not([hidden]) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  /* Custom footer and its motion-hidden children */
+  html body .hc-simple-footer {
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 1px !important;
+    margin: 16px 0 0 !important;
+    padding: 12px 6px !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  html body .hc-simple-footer .hc-scroll-container,
+  html body .hc-simple-footer .hc-footer-brand,
+  html body .hc-simple-footer .hc-terminal-block,
+  html body .hc-motion-ready .hc-scroll-container,
+  html body .hc-motion-ready .hc-footer-brand,
+  html body .hc-motion-ready .hc-terminal-block {
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+  }
+
+  html body .hc-simple-footer img {
+    max-width: 72px !important;
+    height: auto !important;
+  }
+
+  html body .hc-simple-footer pre,
+  html body .hc-simple-footer code,
+  html body .hc-simple-footer .terminal {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+}
