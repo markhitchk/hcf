@@ -362,9 +362,11 @@ html body #hc-holiday-header{
         <span aria-hidden="true">🚧</span> Under Construction
         <span aria-hidden="true"> • 💬 </span>DM issues? Open:
         <a href="https://forum.harleytg.com/conversations">Direct Messages</a>
-        <span aria-hidden="true"> • 🌐 </span>Domain Expiration:
-        <strong>October 12, 2026</strong>
-        <a href="https://forum.harleytg.com/d/77-domain-expiration-alert">Info</a>
+        <span id="hc-domain-expiration">
+          <span aria-hidden="true"> • 🌐 </span>Domain Expiration:
+          <strong>October 12, 2026</strong>
+          <a href="https://forum.harleytg.com/d/77-domain-expiration-alert">Info</a>
+        </span>
       </div>
     </div>
   </div>
@@ -396,6 +398,32 @@ html body #hc-holiday-header{
     });
     if(changed){history.replaceState(history.state,"",url.pathname+url.search+url.hash)}
   }catch(error){}
+})();
+</script>
+
+<script>
+(function domainExpirationNotice(){
+  "use strict";
+
+  var item=document.getElementById("hc-domain-expiration");
+  var cutoff=new Date("2026-10-13T00:00:00-07:00").getTime();
+  var MAX_TIMEOUT=2147483647;
+
+  function sync(){
+    if(!item){return}
+    var remaining=cutoff-Date.now();
+
+    if(remaining<=0){
+      item.remove();
+      item=null;
+      try{document.dispatchEvent(new CustomEvent("hc-banners-changed"))}catch(error){}
+      return;
+    }
+
+    window.setTimeout(sync,Math.min(remaining,MAX_TIMEOUT));
+  }
+
+  sync();
 })();
 </script>
 
