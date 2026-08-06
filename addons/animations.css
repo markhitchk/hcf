@@ -2,12 +2,12 @@
    HARLEY'S CLAN FORUM — ANIMATIONS ADD-ON
 
    The original animation layer is pinned to the last complete
-   build. Local overrides below disable motion only inside the
-   Afrux welcome/profile widget.
+   build. Local overrides keep the preferred forum animations
+   while disabling motion in specific interface areas.
 
-   Version: 1.1
+   Version: 1.2
    Author: HarleyTG
-   Updated: 2026-08-04
+   Updated: 2026-08-05
 ========================================================= */
 
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@f00ce72ddea5b86ebcd08be9b2fefb6c4db10155/addons/animations.css");
@@ -24,6 +24,8 @@
 .AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget *::before,
 .AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget *::after {
   animation: none !important;
+  animation-name: none !important;
+  animation-duration: 0s !important;
   animation-delay: 0s !important;
   transition: none !important;
   scroll-behavior: auto !important;
@@ -55,4 +57,68 @@
 .AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-toggle::after {
   animation: none !important;
   opacity: 0 !important;
+}
+
+/* =========================================================
+   HEADER SIGN IN / SIGN UP TOOLBAR — NO ANIMATIONS
+
+   This belongs in animations.css because the movement and shine
+   originate from the imported animation layer. The normal theme
+   colors, borders, backgrounds, and focus outlines remain active.
+========================================================= */
+
+.Header-secondary .item-logIn,
+.Header-secondary .item-signUp,
+#header-secondary .item-logIn,
+#header-secondary .item-signUp,
+.Header-secondary .item-logIn *,
+.Header-secondary .item-signUp *,
+#header-secondary .item-logIn *,
+#header-secondary .item-signUp *,
+.Header-secondary .item-logIn *::before,
+.Header-secondary .item-logIn *::after,
+.Header-secondary .item-signUp *::before,
+.Header-secondary .item-signUp *::after,
+#header-secondary .item-logIn *::before,
+#header-secondary .item-logIn *::after,
+#header-secondary .item-signUp *::before,
+#header-secondary .item-signUp *::after {
+  animation: none !important;
+  animation-name: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Remove animated shine overlays added by the original layer. */
+.Header-secondary .item-logIn .Button::after,
+.Header-secondary .item-signUp .Button::after,
+#header-secondary .item-logIn .Button::after,
+#header-secondary .item-signUp .Button::after {
+  display: none !important;
+  content: none !important;
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* Keep hover, keyboard-focus, and pressed states stationary. */
+.Header-secondary .item-logIn .Button:hover,
+.Header-secondary .item-logIn .Button:focus-visible,
+.Header-secondary .item-logIn .Button:active,
+.Header-secondary .item-signUp .Button:hover,
+.Header-secondary .item-signUp .Button:focus-visible,
+.Header-secondary .item-signUp .Button:active,
+#header-secondary .item-logIn .Button:hover,
+#header-secondary .item-logIn .Button:focus-visible,
+#header-secondary .item-logIn .Button:active,
+#header-secondary .item-signUp .Button:hover,
+#header-secondary .item-signUp .Button:focus-visible,
+#header-secondary .item-signUp .Button:active {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
 }
