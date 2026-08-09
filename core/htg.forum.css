@@ -1,0 +1,2095 @@
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/conversations.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css");
+
+/* Modern phones and tablets only. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/mobile-v2.css");
+
+
+
+/* ===================================
+   Harley's Clan Forum Custom CSS V5
+
+   Glassmorphic theme with frosted glass, cyan accents,
+   smooth animations, light/dark mode, and responsive
+   support for current desktop and mobile browsers.
+
+   KaiOS and legacy Gecko support have been removed.
+
+   Version: 5.9a1
+   Author: HarleyTG
+   Updated: 2026-08-05
+
+=================================== */
+
+:root {
+  --cyan: #00ffff;
+  --text: var(--body-color, #e8e8e8);
+  --btn-text: #101414;
+
+  /* Stable fallback values for Flarum custom CSS. */
+  --cyan-readable: var(--primary-color, #00dfe6);
+  --surface-translucent: rgba(20, 20, 20, 0.90);
+  --surface-translucent-strong: rgba(15, 15, 15, 0.96);
+  --cyan-tint-15: rgba(0, 255, 255, 0.15);
+  --cyan-glow-40: rgba(0, 255, 255, 0.40);
+  --cyan-glow-30: rgba(0, 255, 255, 0.30);
+  --primary-tint-15: rgba(0, 255, 255, 0.15);
+}
+
+/* ===================================
+   HEADER TITLE + LOGO
+
+   Hard size and flex limits prevent imported animation/add-on
+   styles from enlarging the logo or pushing the forum title
+   outside the visible header area.
+=================================== */
+.Header-title {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 55vw !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+
+  color: var(--text) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+.Header-title > a#home-link,
+.Header-title > a {
+  display: flex !important;
+  align-items: center !important;
+  align-self: stretch !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+
+  margin: 0 !important;
+  padding: 0 4px 0 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+
+  color: var(--cyan-readable) !important;
+  font-size: inherit !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+
+  /* Black outline around cyan text. */
+  -webkit-text-stroke: 1.2px #000000;
+  paint-order: stroke fill;
+
+  /* Keeps the existing 3D offset style without changing layout. */
+  text-shadow:
+    1px 1px 0 #000000,
+    2px 2px 0 #000000,
+    3px 3px 0 var(--cyan-readable),
+    4px 4px 0 #000000;
+}
+
+.Header-title::before {
+  content: '' !important;
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+
+  width: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  flex: 0 0 46px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+
+  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  border-radius: 50% !important;
+  align-self: center !important;
+  vertical-align: middle !important;
+
+  /* Optical correction: the circular artwork sits slightly low
+     beside the title even when its flex box is mathematically centered. */
+  transform: translateY(-4px) !important;
+  transform-origin: center !important;
+}
+
+/* Hide Flarum's native image so only the controlled circular
+   pseudo-element logo appears. This also prevents duplicate or
+   oversized images from imported header styles. */
+.Header-title .Header-logo,
+.Header-title img.Header-logo,
+.Header-title > a > img {
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.Header-title span {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  font: inherit !important;
+}
+
+@media (max-width: 900px) {
+  .Header-title {
+    max-width: 50vw !important;
+    font-size: 22px !important;
+  }
+
+  .Header-title::before {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    flex-basis: 40px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .Header-title {
+    gap: 7px !important;
+    max-width: 48vw !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    font-size: 18px !important;
+  }
+
+  .Header-title::before {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    flex-basis: 32px !important;
+
+    /* Smaller correction for the reduced mobile logo. */
+    transform: translateY(-3px) !important;
+  }
+
+  .Header-title > a#home-link,
+  .Header-title > a {
+    padding: 0 4px 0 0 !important;
+    line-height: 1 !important;
+    -webkit-text-stroke-width: 0.8px;
+    text-shadow:
+      1px 1px 0 #000000,
+      2px 2px 0 var(--cyan-readable),
+      3px 3px 0 #000000;
+  }
+}
+
+/* ===================================
+   ALERT
+=================================== */
+.Alert {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 44px 14px 20px;
+  border-radius: 12px;
+  background: var(--surface-translucent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--body-color);
+  border: 1px solid var(--control-border);
+  border-left: 4px solid var(--cyan);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 0 12px rgba(0, 255, 255, 0.15);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.Alert-body {
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.Alert a {
+  color: var(--primary-color, var(--cyan));
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.Alert a:hover {
+  text-decoration: underline;
+}
+
+.Alert-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.Alert-controls .Button--link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 !important;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--primary-tint-15) !important;
+  color: var(--primary-color, var(--cyan-readable)) !important;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.Alert-controls .Button--link:hover,
+.Alert-controls .Button--link:focus-visible,
+.Alert-controls .Button--link:active {
+  background: var(--cyan-readable) !important;
+  color: var(--btn-text) !important;
+}
+
+.Alert-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--control-bg, rgba(255, 255, 255, 0.12));
+  color: var(--body-color, var(--text));
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s ease;
+  font-size: 13px;
+  z-index: 2;
+}
+
+.Alert-dismiss:hover {
+  background: var(--cyan-readable);
+  color: var(--btn-text);
+  transform: scale(1.08);
+}
+
+/* ===================================
+   ENTRANCE ANIMATIONS
+=================================== */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================
+   LOGOUT BUTTON
+=================================== */
+.item-logOut button {
+  color: #ff4d4d !important;
+}
+
+.item-logOut button:hover {
+  color: #ff6b6b !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.item-logOut button .Button-icon {
+  color: #ff4d4d !important;
+}
+
+.item-logOut button:hover .Button-icon {
+  color: #ff6b6b !important;
+}
+
+/* ===================================
+   PROFILE DROPDOWN
+=================================== */
+.backgrwb .logoutt,
+.backgrwb button.logwbox .Button-icon {
+  color: #ff4d4d !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb button.logwbox:hover .logoutt,
+.backgrwb button.logwbox:hover .Button-icon {
+  color: #ff6b6b !important;
+  transform: scale(1.1) !important;
+}
+
+.backgrwb button.logwbox {
+  color: #ff4d4d !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb button.logwbox:hover {
+  color: #ff6b6b !important;
+  background: rgba(255, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+.backgrwb {
+  background: var(--surface-translucent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu {
+  background: var(--surface-translucent-strong) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.35)) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+  animation: dropdownIn 0.2s ease !important;
+}
+
+.backgrwb .circletop a {
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb.backgrwb.backgrwb .circletop a i {
+  color: var(--body-color) !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .circletop a:hover i,
+.backgrwb .circletop a:focus-visible i {
+  color: var(--cyan-readable) !important;
+  transform: scale(1.2) translateY(-3px) !important;
+}
+
+.backgrwb.backgrwb.backgrwb .ulwb li,
+.backgrwb.backgrwb.backgrwb .ulwb li label.textinfo,
+.backgrwb.backgrwb.backgrwb .ulwb li strong.textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* NOTE: raised to match the .backgrwb.backgrwb.backgrwb
+   specificity used above for the base (non-hover) state, so
+   this hover rule reliably wins regardless of source order. */
+.backgrwb.backgrwb.backgrwb .ulwb li:hover {
+  transform: translateX(5px) !important;
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb.backgrwb.backgrwb .contentwb .textinfo,
+.backgrwb.backgrwb.backgrwb .textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+.backgrwb.backgrwb .contentwb .textinfo strong .username,
+.backgrwb.backgrwb .username {
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb .avatarwb {
+  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .avatarwb:hover {
+  transform: scale(1.02) !important;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.backgrwb .iconbadge .Badge {
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .iconbadge .Badge:hover {
+  transform: scale(1.2) !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu li button {
+  color: var(--body-color, #e8e8e8) !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu li button:hover {
+  background: var(--cyan-tint-15) !important;
+  color: var(--cyan-readable) !important;
+  transform: translateX(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* ===================================
+   PROFILE DROPDOWN - GUEST VARIANT
+   Matches the .backgrwb glass treatment above instead of the
+   old flat #1b2028 background. Shares the same 700px
+   bottom-sheet responsive pattern.
+=================================== */
+.backgrwbguest {
+  width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface-translucent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  color: var(--body-color, var(--text)) !important;
+  text-align: center !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.backgrwbguest a,
+.backgrwbguest .Button {
+  color: var(--cyan-readable) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.backgrwbguest a:hover,
+.backgrwbguest .Button:hover {
+  color: var(--cyan-readable) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ===================================
+   DESKTOP / TABLET PROFILE CARD SIZE
+   Keeps the Welcome Box .backgrwb at its original compact
+   200px card size. This deliberately does not apply at or
+   below 700px, so the existing regular-mobile layout remains.
+=================================== */
+@media (min-width: 701px) {
+  .backgrwb,
+  .backgrwbguest {
+    box-sizing: border-box !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+    overflow: visible !important;
+    z-index: auto !important;
+  }
+
+  .backgrwb > div {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .backgrwb > button.logwbox {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 30px !important;
+    z-index: 5 !important;
+  }
+
+  .backgrwb > button.logwbox .Button-icon {
+    width: auto !important;
+    margin: 0 !important;
+    line-height: 30px !important;
+  }
+
+  .backgrwb .avatarwb,
+  .backgrwb .AvatarEditor {
+    max-width: 100px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .backgrwb .avatarwb .Avatar {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+  }
+
+  .backgrwb .contentwb,
+  .backgrwb .ulwb.contentwb {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 200px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+/* ===================================
+   PROFILE BUTTON
+=================================== */
+li.item-session .Dropdown-toggle.Button--user {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 200, 255, 0.05)) !important;
+  border: 1px solid rgba(0, 255, 255, 0.25) !important;
+  border-radius: 40px !important;
+  padding: 4px 16px 4px 4px !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 40px !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(0, 200, 255, 0.15)) !important;
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .Avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 2px solid #00ffff !important;
+  margin: 0 !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .username {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--cyan-readable) !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .Button-label {
+  display: flex !important;
+  align-items: center !important;
+}
+
+@media (max-width: 700px) {
+  #header-secondary {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Header-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Header-controls > li {
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Button--flat {
+    padding: 6px 8px !important;
+    min-width: 32px !important;
+  }
+
+  #header-secondary .item-session .Button--user {
+    padding: 3px 8px 3px 3px !important;
+  }
+}
+
+/* ===================================
+   LOGIN / SIGNUP BUTTONS
+=================================== */
+.item-logIn .Button,
+.item-signUp .Button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--control-bg, rgba(0,0,0,0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0,0,0,0.15));
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: var(--cyan-readable) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  min-width: 0;
+  transition: all 0.25s ease;
+}
+
+.item-logIn .Button:hover,
+.item-signUp .Button:hover {
+  background: var(--control-bg-hover, rgba(0,0,0,0.08)) !important;
+  border-color: var(--cyan-readable);
+  color: var(--cyan-readable) !important;
+  box-shadow: 0 0 10px var(--cyan-glow-40);
+  transform: translateY(-1px);
+}
+
+.item-logIn .Button:active,
+.item-signUp .Button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px var(--cyan-glow-30);
+}
+
+.item-logIn .Button-label,
+.item-signUp .Button-label {
+  letter-spacing: 0.3px;
+}
+
+.item-logIn,
+.item-signUp {
+  margin: 0 4px;
+}
+
+/* ===================================
+   LOGIN HELP TOOLTIP
+=================================== */
+.LogInModal .Modal-header,
+.SignUpModal .Modal-header {
+  position: relative;
+}
+
+.LogInModal .Modal-header::after,
+.SignUpModal .Modal-header::after {
+  content: "?";
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: var(--cyan-readable);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: help;
+  pointer-events: none;
+  z-index: 4;
+  transition: all 0.2s ease;
+}
+
+.LogInModal .Modal-header::before,
+.SignUpModal .Modal-header::before {
+  content: "Usernames are NOT case-sensitive.\A Passwords ARE case-sensitive.";
+  white-space: pre-line;
+  position: absolute;
+  top: 42px;
+  left: 10px;
+  width: 230px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--body-color, #fff);
+  background: var(--body-bg, rgba(20,20,20,0.95));
+  border: 1px solid var(--control-border, rgba(0,255,255,0.3));
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  pointer-events: none;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+@media (hover: hover) {
+  .LogInModal .Modal-header:hover::after,
+  .SignUpModal .Modal-header:hover::after {
+     background: rgba(0,255,255,0.2);
+  }
+
+  .LogInModal .Modal-header:hover::before,
+  .SignUpModal .Modal-header:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.LogInModal .Modal-header:focus-within::after,
+.SignUpModal .Modal-header:focus-within::after {
+  background: rgba(0,255,255,0.2);
+}
+
+.LogInModal .Modal-header:focus-within::before,
+.SignUpModal .Modal-header:focus-within::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.LogInModal .Modal-header:not(:hover):not(:focus-within)::before,
+.SignUpModal .Modal-header:not(:hover):not(:focus-within)::before {
+  opacity: 0;
+}
+
+/* ===================================
+   SIGNUP MODAL LEGAL NOTICE
+=================================== */
+.FoF-Terms-SignUp-Legal.Alert {
+    position: relative;
+    background: var(--control-bg, rgba(25, 25, 25, 0.85));
+    color: var(--body-color, #e8e8e8);
+    border-left: 2px solid #00ffff;
+    padding: 6px 10px 6px 28px;
+    margin: 6px 0;
+    border-radius: 5px;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.FoF-Terms-SignUp-Legal.Alert::before {
+    content: "⚠";
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 0.9rem;
+}
+
+.FoF-Terms-SignUp-Legal.Alert:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===================================
+   MOBILE PROFILE
+=================================== */
+@media (max-width: 700px) {
+  #header-secondary .item-session .username {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    /* Safety net: forcing this visible again means Flarum's own
+       overflow handling for this label no longer applies. Without
+       these, a long username has nothing stopping it from pushing
+       the header into horizontal overflow. */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 96px !important;
+  }
+
+  #header-secondary .item-session .Button--user .Button-label {
+    display: flex !important;
+    /* Lets the .username child above actually shrink/ellipsize
+       inside this flex row instead of forcing the row wider. */
+    min-width: 0 !important;
+  }
+}
+
+/* ===================================
+   AUTHENTICATION MODAL SYSTEM
+
+   Scoped to login, signup, and password recovery so unrelated
+   Flarum and extension modals keep their native layouts.
+=================================== */
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content {
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 14px !important;
+  overflow: visible !important;
+  background: var(--body-bg) !important;
+  border: 1px solid var(--control-border) !important;
+  color: var(--body-color) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2) !important;
+  animation: modalIn 0.25s ease !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal),
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer {
+  background: transparent !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-header {
+  padding: 16px 20px !important;
+  border-bottom: 1px solid var(--control-border) !important;
+  background: transparent !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer {
+  text-align: center !important;
+  padding: 12px 20px !important;
+  border-top: 1px solid var(--control-border) !important;
+  background: var(--control-bg) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body {
+  padding: 20px !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-body .Form-group {
+  order: 1 !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-body .Button--primary {
+  order: 2 !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-body .LogInButtons {
+  order: 3 !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  letter-spacing: 0.4px !important;
+  color: var(--primary-color) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-close {
+  opacity: 0.45 !important;
+  transition: all 0.2s ease !important;
+  color: var(--body-color) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-close:hover {
+  opacity: 1 !important;
+  color: var(--primary-color) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Current-browser-only backdrop styling. Unsupported browsers keep
+   Flarum's native backdrop without affecting modal functionality. */
+@supports selector(body:has(.LogInModal)) {
+  body:has(:is(.LogInModal, .SignUpModal, .ForgotPasswordModal)) .Modal-backdrop {
+    background: rgba(0, 0, 0, 0.5) !important;
+    animation: fadeIn 0.2s ease !important;
+  }
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content input.FormControl {
+  background: var(--control-bg) !important;
+  border: 1px solid var(--control-border) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  color: var(--body-color) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content input.FormControl::placeholder {
+  color: var(--muted-color) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content input.FormControl:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 10px var(--cyan-glow-40) !important;
+  outline: none !important;
+  background: var(--control-bg) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 10px !important;
+  background: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-inverted-color, #fff) !important;
+  transition: background 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary .Button-label {
+  color: var(--primary-inverted-color, #fff) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary:hover {
+  background: var(--primary-color) !important;
+  opacity: 0.88 !important;
+  box-shadow: 0 0 14px var(--cyan-glow-30) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer a,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer .Button--link,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content a,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--link {
+  color: var(--primary-color) !important;
+  font-weight: 600 !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer a:hover,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer .Button--link:hover,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content a:hover,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--link:hover {
+  text-decoration: underline !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer p,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer span,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .helpText {
+  color: var(--muted-color) !important;
+  font-size: 13px !important;
+}
+
+:is(.LogInModal, .SignUpModal) .LogInButtons {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  margin-top: 8px !important;
+  background: transparent !important;
+}
+
+:is(.LogInModal, .SignUpModal) .LogInButtons::before {
+  content: "OR CONTINUE WITH";
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  color: var(--muted-color);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--control-border);
+  width: 100%;
+}
+
+:is(.LogInModal, .SignUpModal) .LogInButtons::after {
+  display: none !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButtonContainer .FoFLogInButton,
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButton--discord {
+  width: 100% !important;
+  justify-content: center !important;
+  background: var(--control-bg) !important;
+  border: 1px solid var(--control-border) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  color: var(--body-color) !important;
+  transition: background 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButtonContainer .FoFLogInButton .Button-label,
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButton--discord .Button-label {
+  color: var(--body-color) !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButtonContainer .FoFLogInButton:hover,
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButton--discord:hover {
+  background: #5865F2 !important;
+  color: #fff !important;
+  border-color: #5865F2 !important;
+  box-shadow: 0 0 15px rgba(88,101,242,0.45) !important;
+}
+
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButtonContainer .FoFLogInButton:hover .Button-label,
+:is(.LogInModal, .SignUpModal) .Modal-content .LogInButton--discord:hover .Button-label {
+  color: #fff !important;
+}
+
+.SignUpModal .FoF-Terms-SignUp-Legal.Alert {
+  display: block !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  background: var(--control-bg) !important;
+  border: 1px solid var(--control-border) !important;
+  border-left: 3px solid var(--primary-color, var(--cyan)) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px 10px 36px !important;
+  color: var(--body-color, var(--text)) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .checkbox {
+  font-size: 13px !important;
+  color: var(--body-color) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .checkbox input {
+  accent-color: var(--primary-color) !important;
+}
+
+/* ===================================
+   FILE CARD
+=================================== */
+.Post-body .wrapper {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 360px !important;
+  height: auto !important;
+  padding: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  display: block !important;
+  margin: 12px 0 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  animation: cardIn 0.35s ease both !important;
+}
+
+.Post-body .wrapper:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.5) !important;
+}
+
+.Post-body .wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0,0,0,0);
+  transition: background 0.25s ease;
+  z-index: 1;
+}
+.Post-body .wrapper:hover::before {
+  background: rgba(0,0,0,0.4);
+}
+
+.Post-body .wrapper .header,
+.Post-body .wrapper .data .title,
+.Post-body .wrapper .data .content .icon,
+.Post-body .wrapper .data .title .title-anchor,
+.Post-body .wrapper .data .title .title-sub-anchor,
+.Post-body .wrapper .data .title i {
+  display: none !important;
+}
+
+.Post-body .wrapper a[data-tag="H4"] {
+  font-size: 0 !important;
+}
+
+.Post-body .wrapper .data {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 12px !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%) !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+}
+.Post-body .wrapper .data .content {
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+}
+
+.Post-body .wrapper .data .Button--primary {
+  background: rgba(0,0,0,0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 8px 14px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  min-width: unset !important;
+  width: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  transform: translateY(6px) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4) !important;
+}
+
+.Post-body .wrapper:hover .data .Button--primary {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  background: rgba(0,0,0,0.75) !important;
+}
+
+.Post-body .wrapper:focus-within .data .Button--primary {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  background: rgba(0,0,0,0.75) !important;
+}
+
+.Post-body .wrapper .data .Button--primary:hover {
+  background: var(--primary-color) !important;
+  box-shadow: 0 0 14px rgba(0,184,240,0.5) !important;
+  transform: scale(1.08) !important;
+}
+.Post-body .wrapper .data .Button--primary i {
+  font-size: 14px !important;
+  color: #fff !important;
+  display: block !important;
+}
+.Post-body .wrapper .data .Button--primary .Button-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* CHANGED from max-width: 500px to 700px to match the mobile
+   UI overhaul breakpoint below. Previously, a viewport between
+   501-700px got the full-width file card and every other
+   touch-friendly mobile treatment, but this button still
+   needed :hover or :focus-within to become visible — unreachable
+   on a touchscreen with no cursor. Now it's always visible at
+   any width the rest of the mobile UI activates at. */
+@media (max-width: 700px) {
+  .Post-body .wrapper .data .Button--primary {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    background: rgba(0,0,0,0.75) !important;
+  }
+}
+
+
+.catalog-top {
+  display: none !important;
+}
+
+
+
+/* ===================================
+   ACCESSIBILITY + DEFENSIVE FIXES
+=================================== */
+.Alert-dismiss:focus-visible,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-close:focus-visible,
+.item-logIn .Button:focus-visible,
+.item-signUp .Button:focus-visible,
+li.item-session .Dropdown-toggle.Button--user:focus-visible,
+.backgrwb a:focus-visible,
+.backgrwb button:focus-visible,
+.backgrwbguest a:focus-visible,
+.backgrwbguest button:focus-visible,
+.Post-body .wrapper .data .Button--primary:focus-visible {
+  outline: 2px solid var(--cyan-readable, #00ffff) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.25) !important;
+}
+
+.Alert-body,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body,
+.backgrwb,
+.backgrwbguest,
+.Post-body,
+.Post-body .wrapper {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .Post-body .wrapper .data .Button--primary {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .Header-title {
+    max-width: 150px !important;
+  }
+
+  .Header-title span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  #header-secondary .item-session .username {
+    max-width: 64px !important;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY: REDUCED MOTION
+=================================== */
+@media (prefers-reduced-motion: reduce) {
+  .Alert,
+  .backgrwb,
+  .backgrwbguest,
+  .backgrwb .AvatarEditor .Dropdown-menu,
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+  .Post-body .wrapper,
+  #flarum-loading,
+  #flarum-loading::before,
+  .containerNarrow,
+  .Hero-title {
+    animation: none !important;
+  }
+
+  @supports selector(body:has(.LogInModal)) {
+    body:has(:is(.LogInModal, .SignUpModal, .ForgotPasswordModal)) .Modal-backdrop {
+      animation: none !important;
+    }
+  }
+
+  .Alert *,
+  .backgrwb *,
+  .backgrwbguest *,
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content *,
+  .Post-body .wrapper *,
+  .Header-title *,
+  .containerNarrow * {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .Post-body .wrapper:hover,
+  .Alert-dismiss:hover,
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-close:hover,
+  .backgrwb .ulwb li:hover,
+  .backgrwb .avatarwb:hover,
+  .backgrwbguest a:hover,
+  .backgrwbguest .Button:hover {
+    transform: none !important;
+  }
+}
+
+/* ===================================
+   HERO / WELCOME BANNER
+=================================== */
+
+.containerNarrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+  margin: 14px auto;
+  padding: 0 12px 8px;
+  text-align: center;
+  animation: heroFadeIn 0.35s ease;
+}
+
+.containerNarrow::before {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  background: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') center/contain no-repeat;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.Hero-title {
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 6px 0;
+  padding-bottom: 8px;
+  letter-spacing: 0.1px;
+  color: var(--cyan-readable);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .Hero-title {
+    background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: heroShimmer 6s linear infinite;
+  }
+}
+
+.Hero-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan-readable, #00ffff), transparent);
+}
+
+.Hero-subtitle {
+  color: #b3fdff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroShimmer {
+  to { background-position: -200% center; }
+}
+
+@media (max-width: 500px) {
+  .containerNarrow::before {
+    width: 28px;
+    height: 28px;
+  }
+
+  .Hero-title {
+    font-size: 18px;
+  }
+
+  .Hero-subtitle {
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .containerNarrow,
+  .Hero-title {
+    animation: none !important;
+  }
+
+  .Hero-title {
+    background-position: 0% center !important;
+  }
+}
+
+/* ===================================
+   MOBILE UI OVERHAUL (<= 700px)
+   Authentication modals and profile dropdowns become bottom
+   sheets. Grab handles are visual only; dialogs still close
+   through their normal controls or tap-outside behavior.
+=================================== */
+@media (max-width: 700px) {
+
+  /* ---- Global tap target floor + touch polish ---- */
+  .item-logIn .Button,
+  .item-signUp .Button,
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary,
+  .Alert-controls .Button--link {
+    min-height: 44px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .Alert-dismiss {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* ---- Authentication modal: bottom sheet ---- */
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) {
+    align-items: flex-end !important;
+    justify-content: center !important;
+  }
+
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    animation: sheetUp 0.28s ease !important;
+    border-bottom: none !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body {
+    padding: 18px 18px 28px !important;
+  }
+
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-header {
+    padding: 14px 18px !important;
+  }
+
+  /* Small visual handle; it does not add swipe behavior. */
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--control-border, rgba(255,255,255,0.2));
+    margin: 8px auto 4px;
+  }
+
+  @keyframes sheetUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary,
+  .item-logIn .Button,
+  .item-signUp .Button {
+    width: 100% !important;
+  }
+
+  .LogInModal .Modal-header::before,
+  .SignUpModal .Modal-header::before {
+    width: calc(100vw - 40px);
+    max-width: 280px;
+  }
+
+  /* ---- Login / signup header buttons ---- */
+  #header-secondary .item-logIn,
+  #header-secondary .item-signUp {
+    flex: 1 1 120px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+  }
+
+  #header-secondary .item-logIn .Button,
+  #header-secondary .item-signUp .Button {
+    width: 100% !important;
+    min-height: 42px !important;
+  }
+
+  /* ---- Profile dropdown: bottom sheet ---- */
+  .backgrwb {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom: none !important;
+    animation: sheetUp 0.28s ease !important;
+    padding-bottom: 16px !important;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    z-index: 1000 !important;
+  }
+
+  .backgrwb::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--control-border, rgba(255,255,255,0.2));
+    margin: 8px auto 10px;
+  }
+
+  .backgrwb .ulwb li {
+    padding: 12px 4px !important;
+    font-size: 15px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* ---- Guest profile dropdown: bottom sheet ---- */
+  .backgrwbguest {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom: none !important;
+    animation: sheetUp 0.28s ease !important;
+    padding-bottom: 16px !important;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    z-index: 1000 !important;
+  }
+
+  /* ---- Alerts ---- */
+  .Alert {
+    border-radius: 12px 12px 0 0;
+    padding: 12px 40px 12px 16px;
+  }
+
+  .Alert-dismiss {
+    top: 10px;
+    right: 10px;
+  }
+
+  .Alert-controls {
+    width: 100%;
+  }
+
+  .Alert-controls .Button--link {
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ---- File card ---- */
+  .Post-body .wrapper {
+    max-width: 100% !important;
+  }
+
+  /* ---- Hero banner ---- */
+  .containerNarrow {
+    margin: 8px auto;
+    padding: 0 16px 4px;
+  }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+  .backgrwb,
+  .backgrwbguest {
+    animation: none !important;
+  }
+}
+
+
+
+/* ===================================
+   MODAL INLINE ALERT (e.g. login error)
+   Inherits background/blur/shadow/color/animation
+   from the master .Alert rule — only sizing is
+   overridden here so it fits inside Modal-body.
+=================================== */
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-alert {
+  display: flex;
+  justify-content: center;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-alert .Alert {
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 14px;
+  gap: 6px;
+  border-radius: 10px;
+  font-size: 12.5px;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-alert .Alert-body {
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-alert .Alert--error {
+  border-left-color: #ff4d4d;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-alert .Alert-controls .Button--link {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* ===================================
+   USER CARD CONTROLS DROPDOWN — V5.9A1
+
+   Makes the Controls menu on profile UserCards render as a
+   complete glass card instead of being clipped by the cover,
+   profile card, viewport edge, or surrounding containers.
+=================================== */
+
+/* The UserCard and its immediate wrappers must allow the menu
+   to escape beyond the profile cover/card boundaries. */
+.UserPage,
+.UserPage .UserCard,
+.UserPage .UserCard .darkenBackground,
+.UserPage .UserCard > .container,
+.UserPage .UserCard .container,
+.UserPage .UserCard-info,
+.UserPage .UserCard-profile {
+  overflow: visible !important;
+}
+
+.UserPage .UserCard {
+  position: relative !important;
+  isolation: auto !important;
+  z-index: 30 !important;
+}
+
+.UserPage .UserCard .UserCard-controls,
+.UserPage .UserCard .UserCard-controls.open {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1050 !important;
+}
+
+/* Keep the Controls toggle above the open menu and make its
+   active state match the forum's cyan glass styling. */
+.UserPage .UserCard .UserCard-controls > .Dropdown-toggle {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.UserPage .UserCard .UserCard-controls.open > .Dropdown-toggle,
+.UserPage .UserCard .UserCard-controls > .Dropdown-toggle[aria-expanded="true"] {
+  border-color: var(--cyan-readable, #00ffff) !important;
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 255, 0.12),
+    0 0 14px rgba(0, 255, 255, 0.20) !important;
+}
+
+/* Shared dropdown-card appearance. */
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+  box-sizing: border-box !important;
+  display: none;
+  padding: 8px !important;
+  margin: 0 !important;
+
+  background: var(--surface-translucent-strong, rgba(15, 15, 15, 0.96)) !important;
+  color: var(--body-color, #e8e8e8) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.30)) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.48),
+    0 0 18px rgba(0, 255, 255, 0.12) !important;
+
+  backdrop-filter: blur(18px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(120%) !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+
+  z-index: 10000 !important;
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--cyan-readable, #00ffff)
+    rgba(255, 255, 255, 0.08);
+}
+
+/* Bootstrap/Flarum can expose the menu through either the open
+   class or aria state, so support both. */
+.UserPage .UserCard .UserCard-controls.open > .Dropdown-menu,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu.show,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu[style*="display: block"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Reset menu rows so every control remains inside the card. */
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li + li {
+  margin-top: 2px !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 9px 11px !important;
+
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: var(--body-color, #e8e8e8) !important;
+
+  text-align: left !important;
+  line-height: 1.3 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a:hover,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a:focus-visible,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button:hover,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button:focus-visible {
+  background: var(--cyan-tint-15, rgba(0, 255, 255, 0.15)) !important;
+  color: var(--cyan-readable, #00ffff) !important;
+  box-shadow: inset 3px 0 0 var(--cyan-readable, #00ffff) !important;
+  outline: none !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .Button-icon,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .icon {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .Button-label {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  color: inherit !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Separators remain visible without expanding the card. */
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu > .Dropdown-separator {
+  height: 1px !important;
+  min-height: 1px !important;
+  margin: 7px 4px !important;
+  padding: 0 !important;
+  background: var(--control-border, rgba(255, 255, 255, 0.12)) !important;
+}
+
+/* Erase is a destructive profile action and should match Log Out. */
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > button,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu
+:is(a, button):has(.fa-eraser) {
+  color: #ff4d4d !important;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a:hover,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a:focus-visible,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > button:hover,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > button:focus-visible,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu
+:is(a, button):has(.fa-eraser):hover,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu
+:is(a, button):has(.fa-eraser):focus-visible {
+  background: rgba(220, 38, 38, 0.90) !important;
+  color: #ffffff !important;
+  box-shadow: inset 3px 0 0 #ff9b9b !important;
+}
+
+/* Desktop/tablet: anchor the complete card below the Controls
+   button and constrain it to the visible viewport. */
+@media (min-width: 701px) {
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: max-content !important;
+    min-width: 270px !important;
+    max-width: min(360px, calc(100vw - 30px)) !important;
+    max-height: min(62vh, calc(100dvh - 150px)) !important;
+
+    transform: none !important;
+    transform-origin: top right !important;
+  }
+}
+
+/* Mobile: show the controls as a bottom-sheet card so all items
+   remain viewable and tappable without running off-screen. */
+@media (max-width: 700px) {
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+    position: fixed !important;
+    top: auto !important;
+    right: 8px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 8px !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: min(72vh, calc(100dvh - 24px)) !important;
+
+    border-radius: 18px !important;
+    padding: 10px !important;
+    transform: none !important;
+    transform-origin: bottom center !important;
+    z-index: 11000 !important;
+  }
+
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu::before {
+    content: "" !important;
+    display: block !important;
+    width: 38px !important;
+    height: 4px !important;
+    margin: 0 auto 8px !important;
+    border-radius: 999px !important;
+    background: var(--control-border, rgba(255, 255, 255, 0.22)) !important;
+  }
+
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a,
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button {
+    min-height: 46px !important;
+    padding: 11px 13px !important;
+    font-size: 14px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--cyan-readable, #00ffff);
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu,
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===================================
+   AFRUX WELCOME WIDGET HEADER FIX
+
+   Keeps the desktop welcome/profile card below Flarum's fixed
+   header while scrolling. This prevents the card's rounded top,
+   avatar edge, and red Log Out control from disappearing behind
+   the header.
+=================================== */
+@media (min-width: 1027px) {
+  .AfruxWidgets-sideNavAlt.AfruxWidgets-WidgetSection {
+    position: sticky !important;
+    top: 64px !important;
+    align-self: flex-start !important;
+    height: max-content !important;
+    overflow: visible !important;
+    z-index: 25 !important;
+  }
+
+  .AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget .AfruxWidgets-Widget-content,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget .containerwb,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb {
+    overflow: visible !important;
+  }
+
+  /* The extension already adds spacing around the widget.
+     Removing only the top margin gives the sticky header offset
+     one predictable source of spacing. */
+  .AfruxWidgets-sideNavAlt .welcomebox-widget .containerwb {
+    margin-top: 0 !important;
+  }
+
+  .AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb {
+    position: relative !important;
+  }
+
+  /* Restore and keep the Log Out control above the avatar/card. */
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.Dropdown-toggle.Button.logwbox.hasIcon {
+    position: absolute !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    top: 8px !important;
+    right: 8px !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255, 0, 0, 0.10) !important;
+    color: #ff4d4d !important;
+    line-height: 30px !important;
+    z-index: 30 !important;
+  }
+
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox .Button-icon,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox .logoutt {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    margin: 0 !important;
+    color: #ff4d4d !important;
+    font-size: 14px !important;
+    line-height: 30px !important;
+  }
+
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox:hover,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox:focus-visible {
+    background: rgba(255, 0, 0, 0.18) !important;
+    color: #ff6b6b !important;
+  }
+
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox:hover .Button-icon,
+  .AfruxWidgets-sideNavAlt .welcomebox-widget
+  .backgrwb > button.logwbox:focus-visible .Button-icon {
+    color: #ff6b6b !important;
+  }
+}
+/* =========================================================
+   SYSTEM-WIDE DANGER BUTTONS — LOG OUT + ERASE
+   ========================================================= */
+
+/* Default red text and icons */
+button:has(.fa-eraser),
+a:has(.fa-eraser),
+button:has(.fa-sign-out-alt),
+a:has(.fa-sign-out-alt),
+button:has(.fa-right-from-bracket),
+a:has(.fa-right-from-bracket),
+.item-logOut button,
+.item-logOut a,
+.item-logout button,
+.item-logout a {
+  color: #ff4d4d !important;
+}
+
+/* Ensure labels and icons inherit the danger color */
+button:has(.fa-eraser) .Button-label,
+button:has(.fa-eraser) .Button-icon,
+a:has(.fa-eraser) .Button-label,
+a:has(.fa-eraser) .Button-icon,
+button:has(.fa-sign-out-alt) .Button-label,
+button:has(.fa-sign-out-alt) .Button-icon,
+a:has(.fa-sign-out-alt) .Button-label,
+a:has(.fa-sign-out-alt) .Button-icon,
+button:has(.fa-right-from-bracket) .Button-label,
+button:has(.fa-right-from-bracket) .Button-icon,
+a:has(.fa-right-from-bracket) .Button-label,
+a:has(.fa-right-from-bracket) .Button-icon,
+.item-logOut .Button-label,
+.item-logOut .Button-icon,
+.item-logout .Button-label,
+.item-logout .Button-icon {
+  color: inherit !important;
+}
+
+/* Red background on hover, focus, or keyboard selection */
+button:has(.fa-eraser):hover,
+button:has(.fa-eraser):focus,
+a:has(.fa-eraser):hover,
+a:has(.fa-eraser):focus,
+button:has(.fa-sign-out-alt):hover,
+button:has(.fa-sign-out-alt):focus,
+a:has(.fa-sign-out-alt):hover,
+a:has(.fa-sign-out-alt):focus,
+button:has(.fa-right-from-bracket):hover,
+button:has(.fa-right-from-bracket):focus,
+a:has(.fa-right-from-bracket):hover,
+a:has(.fa-right-from-bracket):focus,
+.item-logOut button:hover,
+.item-logOut button:focus,
+.item-logOut a:hover,
+.item-logOut a:focus,
+.item-logout button:hover,
+.item-logout button:focus,
+.item-logout a:hover,
+.item-logout a:focus {
+  color: #fff !important;
+  background: rgba(220, 38, 38, 0.9) !important;
+}
