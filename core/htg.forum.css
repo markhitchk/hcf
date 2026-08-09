@@ -18,7 +18,7 @@
 
    KaiOS and legacy Gecko support have been removed.
 
-   Version: 5.9a3
+   Version: 5.9a4
    Author: HarleyTG
    Updated: 2026-08-09
 
@@ -711,127 +711,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 .item-logIn,
 .item-signUp {
   margin: 0 4px;
-}
-
-/* ===================================
-   LOGIN HELP TOOLTIP
-=================================== */
-.LogInModal .Modal-header,
-.SignUpModal .Modal-header {
-  position: relative;
-  overflow: visible !important;
-  z-index: 10;
-}
-
-/* Keep the form layer below the header help panel. Flarum paints
-   .Modal-body after .Modal-header, which otherwise covers the
-   part of the tooltip that extends below the short header. */
-.LogInModal .Modal-body,
-.SignUpModal .Modal-body {
-  position: relative;
-  z-index: 1;
-}
-
-.LogInModal .Modal-header::after,
-.SignUpModal .Modal-header::after {
-  content: "?";
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  color: var(--cyan-readable);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: help;
-  pointer-events: none;
-  z-index: 4;
-  animation: none !important;
-  transform: none !important;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.LogInModal .Modal-header::before,
-.SignUpModal .Modal-header::before {
-  content: "Usernames are NOT case-sensitive.\A Passwords ARE case-sensitive.";
-  white-space: pre-line;
-  position: absolute;
-  top: 42px;
-  left: 10px;
-  width: 230px;
-  max-width: calc(100% - 20px);
-  box-sizing: border-box;
-  padding: 10px 12px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--body-color, #fff);
-  background: var(--body-bg, rgba(20,20,20,0.95));
-  border: 1px solid var(--control-border, rgba(0,255,255,0.3));
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 3;
-  animation: none !important;
-  transform: none !important;
-
-  /* Keep the help text anchored. Only its visibility fades;
-     no translate animation means it cannot drift on screen. */
-  transition:
-    opacity 0.2s ease,
-    visibility 0s linear 0.2s;
-}
-
-/* On wide screens, place the panel beside the question mark so
-   it never covers the username field or modal title. */
-@media (hover: hover) and (min-width: 1000px) {
-  .LogInModal .Modal-header::before,
-  .SignUpModal .Modal-header::before {
-    top: 0;
-    right: calc(100% + 12px);
-    left: auto;
-    width: 260px;
-    max-width: 260px;
-  }
-}
-
-@media (hover: hover) {
-  .LogInModal .Modal-header:hover::after,
-  .SignUpModal .Modal-header:hover::after {
-     background: rgba(0,255,255,0.2);
-  }
-
-  .LogInModal .Modal-header:hover::before,
-  .SignUpModal .Modal-header:hover::before {
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0s;
-  }
-}
-
-.LogInModal .Modal-header:focus-within::after,
-.SignUpModal .Modal-header:focus-within::after {
-  background: rgba(0,255,255,0.2);
-}
-
-.LogInModal .Modal-header:focus-within::before,
-.SignUpModal .Modal-header:focus-within::before {
-  opacity: 1;
-  visibility: visible;
-  transition-delay: 0s;
-}
-
-.LogInModal .Modal-header:not(:hover):not(:focus-within)::before,
-.SignUpModal .Modal-header:not(:hover):not(:focus-within)::before {
-  opacity: 0;
 }
 
 /* ===================================
@@ -1542,12 +1421,6 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
   .item-logIn .Button,
   .item-signUp .Button {
     width: 100% !important;
-  }
-
-  .LogInModal .Modal-header::before,
-  .SignUpModal .Modal-header::before {
-    width: calc(100vw - 40px);
-    max-width: 280px;
   }
 
   /* ---- Login / signup header buttons ---- */
