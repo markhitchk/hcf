@@ -18,7 +18,7 @@
 
    KaiOS and legacy Gecko support have been removed.
 
-   Version: 5.9a3
+   Version: 5.9a4
    Author: HarleyTG
    Updated: 2026-08-09
 
@@ -788,19 +788,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   transition:
     opacity 0.2s ease,
     visibility 0s linear 0.2s;
-}
-
-/* On wide screens, place the panel beside the question mark so
-   it never covers the username field or modal title. */
-@media (hover: hover) and (min-width: 1000px) {
-  .LogInModal .Modal-header::before,
-  .SignUpModal .Modal-header::before {
-    top: 0;
-    right: calc(100% + 12px);
-    left: auto;
-    width: 260px;
-    max-width: 260px;
-  }
 }
 
 @media (hover: hover) {
