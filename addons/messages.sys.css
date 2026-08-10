@@ -239,30 +239,48 @@ li.startConvo::before {
 }
 
 /*
- * BetterFlarum Messenger leaves the button at Flarum's natural content height.
- * Keep that behavior on both the dropdown and /conversations: fixed heights and
- * an absolutely positioned label can crop or lower the text at large zoom.
+ * Responsive, zoom-safe Start Conversation button.
+ * BetterFlarum lets Flarum calculate the control's natural height. Preserve
+ * that behavior, prevent flex shrinking, and let the label wrap when browser
+ * zoom or a narrow viewport leaves less horizontal room.
  */
 .MessagesDropdown .ConversationsList .people-list > .Button--primary,
 .ConversationsPage .ConversationsList .people-list > .Button--primary {
   box-sizing: border-box !important;
   position: static !important;
-  display: grid !important;
-  place-items: center !important;
+  inset: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: stretch !important;
   flex: 0 0 auto !important;
-  width: 90% !important;
+  inline-size: auto !important;
+  width: auto !important;
+  min-inline-size: 0 !important;
   min-width: 0 !important;
+  block-size: auto !important;
   height: auto !important;
-  min-height: 36px !important;
+  min-block-size: 44px !important;
+  min-height: 44px !important;
+  max-block-size: none !important;
   max-height: none !important;
   margin: 15px 10px !important;
+  margin-block: clamp(8px, 2dvh, 15px) !important;
+  margin-inline: 10px !important;
   padding: 8px 13px !important;
+  padding-block: clamp(6px, 1.2dvh, 8px) !important;
   overflow: visible !important;
   border-radius: 30px !important;
   font-size: 13px !important;
-  line-height: 20px !important;
+  line-height: 1.25 !important;
   text-align: center !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  transform: none !important;
+  translate: none !important;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 .MessagesDropdown .ConversationsList .people-list > .Button--primary > .Button-label,
@@ -271,21 +289,35 @@ li.startConvo::before {
   position: static !important;
   inset: auto !important;
   display: block !important;
+  flex: 0 1 auto !important;
+  inline-size: auto !important;
   width: auto !important;
+  max-inline-size: 100% !important;
   max-width: 100% !important;
+  block-size: auto !important;
   height: auto !important;
+  min-block-size: 0 !important;
   min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
   font-size: inherit !important;
-  line-height: 20px !important;
+  line-height: inherit !important;
   text-align: center !important;
   vertical-align: baseline !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  text-wrap: balance !important;
   text-overflow: clip !important;
   transform: none !important;
   translate: none !important;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
   pointer-events: none !important;
 }
 
