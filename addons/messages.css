@@ -1,0 +1,19 @@
+/* ========================================================================== 
+   Harley's Clan Forum — Messaging UI Bundle
+   File: addons/messages.css
+   Purpose: single entry point for private messages, conversations, and
+            notification styling.
+   Updated: 2026-08-09
+
+   Load order matters:
+   1. messenger.css provides the extension/base messaging layout
+   2. conversations.css provides Harley's /conversations page overrides
+   3. notifications-messenger-style.css provides notification styling and
+      the final hard isolation/fixes for the Start Conversation controls
+
+   Use this file instead of importing the three files separately.
+   ========================================================================== */
+
+@import url("./messenger.css");
+@import url("./conversations.css");
+@import url("./notifications-messenger-style.css");
