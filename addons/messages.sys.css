@@ -240,6 +240,7 @@ li.startConvo::before {
 
 .ConversationsList .people-list .Button--primary {
   box-sizing: border-box !important;
+  position: relative !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -250,23 +251,37 @@ li.startConvo::before {
   min-height: 36px !important;
   max-height: 36px !important;
   margin: 15px 10px !important;
-  padding: 8px 13px !important;
+  padding: 0 13px !important;
   overflow: visible !important;
   border-radius: 30px !important;
+  font-size: 13px !important;
   line-height: 20px !important;
   white-space: nowrap !important;
 }
 
 .ConversationsList .people-list .Button--primary .Button-label {
-  display: block !important;
-  width: auto !important;
+  box-sizing: border-box !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
   max-width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 0 13px !important;
   overflow: visible !important;
+  font-size: 13px !important;
   line-height: 20px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
   white-space: nowrap !important;
   text-overflow: clip !important;
+  transform: none !important;
+  translate: none !important;
+  pointer-events: none !important;
 }
 
 .ConversationsList .people-list .ConversationsList-list {
