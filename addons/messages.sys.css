@@ -239,12 +239,42 @@ li.startConvo::before {
 }
 
 .ConversationsList .people-list .Button--primary {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 36px !important;
+  width: 90% !important;
+  min-width: 0 !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  margin: 15px 10px !important;
+  padding: 8px 13px !important;
+  overflow: visible !important;
   border-radius: 30px !important;
-  margin: 15px 10px;
-  width: 90%;
+  line-height: 20px !important;
+  white-space: nowrap !important;
+}
+
+.ConversationsList .people-list .Button--primary .Button-label {
+  display: block !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  line-height: 20px !important;
+  white-space: nowrap !important;
+  text-overflow: clip !important;
 }
 
 .ConversationsList .people-list .ConversationsList-list {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   flex-direction: column;
   padding: 10px;
   gap: 10px;
