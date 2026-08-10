@@ -238,45 +238,50 @@ li.startConvo::before {
   padding: 3%;
 }
 
-.ConversationsList .people-list .Button--primary {
+/*
+ * BetterFlarum Messenger leaves the button at Flarum's natural content height.
+ * Keep that behavior on both the dropdown and /conversations: fixed heights and
+ * an absolutely positioned label can crop or lower the text at large zoom.
+ */
+.MessagesDropdown .ConversationsList .people-list > .Button--primary,
+.ConversationsPage .ConversationsList .people-list > .Button--primary {
   box-sizing: border-box !important;
-  position: relative !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex: 0 0 36px !important;
+  position: static !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
   width: 90% !important;
   min-width: 0 !important;
-  height: 36px !important;
+  height: auto !important;
   min-height: 36px !important;
-  max-height: 36px !important;
+  max-height: none !important;
   margin: 15px 10px !important;
-  padding: 0 13px !important;
+  padding: 8px 13px !important;
   overflow: visible !important;
   border-radius: 30px !important;
   font-size: 13px !important;
   line-height: 20px !important;
+  text-align: center !important;
   white-space: nowrap !important;
 }
 
-.ConversationsList .people-list .Button--primary .Button-label {
+.MessagesDropdown .ConversationsList .people-list > .Button--primary > .Button-label,
+.ConversationsPage .ConversationsList .people-list > .Button--primary > .Button-label {
   box-sizing: border-box !important;
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: auto !important;
   max-width: 100% !important;
-  height: 100% !important;
+  height: auto !important;
   min-height: 0 !important;
   margin: 0 !important;
-  padding: 0 13px !important;
+  padding: 0 !important;
   overflow: visible !important;
-  font-size: 13px !important;
+  font-size: inherit !important;
   line-height: 20px !important;
   text-align: center !important;
-  vertical-align: middle !important;
+  vertical-align: baseline !important;
   white-space: nowrap !important;
   text-overflow: clip !important;
   transform: none !important;
