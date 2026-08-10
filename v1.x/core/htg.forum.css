@@ -1,5 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/animations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.sys.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.css");
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/welcome-loading.css");
 
 /* Modern phones and tablets only. */
@@ -35,6 +35,718 @@
   --cyan-glow-40: rgba(0, 255, 255, 0.40);
   --cyan-glow-30: rgba(0, 255, 255, 0.30);
   --primary-tint-15: rgba(0, 255, 255, 0.15);
+}
+
+/* ===================================
+   HEADER TITLE + LOGO
+
+   Hard size and flex limits prevent imported animation/add-on
+   styles from enlarging the logo or pushing the forum title
+   outside the visible header area.
+=================================== */
+.Header-title {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 55vw !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+
+  color: var(--text) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+.Header-title > a#home-link,
+.Header-title > a {
+  display: flex !important;
+  align-items: center !important;
+  align-self: stretch !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+
+  margin: 0 !important;
+  padding: 0 4px 0 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+
+  color: var(--cyan-readable) !important;
+  font-size: inherit !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+
+  /* Black outline around cyan text. */
+  -webkit-text-stroke: 1.2px #000000;
+  paint-order: stroke fill;
+
+  /* Keeps the existing 3D offset style without changing layout. */
+  text-shadow:
+    1px 1px 0 #000000,
+    2px 2px 0 #000000,
+    3px 3px 0 var(--cyan-readable),
+    4px 4px 0 #000000;
+}
+
+.Header-title::before {
+  content: '' !important;
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+
+  width: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  flex: 0 0 46px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+
+  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg') !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  border-radius: 50% !important;
+  align-self: center !important;
+  vertical-align: middle !important;
+
+  /* Optical correction: the circular artwork sits slightly low
+     beside the title even when its flex box is mathematically centered. */
+  transform: translateY(-4px) !important;
+  transform-origin: center !important;
+}
+
+/* Hide Flarum's native image so only the controlled circular
+   pseudo-element logo appears. This also prevents duplicate or
+   oversized images from imported header styles. */
+.Header-title .Header-logo,
+.Header-title img.Header-logo,
+.Header-title > a > img {
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.Header-title span {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  font: inherit !important;
+}
+
+@media (max-width: 900px) {
+  .Header-title {
+    max-width: 50vw !important;
+    font-size: 22px !important;
+  }
+
+  .Header-title::before {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    flex-basis: 40px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .Header-title {
+    gap: 7px !important;
+    max-width: 48vw !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    font-size: 18px !important;
+  }
+
+  .Header-title::before {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    flex-basis: 32px !important;
+
+    /* Smaller correction for the reduced mobile logo. */
+    transform: translateY(-3px) !important;
+  }
+
+  .Header-title > a#home-link,
+  .Header-title > a {
+    padding: 0 4px 0 0 !important;
+    line-height: 1 !important;
+    -webkit-text-stroke-width: 0.8px;
+    text-shadow:
+      1px 1px 0 #000000,
+      2px 2px 0 var(--cyan-readable),
+      3px 3px 0 #000000;
+  }
+}
+
+/* ===================================
+   ALERT
+=================================== */
+.Alert {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 44px 14px 20px;
+  border-radius: 12px;
+  background: var(--surface-translucent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--body-color);
+  border: 1px solid var(--control-border);
+  border-left: 4px solid var(--cyan);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 0 12px rgba(0, 255, 255, 0.15);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.Alert-body {
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.Alert a {
+  color: var(--primary-color, var(--cyan));
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.Alert a:hover {
+  text-decoration: underline;
+}
+
+.Alert-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.Alert-controls .Button--link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 !important;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--primary-tint-15) !important;
+  color: var(--primary-color, var(--cyan-readable)) !important;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.Alert-controls .Button--link:hover,
+.Alert-controls .Button--link:focus-visible,
+.Alert-controls .Button--link:active {
+  background: var(--cyan-readable) !important;
+  color: var(--btn-text) !important;
+}
+
+.Alert-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--control-bg, rgba(255, 255, 255, 0.12));
+  color: var(--body-color, var(--text));
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s ease;
+  font-size: 13px;
+  z-index: 2;
+}
+
+.Alert-dismiss:hover {
+  background: var(--cyan-readable);
+  color: var(--btn-text);
+  transform: scale(1.08);
+}
+
+/* ===================================
+   ENTRANCE ANIMATIONS
+=================================== */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================
+   LOGOUT BUTTON
+=================================== */
+.item-logOut button {
+  color: #ff4d4d !important;
+}
+
+.item-logOut button:hover {
+  color: #ff6b6b !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.item-logOut button .Button-icon {
+  color: #ff4d4d !important;
+}
+
+.item-logOut button:hover .Button-icon {
+  color: #ff6b6b !important;
+}
+
+/* ===================================
+   PROFILE DROPDOWN
+=================================== */
+.backgrwb .logoutt,
+.backgrwb button.logwbox .Button-icon {
+  color: #ff4d4d !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb button.logwbox:hover .logoutt,
+.backgrwb button.logwbox:hover .Button-icon {
+  color: #ff6b6b !important;
+  transform: scale(1.1) !important;
+}
+
+.backgrwb button.logwbox {
+  color: #ff4d4d !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb button.logwbox:hover {
+  color: #ff6b6b !important;
+  background: rgba(255, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+.backgrwb {
+  background: var(--surface-translucent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu {
+  background: var(--surface-translucent-strong) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.35)) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+  animation: dropdownIn 0.2s ease !important;
+}
+
+.backgrwb .circletop a {
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb.backgrwb.backgrwb .circletop a i {
+  color: var(--body-color) !important;
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .circletop a:hover i,
+.backgrwb .circletop a:focus-visible i {
+  color: var(--cyan-readable) !important;
+  transform: scale(1.2) translateY(-3px) !important;
+}
+
+.backgrwb.backgrwb.backgrwb .ulwb li,
+.backgrwb.backgrwb.backgrwb .ulwb li label.textinfo,
+.backgrwb.backgrwb.backgrwb .ulwb li strong.textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* NOTE: raised to match the .backgrwb.backgrwb.backgrwb
+   specificity used above for the base (non-hover) state, so
+   this hover rule reliably wins regardless of source order. */
+.backgrwb.backgrwb.backgrwb .ulwb li:hover {
+  transform: translateX(5px) !important;
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb.backgrwb.backgrwb .contentwb .textinfo,
+.backgrwb.backgrwb.backgrwb .textinfo {
+  color: var(--body-color) !important;
+  transition: all 0.2s ease !important;
+}
+
+.backgrwb.backgrwb .contentwb .textinfo strong .username,
+.backgrwb.backgrwb .username {
+  color: var(--cyan-readable) !important;
+}
+
+.backgrwb .avatarwb {
+  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .avatarwb:hover {
+  transform: scale(1.02) !important;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.backgrwb .iconbadge .Badge {
+  transition: all 0.3s ease !important;
+}
+
+.backgrwb .iconbadge .Badge:hover {
+  transform: scale(1.2) !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu li button {
+  color: var(--body-color, #e8e8e8) !important;
+}
+
+.backgrwb .AvatarEditor .Dropdown-menu li button:hover {
+  background: var(--cyan-tint-15) !important;
+  color: var(--cyan-readable) !important;
+  transform: translateX(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* ===================================
+   PROFILE DROPDOWN - GUEST VARIANT
+   Matches the .backgrwb glass treatment above instead of the
+   old flat #1b2028 background. Shares the same 700px
+   bottom-sheet responsive pattern.
+=================================== */
+.backgrwbguest {
+  width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface-translucent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--control-border, rgba(0, 255, 255, 0.25)) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  color: var(--body-color, var(--text)) !important;
+  text-align: center !important;
+  animation: dropdownIn 0.25s ease !important;
+}
+
+.backgrwbguest a,
+.backgrwbguest .Button {
+  color: var(--cyan-readable) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.backgrwbguest a:hover,
+.backgrwbguest .Button:hover {
+  color: var(--cyan-readable) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ===================================
+   DESKTOP / TABLET PROFILE CARD SIZE
+   Keeps the Welcome Box .backgrwb at its original compact
+   200px card size. This deliberately does not apply at or
+   below 700px, so the existing regular-mobile layout remains.
+=================================== */
+@media (min-width: 701px) {
+  .backgrwb,
+  .backgrwbguest {
+    box-sizing: border-box !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+    overflow: visible !important;
+    z-index: auto !important;
+  }
+
+  .backgrwb > div {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .backgrwb > button.logwbox {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 30px !important;
+    z-index: 5 !important;
+  }
+
+  .backgrwb > button.logwbox .Button-icon {
+    width: auto !important;
+    margin: 0 !important;
+    line-height: 30px !important;
+  }
+
+  .backgrwb .avatarwb,
+  .backgrwb .AvatarEditor {
+    max-width: 100px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .backgrwb .avatarwb .Avatar {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+  }
+
+  .backgrwb .contentwb,
+  .backgrwb .ulwb.contentwb {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 200px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+/* ===================================
+   PROFILE BUTTON
+=================================== */
+li.item-session .Dropdown-toggle.Button--user {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 200, 255, 0.05)) !important;
+  border: 1px solid rgba(0, 255, 255, 0.25) !important;
+  border-radius: 40px !important;
+  padding: 4px 16px 4px 4px !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 40px !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(0, 200, 255, 0.15)) !important;
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .Avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 2px solid #00ffff !important;
+  margin: 0 !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .username {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--cyan-readable) !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .Button-label {
+  display: flex !important;
+  align-items: center !important;
+}
+
+@media (max-width: 700px) {
+  #header-secondary {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Header-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Header-controls > li {
+    min-width: 0 !important;
+  }
+
+  #header-secondary .Button--flat {
+    padding: 6px 8px !important;
+    min-width: 32px !important;
+  }
+
+  #header-secondary .item-session .Button--user {
+    padding: 3px 8px 3px 3px !important;
+  }
+}
+
+/* ===================================
+   LOGIN / SIGNUP BUTTONS
+=================================== */
+.item-logIn .Button,
+.item-signUp .Button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--control-bg, rgba(0,0,0,0.05)) !important;
+  border: 1px solid var(--control-border, rgba(0,0,0,0.15));
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: var(--cyan-readable) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  min-width: 0;
+  transition: all 0.25s ease;
+}
+
+.item-logIn .Button:hover,
+.item-signUp .Button:hover {
+  background: var(--control-bg-hover, rgba(0,0,0,0.08)) !important;
+  border-color: var(--cyan-readable);
+  color: var(--cyan-readable) !important;
+  box-shadow: 0 0 10px var(--cyan-glow-40);
+  transform: translateY(-1px);
+}
+
+.item-logIn .Button:active,
+.item-signUp .Button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px var(--cyan-glow-30);
+}
+
+.item-logIn .Button-label,
+.item-signUp .Button-label {
+  letter-spacing: 0.3px;
+}
+
+.item-logIn,
+.item-signUp {
+  margin: 0 4px;
+}
+
+/* ===================================
+   LOGIN HELP TOOLTIP
+=================================== */
+.LogInModal .Modal-header,
+.SignUpModal .Modal-header {
+  position: relative;
+  overflow: visible !important;
+  z-index: 10;
+}
+
+/* Keep the form layer below the header help panel. Flarum paints
+   .Modal-body after .Modal-header, which otherwise covers the
+   part of the tooltip that extends below the short header. */
+.LogInModal .Modal-body,
+.SignUpModal .Modal-body {
+  position: relative;
+  z-index: 1;
+}
+
+.LogInModal .Modal-header::after,
+.SignUpModal .Modal-header::after {
+  content: "?";
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: var(--cyan-readable);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  c  --primary-tint-15: rgba(0, 255, 255, 0.15);
 }
 
 /* ===================================
