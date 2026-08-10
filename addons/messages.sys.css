@@ -687,38 +687,40 @@ div#people-list::before {
 
 /* ==========================================================================
    FULL-PAGE / POP-OUT PARITY
-   Keep /conversations visually identical to the normal Messages pop-out.
-   The page wrapper replaces Dropdown-menu, so it must share its geometry.
+   /conversations uses the same shell and inner grid as the Messages pop-out.
+   Target ConversationsPage directly: bodyClass placement varies by Flarum build.
    ========================================================================== */
 
-.App--conversations .App-content {
+/* Remove only the page-level top gap when this view is present. */
+.App-content:has(.ConversationsPage) {
   padding-top: 0 !important;
 }
 
-.App--conversations .ConversationsPage {
-  justify-content: center;
-  margin-right: auto;
-  margin-left: auto;
+/* Match .MessagesDropdown .Dropdown-menu geometry. */
+.ConversationsPage {
+  box-sizing: border-box !important;
+  display: flex !important;
+  justify-content: stretch !important;
+  width: 725px !important;
+  max-width: calc(100% - 30px) !important;
+  max-height: calc(100vh - var(--header-height, 52px) - 0.5em) !important;
+  max-height: calc(100dvh - var(--header-height, 52px) - 0.5em) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }
 
+/* Match the exact Messenger base used inside the header pop-out. */
 @media (min-width: 992px) {
-  .App--conversations .ConversationsPage {
-    width: 725px !important;
-    max-width: calc(100% - 30px) !important;
-    height: calc(100vh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
-    height: calc(100dvh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
-    max-height: calc(100vh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
-    max-height: calc(100dvh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
-    padding: 0 !important;
-  }
-
-  .App--conversations .ConversationsPage > .ConversationsList {
+  .ConversationsPage > .ConversationsList {
+    box-sizing: border-box !important;
     display: grid !important;
     grid-template-columns: 250px minmax(0, 1fr) !important;
     grid-auto-rows: 100% !important;
     flex: 1 1 auto !important;
     width: 100% !important;
-    height: 100% !important;
+    min-width: 0 !important;
     min-height: 0 !important;
     max-width: none !important;
     margin: 0 !important;
@@ -730,7 +732,26 @@ div#people-list::before {
     box-shadow:
       rgba(0, 0, 0, 0.19) 0 10px 20px,
       rgba(0, 0, 0, 0.23) 0 6px 6px !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+
+  .ConversationsPage > .ConversationsList > .people-list,
+  .ConversationsPage > .ConversationsList > .chat {
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+}
+
+/* Keep the extension's intended single-column mobile page. */
+@media (max-width: 991.98px) {
+  .ConversationsPage {
+    width: 100% !important;
+    max-width: 890px !important;
+  }
+
+  .ConversationsPage > .ConversationsList {
+    width: 100% !important;
+    min-width: 0 !important;
   }
 }
