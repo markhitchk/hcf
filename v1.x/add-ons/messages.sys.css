@@ -480,6 +480,205 @@ div#people-list::before {
   }
 }
 
+/* ---------- Flagged posts dropdown ---------- */
+/*
+ * Flarum 1.x renders FlagList directly inside a notification-style
+ * Dropdown-menu. Give only that menu the same dark glass and cyan treatment
+ * as Messenger without changing unrelated Flarum dropdowns.
+ */
+.Dropdown-menu.Dropdown-menu--right:has(> .FlagList),
+.Header-secondary .item-flags .Dropdown-menu,
+#header-secondary .item-flags .Dropdown-menu,
+.FlagsDropdown > .Dropdown-menu {
+  --hc-flags-accent: var(--cyan-readable, var(--cyan, #00ffff));
+  --hc-flags-text: #efffff;
+  --hc-flags-muted: rgba(225, 248, 248, 0.68);
+  box-sizing: border-box !important;
+  max-width: calc(100vw - 30px) !important;
+  max-height: calc(100vh - var(--header-height, 52px) - 0.5em) !important;
+  max-height: calc(100dvh - var(--header-height, 52px) - 0.5em) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0, 255, 255, 0.32) !important;
+  border-radius: 30px !important;
+  background: rgba(0, 0, 0, 0.82) !important;
+  color: var(--hc-flags-text) !important;
+  box-shadow:
+    rgba(0, 0, 0, 0.19) 0 10px 20px,
+    rgba(0, 0, 0, 0.23) 0 6px 6px,
+    0 0 18px rgba(0, 255, 255, 0.12) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+}
+
+@media (min-width: 992px) {
+  .Dropdown-menu.Dropdown-menu--right:has(> .FlagList),
+  .Header-secondary .item-flags .Dropdown-menu,
+  #header-secondary .item-flags .Dropdown-menu,
+  .FlagsDropdown > .Dropdown-menu {
+    width: 425px !important;
+  }
+}
+
+.Dropdown-menu > .NotificationList.FlagList {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border-radius: inherit !important;
+  background: transparent !important;
+  color: var(--hc-flags-text, #efffff) !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-header {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 48px !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.24) !important;
+  background: rgba(0, 255, 255, 0.055) !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-header h4,
+.Dropdown-menu > .FlagList .App-titleControl--text {
+  margin: 0 !important;
+  color: var(--hc-flags-accent, #00ffff) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.075em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.24) !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-content {
+  max-height: min(70vh, 800px) !important;
+  max-height: min(70dvh, 800px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  background: rgba(0, 0, 0, 0.18) !important;
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--hc-flags-accent, #00ffff)
+    rgba(255, 255, 255, 0.08);
+  -webkit-overflow-scrolling: touch;
+}
+
+.Dropdown-menu > .FlagList .NotificationGroup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationGroup-content > li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationGroup-content > li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.075) !important;
+}
+
+.Dropdown-menu > .FlagList .Notification {
+  box-sizing: border-box !important;
+  min-height: 64px !important;
+  padding: 11px 16px !important;
+  background: transparent !important;
+  color: var(--hc-flags-text, #efffff) !important;
+  text-decoration: none !important;
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease !important;
+}
+
+.Dropdown-menu > .FlagList .Notification:hover,
+.Dropdown-menu > .FlagList .Notification:focus,
+.Dropdown-menu > .FlagList .Notification:focus-within {
+  outline: none !important;
+  background: rgba(0, 255, 255, 0.11) !important;
+  color: #ffffff !important;
+  box-shadow: inset 3px 0 0 var(--hc-flags-accent, #00ffff) !important;
+}
+
+.Dropdown-menu > .FlagList .Notification .Avatar {
+  border: 1px solid rgba(0, 255, 255, 0.55) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.16) !important;
+}
+
+.Dropdown-menu > .FlagList .Notification-icon,
+.Dropdown-menu > .FlagList .Notification-content .username {
+  color: var(--hc-flags-accent, #00ffff) !important;
+}
+
+.Dropdown-menu > .FlagList .Notification-content {
+  color: var(--hc-flags-text, #efffff) !important;
+}
+
+.Dropdown-menu > .FlagList .Notification time,
+.Dropdown-menu > .FlagList .Notification-excerpt {
+  color: var(--hc-flags-muted, rgba(225, 248, 248, 0.68)) !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-empty {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 180px !important;
+  padding: 48px 20px !important;
+  color: var(--hc-flags-muted, rgba(225, 248, 248, 0.68)) !important;
+  background:
+    radial-gradient(circle at center, rgba(0, 255, 255, 0.07), transparent 68%) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.02em !important;
+  text-align: center !important;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.Dropdown-menu > .FlagList .NotificationList-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.Dropdown-menu > .FlagList .NotificationList-content::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--hc-flags-accent, #00ffff);
+}
+
+@media (max-width: 700px) {
+  .Dropdown-menu.Dropdown-menu--right:has(> .FlagList),
+  .Header-secondary .item-flags .Dropdown-menu,
+  #header-secondary .item-flags .Dropdown-menu,
+  .FlagsDropdown > .Dropdown-menu {
+    border-radius: 18px !important;
+  }
+
+  .Dropdown-menu > .FlagList .NotificationList-content {
+    max-height: calc(70dvh - 48px) !important;
+  }
+
+  .Dropdown-menu > .FlagList .NotificationList-empty {
+    min-height: 140px !important;
+    padding: 38px 18px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .Dropdown-menu > .FlagList .Notification,
+  .Dropdown-menu > .FlagList .Notification * {
+    transition: none !important;
+  }
+}
+
 /* ---------- .StartConversationModal ---------- */
 .StartConversationModal h2 {
   text-align: center;
