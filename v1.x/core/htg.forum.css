@@ -2,23 +2,22 @@
    HARLEY'S CLAN FORUM — RESPONSIVE THEME ENTRY POINT
 
    Mobile and desktop are intentionally separated.
-   - <= 767.98px: mobile-v2.css owns the phone/tablet UI
+   - <= 767.98px: mobile.css owns the phone/tablet UI
    - >= 768px: htg.desktop.css owns the desktop/tablet-up theme
 
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a6
+   Version: 5.9a7
    Author: HarleyTG
    Updated: 2026-08-10
 ========================================================== */
 
 /* Mobile-only add-ons and layout. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/animations.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/welcome-loading.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile-v2.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
 
-/* Desktop/tablet-up theme. Mobile rules inside this legacy theme are
-   inert because the entire stylesheet is gated to >= 768px here. */
+/* Desktop/tablet-up theme. */
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
