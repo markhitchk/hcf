@@ -200,7 +200,7 @@
   letter-spacing: 0.035em !important;
   color: var(--hc-loader-text) !important;
   background:
-    url("https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png")
+    url("https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/assets/logos/HTG-Icon.png")
     center top / 92px 92px no-repeat !important;
   filter: drop-shadow(0 0 11px var(--hc-welcome-glow));
   text-shadow:
