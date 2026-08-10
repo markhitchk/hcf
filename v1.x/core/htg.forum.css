@@ -1,9 +1,9 @@
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@27b450adfe7d89ff5aa395589d60cb147534fc60/addons/messages.sys.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/animations.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.sys.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/welcome-loading.css");
 
 /* Modern phones and tablets only. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/mobile-v2.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile-v2.css");
 
 
 
@@ -124,7 +124,7 @@
   box-sizing: border-box !important;
   overflow: hidden !important;
 
-  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') !important;
+  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg') !important;
   background-position: center !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
@@ -1368,7 +1368,7 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
   width: 34px;
   height: 34px;
   margin-bottom: 6px;
-  background: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') center/contain no-repeat;
+  background: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg') center/contain no-repeat;
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
 }
