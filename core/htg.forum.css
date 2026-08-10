@@ -1,7 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/conversations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messenger.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/notifications-messenger-style.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/messages.css");
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css");
 
 /* Modern phones and tablets only. */
