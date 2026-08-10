@@ -1,31 +1,36 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — MODERN MOBILE LAYOUT
 
-   Mobile-only layout fixes for current Flarum 1.x browsers.
-   - Preserves Flarum's native phone navigation/header system
-   - Keeps the desktop header inside the slide-out drawer
-   - Prevents header controls from appearing as a second top row
-   - Keeps menus, composer, content, and footer inside viewport
-   - Does not target KaiOS
+   Minimal mobile-only fixes for current Flarum 1.x browsers.
+   This stylesheet deliberately follows Flarum's native phone
+   layout instead of rebuilding the header or drawer.
 
-   Version: 2.2
+   Version: 2.3
    Updated: 2026-08-10
 ========================================================== */
 
 :root {
-  --hc-mobile-safe-top: env(safe-area-inset-top, 0px);
   --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
   --hc-mobile-edge-gap: 10px;
 }
 
 @media screen and (max-width: 767.98px) {
+  /* ------------------------------------------------------
+     KEEP FLARUM'S DEFAULT MOBILE STRUCTURE
+     ------------------------------------------------------
+     Do not override App-navigation, App-drawer, App-header,
+     Header-primary, Header-secondary, or their positioning.
+     Flarum already moves the desktop header into the drawer
+     and uses App-navigation as the visible phone header.
+  ------------------------------------------------------ */
+
   html,
   body,
   .App,
   .App-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   *,
@@ -40,163 +45,44 @@
   canvas,
   svg {
     max-width: 100%;
+    height: auto;
   }
 
   /* ------------------------------------------------------
-     FLARUM NATIVE MOBILE HEADER / DRAWER
+     DRAWER BRANDING ONLY
+     ------------------------------------------------------
+     Flarum owns the drawer layout. These rules only keep the
+     custom HTG branding from overflowing inside that drawer.
   ------------------------------------------------------ */
 
-  /* The visible phone header is App-navigation. The normal
-     App-header belongs inside App-drawer on Flarum phones. */
-  .App-navigation {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .App:not(.drawerOpen) .App-drawer {
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  .App.drawerOpen .App-drawer {
-    visibility: visible !important;
-    pointer-events: auto !important;
-  }
-
-  .App-drawer {
-    width: var(--drawer-width, 270px) !important;
-    max-width: calc(100vw - 40px) !important;
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Do not force the drawer header into a desktop horizontal row. */
-  .App-drawer .App-header {
-    position: static !important;
-    display: flex !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-  }
-
-  .App-drawer .App-header .container {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* Brand at the top of the opened drawer. */
   .App-drawer .Header-title {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-    max-width: 100% !important;
     min-width: 0 !important;
-    height: auto !important;
-    min-height: 56px !important;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 10px 12px !important;
+    max-width: 100% !important;
     overflow: hidden !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    font-size: 17px !important;
-    text-align: center !important;
   }
 
   .App-drawer .Header-title::before {
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-    flex: 0 0 34px !important;
+    width: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    flex: 0 0 30px !important;
     transform: none !important;
   }
 
   .App-drawer .Header-title > a,
   .App-drawer .Header-title > a#home-link {
     min-width: 0 !important;
-    max-width: calc(100% - 42px) !important;
+    max-width: 100% !important;
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
   }
 
-  /* Restore Flarum's vertical drawer controls instead of the
-     accidental full-width desktop row shown in the screenshot. */
-  .App-drawer .Header-primary,
-  .App-drawer .Header-secondary,
-  .App-drawer #header-primary,
-  .App-drawer #header-secondary {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    position: static !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .App-drawer .Header-controls {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 10px 0 0 !important;
-    padding: 0 !important;
-  }
-
-  .App-drawer .Header-controls > li {
-    display: block !important;
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 10px !important;
-  }
-
-  .App-drawer .Header-controls .Button,
-  .App-drawer .Header-controls .ButtonGroup,
-  .App-drawer .Header-controls .FormControl {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
   /* ------------------------------------------------------
-     DROPDOWNS / SEARCH
-  ------------------------------------------------------ */
-
-  .Dropdown-menu,
-  .Search-results {
-    max-width: calc(100vw - (var(--hc-mobile-edge-gap) * 2)) !important;
-  }
-
-  .App-drawer .Dropdown-menu,
-  .App-drawer .Search-results {
-    max-height: calc(100dvh - 88px - var(--hc-mobile-safe-bottom)) !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* ------------------------------------------------------
-     CONTENT SAFETY
+     CONTENT / EXTENSION SAFETY
   ------------------------------------------------------ */
 
   .App-content,
@@ -220,6 +106,11 @@
     overflow-wrap: anywhere;
   }
 
+  .Dropdown-menu,
+  .Search-results {
+    max-width: calc(100vw - (var(--hc-mobile-edge-gap) * 2)) !important;
+  }
+
   .Composer {
     max-width: 100vw !important;
   }
@@ -236,11 +127,5 @@
 @media screen and (max-width: 380px) {
   :root {
     --hc-mobile-edge-gap: 6px;
-  }
-
-  .App-drawer .Header-title {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    font-size: 15px !important;
   }
 }
