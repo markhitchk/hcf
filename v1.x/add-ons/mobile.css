@@ -9,7 +9,7 @@
    - Protects extension content from viewport overflow
    - No KaiOS-specific rules
 
-   Version: 3.0
+   Version: 3.1
    Updated: 2026-08-10
 ========================================================== */
 
@@ -20,10 +20,6 @@
 }
 
 @media screen and (max-width: 767.98px) {
-  /* ------------------------------------------------------
-     BASE / VIEWPORT
-  ------------------------------------------------------ */
-
   html,
   body,
   .App,
@@ -58,13 +54,9 @@
     height: auto;
   }
 
-  /* ------------------------------------------------------
+  /* ==========================
      FLARUM PHONE TOP BAR
-
-     App-navigation is the visible phone header. App-header is
-     intentionally left inside App-drawer, matching Flarum.
-  ------------------------------------------------------ */
-
+  ========================== */
   body .App .App-navigation {
     position: absolute !important;
     top: 0 !important;
@@ -74,6 +66,7 @@
     max-width: 100% !important;
     min-width: 0 !important;
     height: var(--header-height-phone) !important;
+    overflow: hidden !important;
     border-bottom: 0 !important;
     background: var(--header-bg) !important;
     z-index: var(--zindex-header, 1000) !important;
@@ -113,6 +106,20 @@
     text-overflow: ellipsis !important;
   }
 
+  /* The full site logo/title belongs in the drawer on phones.
+     Prevent cloned Header-title/logo nodes or pseudo-elements from
+     leaking out at the upper-left edge of the visible phone bar. */
+  body .App .App-navigation .Header-title,
+  body .App .App-navigation .Header-logo,
+  body .App .App-navigation img.Header-logo,
+  body .App .App-navigation .Header-title::before,
+  body .App .App-navigation .Header-title::after {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    content: none !important;
+  }
+
   body .App .App-navigation .App-primaryControl > .Button,
   body .App .App-navigation .App-backControl > .Button {
     width: auto !important;
@@ -129,11 +136,19 @@
     display: none !important;
   }
 
-  /* ------------------------------------------------------
+  /* ==========================
      NATIVE DRAWER BEHAVIOR
-  ------------------------------------------------------ */
-
+  ========================== */
   body .App:not(.drawerOpen) .App-drawer {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Extra leak guard for custom pseudo-logo rules. */
+  body .App:not(.drawerOpen) .App-drawer *,
+  body .App:not(.drawerOpen) .App-drawer *::before,
+  body .App:not(.drawerOpen) .App-drawer *::after {
     visibility: hidden !important;
     pointer-events: none !important;
   }
@@ -154,27 +169,30 @@
     overflow-y: auto !important;
     background: var(--header-bg) !important;
     box-shadow: 0 2px 6px var(--shadow-color, rgba(0, 0, 0, .35)) !important;
-    transform: translateX(calc(-6px - var(--drawer-width, 270px))) !important;
-    transition: transform .2s ease !important;
+    opacity: 0 !important;
+    transform: translate3d(calc(-100% - 8px), 0, 0) !important;
+    transition: transform .2s ease, opacity .15s ease !important;
     z-index: var(--zindex-modal, 1050) !important;
     -webkit-overflow-scrolling: touch;
   }
 
   body .App.drawerOpen .App-drawer {
     visibility: visible !important;
+    opacity: 1 !important;
     pointer-events: auto !important;
     -webkit-transform: none !important;
     transform: none !important;
   }
 
-  /* ------------------------------------------------------
+  body .App.drawerOpen .App-drawer *,
+  body .App.drawerOpen .App-drawer *::before,
+  body .App.drawerOpen .App-drawer *::after {
+    visibility: visible;
+  }
+
+  /* ==========================
      DRAWER HEADER
-
-     These selectors intentionally outrank the global V5
-     Header-title/header-secondary !important rules. Mobile is
-     owned here, even though this file is imported first.
-  ------------------------------------------------------ */
-
+  ========================== */
   body .App .App-drawer .App-header {
     position: static !important;
     top: auto !important;
@@ -217,7 +235,7 @@
     min-height: var(--header-height-phone) !important;
     max-height: none !important;
     margin: 0 !important;
-    padding: 10px !important;
+    padding: 10px 12px !important;
     overflow: hidden !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -256,10 +274,9 @@
     line-height: inherit !important;
   }
 
-  /* ------------------------------------------------------
-     DRAWER PRIMARY / SECONDARY CONTROLS
-  ------------------------------------------------------ */
-
+  /* ==========================
+     DRAWER CONTROLS
+  ========================== */
   body .App .App-drawer .Header-primary,
   body .App .App-drawer #header-primary,
   body .App .App-drawer .Header-secondary,
@@ -324,7 +341,6 @@
     white-space: normal !important;
   }
 
-  /* Undo desktop pill styling on the session control. */
   body .App .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user,
   body .App .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user {
     display: flex !important;
@@ -364,7 +380,6 @@
     text-overflow: ellipsis !important;
   }
 
-  /* Login / signup are drawer rows on mobile, not desktop pills. */
   body .App .App-drawer #header-secondary .item-logIn,
   body .App .App-drawer #header-secondary .item-signUp,
   body .App .App-drawer .Header-secondary .item-logIn,
@@ -383,10 +398,9 @@
     transform: none !important;
   }
 
-  /* ------------------------------------------------------
+  /* ==========================
      DROPDOWNS / SEARCH
-  ------------------------------------------------------ */
-
+  ========================== */
   body .App .Dropdown-menu,
   body .App .Search-results {
     max-width: calc(100vw - (var(--hc-mobile-edge-gap) * 2)) !important;
@@ -400,10 +414,9 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* ------------------------------------------------------
+  /* ==========================
      CONTENT / EXTENSION SAFETY
-  ------------------------------------------------------ */
-
+  ========================== */
   body .App .App-content {
     width: 100% !important;
     min-width: 0 !important;
