@@ -6,6 +6,7 @@ Custom forum styling, optional addons, shared assets, and branded error pages fo
 
 ```text
 core/
+├── htg.forum.css
 ├── master.css
 ├── admin.css
 ├── header.html
@@ -40,13 +41,30 @@ pages/
     └── 503.html
 ```
 
-## Main theme
+## Main forum CSS
 
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/master.css">
+`core/htg.forum.css` is the canonical stylesheet used by Harley's Clan Forum.
+
+Paste this single raw CSS import into Flarum's **Appearance → Custom CSS** field:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/htg.forum.css");
 ```
 
-`core/master.css` loads the unified responsive messaging stylesheet.
+Do not wrap CSS URLs in Markdown link syntax such as `[URL](URL)`.
+
+The main stylesheet currently loads these addons in order:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/animations.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@27b450adfe7d89ff5aa395589d60cb147534fc60/addons/messages.sys.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/welcome-loading.css");
+
+/* Modern phones and tablets only. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/addons/mobile-v2.css");
+```
+
+`core/master.css` is retained as a legacy stylesheet and is not the primary forum entrypoint.
 
 ## Optional addons
 
