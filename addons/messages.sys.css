@@ -684,3 +684,53 @@ div#people-list::before {
   font-family: "Font Awesome 6 Free" !important;
   font-weight: 900 !important;
 }
+
+/* ==========================================================================
+   FULL-PAGE / POP-OUT PARITY
+   Keep /conversations visually identical to the normal Messages pop-out.
+   The page wrapper replaces Dropdown-menu, so it must share its geometry.
+   ========================================================================== */
+
+.App--conversations .App-content {
+  padding-top: 0 !important;
+}
+
+.App--conversations .ConversationsPage {
+  justify-content: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 992px) {
+  .App--conversations .ConversationsPage {
+    width: 725px !important;
+    max-width: calc(100% - 30px) !important;
+    height: calc(100vh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
+    height: calc(100dvh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
+    max-height: calc(100vh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
+    max-height: calc(100dvh - var(--header-height, 52px) - var(--header-height, 52px) - 0.5em) !important;
+    padding: 0 !important;
+  }
+
+  .App--conversations .ConversationsPage > .ConversationsList {
+    display: grid !important;
+    grid-template-columns: 250px minmax(0, 1fr) !important;
+    grid-auto-rows: 100% !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 30px !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    box-shadow:
+      rgba(0, 0, 0, 0.19) 0 10px 20px,
+      rgba(0, 0, 0, 0.23) 0 6px 6px !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
