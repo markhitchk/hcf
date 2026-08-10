@@ -16,8 +16,7 @@ addons/
 ├── conversations.css
 ├── mobile-v2.css
 ├── kaios-accessibility-v2.css
-├── messenger.css
-├── notifications-messenger-style.css
+├── messages.sys.css
 ├── user-directory.css
 ├── welcome-loading.css
 └── celebrations/
@@ -47,7 +46,7 @@ pages/
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/core/master.css">
 ```
 
-`core/master.css` loads the required messenger and notification styling.
+`core/master.css` loads the unified responsive messaging stylesheet.
 
 ## Optional addons
 
