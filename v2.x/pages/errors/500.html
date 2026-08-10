@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>500 - Internal Server Error</title>
+<link rel="icon" href="https://raw.githubusercontent.com/markhitchk/hcf/main/v2.x/assets/logos/HTG-Icon.png" type="image/png">
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+    font-family:'Roboto',sans-serif;
+    background:linear-gradient(135deg, #E85656, #2F3C7E);
+    color:#FFF;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    text-align:center;
+    overflow:hidden;
+    padding:0 10px;
+}
+
+.container {
+    background-color: rgba(0,0,0,0.8);
+    padding: 40px 30px 30px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.6);
+    max-width:600px;
+    width:100%;
+    margin:0 auto;
+    user-select:none;
+}
+
+/* LOGO */
+.logo {
+    width:120px;
+    margin-bottom:20px;
+    border-radius:50%;
+    background-color: #0FD3F7;
+    padding: 5px;
+    box-shadow: 0 0 0 5px #0FD3F7;
+    animation: floatLogo 4s ease-in-out infinite,
+               glowLogo 3s ease-in-out infinite alternate;
+}
+@keyframes floatLogo {0%{transform:translateY(0);}50%{transform:translateY(-10px);}100%{transform:translateY(0);}}
+@keyframes glowLogo {0%{box-shadow:0 0 10px #0FD3F7,0 0 20px rgba(15,211,247,0.5);}100%{box-shadow:0 0 30px #0FD3F7,0 0 45px rgba(15,211,247,0.9);}}
+.logo:hover {transform:scale(1.1);}
+
+/* Heading Animation (shake effect) */
+h1 {
+    font-size:2.5rem;
+    color:#FF4D4D;
+    margin-bottom:10px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    animation: shake 1s ease-in-out infinite alternate;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+/* Paragraph */
+p { font-size:1.2rem; margin-bottom:20px; color:#b1b1b1; }
+
+/* Buttons */
+.button {
+    padding:14px 30px; font-size:16px; color:#FFF; background-color:#2F3C7E;
+    border:2px solid transparent; border-radius:50px; cursor:pointer;
+    margin:10px; min-width:150px; text-transform:uppercase; font-weight:500; letter-spacing:1px;
+    display:inline-block; box-shadow:0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;
+}
+.button:hover { background-color:#5B6EAE; transform:translateY(-2px); box-shadow:0 6px 12px rgba(0,0,0,0.2); border-color:#FFF; }
+.button:active { transform:translateY(1px); box-shadow:0 2px 4px rgba(0,0,0,0.15); }
+
+.button-container { display:flex; justify-content:center; gap:20px; flex-wrap:nowrap; margin-top:20px; }
+
+@keyframes fadeIn {0%{opacity:0; transform:scale(0.8);}100%{opacity:1; transform:scale(1);}}
+@media(max-width:600px){ h1{font-size:2rem;} p{font-size:1rem;} .button{width:100%; padding:12px;} .logo{width:90px;} .button-container{flex-direction:column; gap:10px;} }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img id="site-logo" class="logo" alt="Site Logo" draggable="false">
+    <h1>500 - Internal Server Error</h1>
+    <p>Something went wrong on our end. We're working on it, please try again later.</p>
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='/'">🏠 Back to Home</button>
+        <button class="button" onclick="window.location.href='https://forum.harleytg.com/p/17-support'">⚙️ Get Support</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const logo = document.getElementById("site-logo");
+    const container = document.querySelector(".container");
+    logo.src = "https://raw.githubusercontent.com/markhitchk/hcf/main/v2.x/assets/logos/HTG-Icon.png";
+    logo.addEventListener("dragstart", e => e.preventDefault());
+    logo.addEventListener("contextmenu", function(e){ e.preventDefault(); alert("This logo is protected."); });
+    container.addEventListener("contextmenu", function(e){ if(e.target!==logo){ e.preventDefault(); alert("Content is protected."); } });
+    document.addEventListener("keydown", function(e){
+        if(e.key==="F12") e.preventDefault();
+        if(e.ctrlKey && e.shiftKey && e.key==="I") e.preventDefault();
+        if(e.ctrlKey && e.shiftKey && e.key==="J") e.preventDefault();
+        if(e.ctrlKey && e.key==="u") e.preventDefault();
+        if(e.ctrlKey && e.key==="s") e.preventDefault();
+    });
+
+const titles = ["500 - Internal Server Error ", "500 - Harley's Clan Forum"];
+let currentTitle = 0;
+setInterval(() => {
+    document.title = titles[currentTitle];
+    currentTitle = (currentTitle + 1) % titles.length;
+}, 2000);
+
+});
+</script>
+
+</body>
+</html>

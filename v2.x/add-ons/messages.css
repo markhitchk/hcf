@@ -1,0 +1,4 @@
+/* Harley's Clan Forum — Flarum 2 messaging entry point.
+   Keep this filename for installs that used v1.x/add-ons/messages.css.
+   The maintained Flarum 2 rules live in messages.sys.css. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v2.x/add-ons/messages.sys.css");

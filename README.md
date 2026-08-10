@@ -7,9 +7,9 @@ Custom forum styling, add-ons, shared assets, and branded error pages for Harley
 | Folder | Flarum version | Status |
 | --- | --- | --- |
 | `v1.x/` | Flarum 1.x | Production |
-| `v2.x/` | Flarum 2.x | Not in use |
+| `v2.x/` | Flarum 2.x | Pre-release test build |
 
-All production files are stored under `v1.x/`. The repository uses folders on the `main` branch; it does not use version branches.
+Production files remain under `v1.x/`. The complete Flarum 2 pre-release package is under `v2.x/`. The repository uses version folders on `main`, not version branches.
 
 ## Repository structure
 
@@ -46,6 +46,10 @@ v1.x/
 └── readme
 
 v2.x/
+├── add-ons/
+├── assets/
+├── core/
+├── pages/
 └── readme.md
 ```
 
@@ -77,6 +81,18 @@ The main stylesheet loads these add-ons in order:
 - Paste `v1.x/core/header.html` into the forum custom header.
 - Paste `v1.x/core/footer.html` into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
+
+## Flarum 2.x pre-release build
+
+`v2.x/` mirrors the full `v1.x/` package and includes compatibility for the current [`flarum/framework` `2.x` branch](https://github.com/flarum/framework/tree/2.x).
+
+For a Flarum 2 test installation, import:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v2.x/core/htg.forum.css");
+```
+
+See [`v2.x/readme.md`](v2.x/readme.md) for the verified upstream commit, Flarum 2 changes, installation details, and release-day checklist.
 
 ## Celebrations and error pages
 
