@@ -1,0 +1,839 @@
+/* ========================================================================== 
+   Harley's Clan Forum — Unified Messaging CSS
+   File: addons/messages.sys.css
+   Contains: one shared Messenger theme for the header dropdown and /conversations
+   The same base selectors intentionally style both messaging surfaces.
+   ========================================================================== */
+
+/* ==================== MESSENGER BASE ==================== */
+/* ==========================================================================
+   messenger.css — compiled
+   Source: neoncube2/flarum-private-messages LESS, resolved to plain CSS.
+   - All LESS variables mapped to Flarum's live CSS custom properties
+   - lighten()/darken()/mix() LESS functions -> color-mix() CSS equivalents.
+   - @screen-tablet/@screen-desktop -> literal 768px / 992px / 991.98px
+   - All nested LESS selectors flattened to plain CSS.
+   - Empty conversation-state placeholder icon (div#people-list::before)
+     replaced with Harley's Studios HTG SVG icon.
+   ========================================================================== */
+
+span.message-data-name, 
+.ConversationsList .chat .chat-message button {
+  display: none !important;
+}
+
+.message-text {
+  background: #0084ff !important;
+  color: white !important;
+  border-radius: 30px !important;
+}
+
+.ConversationsList {
+  border-radius: 30px !important;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+  background: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px !important;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-auto-rows: 100%;
+  flex: 1;
+}
+
+.ConversationsList * {
+  color: white !important;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.ConversationsList *,
+.ConversationsList *:before,
+.ConversationsList *:after {
+  box-sizing: border-box;
+}
+
+.ConversationsList .chat {
+  background: black !important;
+  border-radius: 30px !important;
+  color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ConversationsList .chat .chat-header {
+  padding: 10px !important;
+  border-bottom: none !important;
+}
+
+.ConversationsList .chat .chat-header .chat-about {
+  margin-top: 1px !important;
+  float: left;
+  padding-left: 10px;
+}
+
+.ConversationsList .chat .chat-header .Avatar,
+.ConversationsList .chat .chat-header img {
+  float: left;
+}
+
+.ConversationsList .chat .chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ConversationsList .chat .chat-header .chat-num-messages,
+.chat-num-messages {
+  font-size: 11px;
+  opacity: 0.5;
+  color: var(--muted-color);
+}
+
+.ConversationsList .chat .chat-history {
+  flex: 1;
+  padding: 10px;
+  min-height: 0;
+  overflow-y: hidden !important;
+}
+
+.ConversationsList .chat .chat-history ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem !important;
+  padding: 0px;
+  margin: 0;
+  list-style-type: none;
+}
+
+.ConversationsList .chat .chat-history .message-data {
+  place-self: center !important;
+  align-self: center;
+  opacity: 0.5 !important;
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.ConversationsList .chat .chat-history .message-data .avatar-inline {
+  display: inline-block;
+}
+
+.ConversationsList .chat .chat-history .message-data .avatar-inline .Avatar {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  line-height: 16px;
+}
+
+.ConversationsList .chat .chat-history .message-data-time {
+  color: color-mix(in srgb, var(--muted-color) 92%, white 8%);
+  padding-left: 6px;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-data {
+  justify-content: center !important;
+  opacity: 0.5;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text-and-indicators {
+  flex-direction: row-reverse;
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text {
+  background: var(--neoncube-private-messages-sender-background-color);
+  color: var(--neoncube-private-messages-sender-text-color);
+}
+
+.ConversationsList .chat .chat-history .my-message .message-text a {
+  color: var(--neoncube-private-messages-sender-text-color);
+}
+
+.ConversationsList .chat .chat-history .other-message .message-text {
+  background: var(--neoncube-private-messages-recipient-background-color);
+  color: var(--neoncube-private-messages-recipient-text-color);
+}
+
+.ConversationsList .chat .chat-history .other-message .message-text a {
+  color: var(--neoncube-private-messages-recipient-text-color);
+}
+
+.ConversationsList .chat .message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ConversationsList .chat .message-content .message-text-and-indicators {
+  display: flex;
+  gap: 10px;
+}
+
+.ConversationsList .chat .message-content .message-text {
+  padding: 7px 15px !important;
+  line-height: 26px;
+  font-size: 16px;
+  word-wrap: break-word;
+  display: inline-block;
+  max-width: 95%;
+}
+
+.ConversationsList .chat .message-content .message-text p {
+  margin: 0;
+}
+
+.ConversationsList .chat .message-content .message-text img {
+  max-width: 100%;
+}
+
+.ConversationsList .chat .chat-message {
+  background-color: black !important;
+  padding: 10px !important;
+  border-radius: 0 0 30px 0 !important;
+}
+
+.ConversationsList .chat .chat-message textarea {
+  height: 100%;
+  width: 100%;
+  border: none;
+  padding: 13px 15px 10px !important;
+  background-color: #333333 !important;
+  color: white;
+  font: inherit !important;
+  border-radius: 30px !important;
+  overflow: hidden;
+  resize: none;
+}
+
+form.chat-message.clearfix {
+  height: 15% !important;
+}
+
+li.startConvo {
+  font-size: 14px;
+  color: #7b7b7b !important;
+}
+
+li.startConvo::before {
+  content: "\f086";
+  font-family: 'Font Awesome 6 Brands';
+  margin: 4px;
+}
+
+.ConversationsList .people-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ConversationsList .people-list .UserListItem {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: var(--border-radius);
+}
+
+.ConversationsList .people-list .UserListItem:hover, 
+.ConversationsList .people-list .UserListItem.active {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-radius: 30px !important;
+  padding: 3%;
+}
+
+/*
+ * Responsive, zoom-safe Start Conversation button.
+ * BetterFlarum lets Flarum calculate the control's natural height. Preserve
+ * that behavior, prevent flex shrinking, and let the label wrap when browser
+ * zoom or a narrow viewport leaves less horizontal room.
+ */
+.MessagesDropdown .ConversationsList .people-list > .Button--primary,
+.ConversationsPage .ConversationsList .people-list > .Button--primary {
+  box-sizing: border-box !important;
+  position: static !important;
+  inset: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: stretch !important;
+  flex: 0 0 auto !important;
+  inline-size: auto !important;
+  width: auto !important;
+  min-inline-size: 0 !important;
+  min-width: 0 !important;
+  block-size: auto !important;
+  height: auto !important;
+  min-block-size: 44px !important;
+  min-height: 44px !important;
+  max-block-size: none !important;
+  max-height: none !important;
+  margin: 15px 10px !important;
+  margin-block: clamp(8px, 2dvh, 15px) !important;
+  margin-inline: 10px !important;
+  padding: 8px 13px !important;
+  padding-block: clamp(6px, 1.2dvh, 8px) !important;
+  overflow: visible !important;
+  border-radius: 30px !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  transform: none !important;
+  translate: none !important;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+}
+
+.MessagesDropdown .ConversationsList .people-list > .Button--primary > .Button-label,
+.ConversationsPage .ConversationsList .people-list > .Button--primary > .Button-label {
+  box-sizing: border-box !important;
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  flex: 0 1 auto !important;
+  inline-size: auto !important;
+  width: auto !important;
+  max-inline-size: 100% !important;
+  max-width: 100% !important;
+  block-size: auto !important;
+  height: auto !important;
+  min-block-size: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  text-align: center !important;
+  vertical-align: baseline !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  text-wrap: balance !important;
+  text-overflow: clip !important;
+  transform: none !important;
+  translate: none !important;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+  pointer-events: none !important;
+}
+
+.ConversationsList .people-list .ConversationsList-list {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+
+.ConversationsList .people-list .UserListItem .info {
+  display: inline-block;
+  margin: 8px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.ConversationsList .people-list .UserListItem .info .UserOnline .fa-circle {
+  color: var(--online-user-circle-color);
+}
+
+.ConversationsList .people-list .UserListItem .Avatar {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.ConversationsList .people-list img {
+  float: left;
+}
+
+.ConversationsList .people-list .about {
+  float: left;
+  margin-top: 8px;
+  padding-left: 8px;
+}
+
+.ConversationsList .people-list .status {
+  color: var(--muted-color);
+}
+
+.ConversationsList .Button {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+}
+
+form.Dropdown-menu.Dropdown-menu--right {
+  border-radius: 30px !important;
+  background: transparent !important;
+}
+
+/* HTG logo shown above the conversations list */
+div#people-list::before {
+  content: "";
+  display: block;
+  width: 100px !important;
+  height: 100px !important;
+  min-width: 100px !important;
+  min-height: 100px !important;
+  flex: 0 0 100px !important;
+  margin: 14px auto 10px !important;
+  background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/assets/logos/HTG-Icon.svg");
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  image-rendering: auto;
+}
+
+/* Replace messenger comment icons with a consistently sized HTG icon */
+.ConversationsList .fa-comment-alt,
+.MessagesDropdown .fa-comment-alt {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  flex: 0 0 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 36px !important;
+  font-size: 0 !important;
+  vertical-align: middle !important;
+  background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/assets/logos/HTG-Icon.svg");
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  image-rendering: auto;
+}
+
+.ConversationsList .fa-comment-alt::before,
+.MessagesDropdown .fa-comment-alt::before {
+  content: "" !important;
+  display: none !important;
+}
+
+.ConversationsList .fa-circle::before {
+  font-weight: 900;
+  color: #53ff1b;
+  position: relative;
+  top: -2px;
+  font-size: 12px;
+}
+
+.ConversationsList .fa-check::before {
+  font-size: 10px;
+  content: "\f00c";
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 700;
+}
+
+/* ---------- .MessagesPage ---------- */
+.MessagesPage .chat,
+.MessagesPage .container.clearfix {
+  width: 100% !important;
+  max-width: unset;
+}
+
+/* ---------- .MessagesDropdown ---------- */
+.MessagesDropdown .tiblock {
+  align-items: center;
+  display: flex;
+  height: 23px;
+  margin: 13px;
+}
+
+.MessagesDropdown .tidot {
+  -webkit-animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
+  border-radius: 13px;
+  display: inline-block;
+  height: 13px;
+  margin-right: 2px;
+  width: 13px;
+  background-color: var(--neoncube-private-messages-sender-background-color);
+}
+
+@-webkit-keyframes mercuryTypingAnimation {
+  0% { -webkit-transform: translateY(0px); }
+  28% { -webkit-transform: translateY(-5px); }
+  44% { -webkit-transform: translateY(0px); }
+}
+
+.MessagesDropdown .tidot:nth-child(1) { -webkit-animation-delay: 200ms; }
+.MessagesDropdown .tidot:nth-child(2) { -webkit-animation-delay: 300ms; }
+.MessagesDropdown .tidot:nth-child(3) { -webkit-animation-delay: 400ms; }
+
+.MessagesDropdown .Dropdown-menu {
+  display: flex;
+  max-height: calc(100vh - var(--header-height) - 0.5em);
+}
+
+@media (min-width: 992px) {
+  .MessagesDropdown .Dropdown-menu {
+    width: 725px;
+  }
+}
+
+/* ---------- .StartConversationModal ---------- */
+.StartConversationModal h2 {
+  text-align: center;
+}
+
+/* ---------- .ConversationsPage ---------- */
+.ConversationsPage {
+  display: flex;
+}
+
+/* -- status colors / utility classes -- */
+.ConversationsList .online,
+.ConversationsList .offline,
+.ConversationsList .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.ConversationsList .online { color: var(--neoncube-private-messages-sender-background-color); }
+.ConversationsList .offline { color: var(--neoncube-private-messages-receiver-background-color); }
+.ConversationsList .me { color: var(--neoncube-private-messages-sender-background-color); }
+.ConversationsList .other { color: var(--neoncube-private-messages-receiver-background-color); }
+.ConversationsList .align-left { text-align: left; }
+.ConversationsList .align-right { text-align: right; }
+.ConversationsList .float-right { float: right; }
+
+.ConversationsList .clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* ---------- Add recipient modal / recipient labels ---------- */
+.AddRecipientModal-form textarea {
+  width: 100%;
+  border: none;
+  background-color: var(--body-bg);
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
+  resize: none;
+}
+
+.AddRecipientModal-form-input {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.AddRecipientModal-form-input input.RecipientsInput {
+  margin: 0 1em;
+  width: auto !important;
+}
+
+.AddRecipientModal-form-input ul.Search-results.fade:not(.in) {
+  display: none;
+}
+
+.AddRecipientModal-form-submit {
+  margin-top: 1em;
+  display: contents;
+}
+
+.Button--cancel {
+  margin-left: 15px;
+}
+
+.RecipientLabel {
+  font-size: 85%;
+  font-weight: 600;
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  background: var(--body-bg);
+  color: var(--control-color);
+  text-transform: none;
+  border: 1px solid var(--neoncube-private-messages-sender-background-color);
+}
+
+.RecipientLabel.none {
+  background: transparent;
+  border: 1px dotted var(--muted-color);
+  color: var(--muted-color);
+}
+
+.DiscussionHero .RecipientsLabel .RecipientLabel {
+  font-size: 14px;
+}
+
+.RecipientsLabel .RecipientLabel {
+  background: transparent;
+  border: none;
+}
+
+.RecipientsLabel .RecipientLabel .username {
+  display: inline-block;
+  margin: 8px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.RecipientsLabel .RecipientLabel .Avatar {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.AddRecipientModal-form .RecipientsInput-selected {
+  margin: 2vh 0;
+}
+
+.AddRecipientModal-form .Search-results {
+  position: relative;
+  display: block;
+  max-height: 70vh;
+  overflow: auto;
+  left: 0;
+  right: 0;
+}
+
+.AddRecipientModal-form .Search-results > li > a {
+  white-space: normal;
+}
+
+.AddRecipientModal-form .Search-results .SearchResult .Avatar {
+  --size: 24px;
+  width: var(--size);
+  height: var(--size);
+  margin: -2px 10px -2px 0;
+}
+
+.AddRecipientModal-form .Search-results mark {
+  background: none;
+  padding: 0;
+  font-weight: bold;
+  color: inherit;
+  box-shadow: none;
+}
+
+.AddRecipientModal-form .RecipientsInput {
+  overflow: hidden;
+  height: auto;
+}
+
+.AddRecipientModal-form .RecipientsInput input {
+  display: block;
+  outline: none;
+  margin-top: -2px;
+  border: 0 !important;
+  padding: 0;
+  background: transparent !important;
+}
+
+/* ---------- Responsive breakpoints ---------- */
+@media (max-width: 991.98px) {
+  .App--conversations {
+    padding-bottom: 0;
+  }
+
+  .App--conversations .App-content {
+    padding-bottom: 0;
+  }
+
+  .ConversationsPage.viewing-conversation .people-list {
+    display: none;
+  }
+
+  .ConversationsList {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 890px;
+  }
+
+  .ConversationsList .chat .chat-message {
+    padding: 1em;
+  }
+}
+
+@media (min-width: 768px) {
+  .ConversationsPage {
+    max-height: calc(100vh - (var(--header-height) * 2));
+  }
+
+  .ConversationsList {
+    margin: 0 auto;
+    max-width: 890px;
+    box-shadow: 0 2px 6px var(--shadow-color);
+  }
+}
+
+.App-header .ConversationsList-list a,
+.ConversationsPage .ConversationsList-list a {
+  color: var(--text-color);
+}
+
+@media (min-width: 992px) {
+  .ConversationsList .chat .chat-history {
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ==========================================================================
+   HEADER ICON SIZE FIX
+   Keep Font Awesome header/button icons at Flarum's normal 14px size.
+   ========================================================================== */
+
+.App-header .Button-icon,
+.App-header .Button-caret {
+  font-size: 14px !important;
+}
+
+.App-header .Button-icon > .fa,
+.App-header .Button-icon > .fas,
+.App-header .Button-icon > .fa-solid,
+.App-header .Button-icon > .far,
+.App-header .Button-icon > .fa-regular,
+.App-header .Button-icon > .fal,
+.App-header .Button-icon > .fa-light,
+.App-header .Button-icon > .fat,
+.App-header .Button-icon > .fa-thin,
+.App-header .Button-icon > .fad,
+.App-header .Button-icon > .fa-duotone,
+.App-header .Button-icon > .fab,
+.App-header .Button-icon > .fa-brands {
+  display: inline-block !important;
+  width: 1em !important;
+  height: 1em !important;
+  min-width: 1em !important;
+  min-height: 1em !important;
+  flex: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  background-image: none !important;
+  background-size: auto !important;
+}
+
+.App-header .Button-icon > .fa::before,
+.App-header .Button-icon > .fas::before,
+.App-header .Button-icon > .fa-solid::before,
+.App-header .Button-icon > .far::before,
+.App-header .Button-icon > .fa-regular::before,
+.App-header .Button-icon > .fal::before,
+.App-header .Button-icon > .fa-light::before,
+.App-header .Button-icon > .fat::before,
+.App-header .Button-icon > .fa-thin::before,
+.App-header .Button-icon > .fad::before,
+.App-header .Button-icon > .fa-duotone::before,
+.App-header .Button-icon > .fab::before,
+.App-header .Button-icon > .fa-brands::before {
+  display: inline-block !important;
+}
+
+.App-header .fa-bell::before {
+  content: "\f0f3" !important;
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+.App-header .MessagesDropdown .fa-comment-alt,
+.App-header .fa-comment-alt {
+  width: 1em !important;
+  height: 1em !important;
+  min-width: 1em !important;
+  min-height: 1em !important;
+  flex: none !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  background-image: none !important;
+}
+
+.App-header .MessagesDropdown .fa-comment-alt::before,
+.App-header .fa-comment-alt::before {
+  content: "\f075" !important;
+  display: inline-block !important;
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+/* ==========================================================================
+   FULL-PAGE / POP-OUT PARITY
+   /conversations uses the same shell and inner grid as the Messages pop-out.
+   Target ConversationsPage directly: bodyClass placement varies by Flarum build.
+   ========================================================================== */
+
+/* Remove only the page-level top gap when this view is present. */
+.App-content:has(.ConversationsPage) {
+  padding-top: 0 !important;
+}
+
+/* Match .MessagesDropdown .Dropdown-menu geometry. */
+.ConversationsPage {
+  box-sizing: border-box !important;
+  display: flex !important;
+  justify-content: stretch !important;
+  width: 725px !important;
+  max-width: calc(100% - 30px) !important;
+  max-height: calc(100vh - var(--header-height, 52px) - 0.5em) !important;
+  max-height: calc(100dvh - var(--header-height, 52px) - 0.5em) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Match the exact Messenger base used inside the header pop-out. */
+@media (min-width: 992px) {
+  .ConversationsPage > .ConversationsList {
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: 250px minmax(0, 1fr) !important;
+    grid-auto-rows: 100% !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 30px !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    box-shadow:
+      rgba(0, 0, 0, 0.19) 0 10px 20px,
+      rgba(0, 0, 0, 0.23) 0 6px 6px !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+
+  .ConversationsPage > .ConversationsList > .people-list,
+  .ConversationsPage > .ConversationsList > .chat {
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+}
+
+/* Keep the extension's intended single-column mobile page. */
+@media (max-width: 991.98px) {
+  .ConversationsPage {
+    width: 100% !important;
+    max-width: 890px !important;
+  }
+
+  .ConversationsPage > .ConversationsList {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
