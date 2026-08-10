@@ -141,6 +141,18 @@
   padding: 0 !important;
 }
 
+/* A signed-in user can have conversations without selecting one yet. */
+.App--conversations
+  .ConversationsPage
+  .ConversationsList:not(:has(.chat)):has(.ConversationsList-list) {
+  height: clamp(
+    480px,
+    calc(100dvh - var(--header-height, 52px) - 180px),
+    680px
+  ) !important;
+  min-height: 480px;
+}
+
 .App--conversations
   .ConversationsPage
   .ConversationsList:not(:has(.chat))
