@@ -89,23 +89,33 @@
 
 /* ========================================================================== 
    PRIVATE MESSAGES — HARD SURFACE ISOLATION
-   The extension reuses .ConversationsList/.people-list/.Button--primary in
-   both the header dropdown and the dedicated /conversations page. These
-   rules deliberately separate those two surfaces so legacy messenger.css
-   declarations cannot make one Start Conversation button inherit the other.
+
+   neoncube/flarum-private-messages reuses the same .ConversationsList,
+   .people-list, .Button--primary and .Button-label classes in two places:
+   1. the header Messages dropdown
+   2. the dedicated /conversations page
+
+   The dropdown is identified by the extension's real form wrapper:
+   form.Dropdown-menu.Dropdown-menu--right
+
+   The full page is identified by .ConversationsPage.
+
+   Do not merge these selectors. Their Start Conversation buttons must stay
+   completely independent even though their HTML classes are the same.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   HEADER DROPDOWN ONLY
+   HEADER MESSAGES DROPDOWN ONLY
+   Matches the actual extension markup:
+   <form class="Dropdown-menu Dropdown-menu--right"> ...
    -------------------------------------------------------------------------- */
 
-.App-header .MessagesDropdown .Dropdown-menu .ConversationsList {
+.MessagesDropdown form.Dropdown-menu.Dropdown-menu--right .ConversationsList {
     width: 100% !important;
 }
 
-.App-header
 .MessagesDropdown
-.Dropdown-menu
+form.Dropdown-menu.Dropdown-menu--right
 .ConversationsList
 .people-list
 > button.Button.Button--primary {
@@ -136,32 +146,54 @@
     transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease !important;
 }
 
-.App-header
+/* Fix the actual <span class="Button-label">Start Conversation</span>.
+   Reset every property commonly used by Flarum/theme icon-only buttons so
+   this text can never be clipped, visually hidden, offset, or collapsed. */
 .MessagesDropdown
-.Dropdown-menu
+form.Dropdown-menu.Dropdown-menu--right
 .ConversationsList
 .people-list
 > button.Button.Button--primary
-> .Button-label {
+> span.Button-label {
+    position: static !important;
+    inset: auto !important;
     display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    float: none !important;
+    flex: 0 1 auto !important;
     align-items: center !important;
     justify-content: center !important;
     width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+    transform: none !important;
+    text-indent: 0 !important;
     color: inherit !important;
-    font-weight: inherit !important;
-    line-height: inherit !important;
+    font: inherit !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
 }
 
-.App-header
 .MessagesDropdown
-.Dropdown-menu
+form.Dropdown-menu.Dropdown-menu--right
 .ConversationsList
 .people-list
 > button.Button.Button--primary:not([disabled]):hover,
-.App-header
 .MessagesDropdown
-.Dropdown-menu
+form.Dropdown-menu.Dropdown-menu--right
 .ConversationsList
 .people-list
 > button.Button.Button--primary:not([disabled]):focus-visible {
@@ -172,9 +204,8 @@
     transform: translateY(-1px);
 }
 
-.App-header
 .MessagesDropdown
-.Dropdown-menu
+form.Dropdown-menu.Dropdown-menu--right
 .ConversationsList
 .people-list
 > button.Button.Button--primary:not([disabled]):active {
@@ -219,19 +250,43 @@
     transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease !important;
 }
 
+/* Separate reset for the page copy of the same Button-label element. */
 #app.App--conversations
 .ConversationsPage
 > .ConversationsList
 > .people-list
 > button.Button.Button--primary
-> .Button-label {
+> span.Button-label {
+    position: static !important;
+    inset: auto !important;
     display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    float: none !important;
+    flex: 0 1 auto !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 100% !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+    transform: none !important;
+    text-indent: 0 !important;
     color: inherit !important;
-    font-weight: inherit !important;
+    font: inherit !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
     line-height: 1 !important;
+    text-align: center !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
 }
 
 #app.App--conversations
@@ -269,9 +324,8 @@
 }
 
 @media (max-width: 560px) {
-    .App-header
     .MessagesDropdown
-    .Dropdown-menu
+    form.Dropdown-menu.Dropdown-menu--right
     .ConversationsList
     .people-list
     > button.Button.Button--primary {
