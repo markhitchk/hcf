@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.8
+   Version: 5.9
    Updated: 2026-08-11
 ========================================================== */
 
@@ -260,7 +260,16 @@
      viewport. Move the complete composer below the live HCF banner instead
      of offsetting only the submit button. */
   html body .App .Composer:not(.minimized) {
+    box-sizing: border-box !important;
     top: var(--hc-banner-height, 0px) !important;
+    height: min(
+      350px,
+      calc(100vh - var(--hc-banner-height, 0px) - var(--hc-mobile-safe-bottom))
+    ) !important;
+    height: min(
+      350px,
+      calc(100dvh - var(--hc-banner-height, 0px) - var(--hc-mobile-safe-bottom))
+    ) !important;
     max-height: calc(
       100vh - var(--hc-banner-height, 0px) - var(--hc-mobile-safe-bottom)
     ) !important;
@@ -269,9 +278,9 @@
     ) !important;
   }
 
-  /* Fixed descendants use the viewport as their containing block and can
-     jump back into the banner. Anchor the composer's own controls to the
-     already-offset Composer instead. */
+  /* Keep Flarum's viewport-level composer controls, but place every one at
+     the same measured banner offset. The exact DOM paths outrank core and
+     extension rules without moving the submit item into its scrolling UL. */
   html body .App .Composer:not(.minimized)
   .Composer-controls > .App-backControl,
   html body .App .Composer:not(.minimized)
@@ -279,9 +288,9 @@
   html body .App .Composer:not(.minimized)
   .ComposerBody-editor .TextEditor-controls
   > .item-submit.App-primaryControl {
-    position: absolute !important;
-    top: 0 !important;
-    inset-block-start: 0 !important;
+    position: fixed !important;
+    top: var(--hc-banner-height, 0px) !important;
+    inset-block-start: var(--hc-banner-height, 0px) !important;
     z-index: calc(var(--zindex-header, 1000) + 2) !important;
   }
 
@@ -399,8 +408,8 @@
      NotificationsDropdown deliberately routes to a full page while
      the native phone drawer is open. FlagsDropdown inherits that same
      behavior. header-panels.css styles the desktop/popup card, so undo
-     only those card constraints on the actual phone route pages and
-     restore Flarum's App-titleControl header geometry.
+     those popup constraints on phone route pages and keep supplied titles
+     and actions together in a visible in-page control row.
      ====================================================== */
   html body .App .NotificationsPage,
   html body .App .FlagsPage,
@@ -438,43 +447,50 @@
   html body .App .FlagsPage .NotificationList-header,
   html body .App .DraftsPage .NotificationList-header {
     box-sizing: border-box !important;
-    position: static !important;
-    display: block !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
     width: 100% !important;
-    min-height: 0 !important;
-    height: 0 !important;
+    min-height: 52px !important;
+    height: auto !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 6px 8px 6px 12px !important;
     overflow: visible !important;
-    border: 0 !important;
-    background: transparent !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .28)) !important;
+    border-bottom: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    background: var(--hc-panel-surface, rgba(10, 13, 17, .94)) !important;
   }
 
-  /* header-panels.css uses margin:0 for popup titles. On a Flarum phone
-     page that cancels core's margin-left:-100px and pushes the title into
-     the right half of the screen. Restore the framework values here. */
+  /* Route-page titles and actions stay together in normal content flow.
+     This keeps every control below the custom notice even when .App affixes. */
   html body .App .NotificationsPage .NotificationList-header .App-titleControl,
   html body .App .FlagsPage .NotificationList-header .App-titleControl,
   html body .App .DraftsPage .NotificationList-header .App-titleControl {
     box-sizing: border-box !important;
-    position: absolute !important;
-    z-index: calc(var(--zindex-header, 1000) + 1) !important;
-    top: 0 !important;
+    position: static !important;
+    z-index: auto !important;
+    inset: auto !important;
+    top: auto !important;
     right: auto !important;
-    left: 50% !important;
+    bottom: auto !important;
+    left: auto !important;
     display: block !important;
-    width: 200px !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
     min-width: 0 !important;
-    max-width: 200px !important;
-    height: var(--header-height-phone, 46px) !important;
-    margin: 0 0 0 -100px !important;
-    padding: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
     overflow: hidden !important;
-    color: var(--header-color, var(--text-color, #f2fdff)) !important;
-    font-size: 16px !important;
-    font-weight: 400 !important;
-    line-height: var(--header-height-phone, 46px) !important;
-    text-align: center !important;
+    color: var(--hc-panel-text, var(--text-color, #f2fdff)) !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    text-align: left !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
   }
@@ -482,29 +498,32 @@
   html body .App.affix .NotificationsPage .NotificationList-header .App-titleControl,
   html body .App.affix .FlagsPage .NotificationList-header .App-titleControl,
   html body .App.affix .DraftsPage .NotificationList-header .App-titleControl {
-    position: fixed !important;
+    position: static !important;
   }
 
   html body .App .NotificationsPage .NotificationList-header .App-primaryControl,
   html body .App .DraftsPage .NotificationList-header .App-primaryControl {
     box-sizing: border-box !important;
-    position: absolute !important;
-    z-index: calc(var(--zindex-header, 1000) + 1) !important;
-    top: 0 !important;
-    right: 0 !important;
+    position: static !important;
+    z-index: auto !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
     left: auto !important;
     display: flex !important;
+    flex: 0 0 auto !important;
     align-items: stretch !important;
-    gap: 0 !important;
+    gap: 4px !important;
     width: auto !important;
-    height: var(--header-height-phone, 46px) !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
   html body .App.affix .NotificationsPage .NotificationList-header .App-primaryControl,
   html body .App.affix .DraftsPage .NotificationList-header .App-primaryControl {
-    position: fixed !important;
+    position: static !important;
   }
 
   html body .App .NotificationsPage .NotificationList-header .App-primaryControl .Button,
@@ -515,14 +534,14 @@
     justify-content: center !important;
     width: 40px !important;
     min-width: 40px !important;
-    height: var(--header-height-phone, 46px) !important;
-    min-height: var(--header-height-phone, 46px) !important;
+    height: 40px !important;
+    min-height: 40px !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    color: var(--header-control-color, var(--header-color, #f2fdff)) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, .08) !important;
+    color: var(--hc-panel-text, var(--text-color, #f2fdff)) !important;
     box-shadow: none !important;
     touch-action: manipulation !important;
   }
@@ -535,11 +554,11 @@
     min-width: 0 !important;
     max-width: none !important;
     max-height: none !important;
-    margin: 10px 0 0 !important;
+    margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
     border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .28)) !important;
-    border-radius: 16px !important;
+    border-radius: 0 0 16px 16px !important;
     background: var(--hc-panel-surface-soft, rgba(16, 19, 24, .88)) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, .18) !important;
   }
