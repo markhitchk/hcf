@@ -1,30 +1,35 @@
 /* =========================================================
    Harley's Clan Forum — FoF Page srcdoc Bootstrap
-   Build: 1.2.1
+   Build: 1.3.0
    Updated: 2026-08-11
 
    Shared loader for v1.x FriendsOfFlarum Pages.
    - Lightweight loading UI with mobile-safe animation behavior
    - Exact route filenames with optional aliases for true mismatches
    - Direct CDN load with GitHub directory fallback
-   - Detailed but user-friendly error classification
-   - Retry without forcing a full page reload
+   - Shared Harley's Clan Forum error screens from v1.x/pages/errors
+   - Isolated error rendering so standalone error CSS cannot affect Flarum
+   - Retry/back/support actions with loader-specific diagnostics
    - Network, timeout, rate-limit, empty-file, and render protection
    - Remote page styles/scripts preserved
    ========================================================= */
 (function () {
   'use strict';
 
-  var BUILD = '1.2.1';
+  var BUILD = '1.3.0';
   var OWNER = 'markhitchk';
   var REPO = 'hcf';
   var BRANCH = 'main';
   var FOLDER = 'v1.x/pages/fof-pages';
+  var ERROR_FOLDER = 'v1.x/pages/errors';
   var CDN_BASE = 'https://cdn.jsdelivr.net/gh/' + OWNER + '/' + REPO + '@' + BRANCH + '/' + FOLDER + '/';
+  var ERROR_CDN_BASE = 'https://cdn.jsdelivr.net/gh/' + OWNER + '/' + REPO + '@' + BRANCH + '/' + ERROR_FOLDER + '/';
+  var ERROR_RAW_BASE = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/' + ERROR_FOLDER + '/';
   var API_DIR = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FOLDER + '?ref=' + encodeURIComponent(BRANCH);
 
   /* Keep this below the 10-second HTML-side emergency fallback. */
   var LOAD_TIMEOUT = 8500;
+  var ERROR_TEMPLATE_TIMEOUT = 3200;
 
   /* Add entries only when a FoF route intentionally differs from its source filename. */
   var ROUTE_FILES = {};
@@ -37,7 +42,7 @@
     },
     'offline': {
       title: 'You appear to be offline',
-      message: 'Reconnect to the internet, then try loading this page again.',
+      message: 'Reconnect to the internet, then retry this page.',
       code: 'HCF-PAGE-OFFLINE'
     },
     'timeout': {
@@ -47,22 +52,22 @@
     },
     'not-found': {
       title: 'Page file not found',
-      message: 'The page file could not be found. It may have been removed, renamed, or moved.',
+      message: 'The requested forum page file could not be found. It may have been moved, renamed, or removed.',
       code: 'HCF-PAGE-404'
     },
     'rate-limited': {
       title: 'Page service is busy',
-      message: 'GitHub temporarily limited page requests. Please try again shortly.',
+      message: 'The upstream page service temporarily limited requests. Retry in a moment.',
       code: 'HCF-PAGE-429'
     },
     'upstream-error': {
       title: 'Page service unavailable',
-      message: 'The remote page service returned an error. Please try again shortly.',
+      message: 'The upstream page service returned an error while loading this forum page.',
       code: 'HCF-PAGE-UPSTREAM'
     },
     'network-error': {
       title: 'Network error',
-      message: 'The forum could not reach the page service. Check your connection and try again.',
+      message: 'The forum could not reach the page service. Check your connection and retry.',
       code: 'HCF-PAGE-NETWORK'
     },
     'empty-file': {
@@ -77,10 +82,12 @@
     },
     'unavailable': {
       title: 'Page unavailable',
-      message: 'This page could not be loaded right now. Please try again.',
+      message: 'This page could not be loaded right now. Please retry.',
       code: 'HCF-PAGE-UNAVAILABLE'
     }
   };
+
+  var ERROR_TEMPLATE_CACHE = {};
 
   var frame = window.frameElement;
   if (!frame || !frame.ownerDocument) return;
@@ -111,18 +118,23 @@
     style.id = 'hcf-fof-bootstrap-ui';
     style.textContent =
       '[data-hcf-fof-import-root]{max-width:760px;margin:18px auto;padding:20px 18px;box-sizing:border-box;background:#12171c;border:1px solid #00b8f0;border-radius:8px;color:#e8f8ff;text-align:center;font-family:Arial,sans-serif}' +
+      '[data-hcf-fof-import-root][data-hcf-error]{max-width:920px;padding:0;background:transparent;border:0;border-radius:0}' +
       '.hcf-page-import-status{font-size:14px;font-weight:700;color:#00b8f0}' +
       '.hcf-page-import-subtext{margin-top:6px;font-size:12px;color:#aebbc2}' +
       '.hcf-page-loader-track{width:100%;max-width:340px;height:3px;margin:16px auto 0;overflow:hidden;background:#283138;border-radius:3px}' +
       '.hcf-page-loader-bar{width:34%;height:100%;background:#00b8f0;transform:translateX(-120%);animation:hcfFofLoad 1.5s linear infinite}' +
-      '.hcf-page-import-error-title{margin:0 0 8px;font-size:17px;color:#ff6b6b}' +
-      '.hcf-page-import-error-text{max-width:560px;margin:0 auto;color:#c0ccd2;font-size:13px;line-height:1.55}' +
-      '.hcf-page-import-error-code{margin-top:9px;color:#788991;font:11px/1.4 "Courier New",monospace}' +
-      '.hcf-page-import-error-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px}' +
-      '.hcf-page-import-error-button{padding:8px 14px;border:0;border-radius:5px;background:#00b8f0;color:#001217;font:700 12px Arial,sans-serif;cursor:pointer}' +
-      '.hcf-page-import-error-button.is-secondary{background:#283138;color:#d8e5eb;border:1px solid #42515a}' +
+      '.hcf-page-error-frame{display:block;width:100%;height:min(820px,82dvh);min-height:610px;border:0;border-radius:22px;background:#0d1014;color-scheme:dark}' +
+      '.hcf-page-error-fallback{padding:28px 20px;border:1px solid rgba(0,184,240,.38);border-radius:18px;background:#12171c;box-shadow:0 18px 50px rgba(0,0,0,.3)}' +
+      '.hcf-page-error-fallback-badge{display:inline-block;padding:6px 10px;border:1px solid rgba(255,107,107,.45);border-radius:999px;background:rgba(255,107,107,.08);color:#ffd4d4;font:700 11px/1.2 "Courier New",monospace;letter-spacing:.08em;text-transform:uppercase}' +
+      '.hcf-page-import-error-title{margin:16px 0 8px;font-size:22px;color:#eefcff}' +
+      '.hcf-page-import-error-text{max-width:600px;margin:0 auto;color:#aebbc2;font-size:14px;line-height:1.6}' +
+      '.hcf-page-import-error-code{margin-top:12px;color:#78939d;font:11px/1.5 "Courier New",monospace}' +
+      '.hcf-page-import-error-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}' +
+      '.hcf-page-import-error-button{padding:10px 16px;border:1px solid #00b8f0;border-radius:9px;background:#00b8f0;color:#001217;font:700 12px Arial,sans-serif;cursor:pointer}' +
+      '.hcf-page-import-error-button.is-secondary{background:#182129;color:#d8e5eb;border-color:#42515a}' +
       '@keyframes hcfFofLoad{to{transform:translateX(315%)}}' +
-      '@media(max-width:767.98px){[data-hcf-fof-import-root]{margin:12px auto;padding:17px 14px}.hcf-page-loader-bar{width:100%;transform:none;animation:none;opacity:.72}}' +
+      '@media(max-width:767.98px){[data-hcf-fof-import-root]{margin:12px auto;padding:17px 14px}.hcf-page-loader-bar{width:100%;transform:none;animation:none;opacity:.72}.hcf-page-error-frame{height:76dvh;min-height:560px;border-radius:17px}}' +
+      '@media(max-width:430px){.hcf-page-error-frame{height:74dvh;min-height:520px}}' +
       '@media(prefers-reduced-motion:reduce){.hcf-page-loader-bar{width:100%;transform:none;animation:none;opacity:.72}}';
 
     (parentDocument.head || parentDocument.documentElement).appendChild(style);
@@ -139,6 +151,7 @@
     root.setAttribute('aria-busy', 'true');
     root.removeAttribute('data-hcf-error');
     root.removeAttribute('data-hcf-error-code');
+    root.removeAttribute('data-hcf-error-template');
     root.removeAttribute('data-hcf-loaded');
     root.innerHTML =
       '<div class="hcf-page-import-status">Loading page…</div>' +
@@ -146,34 +159,207 @@
       '<div class="hcf-page-loader-track" aria-hidden="true"><div class="hcf-page-loader-bar"></div></div>';
   }
 
-  function showError(type, extra) {
-    installLoaderStyle();
+  function errorTemplateFor(type, extra) {
+    var status = extra && Number(extra.status);
 
-    var errorType = ERROR_COPY[type] ? type : 'unavailable';
-    var copy = ERROR_COPY[errorType];
-    var errorCode = copy.code;
+    if (status === 403) return 403;
+    if (type === 'invalid-route' || type === 'not-found') return 404;
+    if (type === 'render-failed' || type === 'empty-file') return 500;
 
-    if (extra && extra.status && errorType === 'upstream-error') {
-      errorCode += '-' + String(extra.status);
+    if (type === 'upstream-error') {
+      if (status === 503) return 503;
+      return 500;
     }
 
-    root.setAttribute('aria-busy', 'false');
-    root.setAttribute('data-hcf-error', errorType);
-    root.setAttribute('data-hcf-error-code', errorCode);
+    return 503;
+  }
+
+  function displayStatusFor(templateCode, extra) {
+    var status = extra && Number(extra.status);
+    if (status >= 400 && status <= 599) return status;
+    return templateCode;
+  }
+
+  function errorDetailText(errorCode, extra) {
+    var parts = ['Reference ' + errorCode];
+
+    if (key) parts.push('Route /p/' + key);
+    if (extra && extra.status) parts.push('Upstream HTTP ' + String(extra.status));
+    else parts.push('No upstream HTTP status');
+
+    return parts.join(' // ');
+  }
+
+  function independentFetch(url, timeoutMs) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      var timer = parentWindow.setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        reject(new Error('error-template-timeout'));
+      }, timeoutMs);
+
+      fetch(url, {
+        method: 'GET',
+        cache: 'no-store',
+        credentials: 'omit',
+        headers: { 'Accept': 'text/html,text/plain;q=0.9,*/*;q=0.1' }
+      }).then(function (response) {
+        if (settled) return;
+        if (!response.ok) {
+          settled = true;
+          parentWindow.clearTimeout(timer);
+          reject(new Error('error-template-http-' + response.status));
+          return;
+        }
+
+        response.text().then(function (text) {
+          if (settled) return;
+          settled = true;
+          parentWindow.clearTimeout(timer);
+
+          if (!text || !text.trim()) {
+            reject(new Error('error-template-empty'));
+            return;
+          }
+
+          resolve(text);
+        }, function (error) {
+          if (settled) return;
+          settled = true;
+          parentWindow.clearTimeout(timer);
+          reject(error);
+        });
+      }, function (error) {
+        if (settled) return;
+        settled = true;
+        parentWindow.clearTimeout(timer);
+        reject(error);
+      });
+    });
+  }
+
+  async function loadErrorTemplate(templateCode) {
+    if (ERROR_TEMPLATE_CACHE[templateCode]) {
+      return ERROR_TEMPLATE_CACHE[templateCode];
+    }
+
+    var filename = String(templateCode) + '.html';
+    var urls = [
+      ERROR_CDN_BASE + filename,
+      ERROR_RAW_BASE + filename
+    ];
+    var lastError = null;
+
+    for (var i = 0; i < urls.length; i++) {
+      try {
+        var html = await independentFetch(
+          urls[i] + (urls[i].indexOf('?') === -1 ? '?' : '&') + 'hcf_error=' + Date.now(),
+          ERROR_TEMPLATE_TIMEOUT
+        );
+        ERROR_TEMPLATE_CACHE[templateCode] = html;
+        return html;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error('error-template-unavailable');
+  }
+
+  function prepareErrorDocument(html, templateCode, errorType, errorCode, extra) {
+    var parser = new DOMParser();
+    var parsed = parser.parseFromString(html, 'text/html');
+    var copy = ERROR_COPY[errorType] || ERROR_COPY.unavailable;
+    var visibleStatus = displayStatusFor(templateCode, extra);
+
+    if (!parsed || !parsed.documentElement || !parsed.body) {
+      throw new Error('error-template-parse');
+    }
+
+    parsed.title = visibleStatus + ' - ' + copy.title + ' | Harley\'s Clan Forum';
+
+    var pillText = parsed.querySelector('.pill span:last-child');
+    if (pillText) pillText.textContent = 'FoF page loader';
+
+    var codeNode = parsed.querySelector('.code');
+    if (codeNode) codeNode.textContent = String(visibleStatus);
+
+    var titleNode = parsed.querySelector('#error-title, .content h1');
+    if (titleNode) titleNode.textContent = copy.title;
+
+    var messageNode = parsed.querySelector('.message');
+    if (messageNode) messageNode.textContent = copy.message;
+
+    var detailNode = parsed.querySelector('.detail');
+    if (detailNode) {
+      while (detailNode.firstChild) detailNode.removeChild(detailNode.firstChild);
+      var strong = parsed.createElement('strong');
+      strong.textContent = errorCode;
+      detailNode.appendChild(strong);
+      detailNode.appendChild(parsed.createTextNode(' // ' + errorDetailText(errorCode, extra).replace('Reference ' + errorCode + ' // ', '')));
+    }
+
+    var actions = parsed.querySelector('.actions');
+    if (actions) {
+      while (actions.firstChild) actions.removeChild(actions.firstChild);
+
+      var retry = parsed.createElement('button');
+      retry.type = 'button';
+      retry.className = 'button primary';
+      retry.textContent = 'Retry Page';
+      retry.setAttribute('onclick', 'parent.location.reload()');
+
+      var back = parsed.createElement('button');
+      back.type = 'button';
+      back.className = 'button';
+      back.textContent = 'Go Back';
+      back.setAttribute('onclick', "if(parent.history.length>1){parent.history.back()}else{parent.location.href=parent.location.origin+'/'}");
+
+      var support = parsed.createElement('a');
+      support.className = 'button';
+      support.href = 'https://forum.harleytg.com/p/17-support';
+      support.target = '_top';
+      support.rel = 'noopener';
+      support.textContent = 'Get Support';
+
+      actions.appendChild(retry);
+      actions.appendChild(back);
+      actions.appendChild(support);
+    }
+
+    var footerStatus = parsed.querySelector('.footer span');
+    if (footerStatus) {
+      footerStatus.textContent = 'Harley\'s Clan Forum // FoF Loader ' + BUILD + ' // ' + errorCode;
+    }
+
+    return '<!DOCTYPE html>\n' + parsed.documentElement.outerHTML;
+  }
+
+  function showFallbackError(errorType, errorCode, extra) {
+    var copy = ERROR_COPY[errorType] || ERROR_COPY.unavailable;
 
     root.innerHTML =
-      '<div class="hcf-page-import-error" role="alert">' +
-        '<h2 class="hcf-page-import-error-title">' + copy.title + '</h2>' +
-        '<p class="hcf-page-import-error-text">' + copy.message + '</p>' +
-        '<div class="hcf-page-import-error-code">Reference: ' + errorCode + '</div>' +
+      '<div class="hcf-page-error-fallback" role="alert">' +
+        '<div class="hcf-page-error-fallback-badge">Error screen fallback</div>' +
+        '<h2 class="hcf-page-import-error-title"></h2>' +
+        '<p class="hcf-page-import-error-text"></p>' +
+        '<div class="hcf-page-import-error-code"></div>' +
         '<div class="hcf-page-import-error-actions">' +
-          '<button class="hcf-page-import-error-button" type="button" data-hcf-page-retry>Retry</button>' +
-          '<button class="hcf-page-import-error-button is-secondary" type="button" data-hcf-page-back>Go back</button>' +
+          '<button class="hcf-page-import-error-button" type="button" data-hcf-page-retry>Retry Page</button>' +
+          '<button class="hcf-page-import-error-button is-secondary" type="button" data-hcf-page-back>Go Back</button>' +
         '</div>' +
       '</div>';
 
+    var titleNode = root.querySelector('.hcf-page-import-error-title');
+    var textNode = root.querySelector('.hcf-page-import-error-text');
+    var codeNode = root.querySelector('.hcf-page-import-error-code');
     var retry = root.querySelector('[data-hcf-page-retry]');
     var back = root.querySelector('[data-hcf-page-back]');
+
+    if (titleNode) titleNode.textContent = copy.title;
+    if (textNode) textNode.textContent = copy.message;
+    if (codeNode) codeNode.textContent = errorDetailText(errorCode, extra);
 
     if (retry) {
       retry.addEventListener('click', function () {
@@ -189,6 +375,45 @@
         } catch (error) {}
       });
     }
+  }
+
+  async function showError(type, extra) {
+    installLoaderStyle();
+    removePreviousAssets();
+
+    var errorType = ERROR_COPY[type] ? type : 'unavailable';
+    var copy = ERROR_COPY[errorType];
+    var errorCode = copy.code;
+
+    if (extra && extra.status && errorType === 'upstream-error') {
+      errorCode += '-' + String(extra.status);
+    }
+
+    var templateCode = errorTemplateFor(errorType, extra);
+
+    root.setAttribute('aria-busy', 'false');
+    root.setAttribute('data-hcf-error', errorType);
+    root.setAttribute('data-hcf-error-code', errorCode);
+    root.setAttribute('data-hcf-error-template', String(templateCode));
+    root.removeAttribute('data-hcf-loaded');
+
+    try {
+      var template = await loadErrorTemplate(templateCode);
+      var prepared = prepareErrorDocument(template, templateCode, errorType, errorCode, extra);
+      var errorFrame = parentDocument.createElement('iframe');
+
+      errorFrame.className = 'hcf-page-error-frame';
+      errorFrame.title = copy.title;
+      errorFrame.setAttribute('scrolling', 'auto');
+      errorFrame.setAttribute('referrerpolicy', 'no-referrer');
+      errorFrame.setAttribute('data-hcf-error-frame', errorCode);
+      errorFrame.srcdoc = prepared;
+
+      root.replaceChildren(errorFrame);
+    } catch (templateError) {
+      console.warn('[HCF FoF Bootstrap] Shared error template unavailable; using local fallback.', templateError);
+      showFallbackError(errorType, errorCode, extra);
+    }
 
     dispatch('hcf:fof-page:error', {
       build: BUILD,
@@ -197,11 +422,12 @@
       key: key,
       type: errorType,
       code: errorCode,
+      template: templateCode,
       status: extra && extra.status ? extra.status : null,
       source: extra && extra.source ? extra.source : null
     });
 
-    console.warn('[HCF FoF Bootstrap] ' + errorCode + ' for ' + (key || '(unknown page)'));
+    console.warn('[HCF FoF Bootstrap] ' + errorCode + ' for ' + (key || '(unknown page)') + ' using error template ' + templateCode);
   }
 
   function encodeFile(name) {
@@ -505,6 +731,9 @@
     }
 
     root.replaceChildren.apply(root, nodes);
+    root.removeAttribute('data-hcf-error');
+    root.removeAttribute('data-hcf-error-code');
+    root.removeAttribute('data-hcf-error-template');
     root.setAttribute('data-hcf-source-file', result.file);
     root.setAttribute('data-hcf-source-url', result.url);
     root.setAttribute('data-hcf-source-kind', result.sourceKind || 'unknown');
@@ -533,7 +762,7 @@
     var token = ++runToken;
 
     if (!id || !slug) {
-      showError('invalid-route');
+      await showError('invalid-route');
       return;
     }
 
@@ -580,11 +809,11 @@
       }
 
       if (token === runToken) {
-        showError(timedOut ? 'timeout' : (bestError && bestError.type) || 'unavailable', bestError);
+        await showError(timedOut ? 'timeout' : (bestError && bestError.type) || 'unavailable', bestError);
       }
     } catch (error) {
       if (token === runToken) {
-        showError(error && error.hcfType ? error.hcfType : 'render-failed');
+        await showError(error && error.hcfType ? error.hcfType : 'render-failed');
       }
       console.error('[HCF FoF Bootstrap]', error);
     } finally {
