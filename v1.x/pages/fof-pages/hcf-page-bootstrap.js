@@ -1,25 +1,26 @@
 /* =========================================================
    Harley's Clan Forum — FoF Page srcdoc Bootstrap
-   Build: 1.0.0
+   Build: 1.1.0
    Updated: 2026-08-11
 
-   Purpose:
-   FriendsOfFlarum Pages injects saved HTML dynamically, so a normal
-   <script> inside the FoF Content field may not execute. This file is
-   loaded inside a hidden iframe srcdoc document, then safely reaches
-   the parent FoF page, detects its ID/slug, fetches matching GitHub HTML,
-   imports styles/body content, and re-runs page scripts.
+   Lightweight shared loader for v1.x FriendsOfFlarum Pages.
+   - Low-cost loading UI
+   - Mobile animation disabled
+   - Automatic missing/deleted page fallback
+   - Network/render timeout protection
+   - Remote page styles/scripts preserved
    ========================================================= */
 (function () {
   'use strict';
 
-  var BUILD = '1.0.0';
+  var BUILD = '1.1.0';
   var OWNER = 'markhitchk';
   var REPO = 'hcf';
   var BRANCH = 'main';
   var FOLDER = 'v1.x/pages/fof-pages';
   var RAW_BASE = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/' + FOLDER + '/';
   var API_DIR = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FOLDER + '?ref=' + encodeURIComponent(BRANCH);
+  var LOAD_TIMEOUT = 12000;
 
   var frame = window.frameElement;
   if (!frame || !frame.ownerDocument) return;
@@ -37,66 +38,116 @@
 
   var id = String(page.getAttribute('data-id') || '').trim();
   var slug = String(page.getAttribute('data-slug') || '').trim();
+  var key = id && slug ? id + '-' + slug : '';
+  var controller = typeof AbortController === 'function' ? new AbortController() : null;
+  var timedOut = false;
+  var timeoutId = 0;
+
+  function installLoaderStyle() {
+    if (parentDocument.getElementById('hcf-fof-bootstrap-ui')) return;
+
+    var style = parentDocument.createElement('style');
+    style.id = 'hcf-fof-bootstrap-ui';
+    style.textContent =
+      '[data-hcf-fof-import-root]{max-width:760px;margin:18px auto;padding:20px 18px;box-sizing:border-box;background:#12171c;border:1px solid #00b8f0;border-radius:8px;color:#e8f8ff;text-align:center;font-family:Arial,sans-serif}' +
+      '.hcf-page-import-status{font-size:14px;font-weight:700;color:#00b8f0}' +
+      '.hcf-page-import-subtext{margin-top:6px;font-size:12px;color:#aebbc2}' +
+      '.hcf-page-loader-track{width:100%;max-width:340px;height:3px;margin:16px auto 0;overflow:hidden;background:#283138;border-radius:3px}' +
+      '.hcf-page-loader-bar{width:34%;height:100%;background:#00b8f0;transform:translateX(-120%);animation:hcfFofLoad 1.5s linear infinite}' +
+      '.hcf-page-import-error-title{margin:0 0 8px;font-size:16px;color:#ff6b6b}' +
+      '.hcf-page-import-error-text{margin:0;color:#aebbc2;font-size:13px;line-height:1.5}' +
+      '.hcf-page-import-error-button{margin-top:14px;padding:8px 14px;border:0;border-radius:5px;background:#00b8f0;color:#001217;font:700 12px Arial,sans-serif;cursor:pointer}' +
+      '@keyframes hcfFofLoad{to{transform:translateX(315%)}}' +
+      '@media(max-width:767.98px){[data-hcf-fof-import-root]{margin:12px auto;padding:17px 14px}.hcf-page-loader-bar{width:100%;transform:none;animation:none;opacity:.72}}' +
+      '@media(prefers-reduced-motion:reduce){.hcf-page-loader-bar{width:100%;transform:none;animation:none;opacity:.72}}';
+    (parentDocument.head || parentDocument.documentElement).appendChild(style);
+  }
+
+  function showLoading() {
+    installLoaderStyle();
+    root.setAttribute('aria-busy', 'true');
+    root.removeAttribute('data-hcf-error');
+    root.innerHTML =
+      '<div class="hcf-page-import-status">Loading page…</div>' +
+      '<div class="hcf-page-import-subtext">Harley\'s Clan Forum</div>' +
+      '<div class="hcf-page-loader-track" aria-hidden="true"><div class="hcf-page-loader-bar"></div></div>';
+  }
+
+  function showError(type) {
+    installLoaderStyle();
+    root.setAttribute('aria-busy', 'false');
+    root.setAttribute('data-hcf-error', type || 'unavailable');
+
+    var message = type === 'timeout'
+      ? 'The page service did not respond in time. The page may be temporarily unavailable.'
+      : type === 'render-failed'
+        ? 'The page file was found, but it could not be displayed correctly.'
+        : 'This page could not be loaded. It may have been removed, deleted, renamed, or be temporarily unavailable.';
+
+    root.innerHTML =
+      '<div class="hcf-page-import-error" role="alert">' +
+        '<h2 class="hcf-page-import-error-title">Page unavailable</h2>' +
+        '<p class="hcf-page-import-error-text">' + message + '</p>' +
+        '<button class="hcf-page-import-error-button" type="button" data-hcf-page-retry>Retry</button>' +
+      '</div>';
+
+    var retry = root.querySelector('[data-hcf-page-retry]');
+    if (retry) {
+      retry.addEventListener('click', function () {
+        try { parentWindow.location.reload(); } catch (error) {}
+      });
+    }
+  }
 
   if (!id || !slug) {
-    root.textContent = 'Page could not be detected.';
+    showError('not-found');
     return;
   }
 
-  var key = id + '-' + slug;
   root.setAttribute('data-hcf-page', key);
-  root.setAttribute('aria-busy', 'true');
+  showLoading();
 
   function encodeFile(name) {
     return encodeURIComponent(String(name || ''));
-  }
-
-  function directCandidates() {
-    return [
-      id + '-' + slug + '.html',
-      slug + '.html',
-      id + '.html'
-    ];
-  }
-
-  async function fetchText(url) {
-    try {
-      var response = await fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 'hcf=' + Date.now(), {
-        method: 'GET',
-        cache: 'no-store',
-        credentials: 'omit',
-        headers: { 'Accept': 'text/html,text/plain;q=0.9,*/*;q=0.1' }
-      });
-
-      if (!response.ok) return null;
-      var text = await response.text();
-      return text && text.trim() ? text : null;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async function tryDirect() {
-    var names = directCandidates();
-    for (var i = 0; i < names.length; i++) {
-      var url = RAW_BASE + encodeFile(names[i]);
-      var html = await fetchText(url);
-      if (html !== null) return { html: html, url: url, file: names[i] };
-    }
-    return null;
   }
 
   function normalize(value) {
     return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   }
 
+  function fetchOptions(accept) {
+    var options = {
+      method: 'GET',
+      cache: 'no-store',
+      credentials: 'omit',
+      headers: { 'Accept': accept }
+    };
+    if (controller) options.signal = controller.signal;
+    return options;
+  }
+
+  async function fetchText(url) {
+    try {
+      var response = await fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 'hcf=' + Date.now(), fetchOptions('text/html,text/plain;q=0.9,*/*;q=0.1'));
+      if (!response.ok) return null;
+      var text = await response.text();
+      return text && text.trim() ? text : null;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return null;
+      return null;
+    }
+  }
+
+  async function tryDirect() {
+    var name = key + '.html';
+    var url = RAW_BASE + encodeFile(name);
+    var html = await fetchText(url);
+    return html === null ? null : { html: html, url: url, file: name };
+  }
+
   async function discoverFromDirectory() {
     try {
-      var response = await fetch(API_DIR + '&hcf=' + Date.now(), {
-        cache: 'no-store',
-        credentials: 'omit',
-        headers: { 'Accept': 'application/vnd.github+json' }
-      });
+      var response = await fetch(API_DIR + '&hcf=' + Date.now(), fetchOptions('application/vnd.github+json,application/json;q=0.9,*/*;q=0.1'));
       if (!response.ok) return null;
 
       var entries = await response.json();
@@ -108,47 +159,40 @@
 
       var normalizedSlug = normalize(slug);
       var idPrefix = id + '-';
+      var best = null;
+      var bestScore = -1;
 
-      htmlFiles.sort(function (a, b) {
-        function score(entry) {
-          var name = String(entry.name || '');
-          var stem = name.replace(/\.html$/i, '');
-          var normalizedStem = normalize(stem);
-          var result = 0;
+      htmlFiles.forEach(function (entry) {
+        var name = String(entry.name || '');
+        var stem = name.replace(/\.html$/i, '');
+        var normalizedStem = normalize(stem);
+        var score = -1;
 
-          if (name === key + '.html') result += 1000;
-          if (name.indexOf(idPrefix) === 0) result += 500;
-          if (normalizedStem === normalizedSlug) result += 300;
-          if (normalizedStem.indexOf(normalizedSlug) !== -1) result += 100;
-          return result;
+        if (name === key + '.html') score = 1000;
+        else if (name.indexOf(idPrefix) === 0 && normalize(stem.slice(idPrefix.length)) === normalizedSlug) score = 900;
+        else if (name.indexOf(idPrefix) === 0) score = 700;
+        else if (normalizedStem === normalizedSlug) score = 600;
+        else if (normalizedStem.slice(-(normalizedSlug.length + 1)) === '-' + normalizedSlug) score = 500;
+
+        if (score > bestScore) {
+          best = entry;
+          bestScore = score;
         }
-        return score(b) - score(a);
       });
 
-      for (var i = 0; i < htmlFiles.length; i++) {
-        var candidate = htmlFiles[i];
-        var name = String(candidate.name || '');
-        var stem = name.replace(/\.html$/i, '');
-        var matchesId = name.indexOf(idPrefix) === 0 || stem === id;
-        var matchesSlug = normalize(stem) === normalizedSlug || normalize(stem).indexOf(normalizedSlug) !== -1;
+      if (!best || bestScore < 0) return null;
 
-        if (!matchesId && !matchesSlug) continue;
-
-        var html = await fetchText(candidate.download_url);
-        if (html !== null) return { html: html, url: candidate.download_url, file: name };
-      }
-    } catch (error) {}
-
-    return null;
+      var html = await fetchText(best.download_url);
+      return html === null ? null : { html: html, url: best.download_url, file: best.name };
+    } catch (error) {
+      return null;
+    }
   }
 
   function resolveUrl(value, sourceUrl) {
     if (!value) return value;
-    try {
-      return new URL(value, sourceUrl).href;
-    } catch (error) {
-      return value;
-    }
+    try { return new URL(value, sourceUrl).href; }
+    catch (error) { return value; }
   }
 
   function toCdnAssetUrl(url) {
@@ -241,8 +285,14 @@
       }
 
       var resolved = toCdnAssetUrl(resolveUrl(src, sourceUrl));
+      if (/\/hcf-page\.js(?:\?|$)/i.test(resolved)) {
+        resolved = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.0';
+      }
 
       if (parentDocument.querySelector('script[src="' + resolved.replace(/"/g, '\\"') + '"]')) {
+        if (/\/hcf-page\.js(?:\?|$)/i.test(resolved) && parentWindow.HCFPageRuntime && typeof parentWindow.HCFPageRuntime.refresh === 'function') {
+          try { parentWindow.HCFPageRuntime.refresh(); } catch (error) {}
+        }
         resolve();
         return;
       }
@@ -302,27 +352,33 @@
   }
 
   async function start() {
-    var result = await tryDirect();
-    if (!result) result = await discoverFromDirectory();
-
-    if (!result) {
-      root.setAttribute('aria-busy', 'false');
-      root.setAttribute('data-hcf-error', 'not-found');
-      root.innerHTML = '<div class="hcf-page-import-error"><strong>Page source not found.</strong><br>The matching GitHub HTML file could not be located.</div>';
-      return;
-    }
+    timeoutId = parentWindow.setTimeout(function () {
+      timedOut = true;
+      if (controller) {
+        try { controller.abort(); } catch (error) {}
+      }
+    }, LOAD_TIMEOUT);
 
     try {
-      await renderRemote(result);
-    } catch (error) {
-      root.setAttribute('aria-busy', 'false');
-      root.setAttribute('data-hcf-error', 'render-failed');
-      root.innerHTML = '<div class="hcf-page-import-error"><strong>Page failed to render.</strong><br>The GitHub HTML was found, but could not be displayed.</div>';
-      console.error('[HCF FoF Bootstrap]', error);
+      var result = await tryDirect();
+      if (!result && !timedOut) result = await discoverFromDirectory();
+
+      if (!result) {
+        showError(timedOut ? 'timeout' : 'not-found');
+        return;
+      }
+
+      try {
+        await renderRemote(result);
+      } catch (error) {
+        showError('render-failed');
+        console.error('[HCF FoF Bootstrap]', error);
+      }
+    } finally {
+      if (timeoutId) parentWindow.clearTimeout(timeoutId);
+      try { frame.remove(); } catch (error) {}
     }
   }
 
-  start().finally(function () {
-    try { frame.remove(); } catch (error) {}
-  });
+  start();
 })();
