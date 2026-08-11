@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.10
+   Version: 5.11
    Updated: 2026-08-11
 ========================================================== */
 
@@ -24,6 +24,137 @@
   body {
     overflow-x: hidden !important;
     overflow-x: clip !important;
+  }
+
+  /* ======================================================
+     FLARUM ALERT MANAGER — PHONE TOASTS
+
+     htg.desktop.css is intentionally not loaded on phones, so reproduce its
+     branded .Alert treatment here without changing Flarum's alert component.
+     Keep the stack above the mobile feedback control and safe-area inset.
+     ====================================================== */
+  html body .AlertManager {
+    box-sizing: border-box !important;
+    position: fixed !important;
+    right: 10px !important;
+    bottom: calc(76px + var(--hc-mobile-safe-bottom)) !important;
+    left: 10px !important;
+    z-index: calc(var(--zindex-alerts, 1100) + 2) !important;
+    width: auto !important;
+    max-width: none !important;
+    pointer-events: none !important;
+  }
+
+  html body .AlertManager-alert {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    pointer-events: none !important;
+  }
+
+  html body .AlertManager .Alert {
+    box-sizing: border-box !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 8px 0 0 !important;
+    padding: 12px 44px 12px 14px !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .34)) !important;
+    border-left: 4px solid var(--hc-panel-accent, #00dfe6) !important;
+    border-radius: 12px !important;
+    background: var(--hc-panel-surface, rgba(10, 13, 17, .94)) !important;
+    color: var(--hc-panel-text, var(--body-color, #f2fdff)) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .34), 0 0 14px rgba(0, 255, 255, .12) !important;
+    text-align: left !important;
+    overflow-wrap: anywhere !important;
+    pointer-events: auto !important;
+    backdrop-filter: blur(14px) saturate(118%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
+  }
+
+  html body .AlertManager .Alert--error {
+    border-left-color: #ff6b6b !important;
+  }
+
+  html body .AlertManager .Alert--success {
+    border-left-color: #45d483 !important;
+  }
+
+  html body .AlertManager :is(.Alert-title, .Alert-body) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body .AlertManager .Alert-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    font-weight: 700 !important;
+  }
+
+  html body .AlertManager .Alert-body {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+    word-break: break-word !important;
+  }
+
+  html body .AlertManager .Alert a {
+    color: var(--hc-panel-accent, var(--primary-color, #00dfe6)) !important;
+    font-weight: 600 !important;
+  }
+
+  html body .AlertManager .Alert-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  html body .AlertManager .Alert-controls > li {
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  html body .AlertManager .Alert-controls .Button--link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 40px !important;
+    margin: 0 !important;
+    padding: 7px 11px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: rgba(0, 255, 255, .12) !important;
+    color: var(--hc-panel-accent, var(--primary-color, #00dfe6)) !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    text-decoration: none !important;
+    touch-action: manipulation !important;
+  }
+
+  html body .AlertManager .Alert-dismiss {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    display: flex !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, .10) !important;
+    color: var(--hc-panel-text, var(--body-color, #f2fdff)) !important;
+    z-index: 2 !important;
   }
 
   /* ======================================================
