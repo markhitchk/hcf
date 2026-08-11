@@ -60,7 +60,7 @@ scripts/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@3d54e75f8cb618c6a9b502335749ec92bc62704a/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@bea847934a4515ac2ddaf024c67fd058f322187d/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
@@ -102,6 +102,9 @@ On those route pages, titles and every action supplied by Flarum or an
 extension stay in a visible in-page control row below the custom notice.
 The standard Flarum composer overlay and the Composer Page extension's
 `/compose` route both keep their phone header controls below that notice.
+Flarum's native `.Composer` keeps its first title row—such as “Start a
+discussion”—centered inside the composer's own phone header instead of fixing
+that row to the viewport.
 On `/compose`, the navigation background, “Start a discussion” title, and send
 control share one offset so the title remains centered inside the phone header.
 Flarum success, error, and extension alerts also retain the HCF desktop alert
