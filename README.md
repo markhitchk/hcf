@@ -60,7 +60,7 @@ scripts/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@63d20482468fcf32aaceaf560a0e292ab1207081/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@b46217b0f437907f0348f3151a78819caa492646/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
@@ -98,6 +98,8 @@ stale CDN paths.
 Mobile notification, flag, and FoF Drafts controls retain Flarum's native
 phone behavior: tapping one from the open drawer routes to its full page.
 HCF hides only the transient Bootstrap dropdown that can flash before routing.
+On those route pages, titles and every action supplied by Flarum or an
+extension stay in a visible in-page control row below the custom notice.
 
 ## Core HTML
 
