@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.7
+   Version: 5.8
    Updated: 2026-08-11
 ========================================================== */
 
@@ -269,10 +269,27 @@
     ) !important;
   }
 
-  html body .App .Composer:not(.minimized) .App-backControl,
-  html body .App .Composer:not(.minimized) .App-titleControl,
-  html body .App .Composer:not(.minimized) .App-primaryControl {
-    top: var(--hc-banner-height, 0px) !important;
+  /* Fixed descendants use the viewport as their containing block and can
+     jump back into the banner. Anchor the composer's own controls to the
+     already-offset Composer instead. */
+  html body .App .Composer:not(.minimized)
+  .Composer-controls > .App-backControl,
+  html body .App .Composer:not(.minimized)
+  .ComposerBody-header .App-titleControl,
+  html body .App .Composer:not(.minimized)
+  .ComposerBody-editor .TextEditor-controls
+  > .item-submit.App-primaryControl {
+    position: absolute !important;
+    top: 0 !important;
+    inset-block-start: 0 !important;
+    z-index: calc(var(--zindex-header, 1000) + 2) !important;
+  }
+
+  html body .App .Composer:not(.minimized)
+  .ComposerBody-editor .TextEditor-controls
+  > .item-submit.App-primaryControl {
+    right: 0 !important;
+    left: auto !important;
   }
 
   html body .composer-backdrop {
