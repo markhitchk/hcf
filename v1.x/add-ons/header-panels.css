@@ -1,11 +1,11 @@
 /* =========================================================
    HARLEY'S CLAN FORUM — SHARED HEADER PANELS
 
-   Owns the visual treatment for account, notifications,
-   flagged posts, and other Flarum header dropdown panels.
-   Popper/Flarum retain control of panel positioning.
+   Owns visual treatment for Flarum HEADER DROPDOWNS only.
+   Dedicated phone route pages such as /notifications and /flags
+   must keep Flarum's native mobile App-titleControl behavior.
 
-   Version: 1.1
+   Version: 1.2
    Author: HarleyTG
    Updated: 2026-08-11
 ========================================================= */
@@ -23,7 +23,7 @@
     0 0 20px rgba(0, 255, 255, .08);
 }
 
-/* Wrapper panels should not hide the owned glass surface inside them. */
+/* Header dropdown wrappers only. */
 .NotificationsDropdown > .Dropdown-menu,
 .FlagsDropdown > .Dropdown-menu,
 .FlaggedPostsDropdown > .Dropdown-menu {
@@ -33,7 +33,7 @@
   padding: 0 !important;
 }
 
-/* Account has no inner NotificationList, so its menu is the panel. */
+/* Account menu kept unchanged. */
 .SessionDropdown > .Dropdown-menu {
   box-sizing: border-box !important;
   min-width: 220px !important;
@@ -122,7 +122,6 @@
   background: rgba(0, 255, 255, .18) !important;
 }
 
-/* Destructive account actions. */
 .SessionDropdown > .Dropdown-menu .item-logOut > a,
 .SessionDropdown > .Dropdown-menu .item-logOut > button,
 .SessionDropdown > .Dropdown-menu .item-logout > a,
@@ -145,13 +144,17 @@
 .SessionDropdown > .Dropdown-menu .item-erase > button:hover,
 .SessionDropdown > .Dropdown-menu .item-erase > button:focus-visible {
   background: rgba(220, 38, 38, .90) !important;
-  color: #ffffff !important;
+  color: #fff !important;
   box-shadow: inset 3px 0 0 #ff8a8a !important;
 }
 
-/* Notifications and FlagList share Flarum's NotificationList structure. */
-.NotificationList,
-.FlagList {
+/*
+ * IMPORTANT: everything below is scoped to a dropdown parent.
+ * Never target .NotificationList/.FlagList globally: those same classes
+ * are used by Flarum's dedicated /notifications and /flags phone pages.
+ */
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationList, .FlagList) {
   box-sizing: border-box !important;
   max-width: min(430px, calc(100vw - 20px)) !important;
   max-height: min(72vh, 620px) !important;
@@ -166,6 +169,7 @@
   -webkit-backdrop-filter: blur(16px) saturate(118%) !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header {
   box-sizing: border-box !important;
   display: flex !important;
@@ -178,6 +182,7 @@
   background: rgba(255, 255, 255, .025) !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header .App-titleControl {
   min-width: 0 !important;
   margin: 0 !important;
@@ -187,12 +192,14 @@
   line-height: 1.25 !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header .App-primaryControl {
   display: flex !important;
   flex: 0 0 auto !important;
   gap: 4px !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header .App-primaryControl .Button {
   border: 0 !important;
   border-radius: 999px !important;
@@ -200,7 +207,9 @@
   color: var(--hc-panel-text) !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header .App-primaryControl .Button:hover,
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-header .App-primaryControl .Button:focus-visible {
   outline: 2px solid var(--hc-panel-accent) !important;
   outline-offset: 1px !important;
@@ -208,6 +217,7 @@
   color: var(--hc-panel-accent) !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-content {
   box-sizing: border-box !important;
   max-height: min(58vh, 500px) !important;
@@ -220,25 +230,27 @@
   scrollbar-color: var(--hc-panel-accent) rgba(255, 255, 255, .08);
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationGroup-content {
   margin: 0 !important;
   padding: 4px !important;
   list-style: none !important;
 }
 
-.NotificationList .Notification,
-.FlagList .Notification {
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationList, .FlagList) .Notification {
   border-radius: 12px !important;
   color: var(--hc-panel-text) !important;
 }
 
-.NotificationList .Notification:hover,
-.NotificationList .Notification:focus-within,
-.FlagList .Notification:hover,
-.FlagList .Notification:focus-within {
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationList, .FlagList) .Notification:hover,
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationList, .FlagList) .Notification:focus-within {
   background: rgba(0, 255, 255, .09) !important;
 }
 
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
 .NotificationList-empty {
   box-sizing: border-box !important;
   padding: 24px 14px !important;
@@ -248,7 +260,6 @@
   text-align: center !important;
 }
 
-/* Keep native header icons at a stable size. */
 .App-header .Button-icon,
 .App-header .Button-caret {
   font-size: 14px !important;
@@ -256,14 +267,14 @@
 }
 
 @media screen and (max-width: 767.98px) {
-  /* Header dropdowns are route controls in Flarum's phone drawer.
-     Bootstrap toggles the menu before NotificationsDropdown redirects, which
-     can flash the desktop popup for a frame. Keep only that transient menu
-     hidden; destination pages and the profile dropdown remain untouched. */
-  html body .App .App-drawer
-  .NotificationsDropdown > .Dropdown-menu,
-  html body .App .App-drawer
-  .NotificationsDropdown > .dropdown-backdrop {
+  /* Flarum deliberately routes notification/flag controls to phone pages.
+     Hide only the transient dropdown that can flash before the route changes. */
+  html body .App .App-drawer .NotificationsDropdown > .Dropdown-menu,
+  html body .App .App-drawer .NotificationsDropdown > .dropdown-backdrop,
+  html body .App .App-drawer .FlagsDropdown > .Dropdown-menu,
+  html body .App .App-drawer .FlagsDropdown > .dropdown-backdrop,
+  html body .App .App-drawer .FlaggedPostsDropdown > .Dropdown-menu,
+  html body .App .App-drawer .FlaggedPostsDropdown > .dropdown-backdrop {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -272,40 +283,16 @@
     transition: none !important;
   }
 
-  /* Flarum owns position; HCF only constrains the rendered card. */
-  html body .App .SessionDropdown > .Dropdown-menu,
-  html body .App .NotificationsDropdown > .Dropdown-menu,
-  html body .App .FlagsDropdown > .Dropdown-menu,
-  html body .App .FlaggedPostsDropdown > .Dropdown-menu {
+  html body .App .SessionDropdown > .Dropdown-menu {
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
+    max-height: calc(70dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
-  }
-
-  html body .App .SessionDropdown > .Dropdown-menu {
-    max-height: calc(70dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
     padding: 8px 8px calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
     border-radius: 16px !important;
-  }
-
-  html body .App .NotificationsDropdown > .Dropdown-menu,
-  html body .App .FlagsDropdown > .Dropdown-menu,
-  html body .App .FlaggedPostsDropdown > .Dropdown-menu {
-    padding-bottom: calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
-  }
-
-  html body .App .NotificationList,
-  html body .App .FlagList {
-    width: 100% !important;
-    max-width: 100% !important;
-    border-radius: 16px !important;
-  }
-
-  html body .App .NotificationList-content {
-    max-height: calc(58dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
   }
 
   html body .App .SessionDropdown > .Dropdown-menu > li > a,
@@ -318,10 +305,10 @@
 @media (prefers-reduced-motion: reduce) {
   .SessionDropdown > .Dropdown-menu,
   .SessionDropdown > .Dropdown-menu *,
-  .NotificationList,
-  .NotificationList *,
-  .FlagList,
-  .FlagList * {
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .NotificationList,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .NotificationList *,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .FlagList,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .FlagList * {
     animation: none !important;
     transition: none !important;
   }
