@@ -1749,7 +1749,7 @@ a:has(.fa-right-from-bracket):focus,
    current HTG dark/cyan desktop and laptop palette.
    ====================================================== */
 html body .hc-feedback-float > summary {
-  border-color: var(--cyan, #00ffff) !important;
+  border-color: var(--cyan-readable, var(--primary-color, #00dfe6)) !important;
   background:
     linear-gradient(135deg, rgba(0, 255, 255, .12), rgba(0, 255, 255, .035)),
     var(--control-bg, #11151b) !important;
@@ -1773,8 +1773,8 @@ html body .hc-feedback-float .hc-feedback-link.is-primary,
 html body .hc-feedback-float .hc-feedback-link.is-primary:hover,
 html body .hc-feedback-float .hc-feedback-link.is-primary:focus,
 html body .hc-feedback-float .hc-feedback-link.is-primary:active {
-  border-color: var(--cyan, #00ffff) !important;
-  background: var(--cyan, #00ffff) !important;
+  border-color: var(--cyan-readable, var(--primary-color, #00dfe6)) !important;
+  background: var(--cyan-readable, var(--primary-color, #00dfe6)) !important;
   color: var(--btn-text, #041012) !important;
   box-shadow: 0 0 16px rgba(0, 255, 255, .25) !important;
 }
