@@ -1,6 +1,7 @@
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css");
+/* Release dependencies are pinned so jsDelivr cannot mix stale @main files. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/motion.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/direct-messages.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/loading-screen.css");
 
 
 
