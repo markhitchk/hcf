@@ -1,16 +1,23 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — FOF PAGES RUNTIME
    Shared device mode + Flarum identity detection.
-   Also loads the global domain router for all FoF pages.
+   Loads the global domain router and re-initializes safely after
+   dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.1.1
+   Runtime Version: 1.2.0
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
 (function(){
   "use strict";
 
+  if(window.HCFPageRuntime){
+    if(typeof window.HCFPageRuntime.refresh==="function")window.HCFPageRuntime.refresh();
+    return;
+  }
+
   var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
+  var resizeTimer=0;
 
   function loadDomainRouter(){
     if(window.HCFDomainRouter)return;
@@ -23,8 +30,6 @@
     script.setAttribute("data-hcf-domain-router","1.0.1");
     (document.head||document.documentElement).appendChild(script);
   }
-
-  loadDomainRouter();
 
   function normalizeUsername(value){
     var name=String(value||"").trim();
@@ -75,7 +80,10 @@
   }
 
   function makeRuntime(page){
-    if(!page||page.querySelector(".hcf-runtime"))return null;
+    if(!page)return null;
+
+    var existing=page.querySelector(".hcf-runtime");
+    if(existing)return existing;
 
     var runtime=document.createElement("div");
     runtime.className="hcf-runtime";
@@ -94,8 +102,12 @@
   }
 
   function updateDevice(page,runtime){
+    if(!page||!runtime)return;
+
     var value=runtime.querySelector(".hcf-runtime-device");
     var text=runtime.querySelector(".hcf-runtime-device-text");
+    if(!value||!text)return;
+
     var mobile=isMobilePerformanceDevice();
     var basic=isBasicMode();
 
@@ -115,7 +127,11 @@
   }
 
   function updateIdentity(runtime){
+    if(!runtime)return;
+
     var target=runtime.querySelector(".hcf-runtime-identity");
+    if(!target)return;
+
     var username=getIdentity();
     if(!username){
       target.textContent="GUEST_PROTOCOL";
@@ -139,46 +155,45 @@
     }catch(error){}
   }
 
-  function initPage(page){
-    var runtime=makeRuntime(page);
-    if(!runtime)return;
+  function refresh(){
+    loadDomainRouter();
 
-    updateDevice(page,runtime);
-    updateIdentity(runtime);
-    refreshDomainLinks();
-
-    var resizeTimer=0;
-    window.addEventListener("resize",function(){
-      window.clearTimeout(resizeTimer);
-      resizeTimer=window.setTimeout(function(){updateDevice(page,runtime)},180);
-    },{passive:true});
-
-    var identityTimer=window.setInterval(function(){
-      if(!document.hidden){
-        updateIdentity(runtime);
-        refreshDomainLinks();
-      }
-    },15000);
-
-    document.addEventListener("visibilitychange",function(){
-      if(!document.hidden){
-        updateIdentity(runtime);
-        refreshDomainLinks();
-      }
-    });
-
-    window.addEventListener("pagehide",function(){window.clearInterval(identityTimer)},{once:true});
-  }
-
-  function init(){
     var pages=document.querySelectorAll(".hcf-page");
-    for(var i=0;i<pages.length;i++)initPage(pages[i]);
+    for(var i=0;i<pages.length;i++){
+      var page=pages[i];
+      var runtime=makeRuntime(page);
+      updateDevice(page,runtime);
+      updateIdentity(runtime);
+    }
+
     refreshDomainLinks();
   }
+
+  function onResize(){
+    window.clearTimeout(resizeTimer);
+    resizeTimer=window.setTimeout(refresh,180);
+  }
+
+  window.HCFPageRuntime={
+    version:"1.2.0",
+    refresh:refresh,
+    getIdentity:getIdentity,
+    isMobilePerformanceDevice:isMobilePerformanceDevice
+  };
+
+  window.addEventListener("resize",onResize,{passive:true});
+  window.addEventListener("hcf:fof-page:loaded",refresh);
+  document.addEventListener("visibilitychange",function(){
+    if(!document.hidden)refresh();
+  });
+
+  window.setInterval(function(){
+    if(!document.hidden)refresh();
+  },15000);
 
   if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",init,{once:true});
+    document.addEventListener("DOMContentLoaded",refresh,{once:true});
   }else{
-    init();
+    refresh();
   }
 })();
