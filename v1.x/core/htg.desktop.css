@@ -1,9 +1,6 @@
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/animations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.sys.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/welcome-loading.css");
-
-/* Modern phones and tablets only. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile-v2.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css");
 
 
 
@@ -16,9 +13,9 @@
 
    KaiOS and legacy Gecko support have been removed.
 
-   Version: 5.9a5
+   Version: 5.9a8
    Author: HarleyTG
-   Updated: 2026-08-09
+   Updated: 2026-08-10
 
 =================================== */
 
