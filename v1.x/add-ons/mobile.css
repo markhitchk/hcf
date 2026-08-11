@@ -10,7 +10,7 @@
    App-navigation or App-drawer layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.1
+   Version: 5.2
    Updated: 2026-08-10
 ========================================================== */
 
@@ -27,13 +27,15 @@
   /* ======================================================
      KEEP FLARUM'S PAGE CONTROLS IN THE PHONE HEADER
 
-     The shared motion layer animates .App-content with a
-     transform and filter. Either property creates a containing
-     block, which pulls Flarum's absolute/fixed title and primary
-     controls down into the welcome hero. Preserve the fade while
-     neutralizing only the two layout-changing properties.
+     The shared motion layer animates .App-content and every
+     .sideNav list item. Their transforms create containing blocks,
+     which pull Flarum's absolute title and primary controls into
+     page content. Preserve opacity fades while neutralizing only
+     the layout-changing properties on native control hosts.
      ====================================================== */
-  html body .App .App-content {
+  html body .App .App-content,
+  html body .App .IndexPage-nav.sideNav > ul > li.item-nav,
+  html body .App .IndexPage-nav.sideNav > ul > li.App-primaryControl {
     transform: none !important;
     filter: none !important;
   }
