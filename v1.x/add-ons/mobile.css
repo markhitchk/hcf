@@ -1,20 +1,20 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — FLARUM-ALIGNED MOBILE CSS
 
-   This file intentionally mirrors Flarum 1.x phone behavior
-   from framework/core/less/common/App.less as closely as
-   possible, then adds only HCF-specific safety fixes.
+   Flarum's native mobile navigation and drawer behavior stay
+   intact. HCF branding is applied only inside the open drawer.
 
-   Version: 4.0
+   Version: 4.1
    Updated: 2026-08-10
 ========================================================== */
 
 :root {
   --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --cyan-readable: var(--primary-color, #00dfe6);
 }
 
 @media screen and (max-width: 767.98px) {
-  /* Base viewport — same role as Flarum's .App phone rules. */
+  /* Base viewport — follows Flarum's phone App rules. */
   .App {
     position: relative !important;
     padding-top: var(--header-height-phone) !important;
@@ -25,9 +25,9 @@
     overflow-x: hidden !important;
   }
 
-  /* ------------------------------------------------------
+  /* ======================================================
      FLARUM DEFAULT PHONE NAVIGATION
-  ------------------------------------------------------ */
+     ====================================================== */
   .App-navigation {
     position: absolute !important;
     border-bottom: 0 !important;
@@ -130,7 +130,6 @@
     display: none !important;
   }
 
-  /* Multiple extension primary controls follow Flarum's flex-row behavior. */
   :has(> .App-primaryControl ~ .App-primaryControl) {
     position: absolute !important;
     z-index: calc(var(--zindex-header) + 1) !important;
@@ -144,9 +143,20 @@
     right: auto !important;
   }
 
-  /* ------------------------------------------------------
+  /* Absolutely no HCF site logo inside the visible hamburger bar. */
+  .App-navigation .Header-title,
+  .App-navigation .Header-logo,
+  .App-navigation img.Header-logo,
+  .App-navigation .Header-title::before,
+  .App-navigation .Header-title::after {
+    content: none !important;
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* ======================================================
      FLARUM DEFAULT DRAWER
-  ------------------------------------------------------ */
+     ====================================================== */
   .App:not(.drawerOpen) .App-drawer {
     visibility: hidden !important;
   }
@@ -166,6 +176,7 @@
     transform: translateX(calc(-6px - var(--drawer-width))) !important;
     transition: transform .2s !important;
     z-index: var(--zindex-modal) !important;
+    overflow-x: hidden !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
@@ -189,97 +200,198 @@
     opacity: .9 !important;
   }
 
-  /* ------------------------------------------------------
+  /* ======================================================
      FLARUM DEFAULT HEADER INSIDE DRAWER
-  ------------------------------------------------------ */
-  .App-header {
+     ====================================================== */
+  .App-drawer .App-header {
     display: flex !important;
   }
 
-  .App-header .container {
+  .App-drawer .App-header .container {
     padding: 0 !important;
     width: 100% !important;
   }
 
-  .Header-navigation {
+  .App-drawer .Header-navigation {
     display: none !important;
   }
 
-  .Header-title {
-    padding: 13px 10px !important;
-    font-size: 16px !important;
-    font-weight: normal !important;
-    margin: 0 !important;
-    text-align: center !important;
-  }
-
-  .Header-controls {
+  .App-drawer .Header-controls {
     margin: 10px 0 0 !important;
     padding: 0 !important;
     list-style: none !important;
   }
 
-  .Header-controls > li {
+  .App-drawer .Header-controls > li {
     padding: 0 10px !important;
   }
 
-  .Header-controls .FormControl,
-  .Header-controls .ButtonGroup,
-  .Header-controls .Button {
+  .App-drawer .Header-controls .FormControl,
+  .App-drawer .Header-controls .ButtonGroup,
+  .App-drawer .Header-controls .Button {
     width: 100% !important;
     justify-content: flex-start !important;
   }
 
-  .Header-controls .Dropdown-menu .ButtonGroup,
-  .Header-controls .Dropdown-menu .Button {
+  .App-drawer .Header-controls .Dropdown-menu .ButtonGroup,
+  .App-drawer .Header-controls .Dropdown-menu .Button {
     width: auto !important;
   }
 
-  /* Use Flarum's real logo in the drawer. Remove the old HCF pseudo-logo
-     that was overlapping the hamburger while the drawer was closed. */
-  .Header-title::before,
-  .Header-title::after {
+  /* ======================================================
+     HCF LOGO + TITLE — DRAWER ONLY
+
+     Desktop-style branding is intentionally scoped to App-drawer.
+     It can never overlap the hamburger button while closed.
+     ====================================================== */
+  .App-drawer .Header-title {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 72px !important;
+    margin: 0 !important;
+    padding: 12px 14px !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+  }
+
+  .App-drawer .Header-title::before {
+    content: "" !important;
+    display: block !important;
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 !important;
+    background-image: url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg") !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 14px rgba(0, 255, 255, .30) !important;
+  }
+
+  .App-drawer .Header-title::after {
     content: none !important;
     display: none !important;
   }
 
-  .Header-title .Header-logo,
-  .Header-title img.Header-logo,
-  .Header-logo {
-    display: inline-block !important;
-    width: auto !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: 30px !important;
-    margin: 0 auto !important;
+  .App-drawer .Header-title > a,
+  .App-drawer .Header-title > a#home-link {
+    display: block !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 60px) !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    color: var(--cyan-readable) !important;
+    font: inherit !important;
+    text-decoration: none !important;
+    -webkit-text-stroke: .8px #000 !important;
+    paint-order: stroke fill !important;
+    text-shadow:
+      1px 1px 0 #000,
+      2px 2px 0 var(--cyan-readable),
+      3px 3px 0 #000 !important;
   }
 
-  /* Do not allow a desktop Header-title/logo to become part of the visible
-     phone toolbar. Flarum's phone toolbar is App-navigation only. */
-  .App-navigation .Header-title,
-  .App-navigation .Header-logo,
-  .App-navigation img.Header-logo {
+  /* Hide the native image because the controlled HCF logo above replaces it. */
+  .App-drawer .Header-title .Header-logo,
+  .App-drawer .Header-title img.Header-logo,
+  .App-drawer .Header-title > a > img {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 
-  /* Strong closed-state guard for third-party/custom logo rules. */
-  .App:not(.drawerOpen) .App-drawer .Header-title,
-  .App:not(.drawerOpen) .App-drawer .Header-logo,
-  .App:not(.drawerOpen) .App-drawer .Header-title::before,
-  .App:not(.drawerOpen) .App-drawer .Header-title::after {
-    visibility: hidden !important;
+  /* ======================================================
+     DESKTOP-STYLE PROFILE BUTTON INSIDE DRAWER
+
+     Keep the desktop cyan glass profile treatment while allowing
+     Flarum's drawer itself to remain native.
+     ====================================================== */
+  .App-drawer .Header-secondary .item-session,
+  .App-drawer #header-secondary .item-session {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
 
-  /* ------------------------------------------------------
+  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user,
+  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 52px !important;
+    height: auto !important;
+    padding: 6px 14px 6px 6px !important;
+    border: 1px solid rgba(0, 255, 255, .35) !important;
+    border-radius: 18px !important;
+    background: linear-gradient(135deg, rgba(0,255,255,.14), rgba(0,200,255,.05)) !important;
+    color: var(--cyan-readable) !important;
+    box-shadow: 0 0 14px rgba(0,255,255,.10) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    transform: none !important;
+  }
+
+  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .Avatar,
+  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .Avatar {
+    flex: 0 0 38px !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    margin: 0 !important;
+    border: 2px solid #00ffff !important;
+    border-radius: 50% !important;
+  }
+
+  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .Button-label,
+  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .Button-label {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .username,
+  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .username {
+    display: block !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    color: var(--cyan-readable) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  /* ======================================================
      FLARUM DEFAULT CONTENT BEHAVIOR
-  ------------------------------------------------------ */
+     ====================================================== */
   .App-content {
     background: var(--body-bg) !important;
     width: 100% !important;
     min-height: calc(100vh - var(--header-height-phone)) !important;
   }
 
-  /* HCF extension safety only — no header/nav restructuring below here. */
+  /* HCF extension safety only. */
   .App-content,
   .container,
   .sideNav,
