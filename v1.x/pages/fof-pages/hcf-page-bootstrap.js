@@ -1,26 +1,31 @@
 /* =========================================================
    Harley's Clan Forum — FoF Page srcdoc Bootstrap
-   Build: 1.1.0
+   Build: 1.1.1
    Updated: 2026-08-11
 
    Lightweight shared loader for v1.x FriendsOfFlarum Pages.
    - Low-cost loading UI
    - Mobile animation disabled
    - Automatic missing/deleted page fallback
+   - Explicit route aliases for FoF page/file ID mismatches
    - Network/render timeout protection
    - Remote page styles/scripts preserved
    ========================================================= */
 (function () {
   'use strict';
 
-  var BUILD = '1.1.0';
+  var BUILD = '1.1.1';
   var OWNER = 'markhitchk';
   var REPO = 'hcf';
   var BRANCH = 'main';
   var FOLDER = 'v1.x/pages/fof-pages';
   var RAW_BASE = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/' + FOLDER + '/';
+  var CDN_BASE = 'https://cdn.jsdelivr.net/gh/' + OWNER + '/' + REPO + '@' + BRANCH + '/' + FOLDER + '/';
   var API_DIR = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FOLDER + '?ref=' + encodeURIComponent(BRANCH);
   var LOAD_TIMEOUT = 12000;
+  var ROUTE_FILES = {
+    '26-critter-extraction': '27-critter-extraction.html'
+  };
 
   var frame = window.frameElement;
   if (!frame || !frame.ownerDocument) return;
@@ -139,8 +144,8 @@
   }
 
   async function tryDirect() {
-    var name = key + '.html';
-    var url = RAW_BASE + encodeFile(name);
+    var name = ROUTE_FILES[key] || (key + '.html');
+    var url = CDN_BASE + encodeFile(name);
     var html = await fetchText(url);
     return html === null ? null : { html: html, url: url, file: name };
   }
