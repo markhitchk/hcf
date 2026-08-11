@@ -1,6 +1,6 @@
 /* =========================================================
    Harley's Clan Forum — Global FoF Domain Router
-   Build: 1.0.0
+   Build: 1.0.1
    Updated: 2026-08-11
 
    Purpose:
@@ -9,6 +9,8 @@
      October 12, 2026.
    - Immediately prefer FreeFlarum whenever a page is already
      running on harleysclan.freeflarum.com.
+   - Preserve explicit FreeFlarum links before cutover so users
+     can save/open the replacement address ahead of time.
    - Rewrite old hard-coded forum URLs added later by FoF/Flarum.
    ========================================================= */
 (function () {
@@ -31,10 +33,6 @@
 
       if (url.origin === OLD_ORIGIN && useFreeFlarum) {
         return NEW_ORIGIN + url.pathname + url.search + url.hash;
-      }
-
-      if (url.origin === NEW_ORIGIN && !useFreeFlarum && !onFreeFlarum) {
-        return OLD_ORIGIN + url.pathname + url.search + url.hash;
       }
     } catch (e) {}
 
@@ -89,7 +87,7 @@
   }
 
   window.HCFDomainRouter = {
-    build: '1.0.0',
+    build: '1.0.1',
     oldOrigin: OLD_ORIGIN,
     newOrigin: NEW_ORIGIN,
     activeOrigin: activeOrigin,
