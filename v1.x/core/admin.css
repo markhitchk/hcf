@@ -2,14 +2,13 @@
    Harley's Clan Forum — Admin Panel Theme
    Companion to the front-end Custom CSS (cyan/glass theme)
 
-   Version: 1.0
+   Version: 1.1
    Author: HarleyTG
-   Updated: 2026-07-19 (UTC)
+   Updated: 2026-08-10
 
    Notes:
-   - Uses Flarum admin's own LESS variables where available
-     (@config-dark-mode) so this adapts to light/dark automatically,
-     the same way the front-end file leans on Flarum's live CSS vars.
+   - Uses Flarum's live CSS variables so this stays valid as a
+     standalone CSS file in both light and dark configurations.
    - Kept scoped to admin-only selectors (.App-nav .AdminNav, .Extension*,
      admin .Modal-content, etc.) so nothing here leaks onto the forum.
 =================================== */
@@ -17,10 +16,19 @@
 :root {
   --htg-cyan: #00ffff;
   --htg-cyan-soft: rgba(0, 255, 255, 0.35);
-  --htg-glass-dark: rgba(20, 20, 20, 0.72);
-  --htg-glass-light: rgba(255, 255, 255, 0.72);
+  --htg-glass-surface: rgba(20, 20, 20, 0.82);
   --htg-border: rgba(0, 255, 255, 0.22);
   --htg-shadow: rgba(0, 0, 0, 0.4);
+}
+
+@supports (background: color-mix(in srgb, black, transparent)) {
+  :root {
+    --htg-glass-surface: color-mix(
+      in srgb,
+      var(--body-bg, #141414) 82%,
+      transparent
+    );
+  }
 }
 
 /* ===================================
@@ -70,19 +78,12 @@
 =================================== */
 .App-nav .AdminNav .Dropdown-menu {
   border-radius: 16px !important;
-  background: var(--htg-glass-dark) !important;
+  background: var(--htg-glass-surface) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
   border: 1px solid var(--htg-border) !important;
   box-shadow: 0 10px 30px var(--htg-shadow) !important;
   animation: htg-fadeIn 0.3s ease;
-}
-
-body when (@config-dark-mode = false) {
-  .App-nav .AdminNav .Dropdown-menu {
-    background: var(--htg-glass-light) !important;
-    color: #1a1a1a;
-  }
 }
 
 .App-nav .AdminNav .Dropdown-menu > li > a {
@@ -123,18 +124,11 @@ body when (@config-dark-mode = false) {
 =================================== */
 div#content {
   border-radius: 20px !important;
-  background: var(--htg-glass-dark) !important;
+  background: var(--htg-glass-surface) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   box-shadow: 0 15px 40px var(--htg-shadow) !important;
   border: 1px solid var(--htg-border) !important;
-}
-
-body when (@config-dark-mode = false) {
-  div#content {
-    background: var(--htg-glass-light) !important;
-    color: #1a1a1a;
-  }
 }
 
 .App-content .container {
@@ -178,7 +172,7 @@ body when (@config-dark-mode = false) {
 
 .ExtensionPage-header {
   border-radius: 16px;
-  text-align: -webkit-center;
+  text-align: center;
 }
 
 .ExtensionPage-header h2 {
@@ -204,6 +198,12 @@ body when (@config-dark-mode = false) {
 .Button--primary:hover {
   box-shadow: 0 0 14px rgba(0, 255, 255, 0.45) !important;
   transform: translateY(-1px);
+}
+
+.Button:focus-visible,
+.App-nav .AdminNav .Dropdown-menu > li > a:focus-visible {
+  outline: 2px solid var(--htg-cyan) !important;
+  outline-offset: 2px !important;
 }
 
 /* ===================================
@@ -232,19 +232,12 @@ body when (@config-dark-mode = false) {
 =================================== */
 .App .Modal-content {
   border-radius: 18px !important;
-  background: var(--htg-glass-dark) !important;
+  background: var(--htg-glass-surface) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   border: 1px solid var(--htg-border) !important;
   box-shadow: 0 12px 40px var(--htg-shadow) !important;
   animation: htg-fadeIn 0.25s ease !important;
-}
-
-body when (@config-dark-mode = false) {
-  .App .Modal-content {
-    background: var(--htg-glass-light) !important;
-    color: #1a1a1a;
-  }
 }
 
 .App .Modal-header {
@@ -267,7 +260,7 @@ body when (@config-dark-mode = false) {
 =================================== */
 .AlertManager .Alert {
   border-radius: 14px !important;
-  background: var(--htg-glass-dark) !important;
+  background: var(--htg-glass-surface) !important;
   backdrop-filter: blur(12px) !important;
   border: 1px solid var(--htg-border) !important;
   border-left: 4px solid var(--htg-cyan) !important;
@@ -319,5 +312,21 @@ body when (@config-dark-mode = false) {
   .AlertManager .Alert,
   .ExtensionListItem-Dot.enabled {
     animation: none !important;
+  }
+
+  .Button,
+  .FormControl,
+  .ExtensionList-Category,
+  .Widget,
+  .ExtensionsWidget,
+  .App-nav .AdminNav .Dropdown-menu > li > a,
+  .App-nav .AdminNav .Dropdown-menu > li .Button-icon {
+    transition: none !important;
+  }
+
+  .Button--primary:hover,
+  .App-nav .AdminNav .Dropdown-menu > li > a:hover,
+  .App-nav .AdminNav .Dropdown-menu > li > a:hover .Button-icon {
+    transform: none !important;
   }
 }

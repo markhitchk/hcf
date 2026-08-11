@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Harley's Clan Forum Header</title>
+<!-- Paste this body-only fragment into Flarum's custom header field. -->
 <style>
 :root{
   --hc-banner-height:58px;
@@ -346,8 +341,6 @@ html body #hc-holiday-header{
   #hc-birthday-effects{display:none!important}
 }
 </style>
-</head>
-<body>
 <div id="hc-header-stack">
   <div class="hc-slide" data-hc-slide="notice">
     <div id="forum-notice" role="status" aria-label="Harley's Clan Forum notice">
@@ -431,7 +424,7 @@ html body #hc-holiday-header{
 (function birthdaySystem(){
   "use strict";
 
-  var RECORDS_URL="https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/add-ons/seasonal/birthdays.json";
+  var RECORDS_URL="https://cdn.jsdelivr.net/gh/markhitchk/hcf@a3a822ead197aebf79785b0a4e7e947ebd9a56a9/v1.x/add-ons/seasonal/birthdays.json";
   var TIME_ZONE="America/Los_Angeles";
   var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var fallback=[
@@ -606,7 +599,7 @@ html body #hc-holiday-header{
 </script>
 
 <!-- Normal production mode: holidays appear only on their real dates. -->
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/seasonal/holidays.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@a3a822ead197aebf79785b0a4e7e947ebd9a56a9/v1.x/add-ons/seasonal/holidays.js"></script>
 
 <script>
 (function normalizeHolidayMode(remaining){
@@ -794,5 +787,3 @@ html body #hc-holiday-header{
   window.setTimeout(sync,1600);
 })();
 </script>
-</body>
-</html>

@@ -1,5 +1,6 @@
 /* Dependencies inherit the revision used to load this stylesheet. */
 @import url("../add-ons/motion.css");
+@import url("../add-ons/header-panels.css");
 @import url("../add-ons/direct-messages.css");
 @import url("../add-ons/loading-screen.css");
 /* ===================================
@@ -11,7 +12,7 @@
 
    KaiOS and legacy Gecko support have been removed.
 
-   Version: 5.9a9
+   Version: 5.9a10
    Author: HarleyTG
    Updated: 2026-08-10
 
@@ -19,8 +20,14 @@
 
 :root {
   --cyan: #00ffff;
-  --text: var(--body-color, #e8e8e8);
+  --text: var(--text-color, #e8e8e8);
   --btn-text: #101414;
+
+  /* Compatibility aliases for older HCF rules. Their sources are the
+     custom properties exported by Flarum 1.x common/root.less. */
+  --body-color: var(--text-color, #e8e8e8);
+  --control-border: rgba(0, 255, 255, 0.24);
+  --primary-inverted-color: var(--button-primary-color, #ffffff);
 
   /* Stable fallback values for Flarum custom CSS. */
   --cyan-readable: var(--primary-color, #00dfe6);
@@ -119,7 +126,7 @@
   box-sizing: border-box !important;
   overflow: hidden !important;
 
-  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg') !important;
+  background-image: url('../assets/logos/HTG.svg') !important;
   background-position: center !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
@@ -174,41 +181,6 @@
     min-height: 40px !important;
     max-height: 40px !important;
     flex-basis: 40px !important;
-  }
-}
-
-@media (max-width: 700px) {
-  .Header-title {
-    gap: 7px !important;
-    max-width: 48vw !important;
-    height: 46px !important;
-    min-height: 46px !important;
-    max-height: 46px !important;
-    font-size: 18px !important;
-  }
-
-  .Header-title::before {
-    width: 32px !important;
-    min-width: 32px !important;
-    max-width: 32px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    max-height: 32px !important;
-    flex-basis: 32px !important;
-
-    /* Smaller correction for the reduced mobile logo. */
-    transform: translateY(-3px) !important;
-  }
-
-  .Header-title > a#home-link,
-  .Header-title > a {
-    padding: 0 4px 0 0 !important;
-    line-height: 1 !important;
-    -webkit-text-stroke-width: 0.8px;
-    text-shadow:
-      1px 1px 0 #000000,
-      2px 2px 0 var(--cyan-readable),
-      3px 3px 0 #000000;
   }
 }
 
@@ -631,35 +603,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   align-items: center !important;
 }
 
-@media (max-width: 700px) {
-  #header-secondary {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-  }
-
-  #header-secondary .Header-controls {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    flex-wrap: wrap !important;
-    gap: 4px !important;
-    min-width: 0 !important;
-  }
-
-  #header-secondary .Header-controls > li {
-    min-width: 0 !important;
-  }
-
-  #header-secondary .Button--flat {
-    padding: 6px 8px !important;
-    min-width: 32px !important;
-  }
-
-  #header-secondary .item-session .Button--user {
-    padding: 3px 8px 3px 3px !important;
-  }
-}
-
 /* ===================================
    LOGIN / SIGNUP BUTTONS
 =================================== */
@@ -844,32 +787,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
 .FoF-Terms-SignUp-Legal.Alert:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* ===================================
-   MOBILE PROFILE
-=================================== */
-@media (max-width: 700px) {
-  #header-secondary .item-session .username {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    /* Safety net: forcing this visible again means Flarum's own
-       overflow handling for this label no longer applies. Without
-       these, a long username has nothing stopping it from pushing
-       the header into horizontal overflow. */
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    max-width: 96px !important;
-  }
-
-  #header-secondary .item-session .Button--user .Button-label {
-    display: flex !important;
-    /* Lets the .username child above actually shrink/ellipsize
-       inside this flex row instead of forcing the row wider. */
-    min-width: 0 !important;
-  }
 }
 
 /* ===================================
@@ -1222,22 +1139,6 @@ li.item-session .Dropdown-toggle.Button--user .Button-label {
   border: 0 !important;
 }
 
-/* CHANGED from max-width: 500px to 700px to match the mobile
-   UI overhaul breakpoint below. Previously, a viewport between
-   501-700px got the full-width file card and every other
-   touch-friendly mobile treatment, but this button still
-   needed :hover or :focus-within to become visible — unreachable
-   on a touchscreen with no cursor. Now it's always visible at
-   any width the rest of the mobile UI activates at. */
-@media (max-width: 700px) {
-  .Post-body .wrapper .data .Button--primary {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    background: rgba(0,0,0,0.75) !important;
-  }
-}
-
-
 .catalog-top {
   display: none !important;
 }
@@ -1278,22 +1179,6 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
     opacity: 1 !important;
     transform: translateY(0) !important;
     background: rgba(0, 0, 0, 0.75) !important;
-  }
-}
-
-@media (max-width: 360px) {
-  .Header-title {
-    max-width: 150px !important;
-  }
-
-  .Header-title span {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-
-  #header-secondary .item-session .username {
-    max-width: 64px !important;
   }
 }
 
@@ -1363,7 +1248,7 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
   width: 34px;
   height: 34px;
   margin-bottom: 6px;
-  background: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg') center/contain no-repeat;
+  background: url('../assets/logos/HTG.svg') center/contain no-repeat;
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
 }
@@ -1421,21 +1306,6 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
   to { background-position: -200% center; }
 }
 
-@media (max-width: 500px) {
-  .containerNarrow::before {
-    width: 28px;
-    height: 28px;
-  }
-
-  .Hero-title {
-    font-size: 18px;
-  }
-
-  .Hero-subtitle {
-    font-size: 12.5px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .containerNarrow,
   .Hero-title {
@@ -1446,201 +1316,6 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
     background-position: 0% center !important;
   }
 }
-
-/* ===================================
-   MOBILE UI OVERHAUL (<= 700px)
-   Authentication modals and profile dropdowns become bottom
-   sheets. Grab handles are visual only; dialogs still close
-   through their normal controls or tap-outside behavior.
-=================================== */
-@media (max-width: 700px) {
-
-  /* ---- Global tap target floor + touch polish ---- */
-  .item-logIn .Button,
-  .item-signUp .Button,
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary,
-  .Alert-controls .Button--link {
-    min-height: 44px !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-  }
-
-  .Alert-dismiss {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-  }
-
-  /* ---- Authentication modal: bottom sheet ---- */
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) {
-    align-items: flex-end !important;
-    justify-content: center !important;
-  }
-
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    border-radius: 20px 20px 0 0 !important;
-    max-height: 88vh !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
-    animation: sheetUp 0.28s ease !important;
-    border-bottom: none !important;
-    padding-bottom: env(safe-area-inset-bottom) !important;
-  }
-
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body {
-    padding: 18px 18px 28px !important;
-  }
-
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-header {
-    padding: 14px 18px !important;
-  }
-
-  /* Small visual handle; it does not add swipe behavior. */
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content::before {
-    content: '';
-    display: block;
-    width: 36px;
-    height: 4px;
-    border-radius: 4px;
-    background: var(--control-border, rgba(255,255,255,0.2));
-    margin: 8px auto 4px;
-  }
-
-  @keyframes sheetUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content .Button--primary,
-  .item-logIn .Button,
-  .item-signUp .Button {
-    width: 100% !important;
-  }
-
-  .LogInModal .Modal-header::before,
-  .SignUpModal .Modal-header::before {
-    width: calc(100vw - 40px);
-    max-width: 280px;
-  }
-
-  /* ---- Login / signup header buttons ---- */
-  #header-secondary .item-logIn,
-  #header-secondary .item-signUp {
-    flex: 1 1 120px !important;
-    margin: 0 !important;
-    min-width: 0 !important;
-  }
-
-  #header-secondary .item-logIn .Button,
-  #header-secondary .item-signUp .Button {
-    width: 100% !important;
-    min-height: 42px !important;
-  }
-
-  /* ---- Profile dropdown: bottom sheet ---- */
-  .backgrwb {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    max-height: 80vh !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
-    border-radius: 20px 20px 0 0 !important;
-    border-bottom: none !important;
-    animation: sheetUp 0.28s ease !important;
-    padding-bottom: 16px !important;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
-    z-index: 1000 !important;
-  }
-
-  .backgrwb::before {
-    content: '';
-    display: block;
-    width: 36px;
-    height: 4px;
-    border-radius: 4px;
-    background: var(--control-border, rgba(255,255,255,0.2));
-    margin: 8px auto 10px;
-  }
-
-  .backgrwb .ulwb li {
-    padding: 12px 4px !important;
-    font-size: 15px !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
-  }
-
-  /* ---- Guest profile dropdown: bottom sheet ---- */
-  .backgrwbguest {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-radius: 20px 20px 0 0 !important;
-    border-bottom: none !important;
-    animation: sheetUp 0.28s ease !important;
-    padding-bottom: 16px !important;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
-    z-index: 1000 !important;
-  }
-
-  /* ---- Alerts ---- */
-  .Alert {
-    border-radius: 12px 12px 0 0;
-    padding: 12px 40px 12px 16px;
-  }
-
-  .Alert-dismiss {
-    top: 10px;
-    right: 10px;
-  }
-
-  .Alert-controls {
-    width: 100%;
-  }
-
-  .Alert-controls .Button--link {
-    flex: 1 1 auto;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* ---- File card ---- */
-  .Post-body .wrapper {
-    max-width: 100% !important;
-  }
-
-  /* ---- Hero banner ---- */
-  .containerNarrow {
-    margin: 8px auto;
-    padding: 0 16px 4px;
-  }
-}
-
-@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
-  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
-  .backgrwb,
-  .backgrwbguest {
-    animation: none !important;
-  }
-}
-
-
 
 /* ===================================
    MODAL INLINE ALERT (e.g. login error)
@@ -1882,50 +1557,7 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
     max-width: min(360px, calc(100vw - 30px)) !important;
     max-height: min(62vh, calc(100dvh - 150px)) !important;
 
-    transform: none !important;
     transform-origin: top right !important;
-  }
-}
-
-/* Mobile: show the controls as a bottom-sheet card so all items
-   remain viewable and tappable without running off-screen. */
-@media (max-width: 700px) {
-  .UserPage .UserCard .UserCard-controls > .Dropdown-menu {
-    position: fixed !important;
-    top: auto !important;
-    right: 8px !important;
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 8px !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    max-height: min(72vh, calc(100dvh - 24px)) !important;
-
-    border-radius: 18px !important;
-    padding: 10px !important;
-    transform: none !important;
-    transform-origin: bottom center !important;
-    z-index: 11000 !important;
-  }
-
-  .UserPage .UserCard .UserCard-controls > .Dropdown-menu::before {
-    content: "" !important;
-    display: block !important;
-    width: 38px !important;
-    height: 4px !important;
-    margin: 0 auto 8px !important;
-    border-radius: 999px !important;
-    background: var(--control-border, rgba(255, 255, 255, 0.22)) !important;
-  }
-
-  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a,
-  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button {
-    min-height: 46px !important;
-    padding: 11px 13px !important;
-    font-size: 14px !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
   }
 }
 

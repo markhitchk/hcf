@@ -10,7 +10,7 @@
    App-navigation or App-drawer layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.2
+   Version: 5.3
    Updated: 2026-08-10
 ========================================================== */
 
@@ -22,22 +22,7 @@
 @media screen and (max-width: 767.98px) {
   body {
     overflow-x: hidden !important;
-  }
-
-  /* ======================================================
-     KEEP FLARUM'S PAGE CONTROLS IN THE PHONE HEADER
-
-     The shared motion layer animates .App-content and every
-     .sideNav list item. Their transforms create containing blocks,
-     which pull Flarum's absolute title and primary controls into
-     page content. Preserve opacity fades while neutralizing only
-     the layout-changing properties on native control hosts.
-     ====================================================== */
-  html body .App .App-content,
-  html body .App .IndexPage-nav.sideNav > ul > li.item-nav,
-  html body .App .IndexPage-nav.sideNav > ul > li.App-primaryControl {
-    transform: none !important;
-    filter: none !important;
+    overflow-x: clip !important;
   }
 
   /* ======================================================
@@ -91,7 +76,7 @@
 
     margin: 0 !important;
     padding: 0 !important;
-    background-image: url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg") !important;
+    background-image: url("../assets/logos/HTG.svg") !important;
     background-position: center !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
@@ -187,7 +172,6 @@
     box-shadow: 0 0 14px rgba(0, 255, 255, 0.1) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
-    transform: none !important;
   }
 
   html body .App .App-drawer .Header-secondary .item-session .Button--user .Avatar,
@@ -268,12 +252,75 @@
   }
 
   html body .App .Composer {
-    max-width: 100vw !important;
+    max-width: 100% !important;
   }
 
   html body .App .Dropdown-menu,
   html body .App .Search-results {
     max-width: calc(100vw - 20px) !important;
+  }
+
+  /* Flarum owns phone modal geometry and its top-to-bottom transition.
+     HCF only tightens form spacing and touch targets. */
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body {
+    padding: 18px 18px 28px !important;
+  }
+
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Button--primary,
+  .item-logIn .Button,
+  .item-signUp .Button {
+    width: 100% !important;
+    min-height: 44px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* File actions must not depend on hover on touch devices. */
+  .Post-body .wrapper .data .Button--primary {
+    opacity: 1 !important;
+    transform: none !important;
+    background: rgba(0, 0, 0, .75) !important;
+  }
+
+  /* Style Flarum's native phone dropdown sheet without replacing its
+     fixed positioning, visibility state, or slide transform. */
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+    box-sizing: border-box !important;
+    max-height: min(70vh, calc(100dvh - 24px)) !important;
+    padding: 10px 10px calc(40px + var(--hc-mobile-safe-bottom)) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .34)) !important;
+    border-radius: 18px 18px 0 0 !important;
+    background: var(--hc-panel-surface, rgba(10, 13, 17, .96)) !important;
+    color: var(--hc-panel-text, #f2fdff) !important;
+    box-shadow: var(--hc-panel-shadow, 0 18px 48px rgba(0, 0, 0, .38)) !important;
+  }
+
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu::before {
+    content: "" !important;
+    display: block !important;
+    width: 38px !important;
+    height: 4px !important;
+    margin: 0 auto 8px !important;
+    border-radius: 999px !important;
+    background: var(--control-border, rgba(255, 255, 255, .22)) !important;
+  }
+
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a,
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 46px !important;
+    padding: 11px 13px !important;
+    color: inherit !important;
+    font-size: 14px !important;
+    touch-action: manipulation !important;
+  }
+
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a,
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > button {
+    color: #ff6b6b !important;
   }
 
   /* ======================================================
@@ -439,5 +486,13 @@
 
   .hc-simple-footer {
     padding-bottom: calc(20px + var(--hc-mobile-safe-bottom)) !important;
+  }
+}
+
+@media screen and (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+  :is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+  .UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+    animation: none !important;
+    transition: none !important;
   }
 }

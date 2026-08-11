@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 - Not Found</title>
-<link rel="icon" href="https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png" type="image/png">
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@a3a822ead197aebf79785b0a4e7e947ebd9a56a9/v1.x/assets/logos/HTG.svg" type="image/svg+xml">
 
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
@@ -18,8 +18,8 @@ body {
     align-items:center;
     min-height:100vh;
     text-align:center;
-    overflow:hidden;
-    padding:0 10px;
+    overflow:auto;
+    padding:20px 10px;
 }
 
 .container {
@@ -83,6 +83,7 @@ p {
 }
 .button:hover { background-color:#5B6EAE; transform:translateY(-2px); box-shadow:0 6px 12px rgba(0,0,0,0.2); border-color:#FFF; }
 .button:active { transform:translateY(1px); box-shadow:0 2px 4px rgba(0,0,0,0.15); }
+.button:focus-visible { outline:3px solid #0FD3F7; outline-offset:3px; }
 
 .button-container { display:flex; justify-content:center; gap:20px; flex-wrap:nowrap; margin-top:20px; }
 
@@ -98,57 +99,25 @@ p {
     .logo{width:90px;}
     .button-container{flex-direction:column; gap:10px;}
 }
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-    <img id="site-logo" class="logo" alt="Site Logo" draggable="false">
+    <img id="site-logo" class="logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@a3a822ead197aebf79785b0a4e7e947ebd9a56a9/v1.x/assets/logos/HTG.svg" alt="Harley's Clan logo" draggable="false">
 
     <h1>🚫 404 — Not Found</h1>
     <p>Oops! The page you're looking for doesn't exist or may have been moved. Let's get you back somewhere useful.</p>
 
     <div class="button-container">
-        <button class="button" onclick="window.location.href='/'">🏠 Back to Home</button>
-        <button class="button" onclick="window.location.href='https://forum.harleytg.com/p/17-support'">⚙️ Get Support</button>
+        <button type="button" class="button" onclick="window.location.href='/'">🏠 Back to Home</button>
+        <button type="button" class="button" onclick="window.location.href='https://forum.harleytg.com/p/17-support'">⚙️ Get Support</button>
     </div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    const logo = document.getElementById("site-logo");
-    const container = document.querySelector(".container");
-
-    logo.src = "https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png";
-
-    // prevent dragging
-    logo.addEventListener("dragstart", e => e.preventDefault());
-
-    // logo right-click
-    logo.addEventListener("contextmenu", function(e){ e.preventDefault(); alert("This logo is protected."); });
-
-    // container right-click
-    container.addEventListener("contextmenu", function(e){ if(e.target !== logo){ e.preventDefault(); alert("Content is protected."); } });
-
-    // block common inspect shortcuts
-    document.addEventListener("keydown", function(e){
-        if(e.key==="F12") e.preventDefault();
-        if(e.ctrlKey && e.shiftKey && e.key==="I") e.preventDefault();
-        if(e.ctrlKey && e.shiftKey && e.key==="J") e.preventDefault();
-        if(e.ctrlKey && e.key==="u") e.preventDefault();
-        if(e.ctrlKey && e.key==="s") e.preventDefault();
-    });
-
-
-const titles = ["404 - Not Found", "404 - Harley's Clan Forum"];
-let currentTitle = 0;
-setInterval(() => {
-    document.title = titles[currentTitle];
-    currentTitle = (currentTitle + 1) % titles.length;
-}, 2000);
-
-});
-</script>
 
 </body>
 </html>

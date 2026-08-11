@@ -17,6 +17,7 @@ All production files are stored under `v1.x/`. The repository uses folders on th
 v1.x/
 ├── add-ons/
 │   ├── direct-messages.css
+│   ├── header-panels.css
 │   ├── loading-screen.css
 │   ├── mobile.css
 │   ├── motion.css
@@ -28,9 +29,7 @@ v1.x/
 │       └── README.md
 ├── assets/
 │   └── logos/
-│       ├── HTG.svg
-│       ├── HTG-Icon.svg
-│       └── HTG-Icon.png
+│       └── HTG.svg
 ├── core/
 │   ├── admin.css
 │   ├── footer.html
@@ -46,6 +45,12 @@ v1.x/
 
 v2.x/
 └── README.md
+
+scripts/
+└── validate.mjs
+
+.github/workflows/
+└── validate.yml
 ```
 
 ## Main Flarum 1.x CSS
@@ -69,6 +74,7 @@ The entry point separates phone and desktop rules at Flarum's native
 ```css
 /* Phones: HCF add-ons plus mobile overrides. */
 @import url("../add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("../add-ons/header-panels.css") screen and (max-width: 767.98px);
 @import url("../add-ons/direct-messages.css") screen and (max-width: 767.98px);
 @import url("../add-ons/loading-screen.css") screen and (max-width: 767.98px);
 @import url("../add-ons/mobile.css") screen and (max-width: 767.98px);
@@ -80,14 +86,18 @@ The entry point separates phone and desktop rules at Flarum's native
 `mobile.css` deliberately leaves the phone header, navigation controls,
 drawer, backdrop, and content positioning to
 [Flarum 1.x's framework App styles](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/App.less).
+It also preserves Flarum's native
+[dropdown sheet](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Dropdown.less)
+and [mobile modal](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Modal.less)
+positioning and transitions.
 It only supplies HCF drawer branding, extension overflow protection, and
 compact mobile spacing. Only the canonical add-on filenames are kept so
 old aliases cannot create duplicate imports or stale CDN paths.
 
 ## Core HTML
 
-- Paste `v1.x/core/header.html` into the forum custom header.
-- Paste `v1.x/core/footer.html` into the forum custom footer.
+- Paste the body-only `v1.x/core/header.html` fragment into the forum custom header.
+- Paste the body-only `v1.x/core/footer.html` fragment into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
 
 ## Seasonal content and error pages
@@ -97,7 +107,15 @@ old aliases cannot create duplicate imports or stale CDN paths.
 
 ## Browser support
 
-The Flarum 1.x styles target current desktop and mobile browsers.
+The Flarum 1.x styles target current desktop and mobile browsers and use
+Flarum's official `767.98px` phone breakpoint. Run the dependency-free check
+before publishing changes:
+
+```sh
+node scripts/validate.mjs
+```
+
+The same check runs automatically in GitHub Actions.
 
 ---
 

@@ -1,13 +1,13 @@
 /* ========================================================================== 
    Harley's Clan Forum — Unified Messaging CSS
-   File: addons/messages.sys.css
+   File: v1.x/add-ons/direct-messages.css
    Contains: one shared Messenger theme for the header dropdown and /conversations
    The same base selectors intentionally style both messaging surfaces.
    ========================================================================== */
 
 /* ==================== MESSENGER BASE ==================== */
 /* ==========================================================================
-   messenger.css — compiled
+   Private Messages layout — compiled
    Source: neoncube2/flarum-private-messages LESS, resolved to plain CSS.
    - All LESS variables mapped to Flarum's live CSS custom properties
    - lighten()/darken()/mix() LESS functions -> color-mix() CSS equivalents.
@@ -17,12 +17,12 @@
      replaced with Harley's Studios HTG SVG icon.
    ========================================================================== */
 
-span.message-data-name, 
+.ConversationsList span.message-data-name,
 .ConversationsList .chat .chat-message button {
   display: none !important;
 }
 
-.message-text {
+.ConversationsList .message-text {
   background: #0084ff !important;
   color: white !important;
   border-radius: 30px !important;
@@ -32,17 +32,17 @@ span.message-data-name,
   border-radius: 30px !important;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
   background: rgba(0, 0, 0, 0.75) !important;
+  color: #ffffff !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 8px !important;
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 250px minmax(0, 1fr);
   grid-auto-rows: 100%;
   flex: 1;
 }
 
 .ConversationsList * {
-  color: white !important;
   font-weight: 500;
   vertical-align: middle;
 }
@@ -84,8 +84,7 @@ span.message-data-name,
   font-size: 16px;
 }
 
-.ConversationsList .chat .chat-header .chat-num-messages,
-.chat-num-messages {
+.ConversationsList .chat .chat-header .chat-num-messages {
   font-size: 11px;
   opacity: 0.5;
   color: var(--muted-color);
@@ -95,7 +94,8 @@ span.message-data-name,
   flex: 1;
   padding: 10px;
   min-height: 0;
-  overflow-y: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
 }
 
 .ConversationsList .chat .chat-history ul {
@@ -205,18 +205,21 @@ span.message-data-name,
   resize: none;
 }
 
-form.chat-message.clearfix {
-  height: 15% !important;
+.ConversationsList form.chat-message.clearfix {
+  flex: 0 0 auto !important;
+  min-height: 68px !important;
+  height: auto !important;
 }
 
-li.startConvo {
+.ConversationsList li.startConvo {
   font-size: 14px;
   color: #7b7b7b !important;
 }
 
-li.startConvo::before {
+.ConversationsList li.startConvo::before {
   content: "\f086";
-  font-family: 'Font Awesome 6 Brands';
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
+  font-weight: 900;
   margin: 4px;
 }
 
@@ -368,7 +371,7 @@ li.startConvo::before {
   background: rgba(255, 255, 255, 0.10) !important;
 }
 
-form.Dropdown-menu.Dropdown-menu--right {
+.MessagesDropdown form.Dropdown-menu.Dropdown-menu--right {
   border-radius: 30px !important;
   background: transparent !important;
 }
@@ -383,7 +386,7 @@ div#people-list::before {
   min-height: 100px !important;
   flex: 0 0 100px !important;
   margin: 14px auto 10px !important;
-  background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/assets/logos/HTG-Icon.svg");
+  background-image: url("../assets/logos/HTG.svg");
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -391,8 +394,7 @@ div#people-list::before {
 }
 
 /* Replace messenger comment icons with a consistently sized HTG icon */
-.ConversationsList .fa-comment-alt,
-.MessagesDropdown .fa-comment-alt {
+.ConversationsList .fa-comment-alt {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -406,15 +408,14 @@ div#people-list::before {
   line-height: 36px !important;
   font-size: 0 !important;
   vertical-align: middle !important;
-  background-image: url("https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/assets/logos/HTG-Icon.svg");
+  background-image: url("../assets/logos/HTG.svg");
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
   image-rendering: auto;
 }
 
-.ConversationsList .fa-comment-alt::before,
-.MessagesDropdown .fa-comment-alt::before {
+.ConversationsList .fa-comment-alt::before {
   content: "" !important;
   display: none !important;
 }
@@ -451,6 +452,7 @@ div#people-list::before {
 
 .MessagesDropdown .tidot {
   -webkit-animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
+  animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
   border-radius: 13px;
   display: inline-block;
   height: 13px;
@@ -465,9 +467,26 @@ div#people-list::before {
   44% { -webkit-transform: translateY(0px); }
 }
 
-.MessagesDropdown .tidot:nth-child(1) { -webkit-animation-delay: 200ms; }
-.MessagesDropdown .tidot:nth-child(2) { -webkit-animation-delay: 300ms; }
-.MessagesDropdown .tidot:nth-child(3) { -webkit-animation-delay: 400ms; }
+@keyframes mercuryTypingAnimation {
+  0% { transform: translateY(0); }
+  28% { transform: translateY(-5px); }
+  44% { transform: translateY(0); }
+}
+
+.MessagesDropdown .tidot:nth-child(1) {
+  -webkit-animation-delay: 200ms;
+  animation-delay: 200ms;
+}
+
+.MessagesDropdown .tidot:nth-child(2) {
+  -webkit-animation-delay: 300ms;
+  animation-delay: 300ms;
+}
+
+.MessagesDropdown .tidot:nth-child(3) {
+  -webkit-animation-delay: 400ms;
+  animation-delay: 400ms;
+}
 
 .MessagesDropdown .Dropdown-menu {
   display: flex;
@@ -478,95 +497,6 @@ div#people-list::before {
   .MessagesDropdown .Dropdown-menu {
     width: 725px;
   }
-}
-
-/* ===================================
-   NOTIFICATIONS — matched to messenger.css
-   (verbatim rgba(0,0,0,0.75) + blur(10px) — the exact
-   values messenger.css itself uses on .ConversationsList,
-   not an approximation — 30px radius, white text,
-   muted opacity)
-
-   Drop this in alongside messenger.css. The old
-   cyan/glassmorphic .NotificationList block has been
-   removed from master.css — see that file's diff.
-=================================== */
-
-/* The panel's own transparency does nothing if the dropdown
-   wrapper Flarum renders around it is already opaque — kill
-   that wrapper's own background/shadow so .NotificationList's
-   rgba + blur is what actually shows. */
-.NotificationsDropdown .Dropdown-menu {
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-}
-
-.NotificationList {
-    background: rgba(0, 0, 0, 0.75) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 30px !important;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
-    overflow: hidden !important;
-    padding: 8px !important;
-}
-
-.NotificationList * {
-    color: white !important;
-    font-weight: 500;
-    vertical-align: middle;
-}
-
-.NotificationList-header {
-    padding: 10px !important;
-    border-bottom: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.NotificationList-header .App-titleControl {
-    margin: 0 !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-}
-
-.NotificationList-header .App-primaryControl {
-    display: flex;
-    gap: 4px;
-}
-
-.NotificationList-header .App-primaryControl .Button {
-    color: white !important;
-    background: rgba(255, 255, 255, 0.10) !important;
-    border-radius: 30px !important;
-    border: none !important;
-}
-
-.NotificationList-header .App-primaryControl .Button:hover {
-    background: rgba(255, 255, 255, 0.18) !important;
-}
-
-.NotificationList-content {
-    background: transparent !important;
-    padding: 4px 0 !important;
-    max-height: 360px;
-    overflow-y: auto;
-}
-
-.NotificationGroup-content {
-    list-style: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.NotificationList-empty {
-    opacity: 0.5 !important;
-    font-size: 11px;
-    text-align: center;
-    padding: 20px 10px !important;
 }
 
 /* ---------- .StartConversationModal ---------- */
@@ -636,7 +566,8 @@ div#people-list::before {
   display: contents;
 }
 
-.Button--cancel {
+.StartConversationModal .Button--cancel,
+.AddRecipientModal .Button--cancel {
   margin-left: 15px;
 }
 
@@ -777,67 +708,10 @@ div#people-list::before {
   }
 }
 
-/* ==========================================================================
-   HEADER ICON SIZE FIX
-   Keep Font Awesome header/button icons at Flarum's normal 14px size.
-   ========================================================================== */
-
-.App-header .Button-icon,
-.App-header .Button-caret {
-  font-size: 14px !important;
-}
-
-.App-header .Button-icon > .fa,
-.App-header .Button-icon > .fas,
-.App-header .Button-icon > .fa-solid,
-.App-header .Button-icon > .far,
-.App-header .Button-icon > .fa-regular,
-.App-header .Button-icon > .fal,
-.App-header .Button-icon > .fa-light,
-.App-header .Button-icon > .fat,
-.App-header .Button-icon > .fa-thin,
-.App-header .Button-icon > .fad,
-.App-header .Button-icon > .fa-duotone,
-.App-header .Button-icon > .fab,
-.App-header .Button-icon > .fa-brands {
-  display: inline-block !important;
-  width: 1em !important;
-  height: 1em !important;
-  min-width: 1em !important;
-  min-height: 1em !important;
-  flex: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  font-size: 14px !important;
-  line-height: 1 !important;
-  background-image: none !important;
-  background-size: auto !important;
-}
-
-.App-header .Button-icon > .fa::before,
-.App-header .Button-icon > .fas::before,
-.App-header .Button-icon > .fa-solid::before,
-.App-header .Button-icon > .far::before,
-.App-header .Button-icon > .fa-regular::before,
-.App-header .Button-icon > .fal::before,
-.App-header .Button-icon > .fa-light::before,
-.App-header .Button-icon > .fat::before,
-.App-header .Button-icon > .fa-thin::before,
-.App-header .Button-icon > .fad::before,
-.App-header .Button-icon > .fa-duotone::before,
-.App-header .Button-icon > .fab::before,
-.App-header .Button-icon > .fa-brands::before {
-  display: inline-block !important;
-}
-
-.App-header .fa-bell::before {
-  content: "\f0f3" !important;
-  font-family: "Font Awesome 6 Free" !important;
-  font-weight: 900 !important;
-}
-
+/* Keep only the Direct Messages header glyph normalized here. */
 .App-header .MessagesDropdown .fa-comment-alt,
-.App-header .fa-comment-alt {
+.App-header .item-privateDiscussions .fa-comment-alt {
+  display: inline-block !important;
   width: 1em !important;
   height: 1em !important;
   min-width: 1em !important;
@@ -849,10 +723,10 @@ div#people-list::before {
 }
 
 .App-header .MessagesDropdown .fa-comment-alt::before,
-.App-header .fa-comment-alt::before {
+.App-header .item-privateDiscussions .fa-comment-alt::before {
   content: "\f075" !important;
   display: inline-block !important;
-  font-family: "Font Awesome 6 Free" !important;
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
   font-weight: 900 !important;
 }
 

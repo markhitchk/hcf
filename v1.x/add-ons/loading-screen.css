@@ -1,7 +1,7 @@
 /* =========================================================
    HARLEY'S CLAN FORUM — WELCOME OUTLINE + LOADING SCREEN
 
-   Load AFTER addons/animations.css so these targeted fixes win.
+   Load AFTER add-ons/motion.css so these targeted fixes win.
 
    Version: 1.2
    Author: HarleyTG
@@ -13,7 +13,7 @@
   --hc-welcome-glow: rgba(0, 255, 255, 0.38);
   --hc-welcome-glow-soft: rgba(0, 255, 255, 0.16);
   --hc-loader-bg: var(--body-bg, #080c10);
-  --hc-loader-text: var(--body-color, #e8ffff);
+  --hc-loader-text: var(--text-color, #e8ffff);
 }
 
 /* =========================================================

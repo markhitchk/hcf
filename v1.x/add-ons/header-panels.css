@@ -1,0 +1,312 @@
+/* =========================================================
+   HARLEY'S CLAN FORUM — SHARED HEADER PANELS
+
+   Owns the visual treatment for account, notifications,
+   flagged posts, and other Flarum header dropdown panels.
+   Popper/Flarum retain control of panel positioning.
+
+   Version: 1.0
+   Author: HarleyTG
+   Updated: 2026-08-10
+========================================================= */
+
+:root {
+  --hc-panel-surface: rgba(10, 13, 17, .92);
+  --hc-panel-surface-soft: rgba(20, 24, 30, .86);
+  --hc-panel-border: rgba(0, 255, 255, .34);
+  --hc-panel-text: var(--text-color, #f2fdff);
+  --hc-panel-muted: var(--muted-color, #9eb8c2);
+  --hc-panel-accent: var(--cyan-readable, var(--primary-color, #00e5ea));
+  --hc-panel-radius: 18px;
+  --hc-panel-shadow:
+    0 18px 48px rgba(0, 0, 0, .38),
+    0 0 20px rgba(0, 255, 255, .08);
+}
+
+/* Wrapper panels should not hide the owned glass surface inside them. */
+.NotificationsDropdown > .Dropdown-menu,
+.FlagsDropdown > .Dropdown-menu,
+.FlaggedPostsDropdown > .Dropdown-menu {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Account has no inner NotificationList, so its menu is the panel. */
+.SessionDropdown > .Dropdown-menu {
+  box-sizing: border-box !important;
+  min-width: 220px !important;
+  max-width: min(320px, calc(100vw - 20px)) !important;
+  max-height: min(70vh, 540px) !important;
+  max-height: min(70dvh, 540px) !important;
+  padding: 8px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  border: 1px solid var(--hc-panel-border) !important;
+  border-radius: var(--hc-panel-radius) !important;
+  background: var(--hc-panel-surface) !important;
+  color: var(--hc-panel-text) !important;
+  box-shadow: var(--hc-panel-shadow) !important;
+  backdrop-filter: blur(16px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(118%) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hc-panel-accent) rgba(255, 255, 255, .08);
+}
+
+.SessionDropdown > .Dropdown-menu > li {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.SessionDropdown > .Dropdown-menu > li + li {
+  margin-top: 2px !important;
+}
+
+.SessionDropdown > .Dropdown-menu > li > a,
+.SessionDropdown > .Dropdown-menu > li > button {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 9px 11px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  color: var(--hc-panel-text) !important;
+  font: inherit !important;
+  line-height: 1.25 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+.SessionDropdown > .Dropdown-menu > li > a:hover,
+.SessionDropdown > .Dropdown-menu > li > a:focus-visible,
+.SessionDropdown > .Dropdown-menu > li > button:hover,
+.SessionDropdown > .Dropdown-menu > li > button:focus-visible {
+  outline: none !important;
+  background: rgba(0, 255, 255, .12) !important;
+  color: var(--hc-panel-accent) !important;
+  box-shadow: inset 3px 0 0 var(--hc-panel-accent) !important;
+}
+
+.SessionDropdown > .Dropdown-menu .Button-icon,
+.SessionDropdown > .Dropdown-menu .icon {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  margin: 0 !important;
+  color: currentColor !important;
+  text-align: center !important;
+}
+
+.SessionDropdown > .Dropdown-menu .Button-label {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.SessionDropdown > .Dropdown-menu > .Dropdown-separator {
+  height: 1px !important;
+  min-height: 1px !important;
+  margin: 7px 4px !important;
+  padding: 0 !important;
+  background: rgba(0, 255, 255, .18) !important;
+}
+
+/* Destructive account actions. */
+.SessionDropdown > .Dropdown-menu .item-logOut > a,
+.SessionDropdown > .Dropdown-menu .item-logOut > button,
+.SessionDropdown > .Dropdown-menu .item-logout > a,
+.SessionDropdown > .Dropdown-menu .item-logout > button,
+.SessionDropdown > .Dropdown-menu .item-erase > a,
+.SessionDropdown > .Dropdown-menu .item-erase > button {
+  color: #ff6b6b !important;
+}
+
+.SessionDropdown > .Dropdown-menu .item-logOut > a:hover,
+.SessionDropdown > .Dropdown-menu .item-logOut > a:focus-visible,
+.SessionDropdown > .Dropdown-menu .item-logOut > button:hover,
+.SessionDropdown > .Dropdown-menu .item-logOut > button:focus-visible,
+.SessionDropdown > .Dropdown-menu .item-logout > a:hover,
+.SessionDropdown > .Dropdown-menu .item-logout > a:focus-visible,
+.SessionDropdown > .Dropdown-menu .item-logout > button:hover,
+.SessionDropdown > .Dropdown-menu .item-logout > button:focus-visible,
+.SessionDropdown > .Dropdown-menu .item-erase > a:hover,
+.SessionDropdown > .Dropdown-menu .item-erase > a:focus-visible,
+.SessionDropdown > .Dropdown-menu .item-erase > button:hover,
+.SessionDropdown > .Dropdown-menu .item-erase > button:focus-visible {
+  background: rgba(220, 38, 38, .90) !important;
+  color: #ffffff !important;
+  box-shadow: inset 3px 0 0 #ff8a8a !important;
+}
+
+/* Notifications and FlagList share Flarum's NotificationList structure. */
+.NotificationList,
+.FlagList {
+  box-sizing: border-box !important;
+  max-width: min(430px, calc(100vw - 20px)) !important;
+  max-height: min(72vh, 620px) !important;
+  max-height: min(72dvh, 620px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--hc-panel-border) !important;
+  border-radius: var(--hc-panel-radius) !important;
+  background: var(--hc-panel-surface) !important;
+  color: var(--hc-panel-text) !important;
+  box-shadow: var(--hc-panel-shadow) !important;
+  backdrop-filter: blur(16px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(118%) !important;
+}
+
+.NotificationList-header {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  min-height: 48px !important;
+  padding: 10px 12px !important;
+  border-bottom: 1px solid rgba(0, 255, 255, .14) !important;
+  background: rgba(255, 255, 255, .025) !important;
+}
+
+.NotificationList-header .App-titleControl {
+  min-width: 0 !important;
+  margin: 0 !important;
+  color: var(--hc-panel-text) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+.NotificationList-header .App-primaryControl {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  gap: 4px !important;
+}
+
+.NotificationList-header .App-primaryControl .Button {
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .10) !important;
+  color: var(--hc-panel-text) !important;
+}
+
+.NotificationList-header .App-primaryControl .Button:hover,
+.NotificationList-header .App-primaryControl .Button:focus-visible {
+  outline: 2px solid var(--hc-panel-accent) !important;
+  outline-offset: 1px !important;
+  background: rgba(0, 255, 255, .14) !important;
+  color: var(--hc-panel-accent) !important;
+}
+
+.NotificationList-content {
+  box-sizing: border-box !important;
+  max-height: min(58vh, 500px) !important;
+  max-height: min(58dvh, 500px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  background: transparent !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hc-panel-accent) rgba(255, 255, 255, .08);
+}
+
+.NotificationGroup-content {
+  margin: 0 !important;
+  padding: 4px !important;
+  list-style: none !important;
+}
+
+.NotificationList .Notification,
+.FlagList .Notification {
+  border-radius: 12px !important;
+  color: var(--hc-panel-text) !important;
+}
+
+.NotificationList .Notification:hover,
+.NotificationList .Notification:focus-within,
+.FlagList .Notification:hover,
+.FlagList .Notification:focus-within {
+  background: rgba(0, 255, 255, .09) !important;
+}
+
+.NotificationList-empty {
+  box-sizing: border-box !important;
+  padding: 24px 14px !important;
+  color: var(--hc-panel-muted) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  text-align: center !important;
+}
+
+/* Keep native header icons at a stable size. */
+.App-header .Button-icon,
+.App-header .Button-caret {
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+@media screen and (max-width: 767.98px) {
+  /* Flarum owns position; HCF only constrains the rendered card. */
+  html body .App .SessionDropdown > .Dropdown-menu,
+  html body .App .NotificationsDropdown > .Dropdown-menu,
+  html body .App .FlagsDropdown > .Dropdown-menu,
+  html body .App .FlaggedPostsDropdown > .Dropdown-menu {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  html body .App .SessionDropdown > .Dropdown-menu {
+    max-height: calc(70dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
+    padding: 8px 8px calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
+    border-radius: 16px !important;
+  }
+
+  html body .App .NotificationsDropdown > .Dropdown-menu,
+  html body .App .FlagsDropdown > .Dropdown-menu,
+  html body .App .FlaggedPostsDropdown > .Dropdown-menu {
+    padding-bottom: calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
+  }
+
+  html body .App .NotificationList,
+  html body .App .FlagList {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px !important;
+  }
+
+  html body .App .NotificationList-content {
+    max-height: calc(58dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
+  }
+
+  html body .App .SessionDropdown > .Dropdown-menu > li > a,
+  html body .App .SessionDropdown > .Dropdown-menu > li > button {
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .SessionDropdown > .Dropdown-menu,
+  .SessionDropdown > .Dropdown-menu *,
+  .NotificationList,
+  .NotificationList *,
+  .FlagList,
+  .FlagList * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

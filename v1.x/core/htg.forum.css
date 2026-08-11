@@ -17,6 +17,7 @@
 
 /* Relative imports inherit this entry point's pinned release revision. */
 @import url("../add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("../add-ons/header-panels.css") screen and (max-width: 767.98px);
 @import url("../add-ons/direct-messages.css") screen and (max-width: 767.98px);
 @import url("../add-ons/loading-screen.css") screen and (max-width: 767.98px);
 @import url("../add-ons/mobile.css") screen and (max-width: 767.98px);

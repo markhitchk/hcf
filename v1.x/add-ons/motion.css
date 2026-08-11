@@ -1,153 +1,285 @@
 /* =========================================================
-   HARLEY'S CLAN FORUM — ANIMATIONS ADD-ON
+   HARLEY'S CLAN FORUM — SAFE MOTION LAYER
 
-   The original animation layer is pinned to the last complete
-   build. Local overrides keep the preferred forum animations
-   while disabling motion in specific interface areas.
+   Motion is deliberately limited to opacity, color, background,
+   and shadow. Flarum/Popper positioning hosts never receive a
+   transform or filter from this file.
 
-   Version: 1.3
+   Version: 2.0
    Author: HarleyTG
-   Updated: 2026-08-09
+   Updated: 2026-08-10
 ========================================================= */
 
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@f00ce72ddea5b86ebcd08be9b2fefb6c4db10155/addons/animations.css");
-
-/* =========================================================
-   AFRUX WELCOME WIDGET — NO ANIMATIONS
-
-   Keeps the rest of the forum animation layer active while
-   making the welcome/profile card completely motion-free.
-========================================================= */
-
-.AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget,
-.AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget *,
-.AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget *::before,
-.AfruxWidgets-sideNavAlt .AfruxWidgets-Widget.welcomebox-widget *::after {
-  animation: none !important;
-  animation-name: none !important;
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
+:root {
+  --hc-motion-fast: 180ms;
+  --hc-motion-normal: 320ms;
+  --hc-motion-slow: 700ms;
+  --hc-motion-ease: cubic-bezier(.2, .8, .2, 1);
+  --hc-animation-cyan: var(--cyan-readable, var(--cyan, #00ffff));
+  --hc-animation-glow: rgba(0, 255, 255, .30);
+  --hc-animation-glow-strong: rgba(0, 255, 255, .52);
 }
 
-/* The imported layer lifts every Afrux widget and adds a cyan
-   shadow on hover. Keep the welcome card itself fixed too; the
-   inner .backgrwb rules below cannot cancel movement applied to
-   this outer wrapper. */
+/* Opacity never changes the containing block used by Flarum controls. */
+.App-content > .container,
+.IndexPage-results,
+.DiscussionPage-discussion,
+.UserPage-content {
+  animation: hc-content-reveal .46s var(--hc-motion-ease) both;
+}
+
+@keyframes hc-content-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Header energy effects stay on decorative paint only. */
+.App-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--hc-animation-cyan),
+    #ffffff,
+    var(--hc-animation-cyan),
+    transparent
+  );
+  background-size: 220% 100%;
+  box-shadow:
+    0 0 7px var(--hc-animation-glow-strong),
+    0 0 16px var(--hc-animation-glow);
+  animation: hc-header-beam 6s ease-in-out infinite;
+}
+
+.Header-title::before {
+  animation: hc-logo-energy 4s ease-in-out infinite;
+  transition:
+    box-shadow var(--hc-motion-normal) ease,
+    opacity var(--hc-motion-normal) ease;
+}
+
+.Header-title:hover::before {
+  opacity: 1;
+  box-shadow:
+    0 0 16px var(--hc-animation-glow-strong),
+    0 0 38px rgba(0, 255, 255, .30);
+}
+
+.Header-title a {
+  background-image: linear-gradient(
+    90deg,
+    var(--hc-animation-cyan) 0%,
+    #ffffff 38%,
+    var(--hc-animation-cyan) 62%,
+    var(--hc-animation-cyan) 100%
+  );
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: hc-title-shimmer 6s ease-in-out infinite;
+}
+
+@keyframes hc-header-beam {
+  0%, 18% { background-position: 120% 0; opacity: .25; }
+  52% { opacity: .9; }
+  82%, 100% { background-position: -120% 0; opacity: .25; }
+}
+
+@keyframes hc-logo-energy {
+  0%, 100% {
+    opacity: .88;
+    box-shadow:
+      0 0 9px var(--hc-animation-glow),
+      0 0 22px rgba(0, 255, 255, .15);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 16px var(--hc-animation-glow-strong),
+      0 0 34px rgba(0, 255, 255, .25);
+  }
+}
+
+@keyframes hc-title-shimmer {
+  0%, 58% { background-position: 100% 0; }
+  82% { background-position: 0 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Interactive controls glow without moving their positioning anchors. */
+.Button,
+.Dropdown-toggle,
+.App-header .Button {
+  transition:
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease,
+    border-color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease;
+}
+
+.Button:hover,
+.Dropdown-toggle:hover,
+.App-header .Button:hover {
+  box-shadow: 0 0 14px var(--hc-animation-glow);
+}
+
+.Button:focus-visible,
+.Dropdown-toggle:focus-visible {
+  outline: 2px solid var(--hc-animation-cyan);
+  outline-offset: 2px;
+}
+
+.item-notifications .Button-badge,
+.item-privateDiscussions .Button-badge,
+.NotificationsDropdown-unread,
+.NotificationGrid-unread {
+  animation: hc-badge-pulse 2.35s ease-in-out infinite;
+}
+
+@keyframes hc-badge-pulse {
+  0%, 100% {
+    opacity: .84;
+    box-shadow: 0 0 0 rgba(0, 255, 255, 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px var(--hc-animation-glow-strong);
+  }
+}
+
+/* Popper owns dropdown transforms. Animate opacity only. */
+.Dropdown-menu,
+.SelectDropdown-menu,
+.NotificationList,
+.Search-results {
+  animation: hc-panel-reveal .22s ease-out both;
+}
+
+.Dropdown-menu > li,
+.SelectDropdown-menu > li,
+.NotificationList .Notification {
+  animation: hc-row-reveal .28s ease-out both;
+}
+
+.Dropdown-menu > li > a,
+.Dropdown-menu > li > button,
+.SelectDropdown-menu > li > button {
+  transition:
+    background-color var(--hc-motion-fast) ease,
+    color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease;
+}
+
+@keyframes hc-panel-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hc-row-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Cards keep their layout box stationary. */
+.DiscussionListItem,
+.PostStream-item,
+.Post,
+.TagTile,
+.AfruxWidgets-Widget {
+  animation: hc-card-reveal .38s var(--hc-motion-ease) both;
+  transition:
+    background-color var(--hc-motion-normal) ease,
+    border-color var(--hc-motion-normal) ease,
+    box-shadow var(--hc-motion-normal) ease;
+}
+
+.DiscussionListItem:hover,
+.TagTile:hover,
+.AfruxWidgets-Widget:hover {
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, .16),
+    0 0 16px var(--hc-animation-glow);
+}
+
+@keyframes hc-card-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.Badge,
+.TagLabel,
+.App-content a:not(.Button):not(.Dropdown-toggle) {
+  transition:
+    color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    text-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease;
+}
+
+.TagLabel:hover,
+.Badge:hover,
+.App-content a:not(.Button):not(.Dropdown-toggle):hover {
+  text-shadow: 0 0 7px var(--hc-animation-glow);
+}
+
+/* Modal and alert entrances are paint-only. */
+.Modal-content,
+.Alert {
+  animation: hc-surface-reveal .3s ease-out both;
+}
+
+@keyframes hc-surface-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.LoadingIndicator-container {
+  animation: hc-loading-breathe 1.5s ease-in-out infinite;
+}
+
+@keyframes hc-loading-breathe {
+  0%, 100% { opacity: .65; }
+  50% { opacity: 1; }
+}
+
+/* These areas intentionally remain stationary. */
 .AfruxWidgets-Widget.welcomebox-widget,
-.AfruxWidgets-Widget.welcomebox-widget:hover,
-.AfruxWidgets-Widget.welcomebox-widget:focus-within {
+.AfruxWidgets-Widget.welcomebox-widget *,
+.backgrwb,
+.backgrwb *,
+.backgrwbguest,
+.backgrwbguest *,
+.tooltip,
+.Tooltip,
+[role="tooltip"],
+.tooltip *,
+.Tooltip *,
+[role="tooltip"] * {
+  transition-property:
+    color,
+    background-color,
+    border-color,
+    box-shadow,
+    opacity !important;
+}
+
+.AfruxWidgets-Widget.welcomebox-widget,
+.AfruxWidgets-Widget.welcomebox-widget *,
+.backgrwb,
+.backgrwb *,
+.backgrwbguest,
+.backgrwbguest * {
   animation: none !important;
-  transition: none !important;
-  transform: none !important;
 }
 
-.AfruxWidgets-Widget.welcomebox-widget:hover {
-  box-shadow: none !important;
-}
-
-/* Remove hover/active movement inherited from the global layer. */
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Button:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Button:active,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-toggle:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-toggle:active,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-menu > li > a:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-menu > li > button:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb .ulwb li:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb .avatarwb:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb .iconbadge .Badge:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb .circletop a:hover i,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb .circletop a:focus-visible i,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb button.logwbox:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb button.logwbox:hover .logoutt,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwb button.logwbox:hover .Button-icon,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwbguest a:hover,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .backgrwbguest .Button:hover {
-  transform: none !important;
-  filter: none !important;
-}
-
-/* Prevent the animated shine layer from appearing on widget buttons. */
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Button::after,
-.AfruxWidgets-sideNavAlt .welcomebox-widget .Dropdown-toggle::after {
-  animation: none !important;
-  opacity: 0 !important;
-}
-
-/* =========================================================
-   HEADER SIGN IN / SIGN UP TOOLBAR — NO ANIMATIONS
-
-   This belongs in animations.css because the movement and shine
-   originate from the imported animation layer. The normal theme
-   colors, borders, backgrounds, and focus outlines remain active.
-========================================================= */
-
-.Header-secondary .item-logIn,
-.Header-secondary .item-signUp,
-#header-secondary .item-logIn,
-#header-secondary .item-signUp,
-.Header-secondary .item-logIn *,
-.Header-secondary .item-signUp *,
-#header-secondary .item-logIn *,
-#header-secondary .item-signUp *,
-.Header-secondary .item-logIn *::before,
-.Header-secondary .item-logIn *::after,
-.Header-secondary .item-signUp *::before,
-.Header-secondary .item-signUp *::after,
-#header-secondary .item-logIn *::before,
-#header-secondary .item-logIn *::after,
-#header-secondary .item-signUp *::before,
-#header-secondary .item-signUp *::after {
-  animation: none !important;
-  animation-name: none !important;
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  scroll-behavior: auto !important;
-}
-
-/* Remove animated shine overlays added by the original layer. */
-.Header-secondary .item-logIn .Button::after,
-.Header-secondary .item-signUp .Button::after,
-#header-secondary .item-logIn .Button::after,
-#header-secondary .item-signUp .Button::after {
-  display: none !important;
-  content: none !important;
-  animation: none !important;
-  opacity: 0 !important;
-}
-
-/* Keep hover, keyboard-focus, and pressed states stationary. */
-.Header-secondary .item-logIn .Button:hover,
-.Header-secondary .item-logIn .Button:focus-visible,
-.Header-secondary .item-logIn .Button:active,
-.Header-secondary .item-signUp .Button:hover,
-.Header-secondary .item-signUp .Button:focus-visible,
-.Header-secondary .item-signUp .Button:active,
-#header-secondary .item-logIn .Button:hover,
-#header-secondary .item-logIn .Button:focus-visible,
-#header-secondary .item-logIn .Button:active,
-#header-secondary .item-signUp .Button:hover,
-#header-secondary .item-signUp .Button:focus-visible,
-#header-secondary .item-signUp .Button:active {
-  animation: none !important;
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-}
-
-/* =========================================================
-   STATIONARY TOOLTIPS
-
-   Popper positions generated tooltips with an inline transform,
-   so that property must remain untouched. Disabling only their
-   animation and transition prevents visible drifting without
-   breaking placement.
-========================================================= */
-
+/* Popper supplies inline transforms to tooltips; never replace them here. */
 .tooltip,
 .Tooltip,
 [role="tooltip"],
@@ -155,80 +287,45 @@
 .Tooltip *,
 [role="tooltip"] * {
   animation: none !important;
-  transition: none !important;
 }
 
-/* Badge scaling moves the element used as the tooltip anchor.
-   Keep labeled badges fixed while retaining their colors and
-   non-transform hover styling. */
-.Badge[data-original-title],
-.Badge[aria-label],
-.Badge[data-original-title]:hover,
-.Badge[aria-label]:hover {
-  transform: none !important;
-}
+@media (prefers-reduced-motion: reduce) {
+  .App-content > .container,
+  .IndexPage-results,
+  .DiscussionPage-discussion,
+  .UserPage-content,
+  .App-header::after,
+  .Header-title::before,
+  .Header-title a,
+  .Button-badge,
+  .NotificationsDropdown-unread,
+  .NotificationGrid-unread,
+  .Dropdown-menu,
+  .SelectDropdown-menu,
+  .NotificationList,
+  .Search-results,
+  .Dropdown-menu > li,
+  .SelectDropdown-menu > li,
+  .NotificationList .Notification,
+  .DiscussionListItem,
+  .PostStream-item,
+  .Post,
+  .TagTile,
+  .AfruxWidgets-Widget,
+  .Modal-content,
+  .Alert,
+  .LoadingIndicator-container {
+    animation: none !important;
+  }
 
-/* =========================================================
-   WELCOME / PROFILE CARD — MOTION BOUNDARY
-
-   These repeated-class selectors intentionally outrank the
-   later profile rules in core/htg.forum.css. This makes the
-   override reliable even though animations.css is imported at
-   the top of that file.
-========================================================= */
-
-.backgrwb.backgrwb.backgrwb,
-.backgrwbguest.backgrwbguest.backgrwbguest,
-.backgrwb.backgrwb.backgrwb::after,
-.backgrwbguest.backgrwbguest.backgrwbguest::after,
-.backgrwb.backgrwb.backgrwb .avatarwb,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Avatar,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Dropdown-menu,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Dropdown-menu > li,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Dropdown-menu > li > button,
-.backgrwb.backgrwb.backgrwb .iconbadge .Badge,
-.backgrwb.backgrwb.backgrwb .circletop a,
-.backgrwb.backgrwb.backgrwb .circletop a i,
-.backgrwb.backgrwb.backgrwb .contentwb .textinfo,
-.backgrwb.backgrwb.backgrwb .ulwb li,
-.backgrwb.backgrwb.backgrwb .ulwb li label.textinfo,
-.backgrwb.backgrwb.backgrwb .ulwb li strong.textinfo,
-.backgrwb.backgrwb.backgrwb button.logwbox,
-.backgrwb.backgrwb.backgrwb button.logwbox .Button-icon,
-.backgrwbguest.backgrwbguest.backgrwbguest a,
-.backgrwbguest.backgrwbguest.backgrwbguest button {
-  animation: none !important;
-  transition: none !important;
-}
-
-/* Remove the old sweeping shine pseudo-element. It required
-   overflow clipping, which could cut off the avatar menu. */
-.backgrwb.backgrwb.backgrwb::after,
-.backgrwbguest.backgrwbguest.backgrwbguest::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* Neutralize only decorative movement. No base transform is
-   placed on the avatar dropdown because its position may be
-   supplied by Flarum/Bootstrap. */
-.backgrwb.backgrwb.backgrwb .avatarwb:hover,
-.backgrwb.backgrwb.backgrwb .AvatarEditor:hover .Avatar,
-.backgrwb.backgrwb.backgrwb .iconbadge .Badge:hover,
-.backgrwb.backgrwb.backgrwb .circletop a:hover i,
-.backgrwb.backgrwb.backgrwb .circletop a:focus-visible i,
-.backgrwb.backgrwb.backgrwb .ulwb li:hover,
-.backgrwb.backgrwb.backgrwb button.logwbox:hover,
-.backgrwb.backgrwb.backgrwb button.logwbox:focus-visible,
-.backgrwb.backgrwb.backgrwb button.logwbox:hover .logoutt,
-.backgrwb.backgrwb.backgrwb button.logwbox:focus-visible .logoutt,
-.backgrwb.backgrwb.backgrwb button.logwbox:hover .Button-icon,
-.backgrwb.backgrwb.backgrwb button.logwbox:focus-visible .Button-icon,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Dropdown-menu > li > button:hover,
-.backgrwb.backgrwb.backgrwb .AvatarEditor .Dropdown-menu > li > button:focus-visible,
-.backgrwbguest.backgrwbguest.backgrwbguest a:hover,
-.backgrwbguest.backgrwbguest.backgrwbguest a:focus-visible,
-.backgrwbguest.backgrwbguest.backgrwbguest button:hover,
-.backgrwbguest.backgrwbguest.backgrwbguest button:focus-visible {
-  transform: none !important;
+  .Button,
+  .Dropdown-toggle,
+  .App-header .Button,
+  .DiscussionListItem,
+  .TagTile,
+  .AfruxWidgets-Widget,
+  .Badge,
+  .TagLabel {
+    transition: none !important;
+  }
 }
