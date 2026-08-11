@@ -4,33 +4,16 @@
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.4.0
+   Runtime Version: 1.4.1
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
 (function(){
   "use strict";
 
-  if(window.HCFPageRuntime){
-    if(typeof window.HCFPageRuntime.refresh==="function")window.HCFPageRuntime.refresh();
-    return;
-  }
-
   var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
   var SILENT_STYLE_ID="hcf-fof-silent-runtime";
   var resizeTimer=0;
-
-  function loadDomainRouter(){
-    if(window.HCFDomainRouter)return;
-    if(document.querySelector('script[data-hcf-domain-router]'))return;
-
-    var script=document.createElement("script");
-    script.src=DOMAIN_ROUTER_SRC;
-    script.async=false;
-    script.defer=false;
-    script.setAttribute("data-hcf-domain-router","1.0.1");
-    (document.head||document.documentElement).appendChild(script);
-  }
 
   function installSilentRuntimeStyle(){
     if(document.getElementById(SILENT_STYLE_ID))return;
@@ -46,6 +29,26 @@
       ".hcf-page .hcf-runtime-identity,"+
       ".hcf-page [data-hcf-runtime-ui]{display:none!important;visibility:hidden!important;}";
     (document.head||document.documentElement).appendChild(style);
+  }
+
+  /* Install the silent override before checking for an older cached runtime. */
+  installSilentRuntimeStyle();
+
+  if(window.HCFPageRuntime){
+    if(typeof window.HCFPageRuntime.refresh==="function")window.HCFPageRuntime.refresh();
+    return;
+  }
+
+  function loadDomainRouter(){
+    if(window.HCFDomainRouter)return;
+    if(document.querySelector('script[data-hcf-domain-router]'))return;
+
+    var script=document.createElement("script");
+    script.src=DOMAIN_ROUTER_SRC;
+    script.async=false;
+    script.defer=false;
+    script.setAttribute("data-hcf-domain-router","1.0.1");
+    (document.head||document.documentElement).appendChild(script);
   }
 
   function normalizeUsername(value){
@@ -166,14 +169,13 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.4.0",
+    version:"1.4.1",
     refresh:refresh,
     getIdentity:getIdentity,
     isMobilePerformanceDevice:isMobilePerformanceDevice,
     runtimeDisabled:runtimeDisabled
   };
 
-  installSilentRuntimeStyle();
   window.addEventListener("resize",onResize,{passive:true});
   window.addEventListener("hcf:fof-page:loaded",refresh);
   document.addEventListener("visibilitychange",function(){
