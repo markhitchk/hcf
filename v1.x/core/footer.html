@@ -1,7 +1,7 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.1
+   HARLEY'S CLAN FORUM FOOTER v4.4.2
    Animated Network Edition
    Author: HarleyTG
    Updated: 2026-08-11
@@ -1073,6 +1073,39 @@
     transition:none!important;
 }
 
+/* Keep only the tiny terminal LEDs alive in mobile performance mode.
+   These use opacity/scale instead of the footer's heavier visual effects. */
+.hc-simple-footer.hc-mobile-performance .hc-terminal-light{
+    background:var(--hc-accent);
+    box-shadow:0 0 5px var(--hc-glow-soft);
+    will-change:opacity,transform;
+    animation:hc-mobile-light-cycle 3s ease-in-out infinite!important;
+}
+
+.hc-simple-footer.hc-mobile-performance .hc-terminal-light:nth-child(2){
+    animation-delay:.45s!important;
+}
+
+.hc-simple-footer.hc-mobile-performance .hc-terminal-light:nth-child(3){
+    animation-delay:.9s!important;
+}
+
+.hc-simple-footer.hc-mobile-performance .hc-device-indicator{
+    box-shadow:0 0 5px currentColor;
+    will-change:opacity,transform;
+    animation:hc-mobile-device-pulse 2s ease-in-out infinite!important;
+}
+
+@keyframes hc-mobile-light-cycle{
+    0%,24%,100%{opacity:.28;transform:scale(.78)}
+    8%,16%{opacity:1;transform:scale(1.16)}
+}
+
+@keyframes hc-mobile-device-pulse{
+    0%,100%{opacity:.5;transform:scale(.84)}
+    50%{opacity:1;transform:scale(1.14)}
+}
+
 .hc-simple-footer.hc-mobile-performance #hc-top-btn,
 .hc-simple-footer.hc-mobile-performance .hc-terminal-block,
 .hc-feedback-float.hc-mobile-performance .hc-feedback-panel{
@@ -1140,7 +1173,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.1">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.2">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
