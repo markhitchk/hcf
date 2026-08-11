@@ -687,10 +687,12 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 12px rgba(88,101,242,.22);
 }
 
-.hc-feedback-paw svg{
+.hc-feedback-logo{
     display:block;
-    width:20px;
-    height:20px;
+    width:28px;
+    height:28px;
+    border-radius:8px;
+    object-fit:cover;
 }
 
 .hc-feedback-label{
@@ -875,9 +877,10 @@
     box-shadow:none;
 }
 
-.hc-feedback-float.hc-mobile-performance .hc-feedback-paw svg{
-    width:18px;
-    height:18px;
+.hc-feedback-float.hc-mobile-performance .hc-feedback-logo{
+    width:25px;
+    height:25px;
+    border-radius:50%;
 }
 
 .hc-feedback-float.hc-mobile-performance .hc-feedback-label{
@@ -1233,12 +1236,11 @@
 <details class="hc-feedback-float">
     <summary aria-label="Open Discord feedback options" title="Discord feedback">
         <span class="hc-feedback-paw" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 5h16v11H9l-5 4V5z"></path>
-                <circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
-                <circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
-                <circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
-            </svg>
+            <img
+                class="hc-feedback-logo"
+                src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@37bd2ceaeb68cf7c04693a75613754080097f4c9/v1.x/assets/logos/HTG.svg"
+                alt=""
+            >
         </span>
         <span class="hc-feedback-label">
             <strong>Discord</strong>
