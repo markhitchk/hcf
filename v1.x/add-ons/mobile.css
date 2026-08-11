@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.11
+   Version: 5.13
    Updated: 2026-08-11
 ========================================================== */
 
@@ -52,7 +52,9 @@
     pointer-events: none !important;
   }
 
-  html body .AlertManager .Alert {
+  html body .AlertManager .Alert,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert {
     box-sizing: border-box !important;
     position: relative !important;
     display: flex !important;
@@ -77,20 +79,28 @@
     -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
   }
 
-  html body .AlertManager .Alert--error {
+  html body .AlertManager .Alert--error,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert--error {
     border-left-color: #ff6b6b !important;
   }
 
-  html body .AlertManager .Alert--success {
+  html body .AlertManager .Alert--success,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert--success {
     border-left-color: #45d483 !important;
   }
 
-  html body .AlertManager :is(.Alert-title, .Alert-body) {
+  html body .AlertManager :is(.Alert-title, .Alert-body),
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert :is(.Alert-title, .Alert-body) {
     min-width: 0 !important;
     max-width: 100% !important;
   }
 
-  html body .AlertManager .Alert-title {
+  html body .AlertManager .Alert-title,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-title {
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
@@ -98,18 +108,27 @@
     font-weight: 700 !important;
   }
 
-  html body .AlertManager .Alert-body {
+  html body .AlertManager .Alert-body,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-body {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
     font-size: 13px !important;
     line-height: 1.45 !important;
     word-break: break-word !important;
   }
 
-  html body .AlertManager .Alert a {
+  html body .AlertManager .Alert a,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert a {
     color: var(--hc-panel-accent, var(--primary-color, #00dfe6)) !important;
     font-weight: 600 !important;
   }
 
-  html body .AlertManager .Alert-controls {
+  html body .AlertManager .Alert-controls,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
@@ -119,12 +138,16 @@
     list-style: none !important;
   }
 
-  html body .AlertManager .Alert-controls > li {
+  html body .AlertManager .Alert-controls > li,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls > li {
     display: block !important;
     margin: 0 !important;
   }
 
-  html body .AlertManager .Alert-controls .Button--link {
+  html body .AlertManager .Alert-controls .Button--link,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls .Button--link {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -141,7 +164,9 @@
     touch-action: manipulation !important;
   }
 
-  html body .AlertManager .Alert-dismiss {
+  html body .AlertManager .Alert-dismiss,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-dismiss {
     position: absolute !important;
     top: 8px !important;
     right: 8px !important;
@@ -433,13 +458,32 @@
   }
 
   /* The Composer Page extension renders /compose outside Flarum's normal
-     .Composer overlay. Its mobile submit item is fixed to viewport top: 0,
-     so give the route title and submit control the same HCF banner offset. */
+     .Composer overlay. Move Flarum's actual phone navigation background with
+     its title and submit control so no control is detached from the bar. */
+  html body .App:has(.ComposerPageContainer) .App-navigation {
+    top: var(--hc-banner-height, 0px) !important;
+    inset-block-start: var(--hc-banner-height, 0px) !important;
+  }
+
   html body .App .ComposerPageContainer h2.App-titleControl,
   html body .App .ComposerPage
   .ComposerBody-editor .TextEditor-controls .item-submit {
     top: var(--hc-banner-height, 0px) !important;
     inset-block-start: var(--hc-banner-height, 0px) !important;
+  }
+
+  html body .App .ComposerPageContainer h2.App-titleControl {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: var(--header-height-phone, 46px) !important;
+    margin-top: 0 !important;
+    padding: 0 8px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   html body .App .ComposerPage
