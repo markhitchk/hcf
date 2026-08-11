@@ -603,6 +603,7 @@
 }
 
 .hc-feedback-float{
+    --hc-feedback-accent:var(--cyan-readable,var(--primary-color,#00dfe6));
     position:fixed;
     right:max(20px,env(safe-area-inset-right));
     bottom:max(20px,env(safe-area-inset-bottom));
@@ -657,12 +658,12 @@
 .hc-feedback-float > summary:hover,
 .hc-feedback-float[open] > summary{
     transform:translateY(-2px);
-    border-color:var(--hc-accent);
+    border-color:var(--hc-feedback-accent);
     box-shadow:0 12px 32px rgba(0,0,0,.32),0 0 21px var(--hc-glow-soft);
 }
 
 .hc-feedback-float > summary:focus-visible{
-    outline:2px solid var(--hc-accent);
+    outline:2px solid var(--hc-feedback-accent);
     outline-offset:3px;
 }
 
@@ -677,7 +678,7 @@
     border:1px solid rgba(0,255,255,.42);
     border-radius:11px;
     background:linear-gradient(135deg,rgba(0,255,255,.16),rgba(0,255,255,.05));
-    color:var(--hc-accent);
+    color:var(--hc-feedback-accent);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 12px rgba(0,255,255,.14);
 }
 
@@ -700,7 +701,7 @@
 }
 
 .hc-feedback-label strong{
-    color:var(--hc-accent);
+    color:var(--hc-feedback-accent);
     font-size:.68rem;
     font-weight:900;
     line-height:1;
@@ -751,7 +752,7 @@
 
 .hc-feedback-kicker{
     margin:0 0 6px;
-    color:var(--hc-accent);
+    color:var(--hc-feedback-accent);
     font:800 .58rem/1.2 "JetBrains Mono","Courier New",monospace;
     letter-spacing:.16em;
     text-transform:uppercase;
@@ -799,27 +800,27 @@
 
 .hc-feedback-link:hover{
     transform:translateY(-1px);
-    border-color:var(--hc-accent);
+    border-color:var(--hc-feedback-accent);
     background:rgba(0,255,255,.11);
     color:inherit;
     text-decoration:none;
 }
 
 .hc-feedback-link.is-primary{
-    border-color:var(--hc-accent);
-    background:var(--hc-accent);
+    border-color:var(--hc-feedback-accent);
+    background:var(--hc-feedback-accent);
     color:var(--btn-text,#041012);
 }
 
 .hc-feedback-link.is-primary:hover{
-    border-color:var(--hc-accent);
-    background:var(--hc-accent);
+    border-color:var(--hc-feedback-accent);
+    background:var(--hc-feedback-accent);
     color:var(--btn-text,#041012);
     box-shadow:0 0 16px var(--hc-glow-soft);
 }
 
 .hc-feedback-link:focus-visible{
-    outline:2px solid var(--hc-accent);
+    outline:2px solid var(--hc-feedback-accent);
     outline-offset:2px;
 }
 
@@ -858,7 +859,7 @@
 .hc-feedback-float.hc-mobile-performance > summary:hover,
 .hc-feedback-float.hc-mobile-performance[open] > summary{
     transform:none;
-    border-color:var(--hc-accent);
+    border-color:var(--hc-feedback-accent);
     box-shadow:0 7px 18px rgba(0,0,0,.26),0 0 12px rgba(0,255,255,.14);
 }
 
@@ -932,7 +933,7 @@
 /* Final HTG theme lock: prevent Flarum or extension button rules
    from restoring Discord-purple backgrounds and borders. */
 .hc-feedback-float > summary{
-    border-color:var(--hc-accent,#00ffff)!important;
+    border-color:var(--hc-feedback-accent,#00dfe6)!important;
     background:
         linear-gradient(135deg,rgba(0,255,255,.12),rgba(0,255,255,.035)),
         var(--control-bg,var(--hc-bg-strong))!important;
@@ -955,8 +956,8 @@
 .hc-feedback-float .hc-feedback-link.is-primary:hover,
 .hc-feedback-float .hc-feedback-link.is-primary:focus,
 .hc-feedback-float .hc-feedback-link.is-primary:active{
-    border-color:var(--hc-accent,#00ffff)!important;
-    background:var(--hc-accent,#00ffff)!important;
+    border-color:var(--hc-feedback-accent,#00dfe6)!important;
+    background:var(--hc-feedback-accent,#00dfe6)!important;
     color:var(--btn-text,#041012)!important;
 }
 
