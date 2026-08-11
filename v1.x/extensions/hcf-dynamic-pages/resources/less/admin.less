@@ -1,0 +1,119 @@
+/* HCF Dynamic Pages — Admin */
+.HCFDynamicPages-panel {
+  margin: 14px 0 18px;
+  padding: 16px;
+  border: 1px solid rgba(0, 184, 240, .38);
+  border-radius: 12px;
+  background: rgba(0, 184, 240, .045);
+}
+
+.HCFDynamicPages-panel[hidden],
+.HCFDynamicPages-panel [hidden] {
+  display: none !important;
+}
+
+.HCFDynamicPages-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.HCFDynamicPages-heading strong {
+  display: block;
+  color: #00b8f0;
+  font-size: 14px;
+}
+
+.HCFDynamicPages-heading small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted-color, #8998a6);
+  font-size: 11px;
+}
+
+.HCFDynamicPages-build {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border: 1px solid rgba(0, 184, 240, .32);
+  border-radius: 999px;
+  color: #00b8f0;
+  font: 700 10px/1.1 monospace;
+}
+
+.HCFDynamicPages-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.HCFDynamicPages-grid {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.HCFDynamicPages-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.HCFDynamicPages-panel label:not(.HCFDynamicPages-switch) {
+  display: grid;
+  gap: 6px;
+  color: var(--body-color, inherit);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.HCFDynamicPages-auto,
+.HCFDynamicPages-url {
+  margin-top: 10px;
+}
+
+.HCFDynamicPages-help,
+.HCFDynamicPages-note {
+  margin: 8px 0 0;
+  color: var(--muted-color, #8998a6);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.HCFDynamicPages-help code {
+  color: #00b8f0;
+}
+
+.HCFDynamicPages-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.HCFDynamicPages-status {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--muted-color, #8998a6);
+  font: 700 10px/1.4 monospace;
+}
+
+.HCFDynamicPages-status.is-testing { color: #f5c542; }
+.HCFDynamicPages-status.is-success { color: #45d483; }
+.HCFDynamicPages-status.is-error { color: #ff6b6b; }
+
+@media (max-width: 767.98px) {
+  .HCFDynamicPages-panel {
+    padding: 13px;
+  }
+
+  .HCFDynamicPages-grid--two {
+    grid-template-columns: 1fr;
+  }
+
+  .HCFDynamicPages-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
