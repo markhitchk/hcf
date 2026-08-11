@@ -8,7 +8,7 @@
    Popper, and app-control positioning. This layer only tunes
    native transition timing and animates safe inner content.
 
-   Version: 3.0
+   Version: 3.1
    Author: HarleyTG
    Updated: 2026-08-11
 ========================================================= */
@@ -65,7 +65,6 @@
 .IndexPage-results,
 .DiscussionPage-discussion,
 .UserPage-content,
-.ComposerPageContainer,
 .NotificationsPage,
 .FlagsPage,
 .DraftsPage {
@@ -389,32 +388,11 @@
 }
 
 /* =========================================================
-   COMPOSER, MODALS, ALERTS + LOADING
+   MODALS, ALERTS + LOADING
+
+   Composer and Composer Page elements intentionally receive no
+   animation from this layer. Flarum owns their header and controls.
 ========================================================= */
-
-.Composer.visible:not(.minimized) .TextEditor-editorContainer,
-.ComposerPage .TextEditor-editorContainer {
-  animation: hc-editor-rise var(--hc-motion-panel) var(--hc-motion-spring) both;
-}
-
-.Composer.visible:not(.minimized)
-.TextEditor-controls > li:not(.item-submit),
-.ComposerPage .TextEditor-controls > li:not(.item-submit),
-.ComposerPage .ComposerBody-header > li:not(.item-title) {
-  animation: hc-row-rise var(--hc-motion-normal) var(--hc-motion-spring) both;
-}
-
-.Composer.visible:not(.minimized)
-.TextEditor-controls > li:not(.item-submit):nth-child(2),
-.ComposerPage .TextEditor-controls > li:not(.item-submit):nth-child(2) {
-  animation-delay: var(--hc-motion-stagger);
-}
-
-.Composer.visible:not(.minimized)
-.TextEditor-controls > li:not(.item-submit):nth-child(n + 3),
-.ComposerPage .TextEditor-controls > li:not(.item-submit):nth-child(n + 3) {
-  animation-delay: calc(var(--hc-motion-stagger) * 2);
-}
 
 .Modal.in .Modal-content {
   animation: hc-panel-reveal var(--hc-motion-normal) ease-out both;
@@ -431,17 +409,6 @@
 
 .LoadingIndicator-container {
   animation: hc-loading-breathe 1.45s ease-in-out infinite;
-}
-
-@keyframes hc-editor-rise {
-  from {
-    opacity: .01;
-    transform: translate3d(0, 8px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 @keyframes hc-alert-in {
@@ -510,7 +477,6 @@
   .IndexPage-results,
   .DiscussionPage-discussion,
   .UserPage-content,
-  .ComposerPageContainer,
   .NotificationsPage,
   .FlagsPage,
   .DraftsPage,
@@ -533,9 +499,6 @@
   .DiscussionListItem-author .Avatar,
   .Post-body,
   .UserListItem-info,
-  .TextEditor-editorContainer,
-  .TextEditor-controls > li,
-  .ComposerBody-header > li,
   .Modal-content,
   .Modal-body > *,
   .Alert,
