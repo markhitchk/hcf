@@ -1,28 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harley's Clan Support Terminal</title>
-<style>
-@keyframes pulse{0%{opacity:.4}50%{opacity:1}100%{opacity:.4}}
-@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){#hc-support-loader-spinner,#hc-support-loader-text{animation:none!important}}
-</style>
-</head>
-<body style="background-color:#0a0a0a;margin:0;padding:20px;font-family:'Courier New',monospace;color:#e8e8e8;display:flex;justify-content:center;">
-<div style="max-width:850px;width:100%;background-color:rgba(25,25,25,.95);border:2px solid #00b8f0;padding:30px;box-shadow:0 0 30px rgba(0,184,240,.2);backdrop-filter:blur(12px);">
-<div style="text-align:center;color:#00b8f0;font-size:32px;font-weight:bold;letter-spacing:4px;text-transform:uppercase;margin-bottom:25px;text-shadow:0 0 10px rgba(0,184,240,.5);">Harley's Clan Support Terminal</div>
-<div style="display:flex;align-items:center;gap:25px;border-bottom:2px solid #00b8f0;padding-bottom:20px;margin-bottom:20px;flex-wrap:wrap;">
-<img src="https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/assets/logos/HTG.svg" alt="Harley's Clan Forum logo" style="width:120px;height:120px;object-fit:contain;border-radius:50%;border:3px solid #00b8f0;box-shadow:0 0 15px #00b8f0;flex-shrink:0;">
-<div style="min-width:0;flex:1;"><h1 style="margin:0;font-size:28px;color:#00b8f0;text-transform:uppercase;">Clan Support</h1><p style="margin:5px 0;font-size:18px;">REQUEST TYPE: <strong>TECH / COMMUNITY / CLAN HELP</strong></p><div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;"><span style="border:1px solid #00b8f0;padding:3px 8px;font-size:13px;background:rgba(0,184,240,.1);">SYSTEM: SUPPORT NODE</span><span style="border:1px solid #00b8f0;padding:3px 8px;font-size:13px;background:rgba(0,184,240,.1);">STATUS: ACTIVE</span></div></div>
+<style>@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.css");</style>
+<div class="hcf-page">
+  <header class="hcf-brand"><img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="" aria-hidden="true"><div class="hcf-brand-copy"><p class="hcf-brand-title">Harley's Clan Forum</p><p class="hcf-brand-sub">Support Network // Request Terminal</p></div></header>
+  <section class="hcf-hero hcf-hero--compact"><div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Support Online</div><h1 class="hcf-title">Clan Support</h1><p class="hcf-lead">Submit technical, community, account, or clan-related support requests through the official Harley's Clan Forum support form.</p><div class="hcf-meta"><span class="hcf-chip">Tech Support</span><span class="hcf-chip">Community Help</span><span class="hcf-chip">Account Help</span></div></section>
+  <main class="hcf-content">
+    <section class="hcf-section"><h2 class="hcf-section-title">Before You Submit</h2><div class="hcf-grid"><div class="hcf-card"><span class="hcf-kv-label">Forum Username</span><span class="hcf-kv-value">Include the account name connected to the issue.</span></div><div class="hcf-card"><span class="hcf-kv-label">Problem Details</span><span class="hcf-kv-value">Describe what happened, what you expected, and any error message shown.</span></div><div class="hcf-card"><span class="hcf-kv-label">Steps Tried</span><span class="hcf-kv-value">List anything you already attempted so support can avoid repeating steps.</span></div></div><div class="hcf-actions"><a class="hcf-button" href="https://forms.gle/ZttwfojRdTEUo8Pf9" target="_blank" rel="noopener noreferrer">Open Support Form Directly</a></div></section>
+    <section class="hcf-section"><div class="hcf-frame-shell"><div id="hcf-support-loader" class="hcf-loader"><div><div class="hcf-spinner"></div>Connecting to support form…</div></div><iframe onload="document.getElementById('hcf-support-loader').style.display='none'" src="https://docs.google.com/forms/d/e/1FAIpQLSdl7QLNNYPPnU0xxB32rQ6BmmWDs9SUS2yqVYAvYiD0e3R2GA/viewform?embedded=true" height="1264" title="Harley's Clan Forum Support Form" loading="lazy"></iframe></div></section>
+  </main>
+  <footer class="hcf-footer"><span>Harley's Clan Forum // Support Channel Verified</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
 </div>
-<div style="margin-bottom:20px;"><p>Submit a support request using the embedded terminal below.</p><p>If the form fails to load, use the direct link: <a href="https://forms.gle/ZttwfojRdTEUo8Pf9" target="_blank" rel="noopener noreferrer" style="color:#00b8f0;text-decoration:none;">Open Support Form</a></p></div>
-<div style="position:relative;border:1px solid rgba(0,184,240,.25);padding:10px;background:rgba(0,0,0,.3);">
-<div id="loader" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;z-index:10;color:#00b8f0;text-align:center;"><div id="hc-support-loader-spinner" style="width:40px;height:40px;border:3px solid rgba(0,184,240,.3);border-top:3px solid #00b8f0;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px;"></div><div id="hc-support-loader-text" style="animation:pulse 1.5s infinite;">ACCESSING SUPPORT DATABASE...</div></div>
-<iframe onload="var l=document.getElementById('loader');if(l){l.style.display='none';}" src="https://docs.google.com/forms/d/e/1FAIpQLSdl7QLNNYPPnU0xxB32rQ6BmmWDs9SUS2yqVYAvYiD0e3R2GA/viewform?embedded=true" title="Harley's Clan Forum support form" width="100%" height="1264" frameborder="0" marginheight="0" marginwidth="0" style="border:none;display:block;"></iframe>
-</div>
-<div style="text-align:center;border-top:1px solid rgba(0,184,240,.3);padding-top:15px;margin-top:25px;font-size:12px;opacity:.7;letter-spacing:2px;">SUPPORT CHANNEL VERIFIED // HARLEY'S CLAN NETWORK</div>
-</div>
-</body>
-</html>
