@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.14
+   Version: 5.15
    Updated: 2026-08-11
 ========================================================== */
 
@@ -495,19 +495,14 @@
     text-overflow: ellipsis !important;
   }
 
-  /* The Composer Page extension renders /compose outside Flarum's normal
-     .Composer overlay. Move Flarum's actual phone navigation background with
-     its title and submit control so no control is detached from the bar. */
-  html body .App:has(.ComposerPageContainer) .App-navigation {
-    top: var(--hc-banner-height, 0px) !important;
-    inset-block-start: var(--hc-banner-height, 0px) !important;
-  }
-
-  html body .App .ComposerPageContainer h2.App-titleControl,
-  html body .App .ComposerPage
-  .ComposerBody-editor .TextEditor-controls .item-submit {
-    top: var(--hc-banner-height, 0px) !important;
-    inset-block-start: var(--hc-banner-height, 0px) !important;
+  /* The standalone Composer Page already lives inside .App, after Flarum's
+     custom headerHtml. Match framework/core/less/common/App.less: anchor the
+     navigation and App-titleControl at top: 0 inside .App. Adding the banner
+     height here creates a second, detached mobile header row. */
+  html body .App:has(.ComposerPageContainer) .App-navigation,
+  html body .App .ComposerPageContainer h2.App-titleControl {
+    top: 0 !important;
+    inset-block-start: 0 !important;
   }
 
   html body .App .ComposerPageContainer h2.App-titleControl {
@@ -524,9 +519,23 @@
     text-overflow: ellipsis !important;
   }
 
-  html body .App .ComposerPage
+  /* Composer Page forces its submit item to fixed positioning. Restore
+     Flarum's native App-primaryControl behavior: absolute in the page header,
+     then fixed at top: 0 only while the app header is affixed. */
+  html body .App:not(.affix) .ComposerPage
+  .ComposerBody-editor .TextEditor-controls .item-submit {
+    position: absolute !important;
+  }
+
+  html body .App.affix .ComposerPage
   .ComposerBody-editor .TextEditor-controls .item-submit {
     position: fixed !important;
+  }
+
+  html body .App .ComposerPage
+  .ComposerBody-editor .TextEditor-controls .item-submit {
+    top: 0 !important;
+    inset-block-start: 0 !important;
     right: 0 !important;
     left: auto !important;
     z-index: calc(var(--zindex-header, 1000) + 2) !important;
