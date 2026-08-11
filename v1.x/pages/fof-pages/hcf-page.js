@@ -4,7 +4,7 @@
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.3.0
+   Runtime Version: 1.4.0
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
@@ -17,6 +17,7 @@
   }
 
   var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
+  var SILENT_STYLE_ID="hcf-fof-silent-runtime";
   var resizeTimer=0;
 
   function loadDomainRouter(){
@@ -29,6 +30,22 @@
     script.defer=false;
     script.setAttribute("data-hcf-domain-router","1.0.1");
     (document.head||document.documentElement).appendChild(script);
+  }
+
+  function installSilentRuntimeStyle(){
+    if(document.getElementById(SILENT_STYLE_ID))return;
+
+    var style=document.createElement("style");
+    style.id=SILENT_STYLE_ID;
+    style.textContent=
+      ".hcf-page .hcf-runtime,"+
+      ".hcf-page .hcf-runtime-item,"+
+      ".hcf-page .hcf-runtime-label,"+
+      ".hcf-page .hcf-runtime-value,"+
+      ".hcf-page .hcf-runtime-device,"+
+      ".hcf-page .hcf-runtime-identity,"+
+      ".hcf-page [data-hcf-runtime-ui]{display:none!important;visibility:hidden!important;}";
+    (document.head||document.documentElement).appendChild(style);
   }
 
   function normalizeUsername(value){
@@ -86,7 +103,7 @@
 
   function removeVisibleRuntime(page){
     if(!page)return;
-    var runtimes=page.querySelectorAll(".hcf-runtime");
+    var runtimes=page.querySelectorAll(".hcf-runtime,[data-hcf-runtime-ui]");
     for(var i=0;i<runtimes.length;i++)runtimes[i].remove();
   }
 
@@ -118,13 +135,14 @@
   }
 
   function refresh(){
+    installSilentRuntimeStyle();
     loadDomainRouter();
 
     var pages=document.querySelectorAll(".hcf-page");
     for(var i=0;i<pages.length;i++){
       var page=pages[i];
 
-      /* Remove any status panel left behind by an older cached runtime. */
+      /* Never show the old DEVICE MODE / MOBILE MODE / IDENTITY panel. */
       removeVisibleRuntime(page);
 
       if(runtimeDisabled(page)){
@@ -134,6 +152,7 @@
         continue;
       }
 
+      /* Keep detection active for CSS/JS behavior, but keep it silent. */
       updateDevice(page);
       updateIdentity(page);
     }
@@ -147,13 +166,14 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.3.0",
+    version:"1.4.0",
     refresh:refresh,
     getIdentity:getIdentity,
     isMobilePerformanceDevice:isMobilePerformanceDevice,
     runtimeDisabled:runtimeDisabled
   };
 
+  installSilentRuntimeStyle();
   window.addEventListener("resize",onResize,{passive:true});
   window.addEventListener("hcf:fof-page:loaded",refresh);
   document.addEventListener("visibilitychange",function(){
@@ -162,7 +182,7 @@
 
   window.setInterval(function(){
     if(!document.hidden)refresh();
-  },15000);
+  },30000);
 
   if(document.readyState==="loading"){
     document.addEventListener("DOMContentLoaded",refresh,{once:true});
