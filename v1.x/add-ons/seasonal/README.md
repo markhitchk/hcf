@@ -1,4 +1,4 @@
-# Celebrations
+# Seasonal celebrations
 
 Birthday and holiday data and scripts for Harley's Clan Forum.
 
@@ -12,7 +12,7 @@ Birthday and holiday data and scripts for Harley's Clan Forum.
 ## Install holiday banners
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/celebrations/holidays.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/seasonal/holidays.js"></script>
 ```
 
 The system uses the `America/Los_Angeles` timezone and loads its settings from `holidays.json` in this folder.

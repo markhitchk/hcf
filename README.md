@@ -20,15 +20,18 @@ v1.x/
 │   ├── loading-screen.css
 │   ├── mobile.css
 │   ├── motion.css
-│   ├── seasonal/
-│   └── compatibility aliases
+│   └── seasonal/
+│       ├── birthdays.json
+│       ├── holidays.js
+│       ├── holidays.json
+│       ├── install-snippet.html
+│       └── README.md
 ├── assets/
 │   └── logos/
 │       ├── HTG.svg
 │       ├── HTG-Icon.svg
 │       └── HTG-Icon.png
 ├── core/
-│   ├── HTG-Icon.svg
 │   ├── admin.css
 │   ├── footer.html
 │   ├── header.html
@@ -40,10 +43,9 @@ v1.x/
 │       ├── 404.html
 │       ├── 500.html
 │       └── 503.html
-└── readme
 
 v2.x/
-└── readme.md
+└── README.md
 ```
 
 ## Main Flarum 1.x CSS
@@ -78,9 +80,8 @@ The entry point separates phone and desktop rules at Flarum's native
 drawer, backdrop, and content positioning to
 [Flarum 1.x's framework App styles](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/App.less).
 It only supplies HCF drawer branding, extension overflow protection, and
-compact mobile spacing. The old names such as `mobile-v2.css`,
-`animations.css`, `messages.sys.css`, and `welcome-loading.css` remain
-as compatibility aliases.
+compact mobile spacing. Only the canonical add-on filenames are kept so
+old aliases cannot create duplicate imports or stale CDN paths.
 
 ## Core HTML
 
