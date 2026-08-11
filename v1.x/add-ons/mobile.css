@@ -1,429 +1,285 @@
 /* ==========================================================
-   HARLEY'S CLAN FORUM — MODERN MOBILE LAYOUT
+   HARLEY'S CLAN FORUM — FLARUM-ALIGNED MOBILE CSS
 
-   Mobile authority layer for Flarum 1.x.
-   - Follows Flarum's native phone navigation/drawer model
-   - Overrides desktop/global HCF header rules on phones
-   - Keeps the visible top bar separate from the drawer header
-   - Restores vertical drawer controls and full-width menu rows
-   - Protects extension content from viewport overflow
-   - No KaiOS-specific rules
+   This file intentionally mirrors Flarum 1.x phone behavior
+   from framework/core/less/common/App.less as closely as
+   possible, then adds only HCF-specific safety fixes.
 
-   Version: 3.1
+   Version: 4.0
    Updated: 2026-08-10
 ========================================================== */
 
 :root {
-  --hc-mobile-safe-top: env(safe-area-inset-top, 0px);
   --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --hc-mobile-edge-gap: 10px;
 }
 
 @media screen and (max-width: 767.98px) {
-  html,
-  body,
-  .App,
-  .App-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  body {
-    overflow-x: hidden !important;
-  }
-
+  /* Base viewport — same role as Flarum's .App phone rules. */
   .App {
     position: relative !important;
     padding-top: var(--header-height-phone) !important;
     min-height: 100vh !important;
   }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
+  body {
+    overflow-x: hidden !important;
   }
 
-  img,
-  video,
-  iframe,
-  canvas,
-  svg {
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* ==========================
-     FLARUM PHONE TOP BAR
-  ========================== */
-  body .App .App-navigation {
+  /* ------------------------------------------------------
+     FLARUM DEFAULT PHONE NAVIGATION
+  ------------------------------------------------------ */
+  .App-navigation {
     position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    height: var(--header-height-phone) !important;
-    overflow: hidden !important;
     border-bottom: 0 !important;
     background: var(--header-bg) !important;
-    z-index: var(--zindex-header, 1000) !important;
+    color: var(--header-color) !important;
+    z-index: var(--zindex-header) !important;
   }
 
-  body .App.affix .App-navigation {
+  .App.affix .App-navigation {
     position: fixed !important;
   }
 
-  body .App .App-navigation .App-primaryControl,
-  body .App .App-navigation .App-titleControl,
-  body .App .App-navigation .App-backControl {
-    position: absolute !important;
-    top: 0 !important;
-    margin: 0 !important;
-    height: var(--header-height-phone) !important;
-    z-index: calc(var(--zindex-header, 1000) + 1) !important;
+  .App.scrolled .App-navigation {
+    box-shadow: 0 2px 6px var(--shadow-color) !important;
   }
 
-  body .App .App-navigation .App-primaryControl {
+  .App-primaryControl,
+  .App-titleControl,
+  .App-backControl {
+    position: absolute !important;
+    z-index: calc(var(--zindex-header) + 1) !important;
+    top: 0 !important;
+    margin: 0 !important;
+  }
+
+  .App.affix .App-primaryControl,
+  .App.affix .App-titleControl,
+  .App.affix .App-backControl,
+  .Composer .App-primaryControl,
+  .Composer .App-titleControl,
+  .Composer .App-backControl {
+    position: fixed !important;
+  }
+
+  .App-primaryControl {
     right: 0 !important;
     width: auto !important;
   }
 
-  body .App .App-navigation .App-backControl {
+  .App-backControl {
     left: 0 !important;
   }
 
-  body .App .App-navigation .App-titleControl {
-    left: 50% !important;
-    width: min(200px, calc(100vw - 96px)) !important;
-    margin-left: 0 !important;
-    transform: translateX(-50%) !important;
-    text-align: center !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-  }
-
-  /* The full site logo/title belongs in the drawer on phones.
-     Prevent cloned Header-title/logo nodes or pseudo-elements from
-     leaking out at the upper-left edge of the visible phone bar. */
-  body .App .App-navigation .Header-title,
-  body .App .App-navigation .Header-logo,
-  body .App .App-navigation img.Header-logo,
-  body .App .App-navigation .Header-title::before,
-  body .App .App-navigation .Header-title::after {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    content: none !important;
-  }
-
-  body .App .App-navigation .App-primaryControl > .Button,
-  body .App .App-navigation .App-backControl > .Button {
-    width: auto !important;
+  .App-primaryControl > .Button,
+  .App-titleControl > .Button,
+  .App-backControl > .Button {
+    float: none !important;
     height: var(--header-height-phone) !important;
-    margin: 0 !important;
+    width: auto !important;
     padding: 13px !important;
-    border-radius: 0 !important;
+    margin: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
   }
 
-  body .App .App-navigation .App-primaryControl > .Button .Button-label,
-  body .App .App-navigation .App-backControl > .Button .Button-label {
+  .App-primaryControl > .Button--icon,
+  .App-backControl > .Button--icon {
+    width: 40px !important;
+  }
+
+  .App-primaryControl > .Button .Button-icon,
+  .App-backControl > .Button .Button-icon {
+    display: block !important;
+    margin: 0 !important;
+    font-size: 20px !important;
+    color: var(--header-control-color) !important;
+  }
+
+  .App-primaryControl > .Button .Button-label,
+  .App-backControl > .Button .Button-label {
     display: none !important;
   }
 
-  /* ==========================
-     NATIVE DRAWER BEHAVIOR
-  ========================== */
-  body .App:not(.drawerOpen) .App-drawer {
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
+  .App-titleControl {
+    left: 50% !important;
+    width: 200px !important;
+    margin-left: -100px !important;
+    text-align: center !important;
+    color: var(--header-color) !important;
+    font-size: 16px !important;
   }
 
-  /* Extra leak guard for custom pseudo-logo rules. */
-  body .App:not(.drawerOpen) .App-drawer *,
-  body .App:not(.drawerOpen) .App-drawer *::before,
-  body .App:not(.drawerOpen) .App-drawer *::after {
-    visibility: hidden !important;
-    pointer-events: none !important;
+  .App-titleControl > .Button {
+    width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: var(--header-color) !important;
+    font-size: 16px !important;
   }
 
-  body .App.drawerOpen {
+  .App-titleControl--text {
+    line-height: var(--header-height-phone) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-weight: normal !important;
+  }
+
+  .Navigation-pin {
+    display: none !important;
+  }
+
+  /* Multiple extension primary controls follow Flarum's flex-row behavior. */
+  :has(> .App-primaryControl ~ .App-primaryControl) {
+    position: absolute !important;
+    z-index: calc(var(--zindex-header) + 1) !important;
+    top: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+  }
+
+  :has(> .App-primaryControl ~ .App-primaryControl) > .App-primaryControl {
+    position: relative !important;
+    right: auto !important;
+  }
+
+  /* ------------------------------------------------------
+     FLARUM DEFAULT DRAWER
+  ------------------------------------------------------ */
+  .App:not(.drawerOpen) .App-drawer {
+    visibility: hidden !important;
+  }
+
+  .App.drawerOpen {
     overflow: hidden !important;
   }
 
-  body .App .App-drawer {
+  .App-drawer {
+    background: var(--header-bg) !important;
+    width: var(--drawer-width) !important;
     position: fixed !important;
+    left: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
-    left: 0 !important;
-    width: var(--drawer-width, 270px) !important;
-    max-width: calc(100vw - 40px) !important;
-    min-width: 0 !important;
-    overflow-x: hidden !important;
+    box-shadow: 0 2px 6px var(--shadow-color) !important;
+    transform: translateX(calc(-6px - var(--drawer-width))) !important;
+    transition: transform .2s !important;
+    z-index: var(--zindex-modal) !important;
     overflow-y: auto !important;
-    background: var(--header-bg) !important;
-    box-shadow: 0 2px 6px var(--shadow-color, rgba(0, 0, 0, .35)) !important;
-    opacity: 0 !important;
-    transform: translate3d(calc(-100% - 8px), 0, 0) !important;
-    transition: transform .2s ease, opacity .15s ease !important;
-    z-index: var(--zindex-modal, 1050) !important;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch !important;
   }
 
-  body .App.drawerOpen .App-drawer {
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
+  .App.drawerOpen .App-drawer {
     -webkit-transform: none !important;
     transform: none !important;
+    visibility: visible !important;
   }
 
-  body .App.drawerOpen .App-drawer *,
-  body .App.drawerOpen .App-drawer *::before,
-  body .App.drawerOpen .App-drawer *::after {
-    visibility: visible;
+  .drawer-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: var(--zindex-modal-background) !important;
+    background-color: var(--overlay-bg) !important;
+    opacity: 0 !important;
+    transition: opacity .2s !important;
   }
 
-  /* ==========================
-     DRAWER HEADER
-  ========================== */
-  body .App .App-drawer .App-header {
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
+  .drawer-backdrop.in {
+    opacity: .9 !important;
+  }
+
+  /* ------------------------------------------------------
+     FLARUM DEFAULT HEADER INSIDE DRAWER
+  ------------------------------------------------------ */
+  .App-header {
     display: flex !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: visible !important;
   }
 
-  body .App .App-drawer .App-header > .container,
-  body .App .App-drawer .App-header .container {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
+  .App-header .container {
     padding: 0 !important;
-    overflow: visible !important;
+    width: 100% !important;
   }
 
-  body .App .App-drawer .Header-navigation {
+  .Header-navigation {
     display: none !important;
   }
 
-  body .App .App-drawer .Header-title {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: var(--header-height-phone) !important;
-    max-height: none !important;
-    margin: 0 !important;
-    padding: 10px 12px !important;
-    overflow: hidden !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+  .Header-title {
+    padding: 13px 10px !important;
     font-size: 16px !important;
     font-weight: normal !important;
-    line-height: 1.25 !important;
+    margin: 0 !important;
     text-align: center !important;
   }
 
-  body .App .App-drawer .Header-title::before {
-    width: 30px !important;
-    min-width: 30px !important;
-    max-width: 30px !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    max-height: 30px !important;
-    flex: 0 0 30px !important;
-    margin: 0 !important;
-    transform: none !important;
-  }
-
-  body .App .App-drawer .Header-title > a,
-  body .App .App-drawer .Header-title > a#home-link {
-    display: block !important;
-    flex: 0 1 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: calc(100% - 38px) !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    font-size: inherit !important;
-    line-height: inherit !important;
-  }
-
-  /* ==========================
-     DRAWER CONTROLS
-  ========================== */
-  body .App .App-drawer .Header-primary,
-  body .App .App-drawer #header-primary,
-  body .App .App-drawer .Header-secondary,
-  body .App .App-drawer #header-secondary {
-    position: static !important;
-    inset: auto !important;
-    display: block !important;
-    float: none !important;
-    flex: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
-  body .App .App-drawer .Header-controls,
-  body .App .App-drawer #header-primary .Header-controls,
-  body .App .App-drawer #header-secondary .Header-controls {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+  .Header-controls {
     margin: 10px 0 0 !important;
     padding: 0 !important;
     list-style: none !important;
   }
 
-  body .App .App-drawer .Header-controls > li,
-  body .App .App-drawer #header-primary .Header-controls > li,
-  body .App .App-drawer #header-secondary .Header-controls > li {
-    position: relative !important;
-    display: block !important;
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
+  .Header-controls > li {
     padding: 0 10px !important;
   }
 
-  body .App .App-drawer .Header-controls .FormControl,
-  body .App .App-drawer .Header-controls .ButtonGroup,
-  body .App .App-drawer .Header-controls > li > .Button,
-  body .App .App-drawer .Header-controls > li > a,
-  body .App .App-drawer .Header-controls .Dropdown-toggle.Button {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
+  .Header-controls .FormControl,
+  .Header-controls .ButtonGroup,
+  .Header-controls .Button {
     width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  .Header-controls .Dropdown-menu .ButtonGroup,
+  .Header-controls .Dropdown-menu .Button {
+    width: auto !important;
+  }
+
+  /* Use Flarum's real logo in the drawer. Remove the old HCF pseudo-logo
+     that was overlapping the hamburger while the drawer was closed. */
+  .Header-title::before,
+  .Header-title::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .Header-title .Header-logo,
+  .Header-title img.Header-logo,
+  .Header-logo {
+    display: inline-block !important;
+    width: auto !important;
     height: auto !important;
-    min-height: 40px !important;
-    margin: 0 !important;
-    padding: 8px 13px !important;
-    border-radius: var(--border-radius, 4px) !important;
-    text-align: left !important;
-    white-space: normal !important;
-  }
-
-  body .App .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user,
-  body .App .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 8px !important;
-    width: 100% !important;
     max-width: 100% !important;
-    min-width: 0 !important;
-    height: auto !important;
-    min-height: 40px !important;
-    margin: 0 !important;
-    padding: 8px 13px !important;
-    border-radius: var(--border-radius, 4px) !important;
-    box-shadow: none !important;
-    transform: none !important;
+    max-height: 30px !important;
+    margin: 0 auto !important;
   }
 
-  body .App .App-drawer #header-secondary .item-session .Button--user .Avatar,
-  body .App .App-drawer .Header-secondary .item-session .Button--user .Avatar {
-    width: 24px !important;
-    min-width: 24px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    margin: 0 !important;
-    border-width: 1px !important;
+  /* Do not allow a desktop Header-title/logo to become part of the visible
+     phone toolbar. Flarum's phone toolbar is App-navigation only. */
+  .App-navigation .Header-title,
+  .App-navigation .Header-logo,
+  .App-navigation img.Header-logo {
+    display: none !important;
   }
 
-  body .App .App-drawer #header-secondary .item-session .Button--user .Button-label,
-  body .App .App-drawer #header-secondary .item-session .Button--user .username,
-  body .App .App-drawer .Header-secondary .item-session .Button--user .Button-label,
-  body .App .App-drawer .Header-secondary .item-session .Button--user .username {
-    display: block !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
+  /* Strong closed-state guard for third-party/custom logo rules. */
+  .App:not(.drawerOpen) .App-drawer .Header-title,
+  .App:not(.drawerOpen) .App-drawer .Header-logo,
+  .App:not(.drawerOpen) .App-drawer .Header-title::before,
+  .App:not(.drawerOpen) .App-drawer .Header-title::after {
+    visibility: hidden !important;
   }
 
-  body .App .App-drawer #header-secondary .item-logIn,
-  body .App .App-drawer #header-secondary .item-signUp,
-  body .App .App-drawer .Header-secondary .item-logIn,
-  body .App .App-drawer .Header-secondary .item-signUp {
-    margin: 0 !important;
-  }
-
-  body .App .App-drawer #header-secondary .item-logIn .Button,
-  body .App .App-drawer #header-secondary .item-signUp .Button,
-  body .App .App-drawer .Header-secondary .item-logIn .Button,
-  body .App .App-drawer .Header-secondary .item-signUp .Button {
-    width: 100% !important;
-    min-width: 0 !important;
-    justify-content: flex-start !important;
-    border-radius: var(--border-radius, 4px) !important;
-    transform: none !important;
-  }
-
-  /* ==========================
-     DROPDOWNS / SEARCH
-  ========================== */
-  body .App .Dropdown-menu,
-  body .App .Search-results {
-    max-width: calc(100vw - (var(--hc-mobile-edge-gap) * 2)) !important;
-  }
-
-  body .App .App-drawer .Dropdown-menu,
-  body .App .App-drawer .Search-results {
-    max-height: calc(100dvh - 80px - var(--hc-mobile-safe-bottom)) !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* ==========================
-     CONTENT / EXTENSION SAFETY
-  ========================== */
-  body .App .App-content {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: calc(100vh - var(--header-height-phone)) !important;
+  /* ------------------------------------------------------
+     FLARUM DEFAULT CONTENT BEHAVIOR
+  ------------------------------------------------------ */
+  .App-content {
     background: var(--body-bg) !important;
+    width: 100% !important;
+    min-height: calc(100vh - var(--header-height-phone)) !important;
   }
 
+  /* HCF extension safety only — no header/nav restructuring below here. */
   .App-content,
   .container,
   .sideNav,
@@ -438,17 +294,23 @@
   .AfruxWidgets-Widget,
   .ConversationsList {
     min-width: 0 !important;
+    max-width: 100% !important;
   }
 
   .Post-body,
   .DiscussionListItem,
   .Notification,
   .UserListItem {
-    overflow-wrap: anywhere;
+    overflow-wrap: anywhere !important;
   }
 
   .Composer {
     max-width: 100vw !important;
+  }
+
+  .Dropdown-menu,
+  .Search-results {
+    max-width: calc(100vw - 20px) !important;
   }
 
   #hc-top-btn {
@@ -457,22 +319,5 @@
 
   .hc-simple-footer {
     padding-bottom: calc(20px + var(--hc-mobile-safe-bottom)) !important;
-  }
-}
-
-@media screen and (max-width: 380px) {
-  :root {
-    --hc-mobile-edge-gap: 6px;
-  }
-
-  body .App .App-drawer {
-    max-width: calc(100vw - 24px) !important;
-  }
-
-  body .App .App-drawer .Header-title {
-    gap: 6px !important;
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    font-size: 15px !important;
   }
 }
