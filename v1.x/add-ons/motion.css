@@ -1,39 +1,125 @@
 /* =========================================================
-   HARLEY'S CLAN FORUM — SAFE MOTION LAYER
+   HARLEY'S CLAN FORUM — MOBILE MOTION LAYER
 
-   Motion is deliberately limited to opacity, color, background,
-   and shadow. Flarum/Popper positioning hosts never receive a
-   transform or filter from this file.
+   Loaded only at Flarum's native phone breakpoint by
+   v1.x/core/htg.forum.css.
 
-   Version: 2.0
+   Flarum keeps ownership of drawer, dropdown, modal, composer,
+   Popper, and app-control positioning. This layer only tunes
+   native transition timing and animates safe inner content.
+
+   Version: 3.0
    Author: HarleyTG
-   Updated: 2026-08-10
+   Updated: 2026-08-11
 ========================================================= */
 
 :root {
-  --hc-motion-fast: 180ms;
-  --hc-motion-normal: 320ms;
-  --hc-motion-slow: 700ms;
+  --hc-motion-instant: 110ms;
+  --hc-motion-fast: 160ms;
+  --hc-motion-normal: 240ms;
+  --hc-motion-panel: 290ms;
+  --hc-motion-slow: 520ms;
+  --hc-motion-stagger: 24ms;
   --hc-motion-ease: cubic-bezier(.2, .8, .2, 1);
+  --hc-motion-spring: cubic-bezier(.16, 1, .3, 1);
   --hc-animation-cyan: var(--cyan-readable, var(--cyan, #00ffff));
-  --hc-animation-glow: rgba(0, 255, 255, .30);
-  --hc-animation-glow-strong: rgba(0, 255, 255, .52);
+  --hc-animation-glow: rgba(0, 255, 255, .28);
+  --hc-animation-glow-strong: rgba(0, 255, 255, .48);
 }
 
-/* Opacity never changes the containing block used by Flarum controls. */
+/* =========================================================
+   FLARUM-OWNED MOBILE SURFACES
+
+   Change timing only. Never replace Flarum's transform,
+   position, visibility, or transition-property values.
+========================================================= */
+
+.App-drawer {
+  transition-duration: var(--hc-motion-panel) !important;
+  transition-timing-function: var(--hc-motion-spring) !important;
+}
+
+.drawer-backdrop,
+.dropdown-backdrop,
+.Modal-backdrop {
+  transition-duration: var(--hc-motion-normal) !important;
+  transition-timing-function: var(--hc-motion-ease) !important;
+}
+
+.Dropdown .Dropdown-menu,
+.SelectDropdown .Dropdown-menu {
+  transition-duration: var(--hc-motion-panel), 0s !important;
+  transition-timing-function: var(--hc-motion-spring), linear !important;
+}
+
+.Modal {
+  transition-duration: var(--hc-motion-panel) !important;
+  transition-timing-function: var(--hc-motion-spring) !important;
+}
+
+/* =========================================================
+   PAGE + DRAWER REVEALS
+========================================================= */
+
 .App-content > .container,
 .IndexPage-results,
 .DiscussionPage-discussion,
-.UserPage-content {
-  animation: hc-content-reveal .46s var(--hc-motion-ease) both;
+.UserPage-content,
+.ComposerPageContainer,
+.NotificationsPage,
+.FlagsPage,
+.DraftsPage {
+  animation: hc-page-reveal var(--hc-motion-panel) var(--hc-motion-ease) both;
 }
 
-@keyframes hc-content-reveal {
-  from { opacity: 0; }
+.App.drawerOpen .App-drawer .Header-title {
+  animation: hc-drawer-title-in var(--hc-motion-panel) var(--hc-motion-spring) both;
+}
+
+.App.drawerOpen .App-drawer .Header-controls > li {
+  animation: hc-opacity-reveal var(--hc-motion-normal) var(--hc-motion-ease) both;
+}
+
+.App.drawerOpen .App-drawer .Header-controls > li:nth-child(2) {
+  animation-delay: var(--hc-motion-stagger);
+}
+
+.App.drawerOpen .App-drawer .Header-controls > li:nth-child(3) {
+  animation-delay: calc(var(--hc-motion-stagger) * 2);
+}
+
+.App.drawerOpen .App-drawer .Header-controls > li:nth-child(n + 4) {
+  animation-delay: calc(var(--hc-motion-stagger) * 3);
+}
+
+@keyframes hc-page-reveal {
+  from { opacity: .01; }
   to { opacity: 1; }
 }
 
-/* Header energy effects stay on decorative paint only. */
+@keyframes hc-drawer-title-in {
+  from {
+    opacity: .01;
+    transform: translate3d(-8px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hc-opacity-reveal {
+  from { opacity: .01; }
+  to { opacity: 1; }
+}
+
+/* =========================================================
+   CYAN HEADER ENERGY
+
+   Decorative pseudo-elements only. Pause continuous effects
+   while Flarum's mobile drawer is closed to reduce battery use.
+========================================================= */
+
 .App-header::after {
   content: "";
   position: absolute;
@@ -54,65 +140,44 @@
   box-shadow:
     0 0 7px var(--hc-animation-glow-strong),
     0 0 16px var(--hc-animation-glow);
-  animation: hc-header-beam 6s ease-in-out infinite;
+  animation: hc-header-beam 5.8s ease-in-out infinite;
 }
 
 .Header-title::before {
-  animation: hc-logo-energy 4s ease-in-out infinite;
-  transition:
-    box-shadow var(--hc-motion-normal) ease,
-    opacity var(--hc-motion-normal) ease;
+  animation: hc-logo-energy 3.8s ease-in-out infinite;
+  transition: opacity var(--hc-motion-normal) ease;
 }
 
-.Header-title:hover::before {
-  opacity: 1;
-  box-shadow:
-    0 0 16px var(--hc-animation-glow-strong),
-    0 0 38px rgba(0, 255, 255, .30);
+.App:not(.drawerOpen) .App-drawer .App-header::after,
+.App:not(.drawerOpen) .App-drawer .Header-title::before {
+  animation-play-state: paused !important;
 }
 
-.Header-title a {
-  background-image: linear-gradient(
-    90deg,
-    var(--hc-animation-cyan) 0%,
-    #ffffff 38%,
-    var(--hc-animation-cyan) 62%,
-    var(--hc-animation-cyan) 100%
-  );
-  background-size: 240% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: hc-title-shimmer 6s ease-in-out infinite;
+.App.drawerOpen .App-drawer .Header-title:active::before {
+  opacity: .72;
 }
 
 @keyframes hc-header-beam {
-  0%, 18% { background-position: 120% 0; opacity: .25; }
-  52% { opacity: .9; }
-  82%, 100% { background-position: -120% 0; opacity: .25; }
+  0%, 16% {
+    background-position: 120% 0;
+    opacity: .22;
+  }
+  50% { opacity: .92; }
+  84%, 100% {
+    background-position: -120% 0;
+    opacity: .22;
+  }
 }
 
 @keyframes hc-logo-energy {
-  0%, 100% {
-    opacity: .88;
-    box-shadow:
-      0 0 9px var(--hc-animation-glow),
-      0 0 22px rgba(0, 255, 255, .15);
-  }
-  50% {
-    opacity: 1;
-    box-shadow:
-      0 0 16px var(--hc-animation-glow-strong),
-      0 0 34px rgba(0, 255, 255, .25);
-  }
+  0%, 100% { opacity: .84; }
+  50% { opacity: 1; }
 }
 
-@keyframes hc-title-shimmer {
-  0%, 58% { background-position: 100% 0; }
-  82% { background-position: 0 0; }
-  100% { background-position: -100% 0; }
-}
+/* =========================================================
+   BUTTONS + TOUCH FEEDBACK
+========================================================= */
 
-/* Interactive controls glow without moving their positioning anchors. */
 .Button,
 .Dropdown-toggle,
 .App-header .Button {
@@ -124,10 +189,14 @@
     opacity var(--hc-motion-fast) ease;
 }
 
-.Button:hover,
-.Dropdown-toggle:hover,
-.App-header .Button:hover {
-  box-shadow: 0 0 14px var(--hc-animation-glow);
+.Button:not(.Dropdown-toggle) {
+  transition:
+    color var(--hc-motion-fast) ease,
+    background-color var(--hc-motion-fast) ease,
+    border-color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease,
+    transform var(--hc-motion-instant) var(--hc-motion-ease);
 }
 
 .Button:focus-visible,
@@ -136,11 +205,51 @@
   outline-offset: 2px;
 }
 
+@media (any-hover: hover) {
+  .Button:hover,
+  .Dropdown-toggle:hover,
+  .App-header .Button:hover {
+    box-shadow: 0 0 14px var(--hc-animation-glow);
+  }
+
+  .TagLabel:hover,
+  .Badge:hover,
+  .App-content a:not(.Button):not(.Dropdown-toggle):hover {
+    text-shadow: 0 0 7px var(--hc-animation-glow);
+  }
+}
+
+@media (any-hover: none) and (pointer: coarse) {
+  .Button:not(.Dropdown-toggle):not(:disabled):active {
+    opacity: .76;
+    transform: scale(.96);
+  }
+
+  .Dropdown-toggle:active,
+  .DiscussionListItem-main:active,
+  .Notification a:active,
+  .Post-body a:active {
+    opacity: .72;
+  }
+}
+
+.Badge,
+.TagLabel,
+.DiscussionListItem-title,
+.Post-body a {
+  transition:
+    color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    text-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease;
+}
+
+/* Unread state stays noticeable without moving its control. */
 .item-notifications .Button-badge,
 .item-privateDiscussions .Button-badge,
 .NotificationsDropdown-unread,
 .NotificationGrid-unread {
-  animation: hc-badge-pulse 2.35s ease-in-out infinite;
+  animation: hc-badge-pulse 2.6s ease-in-out infinite;
 }
 
 @keyframes hc-badge-pulse {
@@ -154,114 +263,222 @@
   }
 }
 
-/* Popper owns dropdown transforms. Animate opacity only. */
-.Dropdown-menu,
-.SelectDropdown-menu,
+/* =========================================================
+   DROPDOWNS, SEARCH, NOTIFICATIONS + FLAGS
+
+   Popper and Flarum own each outer panel. Entrances use opacity
+   on the panel and small movement on non-positioning row content.
+========================================================= */
+
+.Dropdown.open > .Dropdown-menu,
+.SelectDropdown.open > .Dropdown-menu,
 .NotificationList,
+.FlagList,
 .Search-results {
-  animation: hc-panel-reveal .22s ease-out both;
+  animation: hc-panel-reveal var(--hc-motion-fast) ease-out both;
 }
 
-.Dropdown-menu > li,
-.SelectDropdown-menu > li,
-.NotificationList .Notification {
-  animation: hc-row-reveal .28s ease-out both;
+.Dropdown.open > .Dropdown-menu > li > :is(a, button, span),
+.SelectDropdown.open > .Dropdown-menu > li > :is(a, button, span),
+.NotificationList .Notification-content,
+.FlagList .Notification-content,
+.DraftsList .Notification-content,
+.Search-results > li > a {
+  animation: hc-row-rise var(--hc-motion-normal) var(--hc-motion-spring) both;
+}
+
+.Dropdown.open > .Dropdown-menu > li:nth-child(2) > :is(a, button, span),
+.SelectDropdown.open > .Dropdown-menu > li:nth-child(2) > :is(a, button, span) {
+  animation-delay: var(--hc-motion-stagger);
+}
+
+.Dropdown.open > .Dropdown-menu > li:nth-child(3) > :is(a, button, span),
+.SelectDropdown.open > .Dropdown-menu > li:nth-child(3) > :is(a, button, span) {
+  animation-delay: calc(var(--hc-motion-stagger) * 2);
+}
+
+.Dropdown.open > .Dropdown-menu > li:nth-child(n + 4) > :is(a, button, span),
+.SelectDropdown.open > .Dropdown-menu > li:nth-child(n + 4) > :is(a, button, span) {
+  animation-delay: calc(var(--hc-motion-stagger) * 3);
 }
 
 .Dropdown-menu > li > a,
 .Dropdown-menu > li > button,
-.SelectDropdown-menu > li > button {
+.SelectDropdown-menu > li > button,
+.Notification {
   transition:
     background-color var(--hc-motion-fast) ease,
     color var(--hc-motion-fast) ease,
-    box-shadow var(--hc-motion-fast) ease;
+    border-color var(--hc-motion-fast) ease,
+    box-shadow var(--hc-motion-fast) ease,
+    opacity var(--hc-motion-fast) ease;
 }
 
 @keyframes hc-panel-reveal {
-  from { opacity: 0; }
+  from { opacity: .01; }
   to { opacity: 1; }
 }
 
-@keyframes hc-row-reveal {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes hc-row-rise {
+  from {
+    opacity: .01;
+    transform: translate3d(0, 5px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* Cards keep their layout box stationary. */
+/* =========================================================
+   DISCUSSIONS, POSTS + USER ROWS
+
+   Animate inner content instead of the outer list item so fixed
+   mobile dropdown sheets keep the viewport as their containing block.
+========================================================= */
+
+.DiscussionListItem-main,
+.DiscussionListItem-author .Avatar,
+.Post-body,
+.UserListItem-info {
+  animation: hc-content-rise var(--hc-motion-panel) var(--hc-motion-spring) both;
+}
+
+.DiscussionList-discussions > li:nth-child(2) .DiscussionListItem-main,
+.DiscussionList-discussions > li:nth-child(2) .DiscussionListItem-author .Avatar {
+  animation-delay: var(--hc-motion-stagger);
+}
+
+.DiscussionList-discussions > li:nth-child(3) .DiscussionListItem-main,
+.DiscussionList-discussions > li:nth-child(3) .DiscussionListItem-author .Avatar {
+  animation-delay: calc(var(--hc-motion-stagger) * 2);
+}
+
+.DiscussionList-discussions > li:nth-child(4) .DiscussionListItem-main,
+.DiscussionList-discussions > li:nth-child(4) .DiscussionListItem-author .Avatar {
+  animation-delay: calc(var(--hc-motion-stagger) * 3);
+}
+
+.DiscussionList-discussions > li:nth-child(n + 5) .DiscussionListItem-main,
+.DiscussionList-discussions > li:nth-child(n + 5) .DiscussionListItem-author .Avatar {
+  animation-delay: calc(var(--hc-motion-stagger) * 4);
+}
+
 .DiscussionListItem,
 .PostStream-item,
 .Post,
 .TagTile,
+.UserListItem,
 .AfruxWidgets-Widget {
-  animation: hc-card-reveal .38s var(--hc-motion-ease) both;
   transition:
     background-color var(--hc-motion-normal) ease,
     border-color var(--hc-motion-normal) ease,
-    box-shadow var(--hc-motion-normal) ease;
+    box-shadow var(--hc-motion-normal) ease,
+    opacity var(--hc-motion-normal) ease;
 }
 
-.DiscussionListItem:hover,
-.TagTile:hover,
-.AfruxWidgets-Widget:hover {
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, .16),
-    0 0 16px var(--hc-animation-glow);
+@keyframes hc-content-rise {
+  from {
+    opacity: .01;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-@keyframes hc-card-reveal {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* =========================================================
+   COMPOSER, MODALS, ALERTS + LOADING
+========================================================= */
+
+.Composer.visible:not(.minimized) .TextEditor-editorContainer,
+.ComposerPage .TextEditor-editorContainer {
+  animation: hc-editor-rise var(--hc-motion-panel) var(--hc-motion-spring) both;
 }
 
-.Badge,
-.TagLabel,
-.App-content a:not(.Button):not(.Dropdown-toggle) {
-  transition:
-    color var(--hc-motion-fast) ease,
-    box-shadow var(--hc-motion-fast) ease,
-    text-shadow var(--hc-motion-fast) ease,
-    opacity var(--hc-motion-fast) ease;
+.Composer.visible:not(.minimized)
+.TextEditor-controls > li:not(.item-submit),
+.ComposerPage .TextEditor-controls > li:not(.item-submit),
+.ComposerPage .ComposerBody-header > li:not(.item-title) {
+  animation: hc-row-rise var(--hc-motion-normal) var(--hc-motion-spring) both;
 }
 
-.TagLabel:hover,
-.Badge:hover,
-.App-content a:not(.Button):not(.Dropdown-toggle):hover {
-  text-shadow: 0 0 7px var(--hc-animation-glow);
+.Composer.visible:not(.minimized)
+.TextEditor-controls > li:not(.item-submit):nth-child(2),
+.ComposerPage .TextEditor-controls > li:not(.item-submit):nth-child(2) {
+  animation-delay: var(--hc-motion-stagger);
 }
 
-/* Modal and alert entrances are paint-only. */
-.Modal-content,
-.Alert {
-  animation: hc-surface-reveal .3s ease-out both;
+.Composer.visible:not(.minimized)
+.TextEditor-controls > li:not(.item-submit):nth-child(n + 3),
+.ComposerPage .TextEditor-controls > li:not(.item-submit):nth-child(n + 3) {
+  animation-delay: calc(var(--hc-motion-stagger) * 2);
 }
 
-@keyframes hc-surface-reveal {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.Modal.in .Modal-content {
+  animation: hc-panel-reveal var(--hc-motion-normal) ease-out both;
+}
+
+.Modal.in .Modal-body > * {
+  animation: hc-opacity-reveal var(--hc-motion-normal) var(--hc-motion-ease) both;
+}
+
+.AlertManager .Alert,
+.SettingsPage .Settings-notifications > ul > li > .Alert {
+  animation: hc-alert-in var(--hc-motion-panel) var(--hc-motion-spring) both;
 }
 
 .LoadingIndicator-container {
-  animation: hc-loading-breathe 1.5s ease-in-out infinite;
+  animation: hc-loading-breathe 1.45s ease-in-out infinite;
+}
+
+@keyframes hc-editor-rise {
+  from {
+    opacity: .01;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hc-alert-in {
+  from {
+    opacity: .01;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes hc-loading-breathe {
-  0%, 100% { opacity: .65; }
+  0%, 100% { opacity: .62; }
   50% { opacity: 1; }
 }
 
-/* These areas intentionally remain stationary. */
+/* =========================================================
+   POSITION-SENSITIVE EXCLUSIONS
+
+   Tooltips may fade through their own library behavior, but this
+   layer never animates or transitions their Popper transform.
+========================================================= */
+
 .AfruxWidgets-Widget.welcomebox-widget,
-.AfruxWidgets-Widget.welcomebox-widget *,
-.backgrwb,
-.backgrwb *,
-.backgrwbguest,
-.backgrwbguest *,
+.AfruxWidgets-Widget.welcomebox-widget * {
+  animation: none !important;
+}
+
 .tooltip,
 .Tooltip,
 [role="tooltip"],
 .tooltip *,
 .Tooltip *,
 [role="tooltip"] * {
+  animation: none !important;
   transition-property:
     color,
     background-color,
@@ -270,49 +487,57 @@
     opacity !important;
 }
 
-.AfruxWidgets-Widget.welcomebox-widget,
-.AfruxWidgets-Widget.welcomebox-widget *,
-.backgrwb,
-.backgrwb *,
-.backgrwbguest,
-.backgrwbguest * {
-  animation: none !important;
-}
+/* =========================================================
+   REDUCED MOTION
 
-/* Popper supplies inline transforms to tooltips; never replace them here. */
-.tooltip,
-.Tooltip,
-[role="tooltip"],
-.tooltip *,
-.Tooltip *,
-[role="tooltip"] * {
-  animation: none !important;
-}
+   Keep a 1ms native surface transition so Flarum's drawer can
+   still receive transitionend and clean up its visibility state.
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+  .App-drawer,
+  .drawer-backdrop,
+  .dropdown-backdrop,
+  .Modal-backdrop,
+  .Dropdown .Dropdown-menu,
+  .SelectDropdown .Dropdown-menu,
+  .Modal {
+    transition-duration: 1ms !important;
+    animation: none !important;
+  }
+
   .App-content > .container,
   .IndexPage-results,
   .DiscussionPage-discussion,
   .UserPage-content,
+  .ComposerPageContainer,
+  .NotificationsPage,
+  .FlagsPage,
+  .DraftsPage,
   .App-header::after,
+  .Header-title,
   .Header-title::before,
-  .Header-title a,
+  .Header-controls > li,
   .Button-badge,
   .NotificationsDropdown-unread,
   .NotificationGrid-unread,
   .Dropdown-menu,
   .SelectDropdown-menu,
   .NotificationList,
+  .FlagList,
   .Search-results,
-  .Dropdown-menu > li,
-  .SelectDropdown-menu > li,
-  .NotificationList .Notification,
-  .DiscussionListItem,
-  .PostStream-item,
-  .Post,
-  .TagTile,
-  .AfruxWidgets-Widget,
+  .Dropdown-menu > li > *,
+  .SelectDropdown-menu > li > *,
+  .Notification-content,
+  .DiscussionListItem-main,
+  .DiscussionListItem-author .Avatar,
+  .Post-body,
+  .UserListItem-info,
+  .TextEditor-editorContainer,
+  .TextEditor-controls > li,
+  .ComposerBody-header > li,
   .Modal-content,
+  .Modal-body > *,
   .Alert,
   .LoadingIndicator-container {
     animation: none !important;
@@ -320,12 +545,16 @@
 
   .Button,
   .Dropdown-toggle,
-  .App-header .Button,
   .DiscussionListItem,
+  .PostStream-item,
+  .Post,
   .TagTile,
+  .UserListItem,
   .AfruxWidgets-Widget,
   .Badge,
-  .TagLabel {
-    transition: none !important;
+  .TagLabel,
+  .DiscussionListItem-title,
+  .Post-body a {
+    transition-duration: 1ms !important;
   }
 }
