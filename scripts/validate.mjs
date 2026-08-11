@@ -158,6 +158,42 @@ for (const required of [
   if (!entry.includes(required)) fail(entryFile, `missing Flarum breakpoint import: ${required}`);
 }
 
+const mobileFile = resolve(repositoryRoot, "v1.x/add-ons/mobile.css");
+const mobile = readFileSync(mobileFile, "utf8");
+for (const required of [
+  ".Composer:not(.minimized) .App-backControl",
+  ".Composer:not(.minimized) .App-titleControl",
+  ".Composer:not(.minimized) .App-primaryControl",
+  "padding-left: 60px !important",
+  "padding-right: 50px !important",
+  ".DraftsPage",
+]) {
+  if (!mobile.includes(required)) fail(mobileFile, `missing mobile compatibility rule: ${required}`);
+}
+if (/html body \.App \.Dropdown-menu\s*,\s*html body \.App \.Search-results/.test(mobile)) {
+  fail(mobileFile, "global phone dropdown width override replaces Flarum sheet geometry");
+}
+
+const panelFile = resolve(repositoryRoot, "v1.x/add-ons/header-panels.css");
+const panels = readFileSync(panelFile, "utf8");
+if (!panels.includes(".DraftsDropdown")) {
+  fail(panelFile, "FoF Drafts is missing from shared header panels");
+}
+if (/App-drawer[\s\S]{0,800}NotificationsDropdown[\s\S]{0,800}display:\s*none\s*!important/.test(panels)) {
+  fail(panelFile, "mobile notification/flag sheets are forcibly hidden");
+}
+
+const headerFile = resolve(repositoryRoot, "v1.x/core/header.html");
+const header = readFileSync(headerFile, "utf8");
+for (const required of [
+  "hcfMobileHeaderPanels",
+  'compat["components/NotificationsDropdown"]',
+  'override(prototype,"onclick"',
+  "state.load();",
+]) {
+  if (!header.includes(required)) fail(headerFile, `missing mobile panel override: ${required}`);
+}
+
 const motionFile = resolve(repositoryRoot, "v1.x/add-ons/motion.css");
 if (/@import\b/.test(readFileSync(motionFile, "utf8"))) {
   fail(motionFile, "motion layer must not import an external animation bundle");
