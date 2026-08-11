@@ -394,6 +394,65 @@ html body #hc-holiday-header{
 })();
 </script>
 
+<!--
+  Flarum 1.x normally routes notifications, flags, and FoF Drafts to their
+  full pages when tapped from the open phone drawer. HCF keeps the original
+  dropdown component and changes only that mobile click decision so the
+  framework's native full-width sheet, backdrop, counts, and close behavior
+  continue to work. Direct /notifications, /flags, and /drafts routes remain
+  available.
+-->
+<script>
+(function hcfMobileHeaderPanels(){
+  "use strict";
+
+  var attempts=0;
+  var MAX_ATTEMPTS=120;
+  var PHONE_QUERY="(max-width: 767.98px)";
+
+  function install(){
+    var namespace=window.flarum;
+    var compat=namespace&&namespace.core&&namespace.core.compat;
+    var app=compat&&compat.app;
+    var NotificationsDropdown=compat&&compat["components/NotificationsDropdown"];
+    var override=compat&&compat.extend&&compat.extend.override;
+    var prototype=NotificationsDropdown&&NotificationsDropdown.prototype;
+
+    if(!app||!prototype||typeof override!=="function"){
+      attempts+=1;
+      if(attempts<MAX_ATTEMPTS){window.setTimeout(install,50)}
+      return;
+    }
+
+    if(prototype.__hcfMobileHeaderPanels){return}
+
+    override(prototype,"onclick",function(original){
+      var drawerOpen=app.drawer&&typeof app.drawer.isOpen==="function"&&app.drawer.isOpen();
+      var phone=typeof window.matchMedia!=="function"||window.matchMedia(PHONE_QUERY).matches;
+      var state=this.attrs&&this.attrs.state;
+
+      if(drawerOpen&&phone&&state&&typeof state.load==="function"){
+        state.load();
+        return;
+      }
+
+      return original();
+    });
+
+    Object.defineProperty(prototype,"__hcfMobileHeaderPanels",{
+      configurable:false,
+      enumerable:false,
+      value:true,
+      writable:false
+    });
+
+    if(window.m&&typeof window.m.redraw==="function"){window.m.redraw()}
+  }
+
+  install();
+})();
+</script>
+
 <script>
 (function domainExpirationNotice(){
   "use strict";
