@@ -5,7 +5,7 @@
    Dedicated phone route pages such as /notifications and /flags
    must keep Flarum's native mobile App-titleControl behavior.
 
-   Version: 1.2
+   Version: 1.3
    Author: HarleyTG
    Updated: 2026-08-11
 ========================================================= */
@@ -26,7 +26,8 @@
 /* Header dropdown wrappers only. */
 .NotificationsDropdown > .Dropdown-menu,
 .FlagsDropdown > .Dropdown-menu,
-.FlaggedPostsDropdown > .Dropdown-menu {
+.FlaggedPostsDropdown > .Dropdown-menu,
+.DraftsDropdown > .Dropdown-menu {
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -153,7 +154,7 @@
  * Never target .NotificationList/.FlagList globally: those same classes
  * are used by Flarum's dedicated /notifications and /flags phone pages.
  */
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 :is(.NotificationList, .FlagList) {
   box-sizing: border-box !important;
   max-width: min(430px, calc(100vw - 20px)) !important;
@@ -169,7 +170,7 @@
   -webkit-backdrop-filter: blur(16px) saturate(118%) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header {
   box-sizing: border-box !important;
   display: flex !important;
@@ -182,7 +183,7 @@
   background: rgba(255, 255, 255, .025) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header .App-titleControl {
   min-width: 0 !important;
   margin: 0 !important;
@@ -192,14 +193,14 @@
   line-height: 1.25 !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header .App-primaryControl {
   display: flex !important;
   flex: 0 0 auto !important;
   gap: 4px !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header .App-primaryControl .Button {
   border: 0 !important;
   border-radius: 999px !important;
@@ -207,9 +208,9 @@
   color: var(--hc-panel-text) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header .App-primaryControl .Button:hover,
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-header .App-primaryControl .Button:focus-visible {
   outline: 2px solid var(--hc-panel-accent) !important;
   outline-offset: 1px !important;
@@ -217,7 +218,7 @@
   color: var(--hc-panel-accent) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-content {
   box-sizing: border-box !important;
   max-height: min(58vh, 500px) !important;
@@ -230,27 +231,27 @@
   scrollbar-color: var(--hc-panel-accent) rgba(255, 255, 255, .08);
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationGroup-content {
   margin: 0 !important;
   padding: 4px !important;
   list-style: none !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 :is(.NotificationList, .FlagList) .Notification {
   border-radius: 12px !important;
   color: var(--hc-panel-text) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 :is(.NotificationList, .FlagList) .Notification:hover,
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 :is(.NotificationList, .FlagList) .Notification:focus-within {
   background: rgba(0, 255, 255, .09) !important;
 }
 
-:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown)
+:is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
 .NotificationList-empty {
   box-sizing: border-box !important;
   padding: 24px 14px !important;
@@ -267,20 +268,55 @@
 }
 
 @media screen and (max-width: 767.98px) {
-  /* Flarum deliberately routes notification/flag controls to phone pages.
-     Hide only the transient dropdown that can flash before the route changes. */
-  html body .App .App-drawer .NotificationsDropdown > .Dropdown-menu,
-  html body .App .App-drawer .NotificationsDropdown > .dropdown-backdrop,
-  html body .App .App-drawer .FlagsDropdown > .Dropdown-menu,
-  html body .App .App-drawer .FlagsDropdown > .dropdown-backdrop,
-  html body .App .App-drawer .FlaggedPostsDropdown > .Dropdown-menu,
-  html body .App .App-drawer .FlaggedPostsDropdown > .dropdown-backdrop {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    animation: none !important;
-    transition: none !important;
+  /* The custom header override makes these components load their native
+     dropdown while the phone drawer is open. Keep Flarum's fixed, full-width
+     sheet, backdrop, .open state, and slide transition. */
+  html body .App .App-drawer
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
+  > .Dropdown-menu {
+    max-width: none !important;
+    padding-bottom: calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
+  }
+
+  html body .App .App-drawer
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown)
+  :is(.NotificationList, .FlagList, .DraftsList) {
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  /* Notification actions are hover-revealed by core on pointer devices.
+     Delete, schedule, dismiss, and extension actions must stay visible and
+     tappable in phone sheets and direct route pages. */
+  html body .App
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown,
+      .DraftsDropdown, .NotificationsPage, .FlagsPage, .DraftsPage)
+  .Notification-action {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  html body .App .DraftsList .Notification-action {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  html body .App .DraftsList
+  :is(.draft--delete, .draft--schedule) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    touch-action: manipulation !important;
   }
 
   html body .App .SessionDropdown > .Dropdown-menu {
@@ -292,7 +328,7 @@
     margin-right: 0 !important;
     margin-left: 0 !important;
     padding: 8px 8px calc(40px + var(--hc-mobile-safe-bottom, 0px)) !important;
-    border-radius: 16px !important;
+    border-radius: 18px 18px 0 0 !important;
   }
 
   html body .App .SessionDropdown > .Dropdown-menu > li > a,
@@ -300,15 +336,32 @@
     min-height: 44px !important;
     padding: 10px 12px !important;
   }
+
+  html body .App .SessionDropdown > .Dropdown-menu > li > a.hasIcon,
+  html body .App .SessionDropdown > .Dropdown-menu > li > button.hasIcon {
+    gap: 12px !important;
+    padding-left: 14px !important;
+  }
+
+  html body .App .SessionDropdown > .Dropdown-menu
+  > li > :is(a, button).hasIcon > .Button-icon {
+    float: none !important;
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .SessionDropdown > .Dropdown-menu,
   .SessionDropdown > .Dropdown-menu *,
-  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .NotificationList,
-  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .NotificationList *,
-  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .FlagList,
-  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown) .FlagList * {
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown) .NotificationList,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown) .NotificationList *,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown) .FlagList,
+  :is(.NotificationsDropdown, .FlagsDropdown, .FlaggedPostsDropdown, .DraftsDropdown) .FlagList *,
+  .DraftsDropdown .DraftsList,
+  .DraftsDropdown .DraftsList * {
     animation: none !important;
     transition: none !important;
   }
