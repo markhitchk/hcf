@@ -11,8 +11,8 @@ It is a complete copy of the current `v1.x/` package with Flarum 2 compatibility
 | HCF source | `v1.x/` at `296f88870e303edd046bf25d2ece471622f8e0ed` |
 | Flarum source | [`flarum/framework` branch `2.x`](https://github.com/flarum/framework/tree/2.x) |
 | Verified Flarum commit | `f4a460ef9e6dff8452ad4d524df726692c7280bb` |
-| Build version | `6.0.0-alpha.1` |
-| Verified date | August 9, 2026 |
+| Build version | `6.0.0-alpha.2` |
+| Verified date | August 11, 2026 |
 
 Flarum 2 is still under development. This package is ready for a Flarum 2 test installation, but it should be rechecked against the final Flarum 2 release commit before replacing the live Flarum 1.x theme.
 
@@ -53,6 +53,8 @@ Use the URLs exactly as shown. Do not wrap them in Markdown link syntax.
 - Hard-coded icon font references use Font Awesome 7, as bundled by Flarum 2.
 - Legacy `ConversationsPage` and `NotificationList` selectors remain as isolated fallbacks for extensions that have not migrated yet.
 - Branded footer and error-page images load from the versioned `v2.x/assets/logos/` folder.
+- HTTP 403, 404, 500, and 503 pages now use the same dark glass surface, cyan accents, typography, controls, and responsive spacing as the forum theme.
+- Error pages use semantic links, focus-visible states, safe-area spacing, and reduced-motion support without the old anti-inspect JavaScript.
 
 ## Folder structure
 
@@ -82,7 +84,7 @@ v2.x/
 Before moving the live forum to Flarum 2:
 
 1. Compare the final `flarum/framework` release commit with the verified commit above.
-2. Test the header dropdowns, `/messages`, flags, login/sign-up modals, profile controls, mobile bottom navigation, and admin dashboard.
+2. Test the header dropdowns, `/messages`, flags, login/sign-up modals, profile controls, mobile bottom navigation, error pages, and admin dashboard.
 3. Clear Flarum's cache and purge jsDelivr after publishing any last selector changes.
 
 ---
