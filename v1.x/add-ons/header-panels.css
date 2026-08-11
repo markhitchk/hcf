@@ -5,9 +5,9 @@
    flagged posts, and other Flarum header dropdown panels.
    Popper/Flarum retain control of panel positioning.
 
-   Version: 1.0
+   Version: 1.1
    Author: HarleyTG
-   Updated: 2026-08-10
+   Updated: 2026-08-11
 ========================================================= */
 
 :root {
@@ -290,6 +290,82 @@
 
   html body .App .NotificationList-content {
     max-height: calc(58dvh - var(--hc-mobile-safe-bottom, 0px)) !important;
+  }
+
+  /* Full-page mobile destinations for header controls.
+     Flarum 1.x moves these title/primary controls into App-navigation.
+     Keep the outer page free of containing-block and internal-scroll rules so
+     the framework can position the controls and scroll the window normally. */
+  html body .App.App--notifications
+  .NotificationsPage > .NotificationList,
+  html body .App.App--flags
+  .FlagsPage > .NotificationList.FlagList {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* On a routed page, the list header only supplies Flarum's controls.
+     It must not consume card space like a desktop dropdown header. */
+  html body .App.App--notifications
+  .NotificationsPage > .NotificationList > .NotificationList-header,
+  html body .App.App--flags
+  .FlagsPage > .FlagList > .NotificationList-header {
+    display: block !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  /* Undo only HCF's dropdown typography overrides. App.less continues to own
+     position, width, left offset, z-index, and mobile header behavior. */
+  html body .App.App--notifications
+  .NotificationsPage .NotificationList-header .App-titleControl,
+  html body .App.App--flags
+  .FlagsPage .NotificationList-header .App-titleControl {
+    width: 200px !important;
+    min-width: 0 !important;
+    margin: 0 0 0 -100px !important;
+    color: var(--header-color) !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: var(--header-height-phone, 46px) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* The Messenger-style glass card belongs on the routed page content, not
+     on the element that contains Flarum's relocated header controls. */
+  html body .App.App--notifications
+  .NotificationsPage > .NotificationList > .NotificationList-content,
+  html body .App.App--flags
+  .FlagsPage > .FlagList > .NotificationList-content {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    overscroll-behavior: auto !important;
+    border: 1px solid var(--hc-panel-border) !important;
+    border-radius: 16px !important;
+    background: var(--hc-panel-surface) !important;
+    color: var(--hc-panel-text) !important;
+    box-shadow: var(--hc-panel-shadow) !important;
+    backdrop-filter: blur(16px) saturate(118%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(118%) !important;
   }
 
   html body .App .SessionDropdown > .Dropdown-menu > li > a,
