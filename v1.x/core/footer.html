@@ -861,56 +861,54 @@
     transform:none;
 }
 
-/* Mobile performance mode: keep the footer readable without continuous GPU-heavy effects. */
-@media (max-width:767.98px){
-    .hc-simple-footer{
-        content-visibility:auto;
-        contain-intrinsic-size:auto 620px;
-        background:transparent;
-    }
+/* Mobile performance mode is class-driven so a narrow desktop window
+   still keeps the standard desktop/laptop effects. */
+.hc-simple-footer.hc-mobile-performance{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 620px;
+    background:transparent;
+}
 
-    .hc-simple-footer::before,
-    .hc-simple-footer::after,
-    .hc-simple-footer .hc-terminal-block::before,
-    .hc-simple-footer .hc-terminal-block::after,
-    .hc-simple-footer .hc-footer-logo-wrap::after,
-    .hc-simple-footer .hc-divider::after,
-    .hc-simple-footer .hc-spoiler::after{
-        display:none!important;
-    }
+.hc-simple-footer.hc-mobile-performance::before,
+.hc-simple-footer.hc-mobile-performance::after,
+.hc-simple-footer.hc-mobile-performance .hc-terminal-block::before,
+.hc-simple-footer.hc-mobile-performance .hc-terminal-block::after,
+.hc-simple-footer.hc-mobile-performance .hc-footer-logo-wrap::after,
+.hc-simple-footer.hc-mobile-performance .hc-divider::after,
+.hc-simple-footer.hc-mobile-performance .hc-spoiler::after{
+    display:none!important;
+}
 
-    .hc-simple-footer *,
-    .hc-simple-footer *::before,
-    .hc-simple-footer *::after{
-        animation:none!important;
-        transition:none!important;
-    }
+.hc-simple-footer.hc-mobile-performance *,
+.hc-simple-footer.hc-mobile-performance *::before,
+.hc-simple-footer.hc-mobile-performance *::after{
+    animation:none!important;
+    transition:none!important;
+}
 
-    .hc-simple-footer #hc-top-btn,
-    .hc-simple-footer .hc-terminal-block,
-    .hc-feedback-panel{
-        -webkit-backdrop-filter:none!important;
-        backdrop-filter:none!important;
-    }
+.hc-simple-footer.hc-mobile-performance #hc-top-btn,
+.hc-simple-footer.hc-mobile-performance .hc-terminal-block,
+.hc-feedback-float.hc-mobile-performance .hc-feedback-panel{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+}
 
-    .hc-simple-footer .hc-terminal-block{
-        box-shadow:0 8px 24px rgba(0,0,0,.16);
-    }
+.hc-simple-footer.hc-mobile-performance .hc-terminal-block{
+    box-shadow:0 8px 24px rgba(0,0,0,.16);
+}
 
-    .hc-simple-footer .hc-footer-logo-img{
-        box-shadow:0 0 10px rgba(0,255,255,.18);
-    }
+.hc-simple-footer.hc-mobile-performance .hc-footer-logo-img{
+    box-shadow:0 0 10px rgba(0,255,255,.18);
+}
 
-    .hc-simple-footer .hc-motion-ready .hc-scroll-container,
-    .hc-simple-footer.hc-motion-ready .hc-scroll-container,
-    .hc-simple-footer.hc-motion-ready .hc-footer-brand,
-    .hc-simple-footer.hc-motion-ready .hc-terminal-block,
-    .hc-simple-footer.hc-motion-ready .hc-data-row,
-    .hc-simple-footer.hc-motion-ready .hc-divider,
-    .hc-simple-footer.hc-motion-ready .hc-system-notice{
-        opacity:1;
-        transform:none;
-    }
+.hc-simple-footer.hc-mobile-performance .hc-scroll-container,
+.hc-simple-footer.hc-mobile-performance .hc-footer-brand,
+.hc-simple-footer.hc-mobile-performance .hc-terminal-block,
+.hc-simple-footer.hc-mobile-performance .hc-data-row,
+.hc-simple-footer.hc-mobile-performance .hc-divider,
+.hc-simple-footer.hc-mobile-performance .hc-system-notice{
+    opacity:1;
+    transform:none;
 }
 
 @media (max-width:600px){
@@ -1159,6 +1157,7 @@
     var ipText=document.getElementById("hc-ip");
     var ipStatus=document.getElementById("hc-ip-status");
     var topButton=document.getElementById("hc-top-btn");
+    var feedbackFloat=document.querySelector(".hc-feedback-float");
     var ipRequested=false;
     var clockTimer=0;
     var identityTimer=0;
@@ -1219,12 +1218,45 @@
         return name;
     }
 
-    function detectCompatibility(){
-        var limited=false;
-        var mobile=false;
+    function isMobilePerformanceDevice(){
+        var userAgent="";
+        var touchPoints=0;
+        var mobileHint=false;
+        var touchFirst=false;
+        var compactScreen=false;
 
         try{
-            mobile=window.matchMedia("(max-width: 767.98px)").matches;
+            userAgent=navigator.userAgent||"";
+            touchPoints=navigator.maxTouchPoints||0;
+            mobileHint=Boolean(
+                navigator.userAgentData&&
+                navigator.userAgentData.mobile===true
+            );
+            touchFirst=window.matchMedia(
+                "(hover: none) and (pointer: coarse)"
+            ).matches;
+            compactScreen=Math.min(
+                window.screen.width||window.innerWidth,
+                window.screen.height||window.innerHeight
+            )<=1024;
+        }catch(error){}
+
+        var knownMobile=/Android|iPhone|iPad|iPod|Mobile|Tablet|Silk|Kindle/i.test(
+            userAgent
+        );
+        var iPadDesktopMode=/Macintosh/i.test(userAgent)&&touchPoints>1;
+
+        return mobileHint||
+            knownMobile||
+            iPadDesktopMode||
+            (touchFirst&&touchPoints>0&&compactScreen);
+    }
+
+    function detectCompatibility(){
+        var limited=false;
+        var mobile=isMobilePerformanceDevice();
+
+        try{
             limited=!window.CSS||
                 !CSS.supports("display","grid")||
                 !(
@@ -1237,6 +1269,11 @@
 
         if(mobile){
             footer.classList.add("hc-mobile-performance");
+
+            if(feedbackFloat){
+                feedbackFloat.classList.add("hc-mobile-performance");
+            }
+
             deviceStatus.className="is-limited";
             deviceStatus.innerHTML=
                 '<span class="hc-device-indicator" aria-hidden="true"></span>'+
