@@ -210,8 +210,8 @@
   /* ======================================================
      PHONE WIDTH + EXTENSION SAFETY
 
-     Flarum retains its own 15px container gutters. These rules
-     only stop extension content from forcing horizontal scroll.
+     Keep Flarum's container flow with a tighter 10px HCF phone
+     gutter. The remaining rules only prevent extension overflow.
      ====================================================== */
   html body .App .App-content,
   html body .App .App-content > .container,
