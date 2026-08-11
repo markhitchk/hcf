@@ -1,7 +1,7 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.1
+   HARLEY'S CLAN FORUM FOOTER v4.2
    Animated Network Edition
    Author: HarleyTG
    Updated: 2026-08-11
@@ -600,9 +600,11 @@
 
 .hc-feedback-float{
     position:fixed;
-    right:max(18px,env(safe-area-inset-right));
-    bottom:max(18px,env(safe-area-inset-bottom));
+    right:max(14px,env(safe-area-inset-right));
+    bottom:max(16px,env(safe-area-inset-bottom));
     z-index:2147483000;
+    width:42px;
+    height:42px;
     margin:0;
     color:var(--text-color,var(--body-color,var(--hc-text)));
     font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
@@ -611,63 +613,85 @@
 .hc-feedback-float > summary{
     display:flex;
     align-items:center;
-    gap:9px;
-    min-height:48px;
-    padding:11px 15px 11px 11px;
+    justify-content:center;
+    width:42px;
+    min-width:42px;
+    max-width:42px;
+    height:42px;
+    min-height:42px;
+    max-height:42px;
+    margin:0;
+    padding:0;
+    overflow:hidden;
     border:1px solid rgba(88,101,242,.72);
-    border-radius:999px;
+    border-radius:50%;
     background:linear-gradient(135deg,#5865f2,#7289da);
     color:#fff;
     cursor:pointer;
-    list-style:none;
-    font-size:.78rem;
-    font-weight:800;
-    line-height:1;
-    box-shadow:0 10px 28px rgba(0,0,0,.24),0 0 18px rgba(88,101,242,.25);
+    list-style:none!important;
+    list-style-type:none!important;
+    font-size:0!important;
+    line-height:0;
+    box-shadow:0 7px 18px rgba(0,0,0,.24),0 0 12px rgba(88,101,242,.22);
     user-select:none;
     -webkit-tap-highlight-color:transparent;
     transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
 }
 
-.hc-feedback-float > summary::-webkit-details-marker{display:none}
-.hc-feedback-float > summary::marker{display:none;content:""}
+.hc-feedback-float > summary::-webkit-details-marker{
+    display:none!important;
+    width:0!important;
+    height:0!important;
+}
+
+.hc-feedback-float > summary::marker{
+    content:""!important;
+    display:none!important;
+    font-size:0!important;
+}
 
 .hc-feedback-float > summary:hover{
-    transform:translateY(-2px) scale(1.02);
+    transform:translateY(-1px) scale(1.04);
     filter:brightness(1.05);
-    box-shadow:0 13px 32px rgba(0,0,0,.28),0 0 22px rgba(88,101,242,.34);
+    box-shadow:0 9px 22px rgba(0,0,0,.28),0 0 16px rgba(88,101,242,.3);
 }
 
 .hc-feedback-float > summary:focus-visible{
     outline:2px solid var(--hc-accent);
-    outline-offset:4px;
+    outline-offset:3px;
 }
 
 .hc-feedback-paw{
-    display:inline-flex;
+    display:flex;
     align-items:center;
     justify-content:center;
     width:28px;
     height:28px;
+    margin:0;
+    padding:0;
     border-radius:50%;
-    background:rgba(255,255,255,.18);
-    font-size:1rem;
-    line-height:1;
+    background:rgba(255,255,255,.15);
+    font-size:15px!important;
+    line-height:1!important;
+}
+
+.hc-feedback-label{
+    display:none!important;
 }
 
 .hc-feedback-panel{
     position:absolute;
     right:0;
-    bottom:calc(100% + 12px);
-    width:min(320px,calc(100vw - 24px));
-    max-height:min(360px,calc(100vh - 110px));
+    bottom:calc(100% + 10px);
+    width:min(280px,calc(100vw - 28px));
+    max-height:min(300px,calc(100vh - 110px));
     overflow:auto;
-    padding:16px;
+    padding:14px;
     border:1px solid rgba(88,101,242,.52);
-    border-radius:20px;
+    border-radius:16px;
     background:var(--control-bg,var(--hc-bg));
     color:inherit;
-    box-shadow:0 18px 48px rgba(0,0,0,.32),0 0 24px rgba(88,101,242,.15);
+    box-shadow:0 14px 38px rgba(0,0,0,.32),0 0 18px rgba(88,101,242,.13);
     backdrop-filter:blur(16px);
     -webkit-backdrop-filter:blur(16px);
     overscroll-behavior:contain;
@@ -676,10 +700,10 @@
 .hc-feedback-panel::after{
     content:"";
     position:absolute;
-    right:27px;
-    bottom:-6px;
-    width:12px;
-    height:12px;
+    right:15px;
+    bottom:-5px;
+    width:10px;
+    height:10px;
     border-right:1px solid rgba(88,101,242,.52);
     border-bottom:1px solid rgba(88,101,242,.52);
     background:var(--control-bg,var(--hc-bg));
@@ -687,37 +711,37 @@
 }
 
 .hc-feedback-title{
-    margin:0 0 6px;
+    margin:0 0 5px;
     color:inherit;
-    font-size:.94rem;
+    font-size:.88rem;
     font-weight:800;
-    line-height:1.35;
+    line-height:1.3;
 }
 
 .hc-feedback-text{
     margin:0;
     color:var(--muted-color,var(--hc-muted));
-    font-size:.77rem;
-    line-height:1.55;
+    font-size:.73rem;
+    line-height:1.5;
 }
 
 .hc-feedback-actions{
     display:grid;
-    gap:8px;
-    margin-top:13px;
+    gap:7px;
+    margin-top:11px;
 }
 
 .hc-feedback-link{
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:38px;
-    padding:9px 12px;
+    min-height:36px;
+    padding:8px 10px;
     border:1px solid rgba(88,101,242,.62);
-    border-radius:12px;
+    border-radius:10px;
     background:rgba(88,101,242,.12);
     color:inherit;
-    font-size:.76rem;
+    font-size:.72rem;
     font-weight:800;
     line-height:1.2;
     text-align:center;
@@ -847,29 +871,55 @@
     .hc-ip-line{line-height:1.7}
 
     .hc-feedback-float{
-        right:max(12px,env(safe-area-inset-right));
-        bottom:max(76px,calc(env(safe-area-inset-bottom) + 12px));
+        right:max(10px,env(safe-area-inset-right));
+        bottom:max(70px,calc(env(safe-area-inset-bottom) + 10px));
+        width:40px;
+        height:40px;
     }
 
     .hc-feedback-float > summary{
-        min-height:46px;
-        padding:9px 12px 9px 9px;
+        width:40px;
+        min-width:40px;
+        max-width:40px;
+        height:40px;
+        min-height:40px;
+        max-height:40px;
     }
 
     .hc-feedback-paw{
-        width:28px;
-        height:28px;
+        width:25px;
+        height:25px;
+        font-size:14px!important;
     }
 
     .hc-feedback-panel{
-        width:min(300px,calc(100vw - 24px));
-        max-height:min(330px,calc(100vh - 145px));
+        width:min(265px,calc(100vw - 24px));
+        max-height:min(270px,calc(100dvh - 135px));
+        padding:13px;
     }
 }
 
 @media (max-width:390px){
-    .hc-feedback-label{display:none}
-    .hc-feedback-float > summary{padding:9px}
+    .hc-feedback-float{
+        right:max(8px,env(safe-area-inset-right));
+        width:38px;
+        height:38px;
+    }
+
+    .hc-feedback-float > summary{
+        width:38px;
+        min-width:38px;
+        max-width:38px;
+        height:38px;
+        min-height:38px;
+        max-height:38px;
+    }
+
+    .hc-feedback-paw{
+        width:24px;
+        height:24px;
+        font-size:13px!important;
+    }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1023,7 +1073,7 @@
 </footer>
 
 <details class="hc-feedback-float">
-    <summary aria-label="Open Discord report feedback options">
+    <summary aria-label="Open Discord report feedback options" title="Report feedback">
         <span class="hc-feedback-paw" aria-hidden="true">🐾</span>
         <span class="hc-feedback-label">Report Feedback</span>
     </summary>
