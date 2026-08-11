@@ -1,79 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HarleyTG Staff Application Terminal</title>
-<style>
-@keyframes pulse {
-0%{opacity:.4}
-50%{opacity:1}
-100%{opacity:.4}
-}
-
-@keyframes spin {
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
-}
-</style>
-</head>
-
-<body style="background-color:#0a0a0a;margin:0;padding:20px;font-family:'Courier New',monospace;color:#e8e8e8;display:flex;justify-content:center;">
-
-<div style="max-width:850px;width:100%;background-color:rgba(25,25,25,0.95);border:2px solid #00ffff;padding:30px;box-shadow:0 0 30px rgba(0,255,255,0.2);backdrop-filter:blur(12px);">
-
-<div style="text-align:center;color:#00ffff;font-size:32px;font-weight:bold;letter-spacing:4px;text-transform:uppercase;margin-bottom:25px;text-shadow:0 0 10px rgba(0,255,255,0.5);">
-HarleyTG Staff Application Terminal
+<style>@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.css");</style>
+<div class="hcf-page">
+  <header class="hcf-brand"><img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="" aria-hidden="true"><div class="hcf-brand-copy"><p class="hcf-brand-title">Harley's Clan Forum</p><p class="hcf-brand-sub">Staff Network // Recruitment</p></div></header>
+  <section class="hcf-hero hcf-hero--compact"><div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Applications Open</div><h1 class="hcf-title">Staff Application</h1><p class="hcf-lead">Apply for a Harley's Clan Forum staff or administration role through the official recruitment form.</p><div class="hcf-meta"><span class="hcf-chip">Recruitment Node</span><span class="hcf-chip">Staff / Admin Application</span></div></section>
+  <main class="hcf-content">
+    <div class="hcf-notice"><strong>Application tip:</strong> Provide accurate information and enough detail for the staff team to understand your experience, availability, and reasons for applying.</div>
+    <section class="hcf-section"><h2 class="hcf-section-title">Application Form</h2><p>If the embedded form does not load, use the direct application link.</p><div class="hcf-actions"><a class="hcf-button" href="https://docs.google.com/forms/d/e/1FAIpQLSdBLT2Nz0CGI_PWN1GY0_5EINCkF1BRgZpopFsPUQN0Bgpm9w/viewform" target="_blank" rel="noopener noreferrer">Open Form Directly</a><a class="hcf-button" href="https://forum.harleytg.com/p/15-staff-rules">Review Staff Rules</a></div></section>
+    <section class="hcf-section"><div class="hcf-frame-shell"><div id="hcf-staff-loader" class="hcf-loader"><div><div class="hcf-spinner"></div>Connecting to recruitment form…</div></div><iframe onload="document.getElementById('hcf-staff-loader').style.display='none'" src="https://docs.google.com/forms/d/e/1FAIpQLSdBLT2Nz0CGI_PWN1GY0_5EINCkF1BRgZpopFsPUQN0Bgpm9w/viewform?embedded=true" height="1200" title="Harley's Clan Forum Staff Application" loading="lazy">Loading…</iframe></div></section>
+  </main>
+  <footer class="hcf-footer"><span>Harley's Clan Forum // Recruitment</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
 </div>
-
-<div style="display:flex;align-items:center;gap:25px;border-bottom:2px solid #00ffff;padding-bottom:20px;margin-bottom:20px;">
-
-<div style="width:120px;height:120px;background:url('https://raw.githubusercontent.com/HarleyTG-O/logo/main/HTG.png') center/cover no-repeat;border-radius:50%;border:3px solid #00ffff;box-shadow:0 0 15px #00ffff;flex-shrink:0;"></div>
-
-<div>
-<h1 style="margin:0;font-size:28px;color:#00ffff;text-transform:uppercase;">Support / Admin Application</h1>
-<p style="margin:5px 0;font-size:18px;">REQUEST TYPE: <strong>STAFF / ADMIN APPLICATION</strong></p>
-<div style="margin-top:10px;">
-<span style="border:1px solid #00ffff;padding:3px 8px;font-size:13px;background:rgba(0,255,255,0.1);">SYSTEM: RECRUITMENT NODE</span>
-<span style="border:1px solid #00ffff;padding:3px 8px;font-size:13px;background:rgba(0,255,255,0.1);margin-left:10px;">STATUS: ACCEPTING APPLICATIONS</span>
-</div>
-</div>
-
-</div>
-
-<div style="margin-bottom:20px;">
-<p>Submit a staff application using the embedded terminal below.</p>
-<p>If the form fails to load use the direct link:<br>
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSdBLT2Nz0CGI_PWN1GY0_5EINCkF1BRgZpopFsPUQN0Bgpm9w/viewform" target="_blank" style="color:#00ffff;text-decoration:none;">Open Staff Application</a>
-</p>
-</div>
-
-<div style="position:relative;border:1px solid rgba(0,255,255,0.2);padding:10px;background:rgba(0,0,0,0.3);">
-
-<div id="loader" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;z-index:10;color:#00ffff;text-align:center;">
-<div style="width:40px;height:40px;border:3px solid rgba(0,255,255,.3);border-top:3px solid #00ffff;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px;"></div>
-<div style="animation:pulse 1.5s infinite;">ACCESSING STAFF APPLICATION DATABASE...</div>
-</div>
-
-<iframe
-onload="document.getElementById('loader').style.display='none';"
-src="https://docs.google.com/forms/d/e/1FAIpQLSdBLT2Nz0CGI_PWN1GY0_5EINCkF1BRgZpopFsPUQN0Bgpm9w/viewform?embedded=true"
-width="100%"
-height="1200"
-frameborder="0"
-marginheight="0"
-marginwidth="0"
-style="border:none;">
-Loading…
-</iframe>
-
-</div>
-
-<div style="text-align:center;border-top:1px solid rgba(0,255,255,0.3);padding-top:15px;margin-top:25px;font-size:12px;opacity:0.7;letter-spacing:2px;">
-RECRUITMENT CHANNEL VERIFIED // HARLEYTG NETWORK
-</div>
-
-</div>
-
-</body>
-</html>
