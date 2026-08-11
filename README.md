@@ -60,7 +60,7 @@ scripts/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@8e11c297798065a0921495698ae17de0733f25f4/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@808d058632115d36220aff7508eb3194274335e1/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
@@ -102,6 +102,8 @@ On those route pages, titles and every action supplied by Flarum or an
 extension stay in a visible in-page control row below the custom notice.
 The standard Flarum composer overlay and the Composer Page extension's
 `/compose` route both keep their phone header controls below that notice.
+Flarum success, error, and extension alerts also retain the HCF desktop alert
+appearance on phones, with full-width touch controls and safe-area spacing.
 
 ## Core HTML
 
