@@ -1,11 +1,11 @@
 /* =========================================================
    Harley's Clan Forum — FoF Page srcdoc Bootstrap
-   Build: 1.2.0
+   Build: 1.2.1
    Updated: 2026-08-11
 
    Shared loader for v1.x FriendsOfFlarum Pages.
    - Lightweight loading UI with mobile-safe animation behavior
-   - Route aliases for FoF page/file ID mismatches
+   - Exact route filenames with optional aliases for true mismatches
    - Direct CDN load with GitHub directory fallback
    - Detailed but user-friendly error classification
    - Retry without forcing a full page reload
@@ -15,7 +15,7 @@
 (function () {
   'use strict';
 
-  var BUILD = '1.2.0';
+  var BUILD = '1.2.1';
   var OWNER = 'markhitchk';
   var REPO = 'hcf';
   var BRANCH = 'main';
@@ -26,9 +26,8 @@
   /* Keep this below the 10-second HTML-side emergency fallback. */
   var LOAD_TIMEOUT = 8500;
 
-  var ROUTE_FILES = {
-    '26-critter-extraction': '27-critter-extraction.html'
-  };
+  /* Add entries only when a FoF route intentionally differs from its source filename. */
+  var ROUTE_FILES = {};
 
   var ERROR_COPY = {
     'invalid-route': {
@@ -330,7 +329,6 @@
 
       if (name === key + '.html') score = 1000;
       else if (name.indexOf(idPrefix) === 0 && normalize(stem.slice(idPrefix.length)) === normalizedSlug) score = 900;
-      else if (name.indexOf(idPrefix) === 0) score = 700;
       else if (normalizedStem === normalizedSlug) score = 600;
       else if (normalizedStem.slice(-(normalizedSlug.length + 1)) === '-' + normalizedSlug) score = 500;
 
