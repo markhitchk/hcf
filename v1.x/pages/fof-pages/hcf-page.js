@@ -1,12 +1,30 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — FOF PAGES RUNTIME
    Shared device mode + Flarum identity detection.
-   Mirrors v1.x/core/footer.html behavior without clocks/IP.
-   Version: 1.0
+   Also loads the global domain router for all FoF pages.
+
+   Runtime Version: 1.1
+   Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
 (function(){
   "use strict";
+
+  var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.0";
+
+  function loadDomainRouter(){
+    if(window.HCFDomainRouter)return;
+    if(document.querySelector('script[data-hcf-domain-router]'))return;
+
+    var script=document.createElement("script");
+    script.src=DOMAIN_ROUTER_SRC;
+    script.async=false;
+    script.defer=false;
+    script.setAttribute("data-hcf-domain-router","1.0.0");
+    (document.head||document.documentElement).appendChild(script);
+  }
+
+  loadDomainRouter();
 
   function normalizeUsername(value){
     var name=String(value||"").trim();
@@ -113,12 +131,21 @@
     target.appendChild(link);
   }
 
+  function refreshDomainLinks(){
+    try{
+      if(window.HCFDomainRouter&&typeof window.HCFDomainRouter.refresh==="function"){
+        window.HCFDomainRouter.refresh();
+      }
+    }catch(error){}
+  }
+
   function initPage(page){
     var runtime=makeRuntime(page);
     if(!runtime)return;
 
     updateDevice(page,runtime);
     updateIdentity(runtime);
+    refreshDomainLinks();
 
     var resizeTimer=0;
     window.addEventListener("resize",function(){
@@ -127,11 +154,17 @@
     },{passive:true});
 
     var identityTimer=window.setInterval(function(){
-      if(!document.hidden)updateIdentity(runtime);
+      if(!document.hidden){
+        updateIdentity(runtime);
+        refreshDomainLinks();
+      }
     },15000);
 
     document.addEventListener("visibilitychange",function(){
-      if(!document.hidden)updateIdentity(runtime);
+      if(!document.hidden){
+        updateIdentity(runtime);
+        refreshDomainLinks();
+      }
     });
 
     window.addEventListener("pagehide",function(){window.clearInterval(identityTimer)},{once:true});
@@ -140,6 +173,7 @@
   function init(){
     var pages=document.querySelectorAll(".hcf-page");
     for(var i=0;i<pages.length;i++)initPage(pages[i]);
+    refreshDomainLinks();
   }
 
   if(document.readyState==="loading"){
