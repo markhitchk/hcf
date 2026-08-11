@@ -1,2 +1,176 @@
-/* Deprecated compatibility alias. Use mobile.css. */
+/* ==========================================================
+   HARLEY'S CLAN FORUM — MOBILE V2 ENTRYPOINT
+
+   Keep the shared mobile foundation, then apply final high-
+   specificity phone overrides here. This file is intentionally
+   safe to import before the main HCF stylesheet: the selectors
+   below are specific enough to keep desktop/base rules from
+   re-expanding the mobile layout later in the cascade.
+
+   Updated: 2026-08-10
+========================================================== */
+
 @import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile.css");
+
+@media screen and (max-width: 767.98px) {
+  /* ------------------------------------------------------
+     PAGE WIDTH + VERTICAL RHYTHM
+     ------------------------------------------------------ */
+  html body .App .App-content,
+  html body .App .App-content > .container,
+  html body .App .IndexPage > .container {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  html body .App .App-content > .container,
+  html body .App .IndexPage > .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  html body .App .IndexPage .sideNav,
+  html body .App .IndexPage .sideNavOffset,
+  html body .App .IndexPage-results,
+  html body .App .DiscussionList {
+    margin-top: 0 !important;
+  }
+
+  /* ------------------------------------------------------
+     WELCOME / HERO CARD
+
+     Prevent desktop sizing from producing the oversized card
+     seen on phones. These selectors cover Flarum Hero markup
+     plus the common WelcomeHero class used by extensions.
+     ------------------------------------------------------ */
+  html body .App .App-content .Hero,
+  html body .App .App-content .WelcomeHero,
+  html body .App .IndexPage .Hero,
+  html body .App .IndexPage .WelcomeHero {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 10px 0 18px !important;
+    padding: 20px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  html body .App .App-content .Hero .container,
+  html body .App .App-content .WelcomeHero .container,
+  html body .App .IndexPage .Hero .container,
+  html body .App .IndexPage .WelcomeHero .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .App .App-content .Hero h1,
+  html body .App .App-content .Hero h2,
+  html body .App .App-content .Hero .Hero-title,
+  html body .App .App-content .WelcomeHero h1,
+  html body .App .App-content .WelcomeHero h2,
+  html body .App .App-content .WelcomeHero .Hero-title {
+    margin: 6px 0 12px !important;
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+  }
+
+  html body .App .App-content .Hero p,
+  html body .App .App-content .Hero .Hero-subtitle,
+  html body .App .App-content .WelcomeHero p,
+  html body .App .App-content .WelcomeHero .Hero-subtitle {
+    margin: 7px 0 !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+
+  html body .App .App-content .Hero img,
+  html body .App .App-content .WelcomeHero img {
+    width: 42px !important;
+    max-width: 42px !important;
+    height: 42px !important;
+    max-height: 42px !important;
+    object-fit: contain !important;
+  }
+
+  /* ------------------------------------------------------
+     HOMEPAGE WIDGETS
+     ------------------------------------------------------ */
+  html body .App .App-content .AfruxWidgets-Widget,
+  html body .App .App-content .Widget,
+  html body .App .App-content .OnlineUsers,
+  html body .App .App-content .ForumStatistics {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html body .App .App-content .AfruxWidgets-Widget-content,
+  html body .App .App-content .Widget-content {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  html body .App .App-content .AfruxWidgets-Widget-title,
+  html body .App .App-content .Widget-title {
+    margin: 0 0 8px !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Announcement / Discord bars should stay compact. */
+  html body .App .App-content .Alert,
+  html body .App .App-content .Announcement,
+  html body .App .App-content .ForumAnnouncement {
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 10px 0 !important;
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* ------------------------------------------------------
+     DISCUSSION LIST — COMPACT PHONE PRESENTATION
+     ------------------------------------------------------ */
+  html body .App .IndexPage .DiscussionList-header,
+  html body .App .IndexPage .DiscussionList-controls {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem {
+    min-height: 0 !important;
+    margin-bottom: 6px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-content {
+    box-sizing: border-box !important;
+    min-height: 58px !important;
+    height: auto !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-title {
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-info {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+}
