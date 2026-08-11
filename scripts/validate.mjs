@@ -161,6 +161,11 @@ for (const required of [
 const mobileFile = resolve(repositoryRoot, "v1.x/add-ons/mobile.css");
 const mobile = readFileSync(mobileFile, "utf8");
 for (const required of [
+  ".AlertManager-alert",
+  ".AlertManager .Alert",
+  ".Alert-controls .Button--link",
+  ".Alert-dismiss",
+  "bottom: calc(76px + var(--hc-mobile-safe-bottom)) !important",
   ".Composer-controls > .App-backControl",
   ".ComposerBody-header .App-titleControl",
   "> .item-submit.App-primaryControl",
