@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.6
+   Version: 5.7
    Updated: 2026-08-11
 ========================================================== */
 
@@ -256,16 +256,29 @@
     max-width: 100% !important;
   }
 
-  /* The custom HCF banner is rendered before #app. Flarum positions the
-     phone submit control at viewport top, so offset only the expanded
-     composer's submit control by the live banner height. */
-  html body .App .Composer:not(.minimized)
-  .ComposerBody-editor .TextEditor-controls
-  .item-submit.App-primaryControl {
-    top: var(--hc-banner-height, 58px) !important;
+  /* Flarum's expanded phone composer and its App controls are fixed to the
+     viewport. Move the complete composer below the live HCF banner instead
+     of offsetting only the submit button. */
+  html body .App .Composer:not(.minimized) {
+    top: var(--hc-banner-height, 0px) !important;
+    max-height: calc(
+      100vh - var(--hc-banner-height, 0px) - var(--hc-mobile-safe-bottom)
+    ) !important;
+    max-height: calc(
+      100dvh - var(--hc-banner-height, 0px) - var(--hc-mobile-safe-bottom)
+    ) !important;
   }
 
-  html body .App .Dropdown-menu,
+  html body .App .Composer:not(.minimized) .App-backControl,
+  html body .App .Composer:not(.minimized) .App-titleControl,
+  html body .App .Composer:not(.minimized) .App-primaryControl {
+    top: var(--hc-banner-height, 0px) !important;
+  }
+
+  html body .composer-backdrop {
+    top: var(--hc-banner-height, 0px) !important;
+  }
+
   html body .App .Search-results {
     max-width: calc(100vw - 20px) !important;
   }
@@ -319,13 +332,43 @@
 
   .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > a,
   .UserPage .UserCard .UserCard-controls > .Dropdown-menu > li > button {
+    box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
     min-height: 46px !important;
     padding: 11px 13px !important;
     color: inherit !important;
     font-size: 14px !important;
     touch-action: manipulation !important;
+  }
+
+  /* Flarum's phone icon rows normally use left padding plus a negative icon
+     margin. HCF rows use flex so every icon remains inside the sheet. */
+  html body .App .UserPage .UserCard .UserCard-controls
+  > .Dropdown-menu > li > a.hasIcon,
+  html body .App .UserPage .UserCard .UserCard-controls
+  > .Dropdown-menu > li > button.hasIcon,
+  html body .App .SessionDropdown
+  > .Dropdown-menu > li > a.hasIcon,
+  html body .App .SessionDropdown
+  > .Dropdown-menu > li > button.hasIcon {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding-left: 14px !important;
+  }
+
+  html body .App .UserPage .UserCard .UserCard-controls
+  > .Dropdown-menu > li > :is(a, button).hasIcon > .Button-icon,
+  html body .App .SessionDropdown
+  > .Dropdown-menu > li > :is(a, button).hasIcon > .Button-icon {
+    float: none !important;
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    margin: 0 !important;
+    text-align: center !important;
   }
 
   .UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a,
@@ -334,7 +377,7 @@
   }
 
   /* ======================================================
-     FLARUM MOBILE ROUTE PAGES — NOTIFICATIONS + FLAGS
+     FLARUM MOBILE ROUTE PAGES — NOTIFICATIONS + FLAGS + DRAFTS
 
      NotificationsDropdown deliberately routes to a full page while
      the native phone drawer is open. FlagsDropdown inherits that same
@@ -343,7 +386,8 @@
      restore Flarum's App-titleControl header geometry.
      ====================================================== */
   html body .App .NotificationsPage,
-  html body .App .FlagsPage {
+  html body .App .FlagsPage,
+  html body .App .DraftsPage {
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -354,7 +398,9 @@
 
   html body .App .NotificationsPage > .NotificationList,
   html body .App .FlagsPage > .NotificationList,
-  html body .App .FlagsPage > .FlagList {
+  html body .App .FlagsPage > .FlagList,
+  html body .App .DraftsPage > .NotificationList,
+  html body .App .DraftsPage > .DraftsList {
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -372,7 +418,8 @@
   }
 
   html body .App .NotificationsPage .NotificationList-header,
-  html body .App .FlagsPage .NotificationList-header {
+  html body .App .FlagsPage .NotificationList-header,
+  html body .App .DraftsPage .NotificationList-header {
     box-sizing: border-box !important;
     position: static !important;
     display: block !important;
@@ -390,7 +437,8 @@
      page that cancels core's margin-left:-100px and pushes the title into
      the right half of the screen. Restore the framework values here. */
   html body .App .NotificationsPage .NotificationList-header .App-titleControl,
-  html body .App .FlagsPage .NotificationList-header .App-titleControl {
+  html body .App .FlagsPage .NotificationList-header .App-titleControl,
+  html body .App .DraftsPage .NotificationList-header .App-titleControl {
     box-sizing: border-box !important;
     position: absolute !important;
     z-index: calc(var(--zindex-header, 1000) + 1) !important;
@@ -415,11 +463,13 @@
   }
 
   html body .App.affix .NotificationsPage .NotificationList-header .App-titleControl,
-  html body .App.affix .FlagsPage .NotificationList-header .App-titleControl {
+  html body .App.affix .FlagsPage .NotificationList-header .App-titleControl,
+  html body .App.affix .DraftsPage .NotificationList-header .App-titleControl {
     position: fixed !important;
   }
 
-  html body .App .NotificationsPage .NotificationList-header .App-primaryControl {
+  html body .App .NotificationsPage .NotificationList-header .App-primaryControl,
+  html body .App .DraftsPage .NotificationList-header .App-primaryControl {
     box-sizing: border-box !important;
     position: absolute !important;
     z-index: calc(var(--zindex-header, 1000) + 1) !important;
@@ -435,11 +485,13 @@
     padding: 0 !important;
   }
 
-  html body .App.affix .NotificationsPage .NotificationList-header .App-primaryControl {
+  html body .App.affix .NotificationsPage .NotificationList-header .App-primaryControl,
+  html body .App.affix .DraftsPage .NotificationList-header .App-primaryControl {
     position: fixed !important;
   }
 
-  html body .App .NotificationsPage .NotificationList-header .App-primaryControl .Button {
+  html body .App .NotificationsPage .NotificationList-header .App-primaryControl .Button,
+  html body .App .DraftsPage .NotificationList-header .App-primaryControl .Button {
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
@@ -459,7 +511,8 @@
   }
 
   html body .App .NotificationsPage .NotificationList-content,
-  html body .App .FlagsPage .NotificationList-content {
+  html body .App .FlagsPage .NotificationList-content,
+  html body .App .DraftsPage .NotificationList-content {
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -475,7 +528,8 @@
   }
 
   html body .App .NotificationsPage .NotificationList-empty,
-  html body .App .FlagsPage .NotificationList-empty {
+  html body .App .FlagsPage .NotificationList-empty,
+  html body .App .DraftsPage .NotificationList-empty {
     display: grid !important;
     place-items: center !important;
     min-height: 112px !important;
@@ -488,14 +542,16 @@
   }
 
   html body .App .NotificationsPage .NotificationGroup-content,
-  html body .App .FlagsPage .NotificationGroup-content {
+  html body .App .FlagsPage .NotificationGroup-content,
+  html body .App .DraftsPage .NotificationGroup-content {
     box-sizing: border-box !important;
     margin: 0 !important;
     padding: 4px !important;
   }
 
   html body .App .NotificationsPage .Notification,
-  html body .App .FlagsPage .Notification {
+  html body .App .FlagsPage .Notification,
+  html body .App .DraftsPage .Notification {
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -808,11 +864,11 @@
   }
 
   /* ======================================================
-     MOBILE DISCUSSION CARD SAFETY
+     FLARUM 1.x PHONE DISCUSSION GEOMETRY
 
-     Keep Flarum's native phone type and vertical rhythm. Extra
-     badges and the discussion-views extension need their own
-     gutters so they cannot cover titles or metadata.
+     Restore the framework's 60px left reservation (15px + 45px)
+     and 50px right reservation (15px + 35px). HCF adds only a
+     subtle divider; desktop card/flex rules are neutralized here.
      ====================================================== */
   html body .App .IndexPage .DiscussionList-header,
   html body .App .IndexPage .DiscussionList-controls {
@@ -821,28 +877,98 @@
   }
 
   html body .App .IndexPage .DiscussionListItem {
-    min-height: 58px !important;
-    margin-bottom: 8px !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-wrap: normal !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 
   html body .App .IndexPage .DiscussionListItem-content {
-    min-height: 58px !important;
+    position: relative !important;
+    min-height: 0 !important;
     height: auto !important;
+    padding-right: 50px !important;
+    padding-left: 60px !important;
+    border-bottom: 1px solid rgba(0, 255, 255, .12) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-controls {
+    display: none !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-author {
+    float: left !important;
+    margin-top: 13px !important;
+    margin-left: -45px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-author .Avatar {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 16px !important;
+    line-height: 32px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-badges {
+    float: left !important;
+    width: 38px !important;
+    margin-top: 10px !important;
+    margin-left: -45px !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    pointer-events: none !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-badges .Badge,
+  html body .App .IndexPage .DiscussionListItem-badges .badge {
+    position: relative !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin-left: -13px !important;
+    font-size: 10px !important;
+    line-height: 20px !important;
+    pointer-events: auto !important;
   }
 
   html body .App .IndexPage .DiscussionListItem-main {
     box-sizing: border-box !important;
-    padding: 12px 0 12px 10px !important;
+    display: inline-block !important;
+    width: 100% !important;
+    margin-right: -45px !important;
+    padding: 12px 0 !important;
   }
 
   html body .App .IndexPage .DiscussionListItem-title {
+    max-width: 100% !important;
+    margin: 0 0 3px !important;
+    overflow: hidden !important;
+    color: var(--heading-color, var(--text-color)) !important;
     font-size: 14px !important;
+    font-weight: normal !important;
     line-height: 1.3 !important;
+    text-overflow: ellipsis !important;
+    text-decoration: none !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem.unread
+  .DiscussionListItem-title {
+    font-weight: 600 !important;
   }
 
   html body .App .IndexPage .DiscussionListItem-info {
     box-sizing: border-box !important;
-    padding-right: 48px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     font-size: 11px !important;
     line-height: 1.35 !important;
   }
@@ -850,10 +976,33 @@
   html body .App .IndexPage
   .DiscussionListItem-info > .item-discussion-views {
     box-sizing: border-box !important;
-    right: 15px !important;
-    max-width: 44px !important;
+    position: static !important;
+    right: auto !important;
+    display: inline !important;
+    max-width: none !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-count {
+    float: right !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin-top: 12px !important;
+    margin-right: -35px !important;
+    padding: 2px 6px !important;
+    border-radius: var(--border-radius, 4px) !important;
+    background: var(--control-bg) !important;
+    color: var(--control-color) !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem.unread
+  .DiscussionListItem-count {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
   }
 
   #hc-top-btn {
