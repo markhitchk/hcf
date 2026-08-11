@@ -163,6 +163,7 @@ const mobile = readFileSync(mobileFile, "utf8");
 for (const required of [
   ".AlertManager-alert",
   ".AlertManager .Alert",
+  ".Settings-notifications > ul > li > .Alert",
   ".Alert-controls .Button--link",
   ".Alert-dismiss",
   "bottom: calc(76px + var(--hc-mobile-safe-bottom)) !important",
@@ -170,6 +171,8 @@ for (const required of [
   ".ComposerBody-header .App-titleControl",
   "> .item-submit.App-primaryControl",
   ".ComposerPageContainer h2.App-titleControl",
+  ".App:has(.ComposerPageContainer) .App-navigation",
+  "height: var(--header-height-phone, 46px) !important",
   ".ComposerPage",
   ".TextEditor-controls .item-submit",
   "position: fixed !important",
