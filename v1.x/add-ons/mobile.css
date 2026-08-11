@@ -11,7 +11,7 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.13
+   Version: 5.14
    Updated: 2026-08-11
 ========================================================== */
 
@@ -440,8 +440,6 @@
   html body .App .Composer:not(.minimized)
   .Composer-controls > .App-backControl,
   html body .App .Composer:not(.minimized)
-  .ComposerBody-header .App-titleControl,
-  html body .App .Composer:not(.minimized)
   .ComposerBody-editor .TextEditor-controls
   > .item-submit.App-primaryControl {
     position: fixed !important;
@@ -455,6 +453,46 @@
   > .item-submit.App-primaryControl {
     right: 0 !important;
     left: auto !important;
+  }
+
+  /* Flarum's native composer title is the first header-list item, not an
+     .App-titleControl. Keep Start a discussion/reply/edit titles relative to
+     the composer so they remain centered inside its own 46px phone header. */
+  html body .App .Composer.normal:not(.minimized)
+  .ComposerBody-header > li:first-child {
+    box-sizing: border-box !important;
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: calc(var(--zindex-header, 1000) + 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    height: var(--header-height-phone, 46px) !important;
+    min-height: var(--header-height-phone, 46px) !important;
+    margin: calc(0px - var(--header-height-phone, 46px)) 50px 0 !important;
+    padding: 0 8px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html body .App .Composer.normal:not(.minimized)
+  .ComposerBody-header > li:first-child > h3 {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    color: var(--header-control-color, var(--header-color)) !important;
+    line-height: 1.2 !important;
+    text-overflow: ellipsis !important;
   }
 
   /* The Composer Page extension renders /compose outside Flarum's normal
