@@ -1,16 +1,200 @@
-<style>@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a1");@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
-#hcf-assets-v2 .asset-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:14px}#hcf-assets-v2 .asset-input{min-height:44px;width:100%;padding:10px 12px;border:1px solid var(--hcf-border);border-radius:12px;background:var(--hcf-control);color:var(--hcf-text);font:13px/1.2 "Courier New",monospace}#hcf-assets-v2 .asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}#hcf-assets-v2 .asset-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid color-mix(in srgb,var(--hcf-accent) 18%,transparent);border-radius:14px;background:var(--hcf-control);color:var(--hcf-text);text-decoration:none;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:translateY(-2px);border-color:var(--hcf-accent);box-shadow:0 10px 24px color-mix(in srgb,var(--hcf-accent) 10%,transparent);text-decoration:none}#hcf-assets-v2 .asset-preview{display:grid;place-items:center;aspect-ratio:16/11;overflow:hidden;border-bottom:1px solid color-mix(in srgb,var(--hcf-accent) 14%,transparent);background:#080b0e}#hcf-assets-v2 .asset-preview img{display:block;width:100%;height:100%;padding:8px;object-fit:contain}#hcf-assets-v2 .asset-preview span{display:none;padding:12px;color:var(--hcf-muted);font:700 10px/1.5 "Courier New",monospace;text-align:center;text-transform:uppercase}#hcf-assets-v2 .asset-preview.is-error img{display:none}#hcf-assets-v2 .asset-preview.is-error span{display:block}#hcf-assets-v2 .asset-copy{padding:10px}.asset-name{display:block;overflow:hidden;color:var(--hcf-accent);font-size:12px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}.asset-path{display:block;margin-top:5px;color:var(--hcf-muted);font:9px/1.45 "Courier New",monospace;overflow-wrap:anywhere}.asset-empty{display:none;padding:26px;border:1px dashed var(--hcf-accent);border-radius:14px;color:var(--hcf-muted);text-align:center}@media(max-width:767.98px){#hcf-assets-v2 .asset-tools{grid-template-columns:1fr}#hcf-assets-v2 .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#hcf-assets-v2 .asset-card{transition:none}#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:none;box-shadow:none}}@media(max-width:430px){#hcf-assets-v2 .asset-grid{grid-template-columns:1fr}}
+<!-- Harley's Clan Forum public asset index — restored live scanner behavior -->
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a2");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a2");
+
+#hcf-assets-v2 .asset-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:14px}
+#hcf-assets-v2 .asset-field{display:grid;gap:6px;color:var(--hcf-accent);font:800 10px/1.2 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase}
+#hcf-assets-v2 .asset-input{min-height:44px;width:100%;padding:10px 12px;border:1px solid var(--hcf-border);border-radius:12px;background:var(--hcf-control);color:var(--hcf-text);font:13px/1.2 "Courier New",monospace;outline:0}
+#hcf-assets-v2 .asset-input:focus{border-color:var(--hcf-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--hcf-accent) 14%,transparent)}
+#hcf-assets-v2 .asset-summary{margin:14px 0 18px;color:var(--hcf-muted);font-size:12px}
+#hcf-assets-v2 .asset-summary strong{color:var(--hcf-accent)}
+#hcf-assets-v2 .asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+#hcf-assets-v2 .asset-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid color-mix(in srgb,var(--hcf-accent) 18%,transparent);border-radius:14px;background:var(--hcf-control);color:var(--hcf-text);text-decoration:none;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:translateY(-2px);border-color:var(--hcf-accent);box-shadow:0 10px 24px color-mix(in srgb,var(--hcf-accent) 10%,transparent);text-decoration:none}
+#hcf-assets-v2 .asset-preview{position:relative;display:grid;place-items:center;aspect-ratio:16/11;overflow:hidden;border-bottom:1px solid color-mix(in srgb,var(--hcf-accent) 14%,transparent);background:#080b0e}
+#hcf-assets-v2 .asset-preview img{display:block;width:100%;height:100%;padding:8px;object-fit:contain}
+#hcf-assets-v2 .asset-preview.is-error img{display:none}
+#hcf-assets-v2 .asset-preview-error{display:none;padding:12px;color:var(--hcf-muted);font:700 10px/1.5 "Courier New",monospace;text-align:center;text-transform:uppercase}
+#hcf-assets-v2 .asset-preview.is-error .asset-preview-error{display:block}
+#hcf-assets-v2 .asset-copy{position:relative;min-width:0;padding:10px 10px 30px}
+#hcf-assets-v2 .asset-name{display:block;overflow:hidden;color:var(--hcf-accent);font-size:12px;font-weight:800;line-height:1.45;text-overflow:ellipsis;white-space:nowrap}
+#hcf-assets-v2 .asset-path{display:block;margin-top:5px;color:var(--hcf-muted);font:9px/1.45 "Courier New",monospace;overflow-wrap:anywhere}
+#hcf-assets-v2 .asset-state{position:absolute;right:10px;bottom:9px;color:#45d483;font:800 9px/1 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase}
+#hcf-assets-v2 .asset-empty{display:none;padding:26px;border:1px dashed var(--hcf-accent);border-radius:14px;color:var(--hcf-muted);text-align:center}
+#hcf-assets-v2 .asset-empty strong{color:var(--hcf-accent)}
+@media(max-width:767.98px){#hcf-assets-v2 .asset-tools{grid-template-columns:1fr}#hcf-assets-v2 .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#hcf-assets-v2 .asset-card{transition:none}#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:none;box-shadow:none}}
+@media(max-width:430px){#hcf-assets-v2 .asset-grid{grid-template-columns:1fr}}
 </style>
-<div class="hcf-page" id="hcf-assets-v2" data-hcf-page-build="2.2a1">
-  <header class="hcf-brand"><img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="" aria-hidden="true"><div class="hcf-brand-copy"><p class="hcf-brand-title">Harley's Clan Forum</p><p class="hcf-brand-sub">Forum Network // Public Asset Index</p></div></header>
-  <section class="hcf-hero hcf-hero--compact"><div class="hcf-pill"><span class="hcf-dot"></span>Public Scanner Ready</div><h1 class="hcf-title">Forum Assets</h1><p class="hcf-lead">Discover guest-accessible images and files referenced by the current Harley's Clan Forum installation without bypassing permissions.</p><div class="hcf-meta"><span class="hcf-chip">Public Resources Only</span><span class="hcf-chip">Current Forum Origin</span></div><div class="asset-tools"><input class="asset-input" id="hcf-asset-search-v2" type="search" placeholder="Search discovered assets…" autocomplete="off"><button class="hcf-button hcf-button--primary" id="hcf-asset-scan-v2" type="button">Scan Public Assets</button></div></section>
+
+<div class="hcf-page" id="hcf-assets-v2" data-hcf-page-build="2.2a2">
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="Harley's Clan Forum logo">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // Public Asset Index</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Live Scanner</div>
+    <h1 class="hcf-title">Forum Assets</h1>
+    <p class="hcf-lead">Live discovery of public uploads, avatars, branding, covers, extension files, fonts, and current forum resources.</p>
+    <div class="hcf-meta">
+      <span class="hcf-chip">Live Scanner</span>
+      <span class="hcf-chip">Host: Current Forum</span>
+      <span class="hcf-chip">Public Resources Only</span>
+    </div>
+    <div class="asset-tools">
+      <label class="asset-field">Search Assets
+        <input class="asset-input" id="hcf-asset-search-v2" type="search" placeholder="Example: HTG.svg" autocomplete="off">
+      </label>
+      <button class="hcf-button hcf-button--primary" id="hcf-asset-scan-v2" type="button">Scan Public Assets</button>
+    </div>
+  </section>
+
   <main class="hcf-content">
-    <div class="hcf-notice"><strong>Permission-safe:</strong> This page only indexes asset URLs that are already visible to a guest through public forum pages or public API responses.</div>
-    <section class="hcf-section"><h2 class="hcf-section-title">Discovered Resources</h2><p id="hcf-asset-status-v2" class="hcf-muted">Run the scanner to build a current public asset list.</p><div class="asset-grid" id="hcf-asset-grid-v2"></div><div class="asset-empty" id="hcf-asset-empty-v2">No matching public assets were found.</div></section>
+    <div class="hcf-notice"><strong>Public-only scan:</strong> This page looks for asset references exposed through guest-accessible forum pages and APIs. It does not bypass permissions or attempt to access restricted files.</div>
+    <p class="asset-summary" id="hcf-asset-status-v2" aria-live="polite">Press <strong>Scan Public Assets</strong> to build the current index.</p>
+    <div class="asset-grid" id="hcf-asset-grid-v2"></div>
+    <div class="asset-empty" id="hcf-asset-empty-v2"><strong>No matching assets</strong><br>Try another search or run the scanner again.</div>
   </main>
+
   <footer class="hcf-footer"><span>Harley's Clan Forum // Public Asset Index</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
 </div>
+
 <script>
-(function(){var root=document.getElementById('hcf-assets-v2');if(!root)return;var grid=root.querySelector('#hcf-asset-grid-v2'),status=root.querySelector('#hcf-asset-status-v2'),empty=root.querySelector('#hcf-asset-empty-v2'),search=root.querySelector('#hcf-asset-search-v2'),button=root.querySelector('#hcf-asset-scan-v2'),origin=location.origin,assets=[];function esc(v){return String(v).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}function norm(v){if(!v)return null;try{var u=new URL(v,origin);if(u.origin!==origin)return null;if(u.pathname.indexOf('/assets/')!==0)return null;return u.pathname+(u.search||'')}catch(e){var m=String(v).match(/\/assets\/[A-Za-z0-9_\-./%?=&]+/);return m?m[0]:null}}function collect(t,s){if(!t)return;var r=/(?:https?:\/\/[^\s"'<>]+)?\/assets\/[A-Za-z0-9_\-./%?=&]+/g,m;while((m=r.exec(String(t)))){var p=norm(m[0]);if(p)s.add(p)}}function deep(v,s,seen){if(v==null)return;if(typeof v==='string'){collect(v,s);return}if(typeof v!=='object'||seen.has(v))return;seen.add(v);if(Array.isArray(v)){v.forEach(function(x){deep(x,s,seen)});return}Object.keys(v).forEach(function(k){deep(v[k],s,seen)})}async function text(url,s){try{var r=await fetch(url,{credentials:'omit'});if(r.ok)collect(await r.text(),s)}catch(e){}}async function json(url,s){try{var r=await fetch(url,{credentials:'omit',headers:{Accept:'application/vnd.api+json,application/json'}});if(!r.ok)return null;var j=await r.json();deep(j,s,new WeakSet());return j}catch(e){return null}}function image(p){return /\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?|$)/i.test(p)}function render(){var q=(search.value||'').trim().toLowerCase(),shown=0;grid.innerHTML='';assets.forEach(function(p){if(q&&p.toLowerCase().indexOf(q)===-1)return;shown++;var href=origin+p,name=decodeURIComponent((p.split('/').pop()||p).split('?')[0]),a=document.createElement('a');a.className='asset-card';a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.innerHTML='<span class="asset-preview'+(image(p)?'':' is-error')+'">'+(image(p)?'<img src="'+esc(href)+'" alt="'+esc(name)+'" loading="lazy" decoding="async" onerror="this.parentNode.classList.add(\'is-error\')">':'')+'<span>Open file resource</span></span><span class="asset-copy"><span class="asset-name">'+esc(name)+'</span><span class="asset-path">'+esc(p)+'</span></span>';grid.appendChild(a)});empty.style.display=shown?'none':'block';status.textContent='Showing '+shown+' of '+assets.length+' discovered public assets.'}async function scan(){button.disabled=true;status.textContent='Scanning public forum references…';var s=new Set();collect(document.documentElement.outerHTML,s);await text(origin+'/',s);await text(origin+'/sitemap.xml',s);await json(origin+'/api/users?page[limit]=50',s);await json(origin+'/api/tags?page[limit]=100',s);var d=await json(origin+'/api/discussions?page[limit]=50',s);if(d&&Array.isArray(d.data)){for(var i=0;i<Math.min(d.data.length,40);i++){var id=d.data[i]&&d.data[i].id;if(id)await json(origin+'/api/posts?filter[discussion]='+encodeURIComponent(id)+'&page[limit]=50',s)}}assets=Array.from(s).sort();render();button.disabled=false}search.addEventListener('input',render);button.addEventListener('click',scan)})();
+(function(){
+  var root=document.getElementById('hcf-assets-v2');
+  if(!root)return;
+
+  var grid=root.querySelector('#hcf-asset-grid-v2');
+  var status=root.querySelector('#hcf-asset-status-v2');
+  var empty=root.querySelector('#hcf-asset-empty-v2');
+  var search=root.querySelector('#hcf-asset-search-v2');
+  var button=root.querySelector('#hcf-asset-scan-v2');
+  var origin=location.origin;
+  var assets=[];
+
+  function esc(v){
+    return String(v).replace(/[&<>"']/g,function(c){
+      return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function normalize(value){
+    if(!value)return null;
+    try{
+      var u=new URL(value,origin);
+      if(u.origin!==origin)return null;
+      var p=u.pathname+(u.search||'');
+      if(p.indexOf('/assets/')!==0)return null;
+      return p;
+    }catch(e){
+      var m=String(value).match(/\/assets\/[A-Za-z0-9_\-./%?=&]+/);
+      return m?m[0]:null;
+    }
+  }
+
+  function collectText(text,set){
+    if(!text)return;
+    var re=/(?:https?:\/\/[^\s"'<>]+)?\/assets\/[A-Za-z0-9_\-./%?=&]+/g,m;
+    while((m=re.exec(String(text)))){
+      var p=normalize(m[0]);
+      if(p)set.add(p);
+    }
+  }
+
+  function deep(value,set,seen){
+    if(value==null)return;
+    if(typeof value==='string'){collectText(value,set);return;}
+    if(typeof value!=='object'||seen.has(value))return;
+    seen.add(value);
+    if(Array.isArray(value)){value.forEach(function(v){deep(v,set,seen);});return;}
+    Object.keys(value).forEach(function(k){deep(value[k],set,seen);});
+  }
+
+  async function fetchText(url,set){
+    try{
+      var r=await fetch(url,{credentials:'omit',headers:{Accept:'text/html,application/xhtml+xml,application/xml;q=.9,*/*;q=.8'}});
+      if(!r.ok)return;
+      collectText(await r.text(),set);
+    }catch(e){}
+  }
+
+  async function fetchJson(url,set){
+    try{
+      var r=await fetch(url,{credentials:'omit',headers:{Accept:'application/vnd.api+json,application/json'}});
+      if(!r.ok)return null;
+      var j=await r.json();
+      deep(j,set,new WeakSet());
+      return j;
+    }catch(e){return null;}
+  }
+
+  function isImage(p){
+    return /\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?|$)/i.test(p);
+  }
+
+  function render(){
+    var q=(search.value||'').trim().toLowerCase();
+    grid.innerHTML='';
+    var shown=0;
+
+    assets.forEach(function(p){
+      if(q&&p.toLowerCase().indexOf(q)===-1)return;
+      shown++;
+      var href=origin+p;
+      var name=decodeURIComponent((p.split('/').pop()||p).split('?')[0]);
+      var a=document.createElement('a');
+      a.className='asset-card';
+      a.href=href;
+      a.target='_blank';
+      a.rel='noopener noreferrer';
+      a.innerHTML='<span class="asset-preview">'+
+        (isImage(p)?'<img src="'+esc(href)+'" alt="'+esc(name)+'" loading="lazy" decoding="async" onerror="this.parentNode.classList.add(\'is-error\')">':'')+
+        '<span class="asset-preview-error">'+(isImage(p)?'Preview unavailable — open asset':'File resource — open asset')+'</span></span>'+
+        '<span class="asset-copy"><span class="asset-name">'+esc(name)+'</span><span class="asset-path">'+esc(p)+'</span><span class="asset-state">LIVE</span></span>';
+      if(!isImage(p))a.querySelector('.asset-preview').classList.add('is-error');
+      grid.appendChild(a);
+    });
+
+    empty.style.display=shown?'none':'block';
+    status.innerHTML='Showing <strong>'+shown+'</strong> of <strong>'+assets.length+'</strong> discovered public assets.';
+  }
+
+  async function scan(){
+    button.disabled=true;
+    button.textContent='Scanning…';
+    status.innerHTML='Scanning public forum references…';
+    var set=new Set();
+
+    try{
+      collectText(document.documentElement.outerHTML,set);
+      await fetchText(origin+'/',set);
+      await fetchText(origin+'/sitemap.xml',set);
+      await fetchJson(origin+'/api',set);
+      await fetchJson(origin+'/api/users?page[limit]=50',set);
+      await fetchJson(origin+'/api/tags?page[limit]=100',set);
+      var discussions=await fetchJson(origin+'/api/discussions?page[limit]=50',set);
+
+      if(discussions&&Array.isArray(discussions.data)){
+        for(var i=0;i<Math.min(discussions.data.length,50);i++){
+          var id=discussions.data[i]&&discussions.data[i].id;
+          if(id)await fetchJson(origin+'/api/posts?filter[discussion]='+encodeURIComponent(id)+'&page[limit]=50',set);
+        }
+      }
+
+      assets=Array.from(set).sort();
+      render();
+    }finally{
+      button.disabled=false;
+      button.textContent='Scan Public Assets';
+    }
+  }
+
+  search.addEventListener('input',render);
+  button.addEventListener('click',scan);
+})();
 </script>
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=2.2a1"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=2.2a2"></script>
