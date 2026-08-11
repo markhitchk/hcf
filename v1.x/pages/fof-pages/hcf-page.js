@@ -1,10 +1,10 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — FOF PAGES RUNTIME
-   Shared device mode + Flarum identity detection.
+   Silent shared device mode + Flarum identity detection.
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.2.2
+   Runtime Version: 1.3.0
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
@@ -81,92 +81,32 @@
 
   function runtimeDisabled(page){
     if(!page)return false;
-
-    if(String(page.getAttribute("data-hcf-runtime")||"").toLowerCase()==="off")return true;
-
-    var fofPage=page.closest? page.closest(".Pages[data-slug]") : null;
-    var slug=fofPage?String(fofPage.getAttribute("data-slug")||"").trim().toLowerCase():"";
-
-    return slug==="privacy-policy"||slug==="privicy-policy";
+    return String(page.getAttribute("data-hcf-runtime")||"").toLowerCase()==="off";
   }
 
-  function removeRuntime(page){
+  function removeVisibleRuntime(page){
     if(!page)return;
-    var runtime=page.querySelector(".hcf-runtime");
-    if(runtime)runtime.remove();
+    var runtimes=page.querySelectorAll(".hcf-runtime");
+    for(var i=0;i<runtimes.length;i++)runtimes[i].remove();
   }
 
-  function makeRuntime(page){
-    if(!page)return null;
-
-    if(runtimeDisabled(page)){
-      removeRuntime(page);
-      return null;
-    }
-
-    var existing=page.querySelector(".hcf-runtime");
-    if(existing)return existing;
-
-    var runtime=document.createElement("div");
-    runtime.className="hcf-runtime";
-    runtime.setAttribute("aria-label","Forum session information");
-    runtime.innerHTML=
-      '<div class="hcf-runtime-item"><span class="hcf-runtime-label">DEVICE MODE</span><span class="hcf-runtime-value hcf-runtime-device"><span class="hcf-runtime-dot" aria-hidden="true"></span><span class="hcf-runtime-device-text">STANDARD MODE</span></span></div>'+
-      '<div class="hcf-runtime-item"><span class="hcf-runtime-label">IDENTITY</span><span class="hcf-runtime-value hcf-runtime-identity">GUEST_PROTOCOL</span></div>';
-
-    var hero=page.querySelector(".hcf-hero");
-    if(hero&&hero.parentNode){
-      hero.parentNode.insertBefore(runtime,hero.nextSibling);
-    }else{
-      page.insertBefore(runtime,page.firstChild);
-    }
-    return runtime;
-  }
-
-  function updateDevice(page,runtime){
-    if(!page||!runtime)return;
-
-    var value=runtime.querySelector(".hcf-runtime-device");
-    var text=runtime.querySelector(".hcf-runtime-device-text");
-    if(!value||!text)return;
+  function updateDevice(page){
+    if(!page)return;
 
     var mobile=isMobilePerformanceDevice();
     var basic=isBasicMode();
+    var mode=basic?"basic":(mobile?"mobile":"standard");
 
-    page.classList.toggle("hcf-mobile-performance",mobile);
+    page.classList.toggle("hcf-mobile-performance",mobile&&!basic);
     page.classList.toggle("hcf-basic-mode",basic);
-
-    if(basic){
-      value.className="hcf-runtime-value hcf-runtime-device is-limited";
-      text.textContent="BASIC MODE";
-    }else if(mobile){
-      value.className="hcf-runtime-value hcf-runtime-device is-mobile";
-      text.textContent="MOBILE MODE";
-    }else{
-      value.className="hcf-runtime-value hcf-runtime-device is-standard";
-      text.textContent="STANDARD MODE";
-    }
+    page.setAttribute("data-hcf-device-mode",mode);
   }
 
-  function updateIdentity(runtime){
-    if(!runtime)return;
-
-    var target=runtime.querySelector(".hcf-runtime-identity");
-    if(!target)return;
+  function updateIdentity(page){
+    if(!page)return;
 
     var username=getIdentity();
-    if(!username){
-      target.textContent="GUEST_PROTOCOL";
-      target.className="hcf-runtime-value hcf-runtime-identity is-guest";
-      return;
-    }
-
-    target.textContent="";
-    target.className="hcf-runtime-value hcf-runtime-identity is-user";
-    var link=document.createElement("a");
-    link.href="/u/"+encodeURIComponent(username);
-    link.textContent="@"+username;
-    target.appendChild(link);
+    page.setAttribute("data-hcf-identity",username||"guest");
   }
 
   function refreshDomainLinks(){
@@ -184,15 +124,18 @@
     for(var i=0;i<pages.length;i++){
       var page=pages[i];
 
+      /* Remove any status panel left behind by an older cached runtime. */
+      removeVisibleRuntime(page);
+
       if(runtimeDisabled(page)){
-        removeRuntime(page);
         page.classList.remove("hcf-mobile-performance","hcf-basic-mode");
+        page.removeAttribute("data-hcf-device-mode");
+        page.removeAttribute("data-hcf-identity");
         continue;
       }
 
-      var runtime=makeRuntime(page);
-      updateDevice(page,runtime);
-      updateIdentity(runtime);
+      updateDevice(page);
+      updateIdentity(page);
     }
 
     refreshDomainLinks();
@@ -204,7 +147,7 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.2.2",
+    version:"1.3.0",
     refresh:refresh,
     getIdentity:getIdentity,
     isMobilePerformanceDevice:isMobilePerformanceDevice,
