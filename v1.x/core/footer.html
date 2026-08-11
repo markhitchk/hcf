@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.0
+   HARLEY'S CLAN FORUM FOOTER v4.1
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-02
+   Updated: 2026-08-11
 ========================================================= */
 
 :root{
@@ -592,6 +592,163 @@
 .hc-compatibility-notice{display:none}
 .hc-compatibility-notice.is-visible{display:block}
 
+/* Floating Discord report-feedback bubble. */
+.hc-feedback-float,
+.hc-feedback-float *{
+    box-sizing:border-box;
+}
+
+.hc-feedback-float{
+    position:fixed;
+    right:max(18px,env(safe-area-inset-right));
+    bottom:max(18px,env(safe-area-inset-bottom));
+    z-index:2147483000;
+    margin:0;
+    color:var(--text-color,var(--body-color,var(--hc-text)));
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+.hc-feedback-float > summary{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-height:48px;
+    padding:11px 15px 11px 11px;
+    border:1px solid rgba(88,101,242,.72);
+    border-radius:999px;
+    background:linear-gradient(135deg,#5865f2,#7289da);
+    color:#fff;
+    cursor:pointer;
+    list-style:none;
+    font-size:.78rem;
+    font-weight:800;
+    line-height:1;
+    box-shadow:0 10px 28px rgba(0,0,0,.24),0 0 18px rgba(88,101,242,.25);
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+
+.hc-feedback-float > summary::-webkit-details-marker{display:none}
+.hc-feedback-float > summary::marker{display:none;content:""}
+
+.hc-feedback-float > summary:hover{
+    transform:translateY(-2px) scale(1.02);
+    filter:brightness(1.05);
+    box-shadow:0 13px 32px rgba(0,0,0,.28),0 0 22px rgba(88,101,242,.34);
+}
+
+.hc-feedback-float > summary:focus-visible{
+    outline:2px solid var(--hc-accent);
+    outline-offset:4px;
+}
+
+.hc-feedback-paw{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:rgba(255,255,255,.18);
+    font-size:1rem;
+    line-height:1;
+}
+
+.hc-feedback-panel{
+    position:absolute;
+    right:0;
+    bottom:calc(100% + 12px);
+    width:min(320px,calc(100vw - 24px));
+    max-height:min(360px,calc(100vh - 110px));
+    overflow:auto;
+    padding:16px;
+    border:1px solid rgba(88,101,242,.52);
+    border-radius:20px;
+    background:var(--control-bg,var(--hc-bg));
+    color:inherit;
+    box-shadow:0 18px 48px rgba(0,0,0,.32),0 0 24px rgba(88,101,242,.15);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    overscroll-behavior:contain;
+}
+
+.hc-feedback-panel::after{
+    content:"";
+    position:absolute;
+    right:27px;
+    bottom:-6px;
+    width:12px;
+    height:12px;
+    border-right:1px solid rgba(88,101,242,.52);
+    border-bottom:1px solid rgba(88,101,242,.52);
+    background:var(--control-bg,var(--hc-bg));
+    transform:rotate(45deg);
+}
+
+.hc-feedback-title{
+    margin:0 0 6px;
+    color:inherit;
+    font-size:.94rem;
+    font-weight:800;
+    line-height:1.35;
+}
+
+.hc-feedback-text{
+    margin:0;
+    color:var(--muted-color,var(--hc-muted));
+    font-size:.77rem;
+    line-height:1.55;
+}
+
+.hc-feedback-actions{
+    display:grid;
+    gap:8px;
+    margin-top:13px;
+}
+
+.hc-feedback-link{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:38px;
+    padding:9px 12px;
+    border:1px solid rgba(88,101,242,.62);
+    border-radius:12px;
+    background:rgba(88,101,242,.12);
+    color:inherit;
+    font-size:.76rem;
+    font-weight:800;
+    line-height:1.2;
+    text-align:center;
+    text-decoration:none;
+    transition:transform .2s ease,background-color .2s ease,border-color .2s ease;
+}
+
+.hc-feedback-link:hover{
+    transform:translateY(-1px);
+    border-color:#7289da;
+    background:rgba(88,101,242,.22);
+    color:inherit;
+    text-decoration:none;
+}
+
+.hc-feedback-link.is-primary{
+    border-color:#5865f2;
+    background:#5865f2;
+    color:#fff;
+}
+
+.hc-feedback-link.is-primary:hover{
+    background:#6875f5;
+    color:#fff;
+}
+
+.hc-feedback-link:focus-visible{
+    outline:2px solid var(--hc-accent);
+    outline-offset:2px;
+}
+
 @keyframes hc-terminal-energy{
     0%,100%{box-shadow:0 16px 50px rgba(0,0,0,.16),0 0 0 transparent,inset 0 0 20px rgba(0,255,255,.015)}
     50%{box-shadow:0 18px 54px rgba(0,0,0,.19),0 0 18px rgba(0,255,255,.09),inset 0 0 27px rgba(0,255,255,.025)}
@@ -688,12 +845,40 @@
     .hc-label{display:block;margin-top:8px;margin-bottom:1px}
     .hc-sep{margin:0 4px}
     .hc-ip-line{line-height:1.7}
+
+    .hc-feedback-float{
+        right:max(12px,env(safe-area-inset-right));
+        bottom:max(76px,calc(env(safe-area-inset-bottom) + 12px));
+    }
+
+    .hc-feedback-float > summary{
+        min-height:46px;
+        padding:9px 12px 9px 9px;
+    }
+
+    .hc-feedback-paw{
+        width:28px;
+        height:28px;
+    }
+
+    .hc-feedback-panel{
+        width:min(300px,calc(100vw - 24px));
+        max-height:min(330px,calc(100vh - 145px));
+    }
+}
+
+@media (max-width:390px){
+    .hc-feedback-label{display:none}
+    .hc-feedback-float > summary{padding:9px}
 }
 
 @media (prefers-reduced-motion:reduce){
     .hc-simple-footer *,
     .hc-simple-footer *::before,
-    .hc-simple-footer *::after{
+    .hc-simple-footer *::after,
+    .hc-feedback-float *,
+    .hc-feedback-float *::before,
+    .hc-feedback-float *::after{
         animation:none!important;
         transition:none!important;
     }
@@ -711,7 +896,9 @@
     #hc-top-btn:hover,
     .hc-terminal-block:hover,
     .hc-data-row:hover,
-    .hc-footer-logo-wrap:hover .hc-footer-logo-img{
+    .hc-footer-logo-wrap:hover .hc-footer-logo-img,
+    .hc-feedback-float > summary:hover,
+    .hc-feedback-link:hover{
         transform:none;
     }
 }
@@ -834,6 +1021,29 @@
         </div>
     </div>
 </footer>
+
+<details class="hc-feedback-float">
+    <summary aria-label="Open Discord report feedback options">
+        <span class="hc-feedback-paw" aria-hidden="true">🐾</span>
+        <span class="hc-feedback-label">Report Feedback</span>
+    </summary>
+
+    <div class="hc-feedback-panel">
+        <div class="hc-feedback-title">💬 Report feedback on Discord</div>
+        <p class="hc-feedback-text">
+            You must join the Harley's Clan Discord server before you can access the report-feedback channel.
+        </p>
+
+        <div class="hc-feedback-actions">
+            <a class="hc-feedback-link is-primary" href="https://discord.gg/NvT5QMKxDA" target="_blank" rel="noopener noreferrer">
+                Join Discord Server
+            </a>
+            <a class="hc-feedback-link" href="https://discord.com/channels/1225158490901971105/1536706202422091826" target="_blank" rel="noopener noreferrer">
+                Open Report Feedback
+            </a>
+        </div>
+    </div>
+</details>
 
 <script>
 (function(){
