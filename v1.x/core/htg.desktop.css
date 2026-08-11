@@ -1741,3 +1741,41 @@ a:has(.fa-right-from-bracket):focus,
   color: #fff !important;
   background: rgba(220, 38, 38, 0.9) !important;
 }
+
+/* ======================================================
+   FOOTER FEEDBACK COLOR COMPATIBILITY
+
+   Keeps older pasted footer builds aligned with the
+   current HTG dark/cyan desktop and laptop palette.
+   ====================================================== */
+html body .hc-feedback-float > summary {
+  border-color: var(--cyan, #00ffff) !important;
+  background:
+    linear-gradient(135deg, rgba(0, 255, 255, .12), rgba(0, 255, 255, .035)),
+    var(--control-bg, #11151b) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .28), 0 0 16px rgba(0, 255, 255, .14) !important;
+}
+
+html body .hc-feedback-float .hc-feedback-paw {
+  border-color: rgba(0, 255, 255, .42) !important;
+  background: linear-gradient(135deg, rgba(0, 255, 255, .16), rgba(0, 255, 255, .05)) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 255, .14) !important;
+}
+
+html body .hc-feedback-float .hc-feedback-panel {
+  border-color: rgba(0, 255, 255, .42) !important;
+  background:
+    linear-gradient(145deg, rgba(0, 255, 255, .055), rgba(0, 255, 255, .018)),
+    var(--control-bg, #11151b) !important;
+}
+
+html body .hc-feedback-float .hc-feedback-link.is-primary,
+html body .hc-feedback-float .hc-feedback-link.is-primary:hover,
+html body .hc-feedback-float .hc-feedback-link.is-primary:focus,
+html body .hc-feedback-float .hc-feedback-link.is-primary:active {
+  border-color: var(--cyan, #00ffff) !important;
+  background: var(--cyan, #00ffff) !important;
+  color: var(--btn-text, #041012) !important;
+  box-shadow: 0 0 16px rgba(0, 255, 255, .25) !important;
+}
+
