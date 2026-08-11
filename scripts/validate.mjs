@@ -161,9 +161,10 @@ for (const required of [
 const mobileFile = resolve(repositoryRoot, "v1.x/add-ons/mobile.css");
 const mobile = readFileSync(mobileFile, "utf8");
 for (const required of [
-  ".Composer:not(.minimized) .App-backControl",
-  ".Composer:not(.minimized) .App-titleControl",
-  ".Composer:not(.minimized) .App-primaryControl",
+  ".Composer-controls > .App-backControl",
+  ".ComposerBody-header .App-titleControl",
+  "> .item-submit.App-primaryControl",
+  "position: absolute !important",
   "padding-left: 60px !important",
   "padding-right: 50px !important",
   ".DraftsPage",
@@ -179,19 +180,14 @@ const panels = readFileSync(panelFile, "utf8");
 if (!panels.includes(".DraftsDropdown")) {
   fail(panelFile, "FoF Drafts is missing from shared header panels");
 }
-if (/App-drawer[\s\S]{0,800}NotificationsDropdown[\s\S]{0,800}display:\s*none\s*!important/.test(panels)) {
-  fail(panelFile, "mobile notification/flag sheets are forcibly hidden");
+if (!/App-drawer[\s\S]{0,800}NotificationsDropdown[\s\S]{0,800}display:\s*none\s*!important/.test(panels)) {
+  fail(panelFile, "transient mobile dropdown is not hidden before route navigation");
 }
 
 const headerFile = resolve(repositoryRoot, "v1.x/core/header.html");
 const header = readFileSync(headerFile, "utf8");
-for (const required of [
-  "hcfMobileHeaderPanels",
-  'compat["components/NotificationsDropdown"]',
-  'override(prototype,"onclick"',
-  "state.load();",
-]) {
-  if (!header.includes(required)) fail(headerFile, `missing mobile panel override: ${required}`);
+if (header.includes("hcfMobileHeaderPanels")) {
+  fail(headerFile, "mobile header override disables Flarum's native route navigation");
 }
 
 const motionFile = resolve(repositoryRoot, "v1.x/add-ons/motion.css");
