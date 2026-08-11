@@ -50,26 +50,28 @@ v2.x/
 
 `v1.x/core/htg.forum.css` is the production stylesheet used by Harley's Clan Forum.
 
-Paste this single import into Flarum's **Appearance → Custom CSS** field:
+Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@71e35c5a63f741a9827f44dc0db979626e77ff41/v1.x/core/htg.forum.css");
 ```
 
-Use the URL exactly as shown. Do not wrap it in Markdown link syntax such as `[URL](URL)`.
+Use the URL exactly as shown. The commit pin prevents jsDelivr from mixing
+older cached `@main` files into the release. Do not wrap the URL in Markdown
+link syntax such as `[URL](URL)`.
 
 The entry point separates phone and desktop rules at Flarum's native
 `767.98px` phone breakpoint:
 
 ```css
 /* Phones: HCF add-ons plus mobile overrides. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
 
 /* Desktop and tablet-up. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@98f70724a1705ae46797f084823690b069505a62/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
 ```
 
 `mobile.css` deliberately leaves the phone header, navigation controls,
