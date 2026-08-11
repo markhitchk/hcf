@@ -15,11 +15,11 @@
    Updated: 2026-08-10
 ========================================================== */
 
-/* Mobile-only add-ons and layout. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
+/* Mobile release files are pinned to one verified build. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
 
-/* Desktop/tablet-up theme. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
+/* Desktop/tablet-up release file, with pinned add-on dependencies. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@98f70724a1705ae46797f084823690b069505a62/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
