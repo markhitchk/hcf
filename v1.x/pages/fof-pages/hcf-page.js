@@ -4,7 +4,7 @@
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.2.1
+   Runtime Version: 1.2.2
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
@@ -87,7 +87,7 @@
     var fofPage=page.closest? page.closest(".Pages[data-slug]") : null;
     var slug=fofPage?String(fofPage.getAttribute("data-slug")||"").trim().toLowerCase():"";
 
-    return slug==="privacy-policy";
+    return slug==="privacy-policy"||slug==="privicy-policy";
   }
 
   function removeRuntime(page){
@@ -204,7 +204,7 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.2.1",
+    version:"1.2.2",
     refresh:refresh,
     getIdentity:getIdentity,
     isMobilePerformanceDevice:isMobilePerformanceDevice,
