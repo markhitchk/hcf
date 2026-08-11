@@ -60,7 +60,7 @@ scripts/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@7bafc88f6e69913144fbb99a0a165682cacb4e1a/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@020544b5591381e8aeeba7da84b79b2eda1ae575/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
@@ -90,13 +90,24 @@ It also preserves Flarum's native
 [dropdown sheet](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Dropdown.less)
 and [mobile modal](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Modal.less)
 positioning and transitions.
-It only supplies HCF drawer branding, extension overflow protection, and
-compact mobile spacing. Only the canonical add-on filenames are kept so
-old aliases cannot create duplicate imports or stale CDN paths.
+It only supplies HCF drawer branding, extension overflow protection, Flarum's
+phone discussion-list spacing, and compact mobile styling. Only the canonical
+add-on filenames are kept so old aliases cannot create duplicate imports or
+stale CDN paths.
+
+The body-only `v1.x/core/header.html` fragment also installs a small Flarum
+compatibility override for mobile notification, flag, and FoF Drafts controls.
+When the phone drawer is open, those components load and open their native
+dropdown sheet instead of immediately routing away. The override keeps the
+framework component, unread counts, backdrop, close behavior, and direct
+`/notifications`, `/flags`, and `/drafts` routes intact; it does not modify
+Flarum core files.
 
 ## Core HTML
 
-- Paste the body-only `v1.x/core/header.html` fragment into the forum custom header.
+- Paste the complete body-only `v1.x/core/header.html` fragment into the forum
+  custom header. Its mobile panel override is required for notification, flag,
+  and FoF Drafts sheets; CSS alone cannot change Flarum's route-on-phone click.
 - Paste the body-only `v1.x/core/footer.html` fragment into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
 
