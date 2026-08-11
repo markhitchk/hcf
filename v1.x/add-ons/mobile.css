@@ -10,7 +10,7 @@
    App-navigation or App-drawer layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.0
+   Version: 5.1
    Updated: 2026-08-10
 ========================================================== */
 
@@ -22,6 +22,20 @@
 @media screen and (max-width: 767.98px) {
   body {
     overflow-x: hidden !important;
+  }
+
+  /* ======================================================
+     KEEP FLARUM'S PAGE CONTROLS IN THE PHONE HEADER
+
+     The shared motion layer animates .App-content with a
+     transform and filter. Either property creates a containing
+     block, which pulls Flarum's absolute/fixed title and primary
+     controls down into the welcome hero. Preserve the fade while
+     neutralizing only the two layout-changing properties.
+     ====================================================== */
+  html body .App .App-content {
+    transform: none !important;
+    filter: none !important;
   }
 
   /* ======================================================
