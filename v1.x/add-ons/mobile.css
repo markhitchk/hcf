@@ -10,8 +10,8 @@
    App-navigation or App-drawer layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.3
-   Updated: 2026-08-10
+   Version: 5.4
+   Updated: 2026-08-11
 ========================================================== */
 
 :root {
@@ -253,6 +253,15 @@
 
   html body .App .Composer {
     max-width: 100% !important;
+  }
+
+  /* The custom HCF banner is rendered before #app. Flarum positions the
+     phone submit control at viewport top, so offset only the expanded
+     composer's submit control by the live banner height. */
+  html body .App .Composer:not(.minimized)
+  .ComposerBody-editor .TextEditor-controls
+  .item-submit.App-primaryControl {
+    top: var(--hc-banner-height, 58px) !important;
   }
 
   html body .App .Dropdown-menu,
