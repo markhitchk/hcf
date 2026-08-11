@@ -60,7 +60,7 @@ scripts/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@383e492586457a7a4e50129f1ba251d746c6ec81/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@63d20482468fcf32aaceaf560a0e292ab1207081/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
@@ -95,19 +95,14 @@ phone discussion-list spacing, and compact mobile styling. Only the canonical
 add-on filenames are kept so old aliases cannot create duplicate imports or
 stale CDN paths.
 
-The body-only `v1.x/core/header.html` fragment also installs a small Flarum
-compatibility override for mobile notification, flag, and FoF Drafts controls.
-When the phone drawer is open, those components load and open their native
-dropdown sheet instead of immediately routing away. The override keeps the
-framework component, unread counts, backdrop, close behavior, and direct
-`/notifications`, `/flags`, and `/drafts` routes intact; it does not modify
-Flarum core files.
+Mobile notification, flag, and FoF Drafts controls retain Flarum's native
+phone behavior: tapping one from the open drawer routes to its full page.
+HCF hides only the transient Bootstrap dropdown that can flash before routing.
 
 ## Core HTML
 
 - Paste the complete body-only `v1.x/core/header.html` fragment into the forum
-  custom header. Its mobile panel override is required for notification, flag,
-  and FoF Drafts sheets; CSS alone cannot change Flarum's route-on-phone click.
+  custom header.
 - Paste the body-only `v1.x/core/footer.html` fragment into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
 
