@@ -4,7 +4,7 @@
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.2.0
+   Runtime Version: 1.2.1
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
@@ -79,8 +79,30 @@
     return normalizeUsername(element?element.textContent:"");
   }
 
+  function runtimeDisabled(page){
+    if(!page)return false;
+
+    if(String(page.getAttribute("data-hcf-runtime")||"").toLowerCase()==="off")return true;
+
+    var fofPage=page.closest? page.closest(".Pages[data-slug]") : null;
+    var slug=fofPage?String(fofPage.getAttribute("data-slug")||"").trim().toLowerCase():"";
+
+    return slug==="privacy-policy";
+  }
+
+  function removeRuntime(page){
+    if(!page)return;
+    var runtime=page.querySelector(".hcf-runtime");
+    if(runtime)runtime.remove();
+  }
+
   function makeRuntime(page){
     if(!page)return null;
+
+    if(runtimeDisabled(page)){
+      removeRuntime(page);
+      return null;
+    }
 
     var existing=page.querySelector(".hcf-runtime");
     if(existing)return existing;
@@ -161,6 +183,13 @@
     var pages=document.querySelectorAll(".hcf-page");
     for(var i=0;i<pages.length;i++){
       var page=pages[i];
+
+      if(runtimeDisabled(page)){
+        removeRuntime(page);
+        page.classList.remove("hcf-mobile-performance","hcf-basic-mode");
+        continue;
+      }
+
       var runtime=makeRuntime(page);
       updateDevice(page,runtime);
       updateIdentity(runtime);
@@ -175,10 +204,11 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.2.0",
+    version:"1.2.1",
     refresh:refresh,
     getIdentity:getIdentity,
-    isMobilePerformanceDevice:isMobilePerformanceDevice
+    isMobilePerformanceDevice:isMobilePerformanceDevice,
+    runtimeDisabled:runtimeDisabled
   };
 
   window.addEventListener("resize",onResize,{passive:true});
