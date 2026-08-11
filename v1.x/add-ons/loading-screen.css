@@ -3,9 +3,9 @@
 
    Load AFTER addons/animations.css so these targeted fixes win.
 
-   Version: 1.1
+   Version: 1.2
    Author: HarleyTG
-   Updated: 2026-08-04
+   Updated: 2026-08-10
 ========================================================= */
 
 :root {
@@ -200,7 +200,7 @@
   letter-spacing: 0.035em !important;
   color: var(--hc-loader-text) !important;
   background:
-    url("https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/assets/logos/HTG-Icon.png")
+    url("../assets/logos/HTG.svg")
     center top / 92px 92px no-repeat !important;
   filter: drop-shadow(0 0 11px var(--hc-welcome-glow));
   text-shadow:
@@ -209,7 +209,13 @@
   animation: hc-loader-logo-pulse 2.2s ease-in-out infinite !important;
 }
 
-/* Animated indeterminate loading bar. */
+/*
+ * Staged loading bar.
+ *
+ * Flarum does not expose byte-level boot progress to CSS, so the fill advances
+ * through realistic loading stages and then waits at 96%. Flarum remains the
+ * source of truth: as soon as it finishes booting, it hides #flarum-loading.
+ */
 #flarum-loading::after {
   content: "" !important;
   display: block !important;
@@ -219,23 +225,22 @@
   margin-top: 2px !important;
   border: 1px solid rgba(0, 255, 255, 0.55) !important;
   border-radius: 999px !important;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 255, 255, 0.20) 15%,
-      var(--hc-welcome-cyan) 40%,
-      #ffffff 50%,
-      var(--hc-welcome-cyan) 60%,
-      rgba(0, 255, 255, 0.20) 85%,
-      transparent 100%
-    ) -55% 0 / 46% 100% no-repeat,
-    rgba(0, 255, 255, 0.055) !important;
+  overflow: hidden !important;
+  background-color: rgba(0, 255, 255, 0.055) !important;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 128, 168, 0.72) 0%,
+    var(--hc-welcome-cyan) 72%,
+    #ffffff 100%
+  );
+  background-position: left center;
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
   box-shadow:
     inset 0 0 8px rgba(0, 0, 0, 0.72),
     0 0 8px var(--hc-welcome-glow-soft),
     0 0 17px rgba(0, 255, 255, 0.11) !important;
-  animation: hc-loader-bar 1.45s cubic-bezier(.45, 0, .55, 1) infinite !important;
+  animation: hc-loader-progress 9.5s linear forwards !important;
 }
 
 @keyframes hc-loader-logo-pulse {
@@ -249,10 +254,15 @@
   }
 }
 
-@keyframes hc-loader-bar {
-  0% { background-position: -65% 0, 0 0; }
-  50% { background-position: 50% 0, 0 0; }
-  100% { background-position: 165% 0, 0 0; }
+@keyframes hc-loader-progress {
+  0% { background-size: 2% 100%; }
+  8% { background-size: 22% 100%; }
+  22% { background-size: 39% 100%; }
+  40% { background-size: 58% 100%; }
+  59% { background-size: 73% 100%; }
+  76% { background-size: 85% 100%; }
+  90% { background-size: 92% 100%; }
+  100% { background-size: 96% 100%; }
 }
 
 /* =========================================================
@@ -347,6 +357,6 @@
   }
 
   #flarum-loading::after {
-    background-position: 50% 0, 0 0 !important;
+    background-size: 72% 100%;
   }
 }
