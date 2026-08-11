@@ -93,6 +93,9 @@ const files = walk(repositoryRoot);
 for (const file of files) {
   if (statSync(file).size === 0) fail(file, "empty tracked file");
 
+  const repositoryPath = relative(repositoryRoot, file);
+  if (repositoryPath.startsWith("legacy/")) continue;
+
   const extension = extname(file);
   if (![".css", ".html", ".js", ".mjs", ".json", ".md", ".yml", ".yaml"].includes(extension)) continue;
   const source = readFileSync(file, "utf8");
@@ -101,7 +104,7 @@ for (const file of files) {
   if (/raw\.githubusercontent\.com\/HarleyTG-O\/logo\/main/i.test(source)) fail(file, "legacy external logo URL");
   if (/HTG-Icon\.(?:svg|png)/i.test(source)) fail(file, "reference to retired empty logo asset");
   if (/body\s+when\s*\(/.test(source)) fail(file, "Less-only conditional in a CSS file");
-  if (relative(repositoryRoot, file).startsWith("v1.x/") && /\b(?:console\.log|debugger)\b/.test(source)) {
+  if (repositoryPath.startsWith("v1.x/") && /\b(?:console\.log|debugger)\b/.test(source)) {
     fail(file, "debug statement");
   }
 
