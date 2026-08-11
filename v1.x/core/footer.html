@@ -592,7 +592,11 @@
 .hc-compatibility-notice{display:none}
 .hc-compatibility-notice.is-visible{display:block}
 
-/* Floating Discord report-feedback bubble. */
+/* =========================================================
+   DISCORD FEEDBACK
+   Desktop: labeled terminal control and floating panel.
+   Mobile: lightweight touch button and bottom panel.
+========================================================= */
 .hc-feedback-float,
 .hc-feedback-float *{
     box-sizing:border-box;
@@ -600,11 +604,11 @@
 
 .hc-feedback-float{
     position:fixed;
-    right:max(14px,env(safe-area-inset-right));
-    bottom:max(16px,env(safe-area-inset-bottom));
+    right:max(20px,env(safe-area-inset-right));
+    bottom:max(20px,env(safe-area-inset-bottom));
     z-index:2147483000;
-    width:48px;
-    height:48px;
+    width:auto;
+    height:52px;
     margin:0;
     color:var(--text-color,var(--body-color,var(--hc-text)));
     font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
@@ -613,29 +617,35 @@
 .hc-feedback-float > summary{
     display:flex;
     align-items:center;
-    justify-content:center;
-    width:48px;
-    min-width:48px;
-    max-width:48px;
-    height:48px;
-    min-height:48px;
-    max-height:48px;
+    justify-content:flex-start;
+    gap:10px;
+    min-width:164px;
+    height:52px;
     margin:0;
-    padding:0;
+    padding:7px 14px 7px 8px;
     overflow:hidden;
-    border:1px solid rgba(88,101,242,.72);
-    border-radius:50%;
-    background:linear-gradient(135deg,#5865f2,#7289da);
-    color:#fff;
+    border:1px solid color-mix(in srgb,var(--hc-accent) 52%,#5865f2 48%);
+    border-radius:15px;
+    background:
+        linear-gradient(135deg,rgba(88,101,242,.24),rgba(0,255,255,.07)),
+        var(--control-bg,var(--hc-bg-strong));
+    color:inherit;
     cursor:pointer;
     list-style:none!important;
     list-style-type:none!important;
-    font-size:0!important;
-    line-height:0;
-    box-shadow:0 7px 18px rgba(0,0,0,.24),0 0 12px rgba(88,101,242,.22);
+    line-height:1;
+    box-shadow:0 10px 28px rgba(0,0,0,.28),0 0 16px rgba(0,255,255,.11);
     user-select:none;
     -webkit-tap-highlight-color:transparent;
-    transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+
+@supports not (color:color-mix(in srgb,red,blue)){
+    .hc-feedback-float > summary{
+        border-color:rgba(0,255,255,.52);
+    }
 }
 
 .hc-feedback-float > summary::-webkit-details-marker{
@@ -650,10 +660,11 @@
     font-size:0!important;
 }
 
-.hc-feedback-float > summary:hover{
-    transform:translateY(-1px) scale(1.04);
-    filter:brightness(1.05);
-    box-shadow:0 9px 22px rgba(0,0,0,.28),0 0 16px rgba(88,101,242,.3);
+.hc-feedback-float > summary:hover,
+.hc-feedback-float[open] > summary{
+    transform:translateY(-2px);
+    border-color:var(--hc-accent);
+    box-shadow:0 12px 32px rgba(0,0,0,.32),0 0 21px var(--hc-glow-soft);
 }
 
 .hc-feedback-float > summary:focus-visible{
@@ -662,87 +673,128 @@
 }
 
 .hc-feedback-paw{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:32px;
-    height:32px;
+    display:grid;
+    flex:0 0 36px;
+    width:36px;
+    height:36px;
+    place-items:center;
     margin:0;
     padding:0;
-    border-radius:50%;
-    background:rgba(255,255,255,.15);
-    font-size:17px!important;
-    line-height:1!important;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:11px;
+    background:linear-gradient(135deg,#5865f2,#7289da);
+    color:#fff;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 12px rgba(88,101,242,.22);
+}
+
+.hc-feedback-paw svg{
+    display:block;
+    width:20px;
+    height:20px;
 }
 
 .hc-feedback-label{
-    display:none!important;
+    display:flex;
+    min-width:0;
+    flex-direction:column;
+    gap:3px;
+    color:inherit;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+
+.hc-feedback-label strong{
+    color:var(--hc-accent);
+    font-size:.68rem;
+    font-weight:900;
+    line-height:1;
+    letter-spacing:.12em;
+}
+
+.hc-feedback-label small{
+    color:var(--muted-color,var(--hc-muted));
+    font-size:.57rem;
+    font-weight:800;
+    line-height:1;
+    letter-spacing:.16em;
 }
 
 .hc-feedback-panel{
     position:absolute;
     right:0;
-    bottom:calc(100% + 10px);
-    width:min(280px,calc(100vw - 28px));
-    max-height:min(300px,calc(100vh - 110px));
+    bottom:calc(100% + 12px);
+    width:min(330px,calc(100vw - 40px));
+    max-height:min(390px,calc(100vh - 110px));
     overflow:auto;
-    padding:14px;
-    border:1px solid rgba(88,101,242,.52);
-    border-radius:16px;
-    background:var(--control-bg,var(--hc-bg));
+    padding:18px;
+    border:1px solid rgba(0,255,255,.34);
+    border-radius:17px;
+    background:
+        linear-gradient(145deg,rgba(0,255,255,.035),rgba(88,101,242,.07)),
+        var(--control-bg,var(--hc-bg-strong));
     color:inherit;
-    box-shadow:0 14px 38px rgba(0,0,0,.32),0 0 18px rgba(88,101,242,.13);
+    box-shadow:0 18px 46px rgba(0,0,0,.38),0 0 22px rgba(0,255,255,.10);
     backdrop-filter:blur(16px);
     -webkit-backdrop-filter:blur(16px);
     overscroll-behavior:contain;
+    animation:hc-feedback-panel-in .2s cubic-bezier(.2,.8,.2,1);
 }
 
 .hc-feedback-panel::after{
     content:"";
     position:absolute;
-    right:15px;
-    bottom:-5px;
-    width:10px;
-    height:10px;
-    border-right:1px solid rgba(88,101,242,.52);
-    border-bottom:1px solid rgba(88,101,242,.52);
-    background:var(--control-bg,var(--hc-bg));
+    right:22px;
+    bottom:-6px;
+    width:11px;
+    height:11px;
+    border-right:1px solid rgba(0,255,255,.34);
+    border-bottom:1px solid rgba(0,255,255,.34);
+    background:var(--control-bg,var(--hc-bg-strong));
     transform:rotate(45deg);
 }
 
+.hc-feedback-kicker{
+    margin:0 0 6px;
+    color:var(--hc-accent);
+    font:800 .58rem/1.2 "JetBrains Mono","Courier New",monospace;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+}
+
 .hc-feedback-title{
-    margin:0 0 5px;
+    margin:0 0 7px;
     color:inherit;
-    font-size:.88rem;
-    font-weight:800;
-    line-height:1.3;
+    font-size:1rem;
+    font-weight:850;
+    line-height:1.25;
 }
 
 .hc-feedback-text{
     margin:0;
     color:var(--muted-color,var(--hc-muted));
-    font-size:.73rem;
-    line-height:1.5;
+    font-size:.76rem;
+    line-height:1.55;
 }
 
 .hc-feedback-actions{
     display:grid;
-    gap:7px;
-    margin-top:11px;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-top:15px;
 }
 
 .hc-feedback-link{
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:36px;
-    padding:8px 10px;
-    border:1px solid rgba(88,101,242,.62);
+    min-height:40px;
+    padding:9px 12px;
+    border:1px solid rgba(0,255,255,.30);
     border-radius:10px;
-    background:rgba(88,101,242,.12);
+    background:rgba(0,255,255,.055);
     color:inherit;
     font-size:.72rem;
-    font-weight:800;
+    font-weight:850;
     line-height:1.2;
     text-align:center;
     text-decoration:none;
@@ -751,8 +803,8 @@
 
 .hc-feedback-link:hover{
     transform:translateY(-1px);
-    border-color:#7289da;
-    background:rgba(88,101,242,.22);
+    border-color:var(--hc-accent);
+    background:rgba(0,255,255,.11);
     color:inherit;
     text-decoration:none;
 }
@@ -764,6 +816,7 @@
 }
 
 .hc-feedback-link.is-primary:hover{
+    border-color:#7289da;
     background:#6875f5;
     color:#fff;
 }
@@ -771,6 +824,111 @@
 .hc-feedback-link:focus-visible{
     outline:2px solid var(--hc-accent);
     outline-offset:2px;
+}
+
+@keyframes hc-feedback-panel-in{
+    from{opacity:0;transform:translateY(8px) scale(.985)}
+    to{opacity:1;transform:none}
+}
+
+/* Detected phone/tablet presentation. */
+.hc-feedback-float.hc-mobile-performance{
+    right:max(10px,env(safe-area-inset-right));
+    bottom:max(70px,calc(env(safe-area-inset-bottom) + 10px));
+    width:46px;
+    height:46px;
+}
+
+.hc-feedback-float.hc-mobile-performance > summary{
+    justify-content:center;
+    gap:0;
+    width:46px;
+    min-width:46px;
+    max-width:46px;
+    height:46px;
+    min-height:46px;
+    max-height:46px;
+    padding:0;
+    border-color:rgba(88,101,242,.82);
+    border-radius:50%;
+    background:#5865f2;
+    box-shadow:0 7px 18px rgba(0,0,0,.26);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    transition:none;
+}
+
+.hc-feedback-float.hc-mobile-performance > summary:hover,
+.hc-feedback-float.hc-mobile-performance[open] > summary{
+    transform:none;
+    border-color:#7289da;
+    box-shadow:0 7px 18px rgba(0,0,0,.26);
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-paw{
+    flex-basis:30px;
+    width:30px;
+    height:30px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.13);
+    box-shadow:none;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-paw svg{
+    width:18px;
+    height:18px;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-label{
+    display:none;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-panel{
+    position:fixed;
+    right:10px;
+    bottom:max(126px,calc(env(safe-area-inset-bottom) + 66px));
+    left:10px;
+    width:auto;
+    max-height:calc(100dvh - 150px);
+    padding:16px;
+    border-color:rgba(88,101,242,.55);
+    border-radius:18px;
+    background:#11151b;
+    box-shadow:0 14px 34px rgba(0,0,0,.34);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    animation:none;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-panel::after{
+    display:none;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-kicker{
+    font-size:.56rem;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-title{
+    font-size:.95rem;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-text{
+    font-size:.75rem;
+    line-height:1.5;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-actions{
+    gap:9px;
+    margin-top:14px;
+}
+
+.hc-feedback-float.hc-mobile-performance .hc-feedback-link{
+    min-height:46px;
+    padding:11px 12px;
+    border-radius:12px;
+    font-size:.76rem;
+    transition:none;
 }
 
 @keyframes hc-terminal-energy{
@@ -920,56 +1078,6 @@
     .hc-sep{margin:0 4px}
     .hc-ip-line{line-height:1.7}
 
-    .hc-feedback-float{
-        right:max(10px,env(safe-area-inset-right));
-        bottom:max(70px,calc(env(safe-area-inset-bottom) + 10px));
-        width:46px;
-        height:46px;
-    }
-
-    .hc-feedback-float > summary{
-        width:46px;
-        min-width:46px;
-        max-width:46px;
-        height:46px;
-        min-height:46px;
-        max-height:46px;
-    }
-
-    .hc-feedback-paw{
-        width:30px;
-        height:30px;
-        font-size:16px!important;
-    }
-
-    .hc-feedback-panel{
-        width:min(265px,calc(100vw - 24px));
-        max-height:min(270px,calc(100dvh - 135px));
-        padding:13px;
-    }
-}
-
-@media (max-width:390px){
-    .hc-feedback-float{
-        right:max(8px,env(safe-area-inset-right));
-        width:44px;
-        height:44px;
-    }
-
-    .hc-feedback-float > summary{
-        width:44px;
-        min-width:44px;
-        max-width:44px;
-        height:44px;
-        min-height:44px;
-        max-height:44px;
-    }
-
-    .hc-feedback-paw{
-        width:28px;
-        height:28px;
-        font-size:15px!important;
-    }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1123,15 +1231,26 @@
 </footer>
 
 <details class="hc-feedback-float">
-    <summary aria-label="Open Discord report feedback options" title="Report feedback">
-        <span class="hc-feedback-paw" aria-hidden="true">🐾</span>
-        <span class="hc-feedback-label">Report Feedback</span>
+    <summary aria-label="Open Discord feedback options" title="Discord feedback">
+        <span class="hc-feedback-paw" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5h16v11H9l-5 4V5z"></path>
+                <circle cx="9" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
+                <circle cx="12" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
+                <circle cx="15" cy="10.5" r=".7" fill="currentColor" stroke="none"></circle>
+            </svg>
+        </span>
+        <span class="hc-feedback-label">
+            <strong>Discord</strong>
+            <small>Feedback</small>
+        </span>
     </summary>
 
     <div class="hc-feedback-panel">
-        <div class="hc-feedback-title">💬 Report feedback on Discord</div>
+        <div class="hc-feedback-kicker">Harley Network Support</div>
+        <div class="hc-feedback-title">Discord Feedback</div>
         <p class="hc-feedback-text">
-            You must join the Harley's Clan Discord server before you can access the report-feedback channel.
+            Join Harley's Clan Discord first, then open the report-feedback channel to report an issue or share a suggestion.
         </p>
 
         <div class="hc-feedback-actions">
@@ -1139,7 +1258,7 @@
                 Join Discord Server
             </a>
             <a class="hc-feedback-link" href="https://discord.com/channels/1225158490901971105/1536706202422091826" target="_blank" rel="noopener noreferrer">
-                Open Report Feedback
+                Open Feedback Channel
             </a>
         </div>
     </div>
