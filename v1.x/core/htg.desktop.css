@@ -1,10 +1,7 @@
-/* Release dependencies are pinned so jsDelivr cannot mix stale @main files. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/motion.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/direct-messages.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@375699ef13d834ff9978b51539f474623cc6a9f7/v1.x/add-ons/loading-screen.css");
-
-
-
+/* Dependencies inherit the revision used to load this stylesheet. */
+@import url("../add-ons/motion.css");
+@import url("../add-ons/direct-messages.css");
+@import url("../add-ons/loading-screen.css");
 /* ===================================
    Harley's Clan Forum Custom CSS V5
 
@@ -14,7 +11,7 @@
 
    KaiOS and legacy Gecko support have been removed.
 
-   Version: 5.9a8
+   Version: 5.9a9
    Author: HarleyTG
    Updated: 2026-08-10
 
