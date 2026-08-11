@@ -55,7 +55,7 @@ v2.x/
 Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@9b9e9b6a4aa2ee052053eca657dc263159f94df5/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@a3a822ead197aebf79785b0a4e7e947ebd9a56a9/v1.x/core/htg.forum.css");
 ```
 
 Use the URL exactly as shown. Its commit pin also applies to every relative
