@@ -1,14 +1,16 @@
 /* ==========================================================
    HARLEY'S CLAN FORUM — RESPONSIVE THEME ENTRY POINT
 
-   Mobile and desktop are intentionally separated.
-   - <= 767.98px: mobile.css owns the phone/tablet UI
+   Mobile and desktop are intentionally separated at Flarum's
+   native 767.98px phone breakpoint.
+   - <= 767.98px: Flarum owns navigation/drawer behavior;
+     mobile.css owns HCF branding and compact extension layout
    - >= 768px: htg.desktop.css owns the desktop/tablet-up theme
 
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a7
+   Version: 5.9a8
    Author: HarleyTG
    Updated: 2026-08-10
 ========================================================== */
