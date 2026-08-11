@@ -3,14 +3,14 @@
    Shared device mode + Flarum identity detection.
    Also loads the global domain router for all FoF pages.
 
-   Runtime Version: 1.1
+   Runtime Version: 1.1.1
    Domain Cutover: October 12, 2026
    Updated: 2026-08-11
 ========================================================== */
 (function(){
   "use strict";
 
-  var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.0";
+  var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
 
   function loadDomainRouter(){
     if(window.HCFDomainRouter)return;
@@ -20,7 +20,7 @@
     script.src=DOMAIN_ROUTER_SRC;
     script.async=false;
     script.defer=false;
-    script.setAttribute("data-hcf-domain-router","1.0.0");
+    script.setAttribute("data-hcf-domain-router","1.0.1");
     (document.head||document.documentElement).appendChild(script);
   }
 
