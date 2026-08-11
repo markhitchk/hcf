@@ -1,6 +1,6 @@
 /* =========================================================
    Harley's Clan Forum — Dynamic FoF Pages GitHub Loader
-   Build: 1.0.0
+   Build: 1.0.1
    Updated: 2026-08-11
 
    Install this ONCE in Flarum's global custom footer/header.
@@ -16,7 +16,7 @@
    - A 404/network failure leaves the saved FoF HTML untouched.
    - Works with Flarum SPA navigation via MutationObserver.
    - Re-runs inline/page scripts after remote HTML injection.
-   - Common external scripts are not loaded repeatedly.
+   - Common external scripts are normalized and loaded once.
    ========================================================= */
 (function () {
   'use strict';
@@ -28,9 +28,11 @@
     return;
   }
 
-  var BUILD = '1.0.0';
+  var BUILD = '1.0.1';
   var RAW_BASE = 'https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/pages/fof-pages/';
   var CDN_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
+  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.2.0';
+  var DOMAIN_ROUTER_SRC = CDN_BASE + 'hcf-domain-router.js?v=1.0.1';
   var CACHE_TTL = 30000;
 
   var pageCache = new Map();
@@ -148,6 +150,12 @@
     });
   }
 
+  function normalizeSharedScript(src) {
+    if (/\/hcf-page\.js(?:\?|$)/i.test(src)) return SHARED_RUNTIME_SRC;
+    if (/\/hcf-domain-router\.js(?:\?|$)/i.test(src)) return DOMAIN_ROUTER_SRC;
+    return src;
+  }
+
   function executeScript(oldScript) {
     return new Promise(function (resolve) {
       var src = oldScript.getAttribute('src');
@@ -155,7 +163,20 @@
       copyScriptAttributes(oldScript, script);
 
       if (src) {
-        var resolvedSrc = absoluteUrl(src);
+        var resolvedSrc = normalizeSharedScript(absoluteUrl(src));
+
+        if (/\/hcf-page\.js(?:\?|$)/i.test(resolvedSrc) && window.HCFPageRuntime) {
+          try { window.HCFPageRuntime.refresh(); } catch (error) {}
+          resolve();
+          return;
+        }
+
+        if (/\/hcf-domain-router\.js(?:\?|$)/i.test(resolvedSrc)) {
+          if (window.HCFDomainRouter || document.querySelector('script[data-hcf-domain-router]')) {
+            resolve();
+            return;
+          }
+        }
 
         if (loadedExternalScripts.has(resolvedSrc)) {
           resolve();
@@ -214,6 +235,10 @@
         }
       }));
     } catch (error) {}
+
+    if (window.HCFPageRuntime && typeof window.HCFPageRuntime.refresh === 'function') {
+      try { window.HCFPageRuntime.refresh(); } catch (error) {}
+    }
 
     if (window.HCFDomainRouter && typeof window.HCFDomainRouter.refresh === 'function') {
       try { window.HCFDomainRouter.refresh(); } catch (error) {}
