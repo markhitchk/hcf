@@ -6,11 +6,12 @@
    framework/core/less/common/App.less
 
    This file only adds HCF drawer branding, extension safety,
-   and compact phone spacing. Do not duplicate Flarum's core
-   App-navigation or App-drawer layout here.
+   compact phone spacing, and mobile-only route-page fixes.
+   Do not duplicate Flarum's core App-navigation or App-drawer
+   layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.5
+   Version: 5.6
    Updated: 2026-08-11
 ========================================================== */
 
@@ -330,6 +331,363 @@
   .UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > a,
   .UserPage .UserCard .UserCard-controls > .Dropdown-menu .item-erase > button {
     color: #ff6b6b !important;
+  }
+
+  /* ======================================================
+     FLARUM MOBILE ROUTE PAGES — NOTIFICATIONS + FLAGS
+
+     NotificationsDropdown deliberately routes to a full page while
+     the native phone drawer is open. FlagsDropdown inherits that same
+     behavior. header-panels.css styles the desktop/popup card, so undo
+     only those card constraints on the actual phone route pages and
+     restore Flarum's App-titleControl header geometry.
+     ====================================================== */
+  html body .App .NotificationsPage,
+  html body .App .FlagsPage {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 10px calc(16px + var(--hc-mobile-safe-bottom)) !important;
+  }
+
+  html body .App .NotificationsPage > .NotificationList,
+  html body .App .FlagsPage > .NotificationList,
+  html body .App .FlagsPage > .FlagList {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html body .App .NotificationsPage .NotificationList-header,
+  html body .App .FlagsPage .NotificationList-header {
+    box-sizing: border-box !important;
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  /* header-panels.css uses margin:0 for popup titles. On a Flarum phone
+     page that cancels core's margin-left:-100px and pushes the title into
+     the right half of the screen. Restore the framework values here. */
+  html body .App .NotificationsPage .NotificationList-header .App-titleControl,
+  html body .App .FlagsPage .NotificationList-header .App-titleControl {
+    box-sizing: border-box !important;
+    position: absolute !important;
+    z-index: calc(var(--zindex-header, 1000) + 1) !important;
+    top: 0 !important;
+    right: auto !important;
+    left: 50% !important;
+    display: block !important;
+    width: 200px !important;
+    min-width: 0 !important;
+    max-width: 200px !important;
+    height: var(--header-height-phone, 46px) !important;
+    margin: 0 0 0 -100px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    color: var(--header-color, var(--text-color, #f2fdff)) !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: var(--header-height-phone, 46px) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html body .App.affix .NotificationsPage .NotificationList-header .App-titleControl,
+  html body .App.affix .FlagsPage .NotificationList-header .App-titleControl {
+    position: fixed !important;
+  }
+
+  html body .App .NotificationsPage .NotificationList-header .App-primaryControl {
+    box-sizing: border-box !important;
+    position: absolute !important;
+    z-index: calc(var(--zindex-header, 1000) + 1) !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    width: auto !important;
+    height: var(--header-height-phone, 46px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .App.affix .NotificationsPage .NotificationList-header .App-primaryControl {
+    position: fixed !important;
+  }
+
+  html body .App .NotificationsPage .NotificationList-header .App-primaryControl .Button {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: var(--header-height-phone, 46px) !important;
+    min-height: var(--header-height-phone, 46px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--header-control-color, var(--header-color, #f2fdff)) !important;
+    box-shadow: none !important;
+    touch-action: manipulation !important;
+  }
+
+  html body .App .NotificationsPage .NotificationList-content,
+  html body .App .FlagsPage .NotificationList-content {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 10px 0 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .28)) !important;
+    border-radius: 16px !important;
+    background: var(--hc-panel-surface-soft, rgba(16, 19, 24, .88)) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18) !important;
+  }
+
+  html body .App .NotificationsPage .NotificationList-empty,
+  html body .App .FlagsPage .NotificationList-empty {
+    display: grid !important;
+    place-items: center !important;
+    min-height: 112px !important;
+    margin: 0 !important;
+    padding: 28px 16px !important;
+    color: var(--hc-panel-muted, var(--muted-color, #9eb8c2)) !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+  }
+
+  html body .App .NotificationsPage .NotificationGroup-content,
+  html body .App .FlagsPage .NotificationGroup-content {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 4px !important;
+  }
+
+  html body .App .NotificationsPage .Notification,
+  html body .App .FlagsPage .Notification {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 12px !important;
+  }
+
+  /* ======================================================
+     /CONVERSATIONS — TRUE PHONE LAYOUT
+
+     direct-messages.css intentionally matches the desktop full page to
+     the popup. On phones, use the extension's single-column behavior,
+     let the window scroll the people list, and keep the active chat in a
+     bounded viewport so its message history/composer stay usable.
+     ====================================================== */
+  html body .App .ConversationsPage {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 10px 10px calc(14px + var(--hc-mobile-safe-bottom)) !important;
+    overflow: visible !important;
+  }
+
+  html body .App .ConversationsPage:not(.viewing-conversation) > .ConversationsList {
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    overflow: visible !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .22)) !important;
+    border-radius: 18px !important;
+    background: var(--hc-panel-surface, rgba(8, 10, 13, .94)) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .22) !important;
+  }
+
+  html body .App .ConversationsPage:not(.viewing-conversation) .people-list,
+  html body .App .ConversationsPage:not(.viewing-conversation) #people-list {
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  html body .App .ConversationsPage #people-list::before {
+    width: 72px !important;
+    min-width: 72px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    flex: 0 0 72px !important;
+    margin: 8px auto 4px !important;
+  }
+
+  html body .App .ConversationsPage .people-list > .Button--primary {
+    min-height: 46px !important;
+    margin: 8px 4px 10px !important;
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+    touch-action: manipulation !important;
+  }
+
+  html body .App .ConversationsPage:not(.viewing-conversation)
+  .people-list .ConversationsList-list {
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 4px !important;
+    overflow: visible !important;
+  }
+
+  html body .App .ConversationsPage .people-list .UserListItem,
+  html body .App .ConversationsPage .people-list .UserListItem:hover,
+  html body .App .ConversationsPage .people-list .UserListItem.active {
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 56px !important;
+    margin: 0 !important;
+    padding: 8px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  html body .App .ConversationsPage .people-list .UserListItem.active {
+    background: rgba(0, 255, 255, .10) !important;
+    box-shadow: inset 3px 0 0 var(--cyan-readable) !important;
+  }
+
+  html body .App .ConversationsPage .people-list .UserListItem .Avatar,
+  html body .App .ConversationsPage .people-list .UserListItem img {
+    float: none !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+  }
+
+  html body .App .ConversationsPage .people-list .UserListItem .info {
+    box-sizing: border-box !important;
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 0 0 10px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  html body .App .ConversationsPage .people-list .about {
+    float: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding-left: 10px !important;
+  }
+
+  html body .App .ConversationsPage.viewing-conversation {
+    display: flex !important;
+    width: 100% !important;
+    height: calc(100dvh - var(--header-height-phone, 46px) - var(--hc-banner-height, 0px) - 12px) !important;
+    min-height: 360px !important;
+    max-height: calc(100dvh - var(--header-height-phone, 46px) - var(--hc-banner-height, 0px) - 12px) !important;
+    margin: 0 !important;
+    padding: 8px 8px calc(8px + var(--hc-mobile-safe-bottom)) !important;
+    overflow: hidden !important;
+  }
+
+  html body .App .ConversationsPage.viewing-conversation > .ConversationsList {
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 6px !important;
+    overflow: hidden !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 255, 255, .22)) !important;
+    border-radius: 18px !important;
+    background: var(--hc-panel-surface, rgba(8, 10, 13, .94)) !important;
+  }
+
+  html body .App .ConversationsPage.viewing-conversation .chat {
+    box-sizing: border-box !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+
+  html body .App .ConversationsPage.viewing-conversation .chat .chat-history {
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
   }
 
   /* ======================================================
