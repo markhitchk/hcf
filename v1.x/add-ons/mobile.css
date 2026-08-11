@@ -1,10 +1,16 @@
 /* ==========================================================
-   HARLEY'S CLAN FORUM — FLARUM-ALIGNED MOBILE CSS
+   HARLEY'S CLAN FORUM — FLARUM 1.x MOBILE OVERRIDES
 
-   Flarum's native mobile navigation and drawer behavior stay
-   intact. HCF branding is applied only inside the open drawer.
+   Flarum owns the phone header, navigation controls, drawer,
+   backdrop, and content positioning. Those rules come from:
+   framework/core/less/common/App.less
 
-   Version: 4.1
+   This file only adds HCF drawer branding, extension safety,
+   and compact phone spacing. Do not duplicate Flarum's core
+   App-navigation or App-drawer layout here.
+
+   Flarum phone breakpoint: max-width 767.98px
+   Version: 5.0
    Updated: 2026-08-10
 ========================================================== */
 
@@ -14,292 +20,97 @@
 }
 
 @media screen and (max-width: 767.98px) {
-  /* Base viewport — follows Flarum's phone App rules. */
-  .App {
-    position: relative !important;
-    padding-top: var(--header-height-phone) !important;
-    min-height: 100vh !important;
-  }
-
   body {
     overflow-x: hidden !important;
   }
 
   /* ======================================================
-     FLARUM DEFAULT PHONE NAVIGATION
+     HCF BRANDING INSIDE FLARUM'S NATIVE DRAWER
+
+     The framework keeps .App-header inside .App-drawer on
+     phones. Scoping every branding rule to that relationship
+     prevents the logo from leaking into the visible top bar.
      ====================================================== */
-  .App-navigation {
-    position: absolute !important;
-    border-bottom: 0 !important;
-    background: var(--header-bg) !important;
-    color: var(--header-color) !important;
-    z-index: var(--zindex-header) !important;
-  }
-
-  .App.affix .App-navigation {
-    position: fixed !important;
-  }
-
-  .App.scrolled .App-navigation {
-    box-shadow: 0 2px 6px var(--shadow-color) !important;
-  }
-
-  .App-primaryControl,
-  .App-titleControl,
-  .App-backControl {
-    position: absolute !important;
-    z-index: calc(var(--zindex-header) + 1) !important;
-    top: 0 !important;
-    margin: 0 !important;
-  }
-
-  .App.affix .App-primaryControl,
-  .App.affix .App-titleControl,
-  .App.affix .App-backControl,
-  .Composer .App-primaryControl,
-  .Composer .App-titleControl,
-  .Composer .App-backControl {
-    position: fixed !important;
-  }
-
-  .App-primaryControl {
-    right: 0 !important;
-    width: auto !important;
-  }
-
-  .App-backControl {
-    left: 0 !important;
-  }
-
-  .App-primaryControl > .Button,
-  .App-titleControl > .Button,
-  .App-backControl > .Button {
+  html body .App .App-drawer .Header-title {
+    box-sizing: border-box !important;
+    position: relative !important;
+    display: flex !important;
     float: none !important;
-    height: var(--header-height-phone) !important;
-    width: auto !important;
-    padding: 13px !important;
-    margin: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .App-primaryControl > .Button--icon,
-  .App-backControl > .Button--icon {
-    width: 40px !important;
-  }
-
-  .App-primaryControl > .Button .Button-icon,
-  .App-backControl > .Button .Button-icon {
-    display: block !important;
-    margin: 0 !important;
-    font-size: 20px !important;
-    color: var(--header-control-color) !important;
-  }
-
-  .App-primaryControl > .Button .Button-label,
-  .App-backControl > .Button .Button-label {
-    display: none !important;
-  }
-
-  .App-titleControl {
-    left: 50% !important;
-    width: 200px !important;
-    margin-left: -100px !important;
-    text-align: center !important;
-    color: var(--header-color) !important;
-    font-size: 16px !important;
-  }
-
-  .App-titleControl > .Button {
-    width: 100% !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    color: var(--header-color) !important;
-    font-size: 16px !important;
-  }
-
-  .App-titleControl--text {
-    line-height: var(--header-height-phone) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    font-weight: normal !important;
-  }
-
-  .Navigation-pin {
-    display: none !important;
-  }
-
-  :has(> .App-primaryControl ~ .App-primaryControl) {
-    position: absolute !important;
-    z-index: calc(var(--zindex-header) + 1) !important;
-    top: 0 !important;
-    right: 0 !important;
-    display: flex !important;
-  }
-
-  :has(> .App-primaryControl ~ .App-primaryControl) > .App-primaryControl {
-    position: relative !important;
-    right: auto !important;
-  }
-
-  /* Absolutely no HCF site logo inside the visible hamburger bar. */
-  .App-navigation .Header-title,
-  .App-navigation .Header-logo,
-  .App-navigation img.Header-logo,
-  .App-navigation .Header-title::before,
-  .App-navigation .Header-title::after {
-    content: none !important;
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  /* ======================================================
-     FLARUM DEFAULT DRAWER
-     ====================================================== */
-  .App:not(.drawerOpen) .App-drawer {
-    visibility: hidden !important;
-  }
-
-  .App.drawerOpen {
-    overflow: hidden !important;
-  }
-
-  .App-drawer {
-    background: var(--header-bg) !important;
-    width: var(--drawer-width) !important;
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    box-shadow: 0 2px 6px var(--shadow-color) !important;
-    transform: translateX(calc(-6px - var(--drawer-width))) !important;
-    transition: transform .2s !important;
-    z-index: var(--zindex-modal) !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .App.drawerOpen .App-drawer {
-    -webkit-transform: none !important;
-    transform: none !important;
-    visibility: visible !important;
-  }
-
-  .drawer-backdrop {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: var(--zindex-modal-background) !important;
-    background-color: var(--overlay-bg) !important;
-    opacity: 0 !important;
-    transition: opacity .2s !important;
-  }
-
-  .drawer-backdrop.in {
-    opacity: .9 !important;
-  }
-
-  /* ======================================================
-     FLARUM DEFAULT HEADER INSIDE DRAWER
-     ====================================================== */
-  .App-drawer .App-header {
-    display: flex !important;
-  }
-
-  .App-drawer .App-header .container {
-    padding: 0 !important;
-    width: 100% !important;
-  }
-
-  .App-drawer .Header-navigation {
-    display: none !important;
-  }
-
-  .App-drawer .Header-controls {
-    margin: 10px 0 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-  }
-
-  .App-drawer .Header-controls > li {
-    padding: 0 10px !important;
-  }
-
-  .App-drawer .Header-controls .FormControl,
-  .App-drawer .Header-controls .ButtonGroup,
-  .App-drawer .Header-controls .Button {
-    width: 100% !important;
-    justify-content: flex-start !important;
-  }
-
-  .App-drawer .Header-controls .Dropdown-menu .ButtonGroup,
-  .App-drawer .Header-controls .Dropdown-menu .Button {
-    width: auto !important;
-  }
-
-  /* ======================================================
-     HCF LOGO + TITLE — DRAWER ONLY
-
-     Desktop-style branding is intentionally scoped to App-drawer.
-     It can never overlap the hamburger button while closed.
-     ====================================================== */
-  .App-drawer .Header-title {
-    position: relative !important;
-    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    flex-wrap: nowrap !important;
     gap: 9px !important;
+
     width: 100% !important;
-    max-width: 100% !important;
     min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
     min-height: 72px !important;
+    max-height: none !important;
+
     margin: 0 !important;
     padding: 12px 14px !important;
     overflow: hidden !important;
-    text-align: center !important;
+
+    color: var(--cyan-readable) !important;
     font-size: 20px !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
+    text-align: center !important;
   }
 
-  .App-drawer .Header-title::before {
+  html body .App .App-drawer .Header-title::before {
     content: "" !important;
+    position: relative !important;
+    inset: auto !important;
     display: block !important;
     flex: 0 0 48px !important;
+
     width: 48px !important;
     min-width: 48px !important;
     max-width: 48px !important;
     height: 48px !important;
     min-height: 48px !important;
     max-height: 48px !important;
+
     margin: 0 !important;
+    padding: 0 !important;
     background-image: url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg") !important;
     background-position: center !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
     border-radius: 50% !important;
-    box-shadow: 0 0 14px rgba(0, 255, 255, .30) !important;
+    box-shadow: 0 0 14px rgba(0, 255, 255, 0.3) !important;
+    transform: none !important;
   }
 
-  .App-drawer .Header-title::after {
+  html body .App .App-drawer .Header-title::after {
     content: none !important;
     display: none !important;
   }
 
-  .App-drawer .Header-title > a,
-  .App-drawer .Header-title > a#home-link {
+  html body .App .App-drawer .Header-title > a,
+  html body .App .App-drawer .Header-title > a#home-link {
+    box-sizing: border-box !important;
     display: block !important;
+    align-self: auto !important;
     flex: 0 1 auto !important;
+
+    width: auto !important;
     min-width: 0 !important;
     max-width: calc(100% - 60px) !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
+
     color: var(--cyan-readable) !important;
     font: inherit !important;
     text-decoration: none !important;
-    -webkit-text-stroke: .8px #000 !important;
+    -webkit-text-stroke: 0.8px #000 !important;
     paint-order: stroke fill !important;
     text-shadow:
       1px 1px 0 #000,
@@ -307,50 +118,64 @@
       3px 3px 0 #000 !important;
   }
 
-  /* Hide the native image because the controlled HCF logo above replaces it. */
-  .App-drawer .Header-title .Header-logo,
-  .App-drawer .Header-title img.Header-logo,
-  .App-drawer .Header-title > a > img {
+  /* The controlled pseudo-element above replaces Flarum's image. */
+  html body .App .App-drawer .Header-title .Header-logo,
+  html body .App .App-drawer .Header-title img.Header-logo,
+  html body .App .App-drawer .Header-title > a > img {
     display: none !important;
     width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
     height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* ======================================================
-     DESKTOP-STYLE PROFILE BUTTON INSIDE DRAWER
-
-     Keep the desktop cyan glass profile treatment while allowing
-     Flarum's drawer itself to remain native.
+     HCF PROFILE TREATMENT INSIDE THE NATIVE DRAWER
      ====================================================== */
-  .App-drawer .Header-secondary .item-session,
-  .App-drawer #header-secondary .item-session {
+  html body .App .App-drawer .Header-secondary .item-session,
+  html body .App .App-drawer #header-secondary .item-session {
+    margin: 0 !important;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
   }
 
-  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user,
-  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user {
+  html body .App .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user,
+  html body .App .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user {
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 10px !important;
+
     width: 100% !important;
-    min-height: 52px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     height: auto !important;
+    min-height: 52px !important;
+    max-height: none !important;
+
+    margin: 0 !important;
     padding: 6px 14px 6px 6px !important;
-    border: 1px solid rgba(0, 255, 255, .35) !important;
+    border: 1px solid rgba(0, 255, 255, 0.35) !important;
     border-radius: 18px !important;
-    background: linear-gradient(135deg, rgba(0,255,255,.14), rgba(0,200,255,.05)) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 255, 255, 0.14),
+      rgba(0, 200, 255, 0.05)
+    ) !important;
     color: var(--cyan-readable) !important;
-    box-shadow: 0 0 14px rgba(0,255,255,.10) !important;
+    box-shadow: 0 0 14px rgba(0, 255, 255, 0.1) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     transform: none !important;
   }
 
-  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .Avatar,
-  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .Avatar {
+  html body .App .App-drawer .Header-secondary .item-session .Button--user .Avatar,
+  html body .App .App-drawer #header-secondary .item-session .Button--user .Avatar {
     flex: 0 0 38px !important;
     width: 38px !important;
     min-width: 38px !important;
@@ -361,16 +186,16 @@
     border-radius: 50% !important;
   }
 
-  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .Button-label,
-  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .Button-label {
+  html body .App .App-drawer .Header-secondary .item-session .Button--user .Button-label,
+  html body .App .App-drawer #header-secondary .item-session .Button--user .Button-label {
     display: flex !important;
     align-items: center !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
   }
 
-  .App-drawer .Header-secondary .item-session .Dropdown-toggle.Button--user .username,
-  .App-drawer #header-secondary .item-session .Dropdown-toggle.Button--user .username {
+  html body .App .App-drawer .Header-secondary .item-session .Button--user .username,
+  html body .App .App-drawer #header-secondary .item-session .Button--user .username {
     display: block !important;
     min-width: 0 !important;
     max-width: 100% !important;
@@ -383,46 +208,213 @@
   }
 
   /* ======================================================
-     FLARUM DEFAULT CONTENT BEHAVIOR
-     ====================================================== */
-  .App-content {
-    background: var(--body-bg) !important;
-    width: 100% !important;
-    min-height: calc(100vh - var(--header-height-phone)) !important;
-  }
+     PHONE WIDTH + EXTENSION SAFETY
 
-  /* HCF extension safety only. */
-  .App-content,
-  .container,
-  .sideNav,
-  .sideNavOffset,
-  .DiscussionList,
-  .DiscussionPage,
-  .PostStream,
-  .Post-body,
-  .DiscussionListItem,
-  .Notification,
-  .UserListItem,
-  .AfruxWidgets-Widget,
-  .ConversationsList {
+     Flarum retains its own 15px container gutters. These rules
+     only stop extension content from forcing horizontal scroll.
+     ====================================================== */
+  html body .App .App-content,
+  html body .App .App-content > .container,
+  html body .App .IndexPage > .container,
+  html body .App .sideNav,
+  html body .App .sideNavOffset,
+  html body .App .DiscussionList,
+  html body .App .DiscussionPage,
+  html body .App .PostStream,
+  html body .App .Post-body,
+  html body .App .DiscussionListItem,
+  html body .App .Notification,
+  html body .App .UserListItem,
+  html body .App .AfruxWidgets-Widget,
+  html body .App .ConversationsList {
+    box-sizing: border-box !important;
     min-width: 0 !important;
     max-width: 100% !important;
   }
 
-  .Post-body,
-  .DiscussionListItem,
-  .Notification,
-  .UserListItem {
+  html body .App .App-content,
+  html body .App .App-content > .container,
+  html body .App .IndexPage > .container {
+    width: 100% !important;
+  }
+
+  html body .App .App-content > .container,
+  html body .App .IndexPage > .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  html body .App .Post-body,
+  html body .App .DiscussionListItem,
+  html body .App .Notification,
+  html body .App .UserListItem {
     overflow-wrap: anywhere !important;
   }
 
-  .Composer {
+  html body .App .Composer {
     max-width: 100vw !important;
   }
 
-  .Dropdown-menu,
-  .Search-results {
+  html body .App .Dropdown-menu,
+  html body .App .Search-results {
     max-width: calc(100vw - 20px) !important;
+  }
+
+  /* ======================================================
+     COMPACT HERO / WELCOME PANEL
+
+     Flarum's phone Hero uses a 16px heading and a 20px content
+     pad. Keep those proportions while neutralizing later V5
+     desktop sizing that may still exist in Flarum Custom CSS.
+     ====================================================== */
+  html body .App .App-content .Hero,
+  html body .App .App-content .WelcomeHero,
+  html body .App .IndexPage .Hero,
+  html body .App .IndexPage .WelcomeHero {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin-top: -1px !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+  }
+
+  html body .App .App-content .Hero .container,
+  html body .App .App-content .WelcomeHero .container,
+  html body .App .IndexPage .Hero .container,
+  html body .App .IndexPage .WelcomeHero .container {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    padding: 16px 14px !important;
+  }
+
+  html body .App .App-content .Hero .containerNarrow,
+  html body .App .App-content .WelcomeHero .containerNarrow {
+    width: 100% !important;
+    max-width: 420px !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 8px !important;
+  }
+
+  html body .App .App-content .Hero h1,
+  html body .App .App-content .Hero h2,
+  html body .App .App-content .Hero .Hero-title,
+  html body .App .App-content .WelcomeHero h1,
+  html body .App .App-content .WelcomeHero h2,
+  html body .App .App-content .WelcomeHero .Hero-title {
+    margin: 0 0 6px !important;
+    padding-bottom: 6px !important;
+    font-size: 16px !important;
+    line-height: 1.35 !important;
+  }
+
+  html body .App .App-content .Hero p,
+  html body .App .App-content .Hero .Hero-subtitle,
+  html body .App .App-content .WelcomeHero p,
+  html body .App .App-content .WelcomeHero .Hero-subtitle {
+    margin: 6px 0 0 !important;
+    font-size: 12.5px !important;
+    line-height: 1.4 !important;
+  }
+
+  html body .App .App-content .Hero img,
+  html body .App .App-content .WelcomeHero img,
+  html body .App .App-content .Hero .containerNarrow::before,
+  html body .App .App-content .WelcomeHero .containerNarrow::before {
+    width: 30px !important;
+    max-width: 30px !important;
+    height: 30px !important;
+    max-height: 30px !important;
+  }
+
+  /* ======================================================
+     COMPACT HOMEPAGE WIDGETS + BANNERS
+     ====================================================== */
+  html body .App .App-content .AfruxWidgets-Widget,
+  html body .App .App-content .Widget,
+  html body .App .App-content .OnlineUsers,
+  html body .App .App-content .ForumStatistics {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin-top: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html body .App .App-content .AfruxWidgets-Widget-content,
+  html body .App .App-content .Widget-content {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+  }
+
+  html body .App .App-content .AfruxWidgets-Widget-title,
+  html body .App .App-content .Widget-title {
+    margin: 0 0 7px !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+  }
+
+  html body .App .App-content .Alert,
+  html body .App .App-content .Announcement,
+  html body .App .App-content .ForumAnnouncement {
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 8px 0 !important;
+    padding: 9px 12px !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* ======================================================
+     COMPACT DISCUSSION LIST
+
+     Flarum puts vertical padding on DiscussionListItem-main.
+     Override that element directly instead of adding padding to
+     DiscussionListItem-content and accidentally making rows taller.
+     ====================================================== */
+  html body .App .IndexPage .DiscussionList-header,
+  html body .App .IndexPage .DiscussionList-controls {
+    margin-top: 6px !important;
+    margin-bottom: 7px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem {
+    min-height: 0 !important;
+    margin-bottom: 4px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-content {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-main {
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-title {
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+  }
+
+  html body .App .IndexPage .DiscussionListItem-info {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
   }
 
   #hc-top-btn {
