@@ -1,13 +1,13 @@
-<!-- Harley's Clan Forum public asset index — restored live scanner behavior -->
+<!-- Harley's Clan Forum public asset gallery — body-only FoF Pages HTML -->
 <style>
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a2");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a2");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a3");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a3");
 
 #hcf-assets-v2 .asset-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:14px}
 #hcf-assets-v2 .asset-field{display:grid;gap:6px;color:var(--hcf-accent);font:800 10px/1.2 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase}
 #hcf-assets-v2 .asset-input{min-height:44px;width:100%;padding:10px 12px;border:1px solid var(--hcf-border);border-radius:12px;background:var(--hcf-control);color:var(--hcf-text);font:13px/1.2 "Courier New",monospace;outline:0}
 #hcf-assets-v2 .asset-input:focus{border-color:var(--hcf-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--hcf-accent) 14%,transparent)}
-#hcf-assets-v2 .asset-summary{margin:14px 0 18px;color:var(--hcf-muted);font-size:12px}
+#hcf-assets-v2 .asset-summary{margin:14px 0 18px;color:var(--hcf-muted);font-size:12px;line-height:1.6}
 #hcf-assets-v2 .asset-summary strong{color:var(--hcf-accent)}
 #hcf-assets-v2 .asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
 #hcf-assets-v2 .asset-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid color-mix(in srgb,var(--hcf-accent) 18%,transparent);border-radius:14px;background:var(--hcf-control);color:var(--hcf-text);text-decoration:none;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
@@ -23,44 +23,48 @@
 #hcf-assets-v2 .asset-state{position:absolute;right:10px;bottom:9px;color:#45d483;font:800 9px/1 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase}
 #hcf-assets-v2 .asset-empty{display:none;padding:26px;border:1px dashed var(--hcf-accent);border-radius:14px;color:var(--hcf-muted);text-align:center}
 #hcf-assets-v2 .asset-empty strong{color:var(--hcf-accent)}
-@media(max-width:767.98px){#hcf-assets-v2 .asset-tools{grid-template-columns:1fr}#hcf-assets-v2 .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#hcf-assets-v2 .asset-card{transition:none}#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:none;box-shadow:none}}
+#hcf-assets-v2 .asset-loading{display:inline-flex;align-items:center;gap:8px}
+#hcf-assets-v2 .asset-loading::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--hcf-accent);animation:hcf-asset-pulse 1.1s ease-in-out infinite}
+@keyframes hcf-asset-pulse{50%{opacity:.3;transform:scale(.75)}}
+@media(max-width:767.98px){#hcf-assets-v2 .asset-tools{grid-template-columns:1fr}#hcf-assets-v2 .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#hcf-assets-v2 .asset-card{transition:none}#hcf-assets-v2 .asset-card:hover,#hcf-assets-v2 .asset-card:focus-visible{transform:none;box-shadow:none}#hcf-assets-v2 .asset-loading::before{animation:none}}
 @media(max-width:430px){#hcf-assets-v2 .asset-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#hcf-assets-v2 .asset-loading::before{animation:none}}
 </style>
 
-<div class="hcf-page" id="hcf-assets-v2" data-hcf-page-build="2.2a2">
+<div class="hcf-page" id="hcf-assets-v2" data-hcf-page-build="2.2a3">
   <header class="hcf-brand">
     <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="Harley's Clan Forum logo">
     <div class="hcf-brand-copy">
       <p class="hcf-brand-title">Harley's Clan Forum</p>
-      <p class="hcf-brand-sub">Forum Network // Public Asset Index</p>
+      <p class="hcf-brand-sub">Forum Network // Public Asset Gallery</p>
     </div>
   </header>
 
   <section class="hcf-hero hcf-hero--compact">
-    <div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Live Scanner</div>
+    <div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Live Asset Gallery</div>
     <h1 class="hcf-title">Forum Assets</h1>
-    <p class="hcf-lead">Live discovery of public uploads, avatars, branding, covers, extension files, fonts, and current forum resources.</p>
+    <p class="hcf-lead">Shows public forum uploads, avatars, branding, covers, extension files, fonts, and other assets as real cards and previews.</p>
     <div class="hcf-meta">
-      <span class="hcf-chip">Live Scanner</span>
-      <span class="hcf-chip">Host: Current Forum</span>
+      <span class="hcf-chip">Auto Load</span>
+      <span class="hcf-chip">Actual Asset Cards</span>
       <span class="hcf-chip">Public Resources Only</span>
     </div>
     <div class="asset-tools">
       <label class="asset-field">Search Assets
-        <input class="asset-input" id="hcf-asset-search-v2" type="search" placeholder="Example: HTG.svg" autocomplete="off">
+        <input class="asset-input" id="hcf-asset-search-v2" type="search" placeholder="Example: avatar, png, files…" autocomplete="off">
       </label>
-      <button class="hcf-button hcf-button--primary" id="hcf-asset-scan-v2" type="button">Scan Public Assets</button>
+      <button class="hcf-button hcf-button--primary" id="hcf-asset-scan-v2" type="button">Refresh Assets</button>
     </div>
   </section>
 
   <main class="hcf-content">
-    <div class="hcf-notice"><strong>Public-only scan:</strong> This page looks for asset references exposed through guest-accessible forum pages and APIs. It does not bypass permissions or attempt to access restricted files.</div>
-    <p class="asset-summary" id="hcf-asset-status-v2" aria-live="polite">Press <strong>Scan Public Assets</strong> to build the current index.</p>
+    <div class="hcf-notice"><strong>Public-only gallery:</strong> Assets are collected only from resources already exposed by guest-accessible forum pages, loaded browser resources, the sitemap, and public forum API responses.</div>
+    <p class="asset-summary asset-loading" id="hcf-asset-status-v2" aria-live="polite">Loading actual forum assets…</p>
     <div class="asset-grid" id="hcf-asset-grid-v2"></div>
-    <div class="asset-empty" id="hcf-asset-empty-v2"><strong>No matching assets</strong><br>Try another search or run the scanner again.</div>
+    <div class="asset-empty" id="hcf-asset-empty-v2"><strong>No matching assets</strong><br>Try another search or press Refresh Assets.</div>
   </main>
 
-  <footer class="hcf-footer"><span>Harley's Clan Forum // Public Asset Index</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
+  <footer class="hcf-footer"><span>Harley's Clan Forum // Public Asset Gallery</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
 </div>
 
 <script>
@@ -74,7 +78,9 @@
   var search=root.querySelector('#hcf-asset-search-v2');
   var button=root.querySelector('#hcf-asset-scan-v2');
   var origin=location.origin;
+  var assetSet=new Set();
   var assets=[];
+  var scanning=false;
 
   function esc(v){
     return String(v).replace(/[&<>"']/g,function(c){
@@ -96,13 +102,29 @@
     }
   }
 
+  function collectValue(value,set){
+    var p=normalize(value);
+    if(p)set.add(p);
+  }
+
   function collectText(text,set){
     if(!text)return;
     var re=/(?:https?:\/\/[^\s"'<>]+)?\/assets\/[A-Za-z0-9_\-./%?=&]+/g,m;
-    while((m=re.exec(String(text)))){
-      var p=normalize(m[0]);
-      if(p)set.add(p);
-    }
+    while((m=re.exec(String(text))))collectValue(m[0],set);
+  }
+
+  function collectCurrentPage(set){
+    collectText(document.documentElement.outerHTML,set);
+
+    document.querySelectorAll('[src],[href]').forEach(function(el){
+      collectValue(el.getAttribute('src')||el.getAttribute('href'),set);
+    });
+
+    try{
+      performance.getEntriesByType('resource').forEach(function(entry){
+        collectValue(entry.name,set);
+      });
+    }catch(e){}
   }
 
   function deep(value,set,seen){
@@ -114,12 +136,22 @@
     Object.keys(value).forEach(function(k){deep(value[k],set,seen);});
   }
 
+  function syncAssets(){
+    assets=Array.from(assetSet).sort(function(a,b){
+      var ai=isImage(a)?0:1,bi=isImage(b)?0:1;
+      return ai-bi||a.localeCompare(b);
+    });
+    render();
+  }
+
   async function fetchText(url,set){
     try{
       var r=await fetch(url,{credentials:'omit',headers:{Accept:'text/html,application/xhtml+xml,application/xml;q=.9,*/*;q=.8'}});
-      if(!r.ok)return;
-      collectText(await r.text(),set);
-    }catch(e){}
+      if(!r.ok)return '';
+      var t=await r.text();
+      collectText(t,set);
+      return t;
+    }catch(e){return '';}
   }
 
   async function fetchJson(url,set){
@@ -132,8 +164,31 @@
     }catch(e){return null;}
   }
 
+  async function fetchJsonPages(url,set,maxPages){
+    var next=url,page=0,last=null;
+    while(next&&page<maxPages){
+      last=await fetchJson(next,set);
+      if(!last)break;
+      next=last.links&&last.links.next?last.links.next:null;
+      page++;
+      syncAssets();
+    }
+    return last;
+  }
+
   function isImage(p){
-    return /\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?|$)/i.test(p);
+    return /\.(?:png|jpe?g|gif|webp|svg|avif|bmp)(?:\?|$)/i.test(p);
+  }
+
+  function fileType(p){
+    var clean=(p.split('?')[0]||'').toLowerCase();
+    if(isImage(p))return 'IMAGE';
+    if(/\.css$/.test(clean))return 'CSS';
+    if(/\.js$/.test(clean))return 'JS';
+    if(/\.(?:woff2?|ttf|otf)$/.test(clean))return 'FONT';
+    if(/\.(?:mp3|wav|ogg|m4a)$/.test(clean))return 'AUDIO';
+    if(/\.(?:mp4|webm|mov)$/.test(clean))return 'VIDEO';
+    return 'FILE';
   }
 
   function render(){
@@ -146,6 +201,7 @@
       shown++;
       var href=origin+p;
       var name=decodeURIComponent((p.split('/').pop()||p).split('?')[0]);
+      var type=fileType(p);
       var a=document.createElement('a');
       a.className='asset-card';
       a.href=href;
@@ -153,48 +209,100 @@
       a.rel='noopener noreferrer';
       a.innerHTML='<span class="asset-preview">'+
         (isImage(p)?'<img src="'+esc(href)+'" alt="'+esc(name)+'" loading="lazy" decoding="async" onerror="this.parentNode.classList.add(\'is-error\')">':'')+
-        '<span class="asset-preview-error">'+(isImage(p)?'Preview unavailable — open asset':'File resource — open asset')+'</span></span>'+
-        '<span class="asset-copy"><span class="asset-name">'+esc(name)+'</span><span class="asset-path">'+esc(p)+'</span><span class="asset-state">LIVE</span></span>';
+        '<span class="asset-preview-error">'+(isImage(p)?'Preview unavailable — open asset':type+' resource — open asset')+'</span></span>'+
+        '<span class="asset-copy"><span class="asset-name">'+esc(name||p)+'</span><span class="asset-path">'+esc(p)+'</span><span class="asset-state">'+type+'</span></span>';
       if(!isImage(p))a.querySelector('.asset-preview').classList.add('is-error');
       grid.appendChild(a);
     });
 
     empty.style.display=shown?'none':'block';
-    status.innerHTML='Showing <strong>'+shown+'</strong> of <strong>'+assets.length+'</strong> discovered public assets.';
+    if(!scanning){
+      status.classList.remove('asset-loading');
+      status.innerHTML='Showing <strong>'+shown+'</strong> of <strong>'+assets.length+'</strong> actual public forum assets.';
+    }else{
+      status.innerHTML='Loading assets… <strong>'+assets.length+'</strong> found so far.';
+    }
+  }
+
+  function sitemapUrls(xmlText){
+    var urls=[];
+    if(!xmlText)return urls;
+    try{
+      var doc=new DOMParser().parseFromString(xmlText,'application/xml');
+      doc.querySelectorAll('loc').forEach(function(loc){
+        try{
+          var u=new URL(loc.textContent.trim(),origin);
+          if(u.origin===origin&&/^\/d\//.test(u.pathname))urls.push(u.href);
+        }catch(e){}
+      });
+    }catch(e){}
+    return urls.slice(0,50);
+  }
+
+  async function inBatches(items,size,worker){
+    for(var i=0;i<items.length;i+=size){
+      await Promise.all(items.slice(i,i+size).map(worker));
+      syncAssets();
+    }
   }
 
   async function scan(){
+    if(scanning)return;
+    scanning=true;
     button.disabled=true;
-    button.textContent='Scanning…';
-    status.innerHTML='Scanning public forum references…';
-    var set=new Set();
+    button.textContent='Loading…';
+    status.classList.add('asset-loading');
+    status.innerHTML='Loading actual forum assets…';
+
+    assetSet=new Set();
+    collectCurrentPage(assetSet);
+    syncAssets();
 
     try{
-      collectText(document.documentElement.outerHTML,set);
-      await fetchText(origin+'/',set);
-      await fetchText(origin+'/sitemap.xml',set);
-      await fetchJson(origin+'/api',set);
-      await fetchJson(origin+'/api/users?page[limit]=50',set);
-      await fetchJson(origin+'/api/tags?page[limit]=100',set);
-      var discussions=await fetchJson(origin+'/api/discussions?page[limit]=50',set);
+      var homePromise=fetchText(origin+'/',assetSet);
+      var sitemapPromise=fetchText(origin+'/sitemap.xml',assetSet);
+      await homePromise;
+      syncAssets();
+
+      await fetchJson(origin+'/api',assetSet);
+      await fetchJsonPages(origin+'/api/users?page[limit]=50',assetSet,4);
+      await fetchJson(origin+'/api/tags?page[limit]=100',assetSet);
+      var discussions=await fetchJson(origin+'/api/discussions?page[limit]=50',assetSet);
+      syncAssets();
 
       if(discussions&&Array.isArray(discussions.data)){
-        for(var i=0;i<Math.min(discussions.data.length,50);i++){
-          var id=discussions.data[i]&&discussions.data[i].id;
-          if(id)await fetchJson(origin+'/api/posts?filter[discussion]='+encodeURIComponent(id)+'&page[limit]=50',set);
-        }
+        var ids=discussions.data.slice(0,50).map(function(d){return d&&d.id;}).filter(Boolean);
+        await inBatches(ids,5,function(id){
+          return fetchJson(origin+'/api/posts?filter[discussion]='+encodeURIComponent(id)+'&page[limit]=50',assetSet);
+        });
       }
 
-      assets=Array.from(set).sort();
-      render();
+      var sitemap=await sitemapPromise;
+      var discussionPages=sitemapUrls(sitemap);
+      if(discussionPages.length){
+        await inBatches(discussionPages,5,function(url){return fetchText(url,assetSet);});
+      }
+
+      /* Scan discovered public CSS files for nested font/image asset URLs. */
+      var cssAssets=Array.from(assetSet).filter(function(p){return /\.css(?:\?|$)/i.test(p);}).slice(0,8);
+      if(cssAssets.length){
+        await inBatches(cssAssets,4,function(p){return fetchText(origin+p,assetSet);});
+      }
     }finally{
+      scanning=false;
       button.disabled=false;
-      button.textContent='Scan Public Assets';
+      button.textContent='Refresh Assets';
+      syncAssets();
     }
   }
 
   search.addEventListener('input',render);
   button.addEventListener('click',scan);
+
+  /* Show real cards immediately, then expand the gallery in the background. */
+  collectCurrentPage(assetSet);
+  syncAssets();
+  scan();
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=2.2a2"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=2.2a3"></script>
