@@ -16,16 +16,12 @@ All production files are stored under `v1.x/`. The repository uses folders on th
 ```text
 v1.x/
 ├── add-ons/
-│   ├── animations.css
-│   ├── messages.sys.css
-│   ├── mobile-v2.css
-│   ├── welcome-loading.css
-│   └── celebrations/
-│       ├── birthdays.json
-│       ├── holidays.js
-│       ├── holidays.json
-│       ├── install-snippet.html
-│       └── README.md
+│   ├── direct-messages.css
+│   ├── loading-screen.css
+│   ├── mobile.css
+│   ├── motion.css
+│   ├── seasonal/
+│   └── compatibility aliases
 ├── assets/
 │   └── logos/
 │       ├── HTG.svg
@@ -36,6 +32,7 @@ v1.x/
 │   ├── admin.css
 │   ├── footer.html
 │   ├── header.html
+│   ├── htg.desktop.css
 │   └── htg.forum.css
 ├── pages/
 │   └── errors/
@@ -61,16 +58,27 @@ Paste this single import into Flarum's **Appearance → Custom CSS** field:
 
 Use the URL exactly as shown. Do not wrap it in Markdown link syntax such as `[URL](URL)`.
 
-The main stylesheet loads these add-ons in order:
+The entry point separates phone and desktop rules at Flarum's native
+`767.98px` phone breakpoint:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/animations.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/messages.sys.css");
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/welcome-loading.css");
+/* Phones: HCF add-ons plus mobile overrides. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/direct-messages.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/loading-screen.css") screen and (max-width: 767.98px);
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile.css") screen and (max-width: 767.98px);
 
-/* Modern phones and tablets only. */
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile-v2.css");
+/* Desktop and tablet-up. */
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.desktop.css") screen and (min-width: 768px);
 ```
+
+`mobile.css` deliberately leaves the phone header, navigation controls,
+drawer, backdrop, and content positioning to
+[Flarum 1.x's framework App styles](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/App.less).
+It only supplies HCF drawer branding, extension overflow protection, and
+compact mobile spacing. The old names such as `mobile-v2.css`,
+`animations.css`, `messages.sys.css`, and `welcome-loading.css` remain
+as compatibility aliases.
 
 ## Core HTML
 
@@ -78,9 +86,9 @@ The main stylesheet loads these add-ons in order:
 - Paste `v1.x/core/footer.html` into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
 
-## Celebrations and error pages
+## Seasonal content and error pages
 
-- Birthday records and automatic holiday banners are in `v1.x/add-ons/celebrations/`.
+- Birthday records and automatic holiday banners are in `v1.x/add-ons/seasonal/`.
 - FoF HTML error pages are in `v1.x/pages/errors/`, organized by HTTP status code.
 
 ## Browser support
