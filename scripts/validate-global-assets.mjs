@@ -44,12 +44,12 @@ function checkRelativeAssetReferences(file, source) {
   }
 }
 
-function checkPinnedSharedLogoUrls(file, source) {
-  const pattern = /https:\/\/cdn\.jsdelivr\.net\/gh\/markhitchk\/hcf@([^/\s"')]+)\/assets\/logos\/(HTG\.svg|htg-icon\.png|htg-neon\.png)/g;
+function checkHcfCdnRefs(file, source) {
+  const pattern = /https:\/\/cdn\.jsdelivr\.net\/gh\/markhitchk\/hcf@([^/\s"')]+)\/([^\s"')]+)/g;
   for (const match of source.matchAll(pattern)) {
-    if (match[1] !== "main") {
-      fail(file, `shared HTG asset is pinned to @${match[1]}; use ${canonicalLogoBase}${match[2]}`);
-    }
+    const ref = match[1];
+    if (ref === "main") continue;
+    fail(file, `non-main HCF jsDelivr ref @${ref}; use @main: ${match[0]}`);
   }
 }
 
@@ -83,7 +83,7 @@ for (const file of walk(repositoryRoot)) {
   }
 
   checkRelativeAssetReferences(file, source);
-  checkPinnedSharedLogoUrls(file, source);
+  checkHcfCdnRefs(file, source);
 }
 
 for (const name of sharedLogoNames) {
