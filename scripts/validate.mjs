@@ -93,14 +93,21 @@ const files = walk(repositoryRoot);
 for (const file of files) {
   if (statSync(file).size === 0) fail(file, "empty tracked file");
 
-  const repositoryPath = relative(repositoryRoot, file);
+  const repositoryPath = relative(repositoryRoot, file).replaceAll("\\", "/");
   if (repositoryPath.startsWith("legacy/")) continue;
 
   const extension = extname(file);
   if (![".css", ".html", ".js", ".mjs", ".json", ".md", ".yml", ".yaml"].includes(extension)) continue;
   const source = readFileSync(file, "utf8");
 
-  if (/https?:\/\/[^\s"')]+@main\//i.test(source)) fail(file, "mutable @main CDN URL");
+  /* FoF page source files intentionally track @main: the permanent page
+     bridge is designed to receive loader/page updates without repasting each
+     FoF page in Admin. Production CSS/core assets must still be pinned. */
+  const dynamicFofPageSource = /^v(?:1|2)\.x\/pages\/fof-pages\//.test(repositoryPath);
+  if (!dynamicFofPageSource && /https?:\/\/[^\s"')]+@main\//i.test(source)) {
+    fail(file, "mutable @main CDN URL");
+  }
+
   if (/raw\.githubusercontent\.com\/HarleyTG-O\/logo\/main/i.test(source)) fail(file, "legacy external logo URL");
   if (/HTG-Icon\.(?:svg|png)/i.test(source)) fail(file, "reference to retired empty logo asset");
   if (/body\s+when\s*\(/.test(source)) fail(file, "Less-only conditional in a CSS file");
@@ -193,23 +200,17 @@ if (/html body \.App \.Dropdown-menu\s*,\s*html body \.App \.Search-results/.tes
 
 const panelFile = resolve(repositoryRoot, "v1.x/add-ons/header-panels.css");
 const panels = readFileSync(panelFile, "utf8");
-if (!panels.includes(".DraftsDropdown")) {
-  fail(panelFile, "FoF Drafts is missing from shared header panels");
-}
+if (!panels.includes(".DraftsDropdown")) fail(panelFile, "FoF Drafts is missing from shared header panels");
 if (!/App-drawer[\s\S]{0,800}NotificationsDropdown[\s\S]{0,800}display:\s*none\s*!important/.test(panels)) {
   fail(panelFile, "transient mobile dropdown is not hidden before route navigation");
 }
 
 const headerFile = resolve(repositoryRoot, "v1.x/core/header.html");
 const header = readFileSync(headerFile, "utf8");
-if (header.includes("hcfMobileHeaderPanels")) {
-  fail(headerFile, "mobile header override disables Flarum's native route navigation");
-}
+if (header.includes("hcfMobileHeaderPanels")) fail(headerFile, "mobile header override disables Flarum's native route navigation");
 
 const motionFile = resolve(repositoryRoot, "v1.x/add-ons/motion.css");
-if (/@import\b/.test(readFileSync(motionFile, "utf8"))) {
-  fail(motionFile, "motion layer must not import an external animation bundle");
-}
+if (/@import\b/.test(readFileSync(motionFile, "utf8"))) fail(motionFile, "motion layer must not import an external animation bundle");
 
 const loaderFile = resolve(repositoryRoot, "v1.x/add-ons/loading-screen.css");
 const loader = readFileSync(loaderFile, "utf8");
@@ -227,4 +228,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${files.length} files for HCF and Flarum 1.x compatibility.`);
+console.log(`Validated ${files.length} files for HCF shared and Flarum 1.x compatibility.`);
