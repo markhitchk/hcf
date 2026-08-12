@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
+const approvedMainCdnPrefix = "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/";
 
 function fail(file, message) {
   errors.push(`${relative(repositoryRoot, file)}: ${message}`);
@@ -100,9 +101,18 @@ for (const file of files) {
   if (![".css", ".html", ".js", ".mjs", ".json", ".md", ".yml", ".yaml"].includes(extension)) continue;
   const source = readFileSync(file, "utf8");
 
-  if (/https?:\/\/[^\s"')]+@main\//i.test(source)) fail(file, "mutable @main CDN URL");
+  // HCF intentionally serves its own live runtime and shared assets from
+  // @main. Continue rejecting mutable @main URLs from other repositories.
+  const sourceWithoutApprovedMain = source.split(approvedMainCdnPrefix).join("");
+  if (/https?:\/\/[^\s"')]+@main\//i.test(sourceWithoutApprovedMain)) {
+    fail(file, "mutable external @main CDN URL");
+  }
+
   if (/raw\.githubusercontent\.com\/HarleyTG-O\/logo\/main/i.test(source)) fail(file, "legacy external logo URL");
-  if (/HTG-Icon\.(?:svg|png)/i.test(source)) fail(file, "reference to retired empty logo asset");
+  if (/HTG-Icon\.(?:svg|png)/.test(source)) fail(file, "reference to retired empty logo asset");
+  if (repositoryPath.startsWith("v1.x/") && /(?:v1\.x\/assets\/logos\/|(?:\.\.\/)+assets\/logos\/)(?:HTG\.svg|HTG\.png)/i.test(source)) {
+    fail(file, "version-local HTG logo reference; use global assets/logos");
+  }
   if (/body\s+when\s*\(/.test(source)) fail(file, "Less-only conditional in a CSS file");
   if (repositoryPath.startsWith("v1.x/") && /\b(?:console\.log|debugger)\b/.test(source)) {
     fail(file, "debug statement");
@@ -143,6 +153,16 @@ for (const name of ["header.html", "footer.html"]) {
   if (/<!doctype|<\/?(?:html|head|body)\b/i.test(source)) {
     fail(file, "must remain a body-only Flarum custom HTML fragment");
   }
+}
+
+// Shared branding belongs only at repository level. Version folders must
+// reference these canonical files instead of maintaining duplicate copies.
+for (const name of ["HTG.svg", "htg-icon.png", "htg-neon.png"]) {
+  const file = resolve(repositoryRoot, "assets/logos", name);
+  if (!existsSync(file)) fail(file, "required global logo asset is missing");
+}
+if (existsSync(resolve(repositoryRoot, "v1.x/assets/logos"))) {
+  errors.push("v1.x/assets/logos: duplicate version-local logo directory must not exist");
 }
 
 const entryFile = resolve(repositoryRoot, "v1.x/core/htg.forum.css");
