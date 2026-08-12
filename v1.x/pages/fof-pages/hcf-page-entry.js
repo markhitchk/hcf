@@ -24,7 +24,7 @@
     'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/' + BOOTSTRAP_PATH,
     'https://cdn.statically.io/gh/markhitchk/hcf/main/' + BOOTSTRAP_PATH
   ];
-  var LOGO = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg';
+  var LOGO = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg';
   var SOURCE_TIMEOUT = 3500;
   var WATCHDOG = 12000;
 
