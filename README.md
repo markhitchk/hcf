@@ -1,140 +1,135 @@
 # HCF — Harley's Clan Forum
 
-Custom forum styling, add-ons, shared assets, and branded error pages for Harley's Clan Forum.
+Custom forum styling, add-ons, shared assets, FoF Pages content, companion
+extensions and branded error pages for Harley's Clan Forum.
 
 ## Flarum versions
 
 | Folder | Flarum version | Status |
 | --- | --- | --- |
-| `v1.x/` | Flarum 1.x | Production |
-| `v2.x/` | Flarum 2.x | Not in use |
+| `v1.x/` | Flarum 1.x | **Production** |
+| `v2.x/` | Flarum 2.x | **RC-ready compatibility preview** |
 
-All production files are stored under `v1.x/`. The repository uses folders on the `main` branch; it does not use version branches.
+`v1.x/` remains the live production source until the forum itself is upgraded.
+`v2.x/` is a complete copy of the HCF feature tree with a dedicated Flarum 2.x
+compatibility layer and Flarum-2 version of the HCF Dynamic Pages extension.
+
+The repository uses version folders on `main`; it does not use `1.x` or `2.x`
+as Git branch names.
 
 ## Repository structure
 
 ```text
 v1.x/
 ├── add-ons/
-│   ├── direct-messages.css
-│   ├── header-panels.css
-│   ├── loading-screen.css
-│   ├── mobile.css
-│   ├── motion.css
-│   └── seasonal/
-│       ├── birthdays.json
-│       ├── holidays.js
-│       ├── holidays.json
-│       ├── install-snippet.html
-│       └── README.md
 ├── assets/
-│   └── logos/
-│       └── HTG.svg
 ├── core/
-│   ├── admin.css
-│   ├── footer.html
-│   ├── header.html
-│   ├── htg.desktop.css
-│   └── htg.forum.css
-├── pages/
-│   └── errors/
-│       ├── 403.html
-│       ├── 404.html
-│       ├── 500.html
-│       └── 503.html
+├── extensions/
+└── pages/
 
 v2.x/
-└── README.md
+├── add-ons/
+│   └── flarum-2-compat.css
+├── assets/
+├── core/
+├── extensions/
+└── pages/
 
 scripts/
-└── validate.mjs
-
-.github/workflows/
-└── validate.yml
+├── validate.mjs
+└── validate-v2.mjs
 ```
 
-## Main Flarum 1.x CSS
+## Flarum 1.x production CSS
 
-`v1.x/core/htg.forum.css` is the production stylesheet used by Harley's Clan Forum.
+The production entry point is:
 
-Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
+```text
+v1.x/core/htg.forum.css
+```
+
+Use a **commit-pinned** jsDelivr URL in Flarum's Appearance → Custom CSS field.
+Do not use `@main` for a production release import.
+
+The entry point separates phone and tablet/desktop rules at Flarum's native
+`767.98px` phone breakpoint. Flarum owns the native phone header, drawer,
+dropdown sheet, modal and composer geometry; HCF supplies branding and
+extension-specific responsive fixes around those framework rules.
+
+## Flarum 2.x compatibility CSS
+
+The pre-release 2.x entry point is:
+
+```text
+v2.x/core/htg.forum.css
+```
+
+It carries the full HCF feature set forward and loads:
+
+```text
+v2.x/add-ons/flarum-2-compat.css
+```
+
+The compatibility layer is intentionally narrow. It bridges HCF's older CSS
+variable aliases to Flarum 2.x, preserves the framework's responsive header
+overflow behavior, and avoids fighting the 2.x multi-primary-control layout.
+
+After a tested v2 release is merged, use a pinned import such as:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@bea847934a4515ac2ddaf024c67fd058f322187d/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@<release-commit>/v2.x/core/htg.forum.css");
 ```
 
-Use the URL exactly as shown. Its commit pin also applies to every relative
-import in the release, preventing jsDelivr from mixing cached `@main` files.
-Do not wrap the URL in Markdown link syntax such as `[URL](URL)` or paste the
-relative imports below directly into Flarum.
+Do **not** use the v2 entry point on the current Flarum 1.x production forum.
 
-The entry point separates phone and desktop rules at Flarum's native
-`767.98px` phone breakpoint:
+See [`v2.x/README.md`](v2.x/README.md) for the compatibility notes and the
+required live smoke-test checklist before production migration.
 
-```css
-/* Phones: HCF add-ons plus mobile overrides. */
-@import url("../add-ons/motion.css") screen and (max-width: 767.98px);
-@import url("../add-ons/header-panels.css") screen and (max-width: 767.98px);
-@import url("../add-ons/direct-messages.css") screen and (max-width: 767.98px);
-@import url("../add-ons/loading-screen.css") screen and (max-width: 767.98px);
-@import url("../add-ons/mobile.css") screen and (max-width: 767.98px);
+## HCF Dynamic Pages
 
-/* Desktop and tablet-up. */
-@import url("./htg.desktop.css") screen and (min-width: 768px);
-```
+Both version trees contain the companion `hcf-dynamic-pages` extension.
 
-`mobile.css` deliberately leaves the phone header, navigation controls,
-drawer, backdrop, and content positioning to
-[Flarum 1.x's framework App styles](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/App.less).
-It also preserves Flarum's native
-[dropdown sheet](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Dropdown.less)
-and [mobile modal](https://github.com/flarum/framework/blob/1.x/framework/core/less/common/Modal.less)
-positioning and transitions.
-It only supplies HCF drawer branding, extension overflow protection, Flarum's
-phone discussion-list spacing, and compact mobile styling. Only the canonical
-add-on filenames are kept so old aliases cannot create duplicate imports or
-stale CDN paths.
+- `v1.x/extensions/hcf-dynamic-pages/` requires Flarum 1.x and defaults to
+  `v1.x/pages/fof-pages`.
+- `v2.x/extensions/hcf-dynamic-pages/` requires Flarum 2.x and defaults to
+  `v2.x/pages/fof-pages`.
 
-Mobile notification, flag, and FoF Drafts controls retain Flarum's native
-phone behavior: tapping one from the open drawer routes to its full page.
-HCF hides only the transient Bootstrap dropdown that can flash before routing.
-On those route pages, titles and every action supplied by Flarum or an
-extension stay in a visible in-page control row below the custom notice.
-The standard Flarum composer overlay and the Composer Page extension's
-`/compose` route both keep their phone header controls below that notice.
-Flarum's native `.Composer` keeps its first title row—such as “Start a
-discussion”—centered inside the composer's own phone header instead of fixing
-that row to the viewport.
-On `/compose`, the navigation background, “Start a discussion” title, and send
-control share one offset so the title remains centered inside the phone header.
-Flarum success, error, and extension alerts also retain the HCF desktop alert
-appearance on phones, with full-width touch controls and safe-area spacing.
-That includes AskVortsov PWA's inline push-permission notice and its Opt In or
-Learn More controls inside user notification settings.
+The local FriendsOfFlarum Pages HTML remains the fallback if a configured
+remote source cannot be loaded.
 
 ## Core HTML
 
-- Paste the complete body-only `v1.x/core/header.html` fragment into the forum
-  custom header.
-- Paste the body-only `v1.x/core/footer.html` fragment into the forum custom footer.
-- Use `v1.x/core/admin.css` for the Flarum administration panel.
+Use the matching version folder for the forum custom HTML:
 
-## Seasonal content and error pages
+- `core/header.html` — body-only custom header fragment
+- `core/footer.html` — body-only custom footer fragment
+- `core/admin.css` — administration styling
 
-- Birthday records and automatic holiday banners are in `v1.x/add-ons/seasonal/`.
-- FoF HTML error pages are in `v1.x/pages/errors/`, organized by HTTP status code.
+Never mix a v1 core entry point with a v2 compatibility deployment.
 
-## Browser support
+## Validation
 
-The Flarum 1.x styles target current desktop and mobile browsers and use
-Flarum's official `767.98px` phone breakpoint. Run the dependency-free check
-before publishing changes:
+Run the normal HCF validation:
 
 ```sh
 node scripts/validate.mjs
 ```
 
-The same check runs automatically in GitHub Actions.
+For Flarum 2.x changes also run:
+
+```sh
+node scripts/validate-v2.mjs
+```
+
+The 2.x audit verifies that the complete v1 feature baseline exists in the v2
+tree, all v2 entry-point imports resolve, the Flarum 2 compatibility layer is
+present, the dynamic-pages package requires Flarum 2.x, its browser runtimes
+default to the v2 FoF page tree, and the custom header/footer remain body-only
+fragments.
+
+Source validation is not a substitute for a live upgrade test. The v2 tree
+must be smoke-tested on an actual Flarum 2.x HCF installation before it becomes
+the production import.
 
 ---
 

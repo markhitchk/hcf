@@ -1,0 +1,286 @@
+/* ==========================================================
+   HCF FOF PAGES RUNTIME UI + MOTION
+   Device mode, identity, and shared page animations.
+   Desktop gets richer motion; mobile keeps a lightweight set.
+   Updated: 2026-08-11
+========================================================== */
+
+.hcf-page .hcf-runtime{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px;
+  margin:0;
+  border-top:1px solid color-mix(in srgb,var(--hcf-accent) 12%,transparent);
+  border-bottom:1px solid color-mix(in srgb,var(--hcf-accent) 14%,transparent);
+  background:color-mix(in srgb,var(--hcf-accent) 10%,transparent);
+  font-family:"Courier New",monospace;
+}
+
+.hcf-page .hcf-runtime-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-width:0;
+  padding:10px 14px;
+  background:var(--hcf-control);
+  transition:background-color .2s ease;
+}
+
+.hcf-page .hcf-runtime-item:hover{
+  background:color-mix(in srgb,var(--hcf-accent) 5%,var(--hcf-control));
+}
+
+.hcf-page .hcf-runtime-label{
+  flex:0 0 auto;
+  color:var(--hcf-muted);
+  font-size:9px;
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.hcf-page .hcf-runtime-value{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-width:0;
+  color:var(--hcf-accent);
+  font-size:10px;
+  font-weight:800;
+  line-height:1.35;
+  letter-spacing:.055em;
+  overflow-wrap:anywhere;
+  text-align:right;
+}
+
+.hcf-page .hcf-runtime-value a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.hcf-page .hcf-runtime-value a:hover{text-decoration:underline}
+
+.hcf-page .hcf-runtime-dot{
+  width:6px;
+  height:6px;
+  flex:0 0 6px;
+  margin-right:7px;
+  border-radius:50%;
+  background:currentColor;
+}
+
+.hcf-page .hcf-runtime-device.is-mobile{color:#ffc857}
+.hcf-page .hcf-runtime-device.is-limited{color:#ffb86b}
+.hcf-page .hcf-runtime-identity.is-guest{color:var(--hcf-muted)}
+
+/* ==========================================================
+   SHARED MOTION — applies automatically to every FoF page.
+========================================================== */
+
+.hcf-page{
+  animation:hcf-page-enter .58s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page::before{
+  background-size:220% 100%;
+  animation:hcf-top-beam 5.2s ease-in-out infinite;
+}
+
+.hcf-page .hcf-brand{
+  animation:hcf-brand-enter .52s .06s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page .hcf-logo{
+  transform-origin:center;
+  animation:hcf-logo-breathe 4.8s ease-in-out infinite;
+}
+
+.hcf-page .hcf-pill{
+  animation:hcf-rise-in .48s .12s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page h1.hcf-title{
+  animation:hcf-rise-in .55s .17s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page .hcf-lead{
+  animation:hcf-rise-in .55s .23s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page .hcf-meta{
+  animation:hcf-rise-in .55s .29s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page .hcf-dot,
+.hcf-page .hcf-runtime-dot{
+  transform-origin:center;
+  animation:hcf-dot-pulse 2.5s ease-in-out infinite;
+}
+
+.hcf-page .hcf-section{
+  animation:hcf-section-enter .52s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hcf-page .hcf-section:nth-of-type(1){animation-delay:.30s}
+.hcf-page .hcf-section:nth-of-type(2){animation-delay:.35s}
+.hcf-page .hcf-section:nth-of-type(3){animation-delay:.40s}
+.hcf-page .hcf-section:nth-of-type(4){animation-delay:.45s}
+.hcf-page .hcf-section:nth-of-type(5){animation-delay:.50s}
+.hcf-page .hcf-section:nth-of-type(6){animation-delay:.55s}
+.hcf-page .hcf-section:nth-of-type(7){animation-delay:.60s}
+.hcf-page .hcf-section:nth-of-type(8){animation-delay:.65s}
+.hcf-page .hcf-section:nth-of-type(n+9){animation-delay:.70s}
+
+.hcf-page .hcf-card,
+.hcf-page .hcf-notice,
+.hcf-page .hcf-table-wrap,
+.hcf-page .hcf-frame-shell{
+  transition:
+    transform .22s cubic-bezier(.2,.8,.2,1),
+    border-color .22s ease,
+    box-shadow .22s ease;
+}
+
+.hcf-page .hcf-card:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--hcf-accent) 48%,transparent);
+  box-shadow:0 10px 24px color-mix(in srgb,var(--hcf-accent) 9%,transparent);
+}
+
+.hcf-page .hcf-notice:hover,
+.hcf-page .hcf-table-wrap:hover,
+.hcf-page .hcf-frame-shell:hover{
+  border-color:color-mix(in srgb,var(--hcf-accent) 34%,transparent);
+}
+
+.hcf-page .hcf-footer{
+  animation:hcf-footer-enter .5s .36s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes hcf-page-enter{
+  from{opacity:0;transform:translateY(12px) scale(.994)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-brand-enter{
+  from{opacity:0;transform:translateY(-10px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-rise-in{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-section-enter{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-footer-enter{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-logo-breathe{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-2px) scale(1.025)}
+}
+
+@keyframes hcf-dot-pulse{
+  0%,100%{opacity:.55;transform:scale(.86)}
+  50%{opacity:1;transform:scale(1.16)}
+}
+
+@keyframes hcf-top-beam{
+  0%,18%{background-position:180% 0;opacity:.55}
+  55%{opacity:1}
+  82%,100%{background-position:-80% 0;opacity:.55}
+}
+
+/* Device class from hcf-page.js. */
+.hcf-page.hcf-mobile-performance{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.hcf-page.hcf-mobile-performance::before{box-shadow:none!important}
+.hcf-page.hcf-mobile-performance .hcf-logo{filter:none!important}
+.hcf-page.hcf-mobile-performance .hcf-dot{box-shadow:none!important}
+
+/* ==========================================================
+   MOBILE PERFORMANCE MOTION
+   Keep entrance motion, remove continuous/heavy effects.
+========================================================== */
+@media(max-width:767.98px){
+  .hcf-page .hcf-runtime{grid-template-columns:1fr}
+  .hcf-page .hcf-runtime-item{padding:9px 12px;transition:none}
+  .hcf-page .hcf-runtime-label{font-size:8px}
+  .hcf-page .hcf-runtime-value{font-size:9px}
+
+  .hcf-page{
+    animation:hcf-mobile-page-enter .32s ease-out both;
+  }
+
+  .hcf-page .hcf-brand,
+  .hcf-page .hcf-pill,
+  .hcf-page h1.hcf-title,
+  .hcf-page .hcf-lead,
+  .hcf-page .hcf-meta{
+    animation:hcf-mobile-rise .34s ease-out both;
+  }
+
+  .hcf-page .hcf-pill{animation-delay:.04s}
+  .hcf-page h1.hcf-title{animation-delay:.08s}
+  .hcf-page .hcf-lead{animation-delay:.12s}
+  .hcf-page .hcf-meta{animation-delay:.16s}
+
+  .hcf-page::before,
+  .hcf-page .hcf-logo,
+  .hcf-page .hcf-dot,
+  .hcf-page .hcf-runtime-dot,
+  .hcf-page .hcf-section,
+  .hcf-page .hcf-footer{
+    animation:none!important;
+  }
+
+  .hcf-page .hcf-card,
+  .hcf-page .hcf-notice,
+  .hcf-page .hcf-table-wrap,
+  .hcf-page .hcf-frame-shell{
+    transition:none;
+  }
+
+  .hcf-page .hcf-card:hover{
+    transform:none;
+    box-shadow:none;
+  }
+}
+
+@keyframes hcf-mobile-page-enter{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+}
+
+@keyframes hcf-mobile-rise{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hcf-page,
+  .hcf-page *,
+  .hcf-page *::before,
+  .hcf-page *::after{
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+
+  .hcf-page .hcf-card:hover{
+    transform:none!important;
+    box-shadow:none!important;
+  }
+}

@@ -16,4 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/validate.mjs
+      - name: Validate HCF 1.x and shared files
+        run: node scripts/validate.mjs
+      - name: Validate HCF Flarum 2.x compatibility tree
+        run: node scripts/validate-v2.mjs

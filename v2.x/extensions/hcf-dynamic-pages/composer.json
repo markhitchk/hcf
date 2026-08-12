@@ -1,0 +1,24 @@
+{
+  "name": "harleytg/hcf-dynamic-pages",
+  "description": "Per-page dynamic GitHub HTML sources for FriendsOfFlarum Pages on Harley's Clan Forum.",
+  "keywords": ["flarum", "fof-pages", "dynamic-pages", "github"],
+  "type": "flarum-extension",
+  "license": "proprietary",
+  "require": {
+    "flarum/core": "^2.0",
+    "fof/pages": "*"
+  },
+  "extra": {
+    "flarum-extension": {
+      "title": "HCF Dynamic Pages",
+      "category": "feature",
+      "icon": {
+        "name": "fas fa-code-branch",
+        "backgroundColor": "#101418",
+        "color": "#00b8f0"
+      }
+    }
+  },
+  "minimum-stability": "beta",
+  "prefer-stable": true
+}

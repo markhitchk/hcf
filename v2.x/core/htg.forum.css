@@ -1,0 +1,31 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — FLARUM 2.x RESPONSIVE ENTRY POINT
+
+   Derived from the production v1.x theme and audited against
+   flarum/framework 2.x.
+
+   Flarum owns responsive navigation, drawer, page controls,
+   composer and modal positioning. HCF supplies branding and
+   extension-specific presentation around those framework rules.
+
+   Flarum 2.x phone breakpoint: <= 767.98px
+   Tablet/desktop: >= 768px
+
+   Version: 2.0.0-rc1
+   Author: HarleyTG
+   Updated: 2026-08-11
+========================================================== */
+
+/* Relative imports inherit the revision used to load this entry point. */
+@import url("../add-ons/motion.css") screen and (max-width: 767.98px);
+@import url("../add-ons/header-panels.css") screen and (max-width: 767.98px);
+@import url("../add-ons/direct-messages.css") screen and (max-width: 767.98px);
+@import url("../add-ons/loading-screen.css") screen and (max-width: 767.98px);
+@import url("../add-ons/mobile.css") screen and (max-width: 767.98px);
+@import url("../add-ons/mobile-auth-tooltip.css") screen and (max-width: 767.98px);
+
+@import url("./htg.desktop.css") screen and (min-width: 768px);
+
+/* Load last so 2.x-specific compatibility wins without duplicating the
+   production theme. */
+@import url("../add-ons/flarum-2-compat.css");

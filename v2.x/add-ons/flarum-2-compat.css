@@ -1,0 +1,64 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — FLARUM 2.x COMPATIBILITY LAYER
+
+   Keep this layer deliberately narrow. Flarum 2.x owns the
+   application header, drawer, responsive page controls,
+   composer, modal geometry and dropdown positioning.
+
+   Audited against flarum/framework 2.x.
+   Author: HarleyTG
+   Updated: 2026-08-11
+========================================================== */
+
+:root {
+  /* Flarum 2.x exports --text-color. Older HCF rules still use
+     --body-color in a few extension-specific surfaces. */
+  --body-color: var(--text-color, #e8e8e8);
+
+  /* Compatibility aliases used by the HCF 1.x-derived theme. */
+  --control-border: rgba(0, 184, 240, 0.28);
+  --primary-inverted-color: var(--button-primary-color, #ffffff);
+}
+
+/* Flarum 2.x can expose light, dark and high-contrast theme modes.
+   Re-resolve the alias at the active theme root instead of freezing a
+   fallback color from initial page load. */
+[data-theme] {
+  --body-color: var(--text-color, #e8e8e8);
+}
+
+@media screen and (min-width: 768px) {
+  /* Flarum 2.x makes the primary header area shrinkable and moves items that
+     no longer fit into OverflowingList. Do not let HCF content restore an
+     intrinsic width that pushes the session controls off-screen. */
+  html body .App .App-header .Header-primary,
+  html body .App .App-header .Header-primary .Header-controls {
+    min-width: 0 !important;
+  }
+
+  html body .App .App-header .OverflowingList-dropdown {
+    flex: 0 0 auto !important;
+  }
+
+  html body .App .App-header .OverflowingList-dropdown > .Dropdown-menu {
+    box-sizing: border-box !important;
+    max-width: min(360px, calc(100vw - 24px)) !important;
+  }
+
+  html body .App .App-header .OverflowingList-dropdown > .Dropdown-menu > li,
+  html body .App .App-header .OverflowingList-dropdown > .Dropdown-menu :is(a, .Button) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  /* Flarum 2.x groups sibling App-primaryControl items into a right-anchored
+     flex row. Core positions the parent; individual children must not all be
+     forced back to right: 0 by older HCF/extension rules. */
+  html body .App :has(> .App-primaryControl ~ .App-primaryControl)
+  > .App-primaryControl {
+    right: auto !important;
+    left: auto !important;
+  }
+}

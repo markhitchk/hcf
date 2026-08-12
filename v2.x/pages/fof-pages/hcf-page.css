@@ -1,0 +1,323 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — FOF PAGES UI V2
+   Shared visual system for FriendsOfFlarum Pages.
+   Matches HCF forum surfaces and v1.x error pages.
+   Version: 2.0
+   Updated: 2026-08-11
+========================================================== */
+
+.hcf-page,
+.hcf-page *,
+.hcf-page *::before,
+.hcf-page *::after { box-sizing: border-box; }
+
+.hcf-page {
+  --hcf-accent: var(--cyan-readable, var(--primary-color, #00dfe6));
+  --hcf-accent-strong: var(--cyan, #00ffff);
+  --hcf-text: var(--body-color, var(--text-color, #eefcff));
+  --hcf-muted: var(--muted-color, #9cb7c2);
+  --hcf-panel: var(--surface-translucent, rgba(18, 22, 28, .94));
+  --hcf-panel-strong: var(--surface-translucent-strong, rgba(12, 16, 21, .96));
+  --hcf-control: var(--control-bg, #0c1015);
+  --hcf-border: var(--control-border, rgba(0, 223, 230, .28));
+  --hcf-shadow: 0 26px 70px rgba(0, 0, 0, .34), 0 0 26px rgba(0, 223, 230, .08);
+
+  position: relative;
+  isolation: isolate;
+  width: min(980px, 100%);
+  min-width: 0;
+  margin: 18px auto;
+  overflow: hidden;
+  border: 1px solid var(--hcf-border);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 13% 4%, color-mix(in srgb, var(--hcf-accent) 11%, transparent), transparent 30%),
+    linear-gradient(180deg, color-mix(in srgb, var(--hcf-accent) 3.5%, transparent), transparent 30%),
+    var(--hcf-panel);
+  color: var(--hcf-text);
+  box-shadow: var(--hcf-shadow);
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+.hcf-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--hcf-accent), transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--hcf-accent) 72%, transparent);
+}
+
+.hcf-page a { color: var(--hcf-accent); }
+.hcf-page a:hover { color: var(--hcf-accent-strong); }
+.hcf-page a:focus-visible,
+.hcf-page button:focus-visible,
+.hcf-page input:focus-visible,
+.hcf-page select:focus-visible { outline: 2px solid var(--hcf-accent-strong); outline-offset: 3px; }
+
+.hcf-page .hcf-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--hcf-accent) 16%, transparent);
+  background: color-mix(in srgb, var(--hcf-control) 55%, transparent);
+}
+
+.hcf-page .hcf-logo {
+  display: block;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--hcf-accent) 35%, transparent));
+}
+
+.hcf-page .hcf-brand-copy { min-width: 0; }
+.hcf-page .hcf-brand-title {
+  margin: 0;
+  color: var(--hcf-accent);
+  font-size: clamp(17px, 2.8vw, 22px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: .025em;
+  text-shadow: 1px 1px 0 #000, 2px 2px 0 color-mix(in srgb, var(--hcf-accent) 24%, transparent);
+}
+.hcf-page .hcf-brand-sub {
+  margin: 4px 0 0;
+  color: var(--hcf-muted);
+  font: 700 10px/1.35 "Courier New", monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.hcf-page .hcf-hero { padding: clamp(24px, 5vw, 42px); }
+.hcf-page .hcf-hero.hcf-hero--compact { padding-bottom: 24px; }
+.hcf-page .hcf-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 6px 11px;
+  border: 1px solid color-mix(in srgb, var(--hcf-accent) 48%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--hcf-accent) 10%, transparent);
+  color: var(--hcf-text);
+  font: 800 11px/1 "Courier New", monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hcf-accent);
+  box-shadow: 0 0 10px var(--hcf-accent);
+}
+.hcf-page .hcf-dot--warn { background: #ffc857; box-shadow: 0 0 10px #ffc857; }
+.hcf-page .hcf-dot--danger { background: #ff6b6b; box-shadow: 0 0 10px #ff6b6b; }
+.hcf-page .hcf-dot--success { background: #45d483; box-shadow: 0 0 10px #45d483; }
+
+.hcf-page h1.hcf-title {
+  margin: 16px 0 0;
+  color: var(--hcf-text);
+  font-size: clamp(28px, 5.5vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+}
+.hcf-page .hcf-lead {
+  max-width: 760px;
+  margin: 12px 0 0;
+  color: var(--hcf-muted);
+  font-size: clamp(14px, 2vw, 17px);
+  line-height: 1.7;
+}
+.hcf-page .hcf-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.hcf-page .hcf-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border: 1px solid color-mix(in srgb, var(--hcf-accent) 36%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--hcf-accent) 6%, transparent);
+  color: var(--hcf-muted);
+  font: 700 10px/1.2 "Courier New", monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-chip strong { color: var(--hcf-accent); }
+
+.hcf-page .hcf-content { padding: 0 clamp(20px, 5vw, 42px) clamp(28px, 5vw, 42px); }
+.hcf-page .hcf-section { margin-top: 26px; }
+.hcf-page .hcf-section:first-child { margin-top: 0; }
+.hcf-page .hcf-section-title {
+  margin: 0 0 12px;
+  padding-left: 11px;
+  border-left: 4px solid var(--hcf-accent);
+  color: var(--hcf-accent);
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-section p,
+.hcf-page .hcf-section li { font-size: 14px; line-height: 1.7; }
+.hcf-page .hcf-section p { margin: 8px 0; }
+.hcf-page .hcf-section ul,
+.hcf-page .hcf-section ol { margin: 10px 0 0; padding-left: 22px; }
+.hcf-page .hcf-section li + li { margin-top: 7px; }
+.hcf-page .hcf-section strong { color: var(--hcf-text); }
+
+.hcf-page .hcf-card,
+.hcf-page .hcf-notice,
+.hcf-page .hcf-table-wrap,
+.hcf-page .hcf-frame-shell {
+  border: 1px solid color-mix(in srgb, var(--hcf-accent) 18%, transparent);
+  border-radius: 14px;
+  background: var(--hcf-control);
+}
+.hcf-page .hcf-card { padding: 15px; }
+.hcf-page .hcf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.hcf-page .hcf-kv-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--hcf-accent);
+  font: 800 10px/1.2 "Courier New", monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-kv-value { color: var(--hcf-text); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+.hcf-page .hcf-muted { color: var(--hcf-muted); }
+
+.hcf-page .hcf-notice {
+  padding: 13px 15px;
+  border-left: 4px solid var(--hcf-accent);
+  color: var(--hcf-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.hcf-page .hcf-notice strong { color: var(--hcf-accent); }
+.hcf-page .hcf-notice--warn { border-left-color: #ffc857; }
+.hcf-page .hcf-notice--warn strong { color: #ffc857; }
+.hcf-page .hcf-notice--danger { border-left-color: #ff6b6b; }
+.hcf-page .hcf-notice--danger strong { color: #ff6b6b; }
+.hcf-page .hcf-notice--success { border-left-color: #45d483; }
+.hcf-page .hcf-notice--success strong { color: #45d483; }
+
+.hcf-page .hcf-table-wrap { overflow-x: auto; }
+.hcf-page table.hcf-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+.hcf-page .hcf-table th,
+.hcf-page .hcf-table td { padding: 12px 14px; border-bottom: 1px solid color-mix(in srgb, var(--hcf-accent) 14%, transparent); text-align: left; vertical-align: top; font-size: 13px; line-height: 1.55; }
+.hcf-page .hcf-table tr:last-child th,
+.hcf-page .hcf-table tr:last-child td { border-bottom: 0; }
+.hcf-page .hcf-table th { width: 30%; color: var(--hcf-accent); font: 800 10px/1.4 "Courier New", monospace; letter-spacing: .06em; text-transform: uppercase; }
+
+.hcf-page .hcf-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.hcf-page .hcf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid color-mix(in srgb, var(--hcf-accent) 55%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--hcf-accent) 8%, transparent);
+  color: var(--hcf-accent);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+.hcf-page .hcf-button--primary { border-color: var(--hcf-accent); background: var(--hcf-accent); color: #061013; }
+.hcf-page .hcf-button:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--hcf-accent) 14%, transparent); box-shadow: 0 8px 22px color-mix(in srgb, var(--hcf-accent) 12%, transparent); text-decoration: none; }
+.hcf-page .hcf-button--primary:hover { background: var(--hcf-accent-strong); color: #061013; }
+
+.hcf-page .hcf-frame-shell { position: relative; overflow: hidden; min-height: 280px; }
+.hcf-page .hcf-frame-shell iframe { display: block; width: 100%; border: 0; background: #fff; }
+.hcf-page .hcf-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 30px;
+  background: var(--hcf-panel-strong);
+  color: var(--hcf-muted);
+  text-align: center;
+  font: 700 11px/1.6 "Courier New", monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-spinner {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 14px;
+  border: 3px solid color-mix(in srgb, var(--hcf-accent) 22%, transparent);
+  border-top-color: var(--hcf-accent);
+  border-radius: 50%;
+  animation: hcf-spin .9s linear infinite;
+}
+@keyframes hcf-spin { to { transform: rotate(360deg); } }
+
+.hcf-page .hcf-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 20px;
+  border-top: 1px solid color-mix(in srgb, var(--hcf-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--hcf-control) 65%, transparent);
+  color: color-mix(in srgb, var(--hcf-muted) 78%, transparent);
+  font: 700 10px/1.4 "Courier New", monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.hcf-page .hcf-footer a { color: var(--hcf-accent); text-decoration: none; }
+
+.hcf-page .hcf-disabled {
+  padding: clamp(30px, 7vw, 70px) 22px;
+  text-align: center;
+}
+.hcf-page .hcf-disabled-code {
+  margin: 16px 0 8px;
+  color: var(--hcf-accent);
+  font-size: clamp(42px, 12vw, 82px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.05em;
+  text-shadow: 2px 2px 0 #000, 4px 4px 0 color-mix(in srgb, var(--hcf-accent) 16%, transparent);
+}
+
+@media (max-width: 767.98px) {
+  .hcf-page { margin: 10px auto; border-radius: 17px; }
+  .hcf-page .hcf-brand { padding: 14px; }
+  .hcf-page .hcf-logo { width: 40px; height: 40px; flex-basis: 40px; }
+  .hcf-page .hcf-hero { padding: 26px 18px 22px; }
+  .hcf-page .hcf-content { padding: 0 18px 28px; }
+  .hcf-page .hcf-grid { grid-template-columns: 1fr; }
+  .hcf-page .hcf-actions { flex-direction: column; }
+  .hcf-page .hcf-button { width: 100%; }
+  .hcf-page .hcf-footer { flex-direction: column; align-items: center; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcf-page *, .hcf-page *::before, .hcf-page *::after { animation: none !important; transition: none !important; }
+  .hcf-page .hcf-button:hover { transform: none; }
+}
