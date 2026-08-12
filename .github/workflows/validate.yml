@@ -6,35 +6,17 @@ on:
   pull_request:
 
 permissions:
-  contents: write
-  pull-requests: read
+  contents: read
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Synchronize HCF Flarum 2.x runtime paths
-        if: github.event_name == 'pull_request' && github.head_ref == 'agent/flarum-2x-compat'
-        run: node scripts/sync-v2-runtime.mjs
       - name: Validate HCF 1.x and shared files
         run: node scripts/validate.mjs
       - name: Validate complete HCF Flarum 2.x parity
         run: node scripts/validate-v2.mjs
-      - name: Commit synchronized v2.x runtime paths
-        if: github.event_name == 'pull_request' && github.head_ref == 'agent/flarum-2x-compat'
-        run: |
-          if git diff --quiet -- v2.x; then
-            echo "No v2.x synchronization changes to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add v2.x
-          git commit -m "Make v2.x runtime self-contained"
-          git push origin HEAD:${{ github.head_ref }}
