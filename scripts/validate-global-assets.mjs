@@ -3,7 +3,7 @@ import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const runtimeExtensions = new Set([".css", ".js", ".html"]);
+const checkedExtensions = new Set([".css", ".js", ".html", ".mjs", ".json", ".md", ".yml", ".yaml"]);
 const failures = [];
 const checked = [];
 
@@ -55,7 +55,7 @@ function checkHcfCdnRefs(file, source) {
 
 for (const file of walk(repositoryRoot)) {
   const extension = extname(file).toLowerCase();
-  if (!runtimeExtensions.has(extension)) continue;
+  if (!checkedExtensions.has(extension)) continue;
 
   checked.push(file);
   const source = readFileSync(file, "utf8");
@@ -101,4 +101,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${checked.length} CSS/JS/HTML files against the global HTG asset policy.`);
+console.log(`Validated ${checked.length} repo text files against the global HCF CDN and HTG asset policy.`);
