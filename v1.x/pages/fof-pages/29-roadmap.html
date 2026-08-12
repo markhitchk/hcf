@@ -1,0 +1,171 @@
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2b1");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
+
+.hcf-page .hcf-runtime,
+.hcf-page .hcf-runtime-item,
+.hcf-page .hcf-runtime-label,
+.hcf-page .hcf-runtime-value,
+.hcf-page .hcf-runtime-device,
+.hcf-page .hcf-runtime-identity,
+.hcf-page [data-hcf-runtime-ui]{display:none!important;}
+
+#hcf-roadmap{--rm-cyan:#00b8f0;--rm-line:rgba(0,184,240,.22);--rm-card:#0c1015;--rm-text:#eefcff;--rm-muted:#9cb7c2;}
+#hcf-roadmap .rm-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 18px;}
+#hcf-roadmap .rm-stat{padding:14px;border:1px solid var(--rm-line);border-radius:12px;background:var(--rm-card);min-width:0;}
+#hcf-roadmap .rm-stat strong{display:block;color:var(--rm-cyan);font:900 24px/1 Arial,sans-serif;}
+#hcf-roadmap .rm-stat span{display:block;margin-top:6px;color:var(--rm-muted);font:700 10px/1.35 "Courier New",monospace;letter-spacing:.08em;text-transform:uppercase;}
+#hcf-roadmap .rm-board{display:grid;gap:16px;}
+#hcf-roadmap .rm-lane{border:1px solid var(--rm-line);border-radius:15px;background:rgba(12,16,21,.9);overflow:hidden;}
+#hcf-roadmap .rm-lane-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid rgba(0,184,240,.15);background:rgba(0,184,240,.04);}
+#hcf-roadmap .rm-lane-title{margin:0;color:var(--rm-text);font-size:16px;line-height:1.3;}
+#hcf-roadmap .rm-lane-count{flex:0 0 auto;padding:4px 8px;border:1px solid rgba(0,184,240,.28);border-radius:999px;color:var(--rm-cyan);font:800 10px/1 "Courier New",monospace;}
+#hcf-roadmap .rm-items{display:grid;gap:10px;padding:12px;}
+#hcf-roadmap .rm-item{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:#10161c;color:var(--rm-text);}
+#hcf-roadmap .rm-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+#hcf-roadmap .rm-item h3{margin:0;color:var(--rm-text);font-size:15px;line-height:1.35;}
+#hcf-roadmap .rm-badge{flex:0 0 auto;padding:5px 8px;border-radius:999px;border:1px solid rgba(0,184,240,.35);background:rgba(0,184,240,.08);color:var(--rm-cyan);font:800 9px/1 "Courier New",monospace;letter-spacing:.06em;text-transform:uppercase;}
+#hcf-roadmap .rm-badge--high{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.08);color:#ff8f8f;}
+#hcf-roadmap .rm-badge--done{border-color:rgba(92,230,160,.4);background:rgba(92,230,160,.08);color:#7ee5ae;}
+#hcf-roadmap .rm-item p{margin:8px 0 0;color:var(--rm-muted);font-size:13px;line-height:1.6;}
+#hcf-roadmap .rm-item ul{margin:9px 0 0;padding-left:19px;color:#c8dde4;font-size:12px;line-height:1.6;}
+#hcf-roadmap .rm-item a{color:var(--rm-cyan);}
+#hcf-roadmap .rm-note{margin-top:16px;padding:13px 14px;border:1px dashed rgba(0,184,240,.32);border-radius:12px;background:rgba(0,184,240,.04);color:#b8d2dc;font-size:12px;line-height:1.6;}
+
+@media(max-width:767.98px){
+  #hcf-roadmap .rm-summary{grid-template-columns:repeat(2,minmax(0,1fr));}
+  #hcf-roadmap .rm-lane-head{padding:12px 13px;}
+  #hcf-roadmap .rm-items{padding:10px;}
+  #hcf-roadmap .rm-item{padding:12px;}
+  #hcf-roadmap .rm-item-top{display:block;}
+  #hcf-roadmap .rm-badge{display:inline-flex;margin-top:8px;}
+}
+</style>
+
+<div class="hcf-page" id="hcf-roadmap" data-hcf-page-build="1.0.0">
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="" aria-hidden="true">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // Development Roadmap</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot"></span>Living Roadmap</div>
+    <h1 class="hcf-title">HCF Roadmap</h1>
+    <p class="hcf-lead">A public view of what Harley's Clan Forum is working on now, what is coming next, and what has already shipped.</p>
+    <div class="hcf-meta">
+      <span class="hcf-chip"><strong>Updated</strong>&nbsp; August 12, 2026</span>
+      <span class="hcf-chip">Flarum 1.x</span>
+      <span class="hcf-chip">HCF v1.x</span>
+    </div>
+  </section>
+
+  <main class="hcf-content">
+    <div class="rm-summary" aria-label="Roadmap summary">
+      <div class="rm-stat"><strong>3</strong><span>Active</span></div>
+      <div class="rm-stat"><strong>3</strong><span>Up Next</span></div>
+      <div class="rm-stat"><strong>3</strong><span>Future</span></div>
+      <div class="rm-stat"><strong>3</strong><span>Released</span></div>
+    </div>
+
+    <div class="rm-board">
+      <section class="rm-lane">
+        <div class="rm-lane-head"><h2 class="rm-lane-title">Active Development</h2><span class="rm-lane-count">3 ITEMS</span></div>
+        <div class="rm-items">
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Mobile interface stabilization</h3><span class="rm-badge rm-badge--high">High Priority</span></div>
+            <p>Finish the current phone-focused fixes without modifying Flarum core.</p>
+            <ul>
+              <li>Notifications, Flags, and Drafts controls and actions.</li>
+              <li>Mobile dropdown/bottom-sheet clipping and navigation behavior.</li>
+              <li>Discussion list layout and composer/header overlap.</li>
+            </ul>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>FoF Pages platform</h3><span class="rm-badge rm-badge--high">High Priority</span></div>
+            <p>Continue turning FoF Pages into a consistent HCF page system with shared loading, error handling, responsive styling, and ID + slug routing.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Assets page improvements</h3><span class="rm-badge">In Progress</span></div>
+            <p>Improve the Assets page so real forum assets appear as useful cards and previews while keeping mobile behavior lightweight.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="rm-lane">
+        <div class="rm-lane-head"><h2 class="rm-lane-title">Up Next</h2><span class="rm-lane-count">3 ITEMS</span></div>
+        <div class="rm-items">
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Push notification configuration</h3><span class="rm-badge">Planned</span></div>
+            <p>Finish the Firebase service configuration needed for the forum/PWA push-notification setup.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>More HCF information pages</h3><span class="rm-badge">Planned</span></div>
+            <p>Expand the new page system with useful destinations such as service status, changelog, known issues, and getting-started information.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>v1.x add-on cleanup</h3><span class="rm-badge">Planned</span></div>
+            <p>Keep HCF v1.x imports and add-ons organized, remove obsolete references, and preserve compatibility where aliases are still needed.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="rm-lane">
+        <div class="rm-lane-head"><h2 class="rm-lane-title">Future</h2><span class="rm-lane-count">3 ITEMS</span></div>
+        <div class="rm-items">
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Flarum 2.x compatibility preparation</h3><span class="rm-badge">Future</span></div>
+            <p>Maintain the separate HCF v2.x work area so the forum theme and add-ons can be adapted when a stable Flarum 2.x release is ready for migration.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Critter Extraction forum integration</h3><span class="rm-badge">Future</span></div>
+            <p>Keep improving the Critter Extraction page and connect game news, builds, known issues, and community information more closely with the forum.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>HCF service dashboard</h3><span class="rm-badge">Future</span></div>
+            <p>Create a dedicated service-status experience for the forum, messages, uploads, notifications, Discord, downloads, and related Harley services.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="rm-lane">
+        <div class="rm-lane-head"><h2 class="rm-lane-title">Released</h2><span class="rm-lane-count">3 ITEMS</span></div>
+        <div class="rm-items">
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Dynamic FoF Pages loader</h3><span class="rm-badge rm-badge--done">Released</span></div>
+            <p>FoF Pages can resolve the current page ID + slug to matching files stored in the HCF repository.</p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>Domain expiration information page</h3><span class="rm-badge rm-badge--done">Released</span></div>
+            <p>The forum now has a dedicated domain-transition page with the October 12, 2026 expiration information.</p>
+            <p><a href="https://forum.harleytg.com/p/27-domain-expiration">Open domain expiration page</a></p>
+          </article>
+
+          <article class="rm-item">
+            <div class="rm-item-top"><h3>HCF Roadmap</h3><span class="rm-badge rm-badge--done">Released</span></div>
+            <p>This public roadmap page is now part of the HCF FoF Pages system and will be updated as priorities change.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="rm-note"><strong>Roadmap note:</strong> Priorities can move as bugs, compatibility work, or forum needs change. Items listed here are development targets, not guaranteed release dates.</div>
+  </main>
+
+  <footer class="hcf-footer">
+    <span>Harley's Clan Forum // Roadmap // Build 1.0.0</span>
+    <a href="https://forum.harleytg.com/">Return to Forum</a>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.1"></script>
