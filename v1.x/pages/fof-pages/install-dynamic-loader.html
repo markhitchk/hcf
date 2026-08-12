@@ -1,18 +1,323 @@
 <!-- =========================================================
-     Harley's Clan Forum — FoF Pages Dynamic GitHub Loader
-     AUTO-DISCOVERY BUILD 1.1.0
+     Harley's Clan Forum — Permanent FoF Page Loader Stub
+     Build: 2.0.0
 
-     Install ONCE in Flarum Admin > Appearance > Custom Footer.
+     Paste this block into a FoF Page once.
 
-     No page manifest is required.
-     New FriendsOfFlarum pages are detected from their FoF page
-     ID + slug automatically. The loader first checks the normal
-     {page-id}-{page-slug}.html filename, then dynamically checks
-     the GitHub fof-pages directory for an ID/slug match.
-
-     If no GitHub HTML exists, the FoF database content remains
-     visible as the safe fallback.
+     Do not pin a commit SHA or version number here.
+     The actual loader UI, watchdog, error handling, and page
+     bootstrap are maintained in the repository and are fetched
+     dynamically from main on every page load.
 ========================================================= -->
-<script
-  src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-fof-loader.js?v=1.1.0"
-  data-hcf-fof-loader="1.1.0"></script>
+<div data-hcf-fof-import-shell>
+  <style>
+    [data-hcf-fof-import-shell] {
+      --hcf-cyan: #00b8f0;
+      --hcf-text: #eefcff;
+      --hcf-muted: #9cb7c2;
+      --hcf-panel: rgba(18, 22, 28, 0.97);
+      --hcf-border: rgba(0, 184, 240, 0.34);
+    }
+
+    [data-hcf-fof-import-root] {
+      position: relative;
+      width: min(760px, 100%);
+      margin: 20px auto;
+      padding: 24px 18px;
+      box-sizing: border-box;
+      overflow: hidden;
+      color: var(--hcf-text);
+      text-align: center;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        linear-gradient(180deg, rgba(0, 184, 240, 0.04), transparent 32%),
+        var(--hcf-panel);
+      border: 1px solid var(--hcf-border);
+      border-radius: 18px;
+      box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.34),
+        0 0 24px rgba(0, 184, 240, 0.07);
+    }
+
+    [data-hcf-fof-import-root]::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--hcf-cyan), transparent);
+      box-shadow: 0 0 16px rgba(0, 184, 240, 0.65);
+    }
+
+    .hcf-stub-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      margin-bottom: 20px;
+    }
+
+    .hcf-stub-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 8px rgba(0, 184, 240, 0.36));
+    }
+
+    .hcf-stub-copy {
+      text-align: left;
+    }
+
+    .hcf-stub-title {
+      margin: 0;
+      color: var(--hcf-cyan);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .hcf-stub-sub {
+      margin: 4px 0 0;
+      color: var(--hcf-muted);
+      font: 700 9px/1.3 "Courier New", monospace;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hcf-stub-status {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .hcf-stub-message {
+      margin-top: 7px;
+      color: var(--hcf-muted);
+      font-size: 12px;
+    }
+
+    .hcf-stub-track {
+      width: 100%;
+      max-width: 380px;
+      height: 4px;
+      margin: 20px auto 0;
+      overflow: hidden;
+      background: #283138;
+      border-radius: 999px;
+    }
+
+    .hcf-stub-bar {
+      width: 34%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #00b8f0, #00ffff);
+      box-shadow: 0 0 10px rgba(0, 184, 240, 0.7);
+      transform: translateX(-120%);
+      animation: hcfStubProgress 1.35s linear infinite;
+    }
+
+    @keyframes hcfStubProgress {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(315%); }
+    }
+
+    @media (max-width: 600px) {
+      [data-hcf-fof-import-root] {
+        width: 100%;
+        margin: 12px auto;
+        padding: 18px 14px;
+        border-radius: 15px;
+      }
+
+      .hcf-stub-logo {
+        width: 40px;
+        height: 40px;
+      }
+
+      .hcf-stub-bar {
+        animation-duration: 1.6s;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hcf-stub-bar {
+        width: 100%;
+        transform: none;
+        animation: none;
+        opacity: 0.75;
+      }
+    }
+  </style>
+
+  <div
+    data-hcf-fof-import-root
+    aria-live="polite"
+    aria-busy="true"
+  >
+    <div class="hcf-stub-brand">
+      <img
+        class="hcf-stub-logo"
+        src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg"
+        alt=""
+        aria-hidden="true"
+      >
+
+      <div class="hcf-stub-copy">
+        <p class="hcf-stub-title">Harley's Clan Forum</p>
+        <p class="hcf-stub-sub">Forum Network // Page Loader</p>
+      </div>
+    </div>
+
+    <div class="hcf-stub-status">Loading page…</div>
+    <div class="hcf-stub-message">Connecting to page service</div>
+
+    <div class="hcf-stub-track" aria-hidden="true">
+      <div class="hcf-stub-bar"></div>
+    </div>
+  </div>
+
+  <iframe
+    title="HCF Page Loader"
+    aria-hidden="true"
+    tabindex="-1"
+    style="display:none"
+    srcdoc="&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;meta charset='utf-8'&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;script&gt;
+(function () {
+  'use strict';
+
+  var frame = window.frameElement;
+  var parentDocument = frame &amp;&amp; frame.ownerDocument;
+  var shell = frame &amp;&amp; frame.closest
+    ? frame.closest('[data-hcf-fof-import-shell]')
+    : null;
+  var root = shell
+    ? shell.querySelector('[data-hcf-fof-import-root]')
+    : null;
+
+  var sources = [
+    'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-entry.js',
+    'https://cdn.statically.io/gh/markhitchk/hcf/main/v1.x/pages/fof-pages/hcf-page-entry.js'
+  ];
+
+  var index = 0;
+  var finished = false;
+
+  function fail() {
+    if (
+      finished ||
+      !root ||
+      root.getAttribute('data-hcf-loaded') === 'true' ||
+      root.getAttribute('data-hcf-error')
+    ) {
+      return;
+    }
+
+    finished = true;
+
+    root.setAttribute('aria-busy', 'false');
+    root.setAttribute('data-hcf-error', 'entry-unavailable');
+    root.setAttribute('data-hcf-error-code', 'HCF-LOADER-ENTRY');
+
+    root.innerHTML =
+      '&lt;div style=&quot;padding:18px;text-align:center&quot;&gt;' +
+        '&lt;div style=&quot;color:#00b8f0;font-size:54px;font-weight:900&quot;&gt;503&lt;/div&gt;' +
+        '&lt;h2 style=&quot;margin:8px 0;color:#eefcff&quot;&gt;Page loader unavailable&lt;/h2&gt;' +
+        '&lt;p style=&quot;margin:8px auto;max-width:520px;color:#9cb7c2;line-height:1.6&quot;&gt;' +
+          'The forum page service could not start. Please retry this page.' +
+        '&lt;/p&gt;' +
+        '&lt;p style=&quot;margin:14px 0 0;color:#00b8f0;font:700 12px Courier New,monospace&quot;&gt;' +
+          'HCF-LOADER-ENTRY' +
+        '&lt;/p&gt;' +
+      '&lt;/div&gt;';
+  }
+
+  function loadNext() {
+    if (finished) return;
+
+    if (index &gt;= sources.length) {
+      fail();
+      return;
+    }
+
+    var script = document.createElement('script');
+    var settled = false;
+
+    var timeout = setTimeout(function () {
+      if (settled || finished) return;
+
+      settled = true;
+      script.onload = null;
+      script.onerror = null;
+
+      try {
+        script.remove();
+      } catch (error) {}
+
+      loadNext();
+    }, 3500);
+
+    script.async = false;
+    script.src =
+      sources[index++] +
+      '?hcf=' +
+      Date.now();
+
+    script.onload = function () {
+      if (settled || finished) return;
+
+      settled = true;
+      clearTimeout(timeout);
+
+      setTimeout(function () {
+        if (
+          root &amp;&amp;
+          root.getAttribute('data-hcf-entry-build')
+        ) {
+          finished = true;
+          return;
+        }
+
+        loadNext();
+      }, 250);
+    };
+
+    script.onerror = function () {
+      if (settled || finished) return;
+
+      settled = true;
+      clearTimeout(timeout);
+
+      try {
+        script.remove();
+      } catch (error) {}
+
+      loadNext();
+    };
+
+    document.head.appendChild(script);
+  }
+
+  setTimeout(function () {
+    if (
+      !finished &amp;&amp;
+      root &amp;&amp;
+      !root.getAttribute('data-hcf-entry-build') &amp;&amp;
+      root.getAttribute('data-hcf-loaded') !== 'true' &amp;&amp;
+      !root.getAttribute('data-hcf-error')
+    ) {
+      fail();
+    }
+  }, 10000);
+
+  loadNext();
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"
+  ></iframe>
+</div>
