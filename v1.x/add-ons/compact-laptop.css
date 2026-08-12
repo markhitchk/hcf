@@ -1,0 +1,231 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — COMPACT LAPTOP / CHROMEBOOK MODE
+
+   Loaded after htg.desktop.css only for short, compact desktop
+   viewports. Designed for common 11-inch Chromebook browser
+   sizes without changing the normal desktop or mobile themes.
+
+   Targets: 768px–1366px wide AND <= 760px usable viewport height.
+   Author: HarleyTG
+   Added: 2026-08-12
+========================================================== */
+
+/* ----------------------------------------------------------
+   HEADER: keep title, search, icons, and account controls from
+   competing for the same horizontal space.
+---------------------------------------------------------- */
+.Header-title {
+  max-width: 40vw !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  gap: 7px !important;
+  font-size: 20px !important;
+}
+
+.Header-title::before {
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  flex-basis: 36px !important;
+  transform: translateY(-2px) !important;
+}
+
+.App-header .container,
+.Header-navigation .container {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.Header-primary,
+.Header-secondary {
+  min-width: 0 !important;
+}
+
+.Search {
+  max-width: min(240px, 22vw) !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user {
+  height: 36px !important;
+  gap: 6px !important;
+  padding: 3px 10px 3px 3px !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .Avatar {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+li.item-session .Dropdown-toggle.Button--user .username {
+  max-width: 110px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+}
+
+.item-logIn .Button,
+.item-signUp .Button {
+  padding: 7px 11px !important;
+}
+
+.item-logIn,
+.item-signUp {
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+/* ----------------------------------------------------------
+   PERFORMANCE: low-power Chromebooks can struggle when several
+   large blur layers and entrance animations repaint together.
+   Keep the glass colors/borders but remove the costly blur pass.
+---------------------------------------------------------- */
+.Alert,
+.backgrwb,
+.backgrwbguest,
+.backgrwb .AvatarEditor .Dropdown-menu,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.Alert,
+.backgrwb,
+.backgrwbguest,
+.backgrwb .AvatarEditor .Dropdown-menu,
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content,
+.Post-body .wrapper,
+.containerNarrow,
+.Hero-title,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+  animation: none !important;
+}
+
+.backgrwb,
+.backgrwbguest,
+.backgrwb .AvatarEditor .Dropdown-menu,
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+  background-color: var(--control-bg, rgba(18, 22, 28, 0.97)) !important;
+}
+
+/* Avoid expensive hover transforms while retaining color feedback. */
+.backgrwb .avatarwb:hover,
+.backgrwb .ulwb li:hover,
+.backgrwb .circletop a:hover i,
+.backgrwbguest a:hover,
+.backgrwbguest .Button:hover,
+li.item-session .Dropdown-toggle.Button--user:hover,
+.item-logIn .Button:hover,
+.item-signUp .Button:hover,
+.Post-body .wrapper:hover {
+  transform: none !important;
+}
+
+/* ----------------------------------------------------------
+   WELCOME / PROFILE WIDGET: a short Chromebook viewport should
+   scroll normally instead of trapping a tall card in sticky mode.
+---------------------------------------------------------- */
+.AfruxWidgets-sideNavAlt.AfruxWidgets-WidgetSection {
+  position: relative !important;
+  top: auto !important;
+  align-self: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.backgrwb,
+.backgrwbguest {
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+}
+
+.backgrwb .avatarwb,
+.backgrwb .AvatarEditor {
+  max-width: 84px !important;
+}
+
+.backgrwb .avatarwb .Avatar {
+  width: 84px !important;
+  min-width: 84px !important;
+  max-width: 84px !important;
+  height: 84px !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+}
+
+.backgrwb .contentwb,
+.backgrwb .ulwb.contentwb {
+  max-width: 190px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+/* ----------------------------------------------------------
+   AUTH MODALS: keep every field/button reachable on short screens.
+---------------------------------------------------------- */
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-content {
+  max-height: calc(100dvh - 20px) !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-body {
+  max-height: calc(100dvh - 132px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  padding: 16px !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-header {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+:is(.LogInModal, .SignUpModal, .ForgotPasswordModal) .Modal-footer {
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
+}
+
+/* ----------------------------------------------------------
+   USER CONTROLS DROPDOWN: constrain long admin/profile menus to
+   the actual viewport instead of letting them run under the shelf.
+---------------------------------------------------------- */
+.UserPage .UserCard .UserCard-controls > .Dropdown-menu {
+  min-width: 240px !important;
+  max-width: min(320px, calc(100vw - 24px)) !important;
+  max-height: calc(100dvh - 120px) !important;
+}
+
+/* ----------------------------------------------------------
+   ALERT + HERO COMPACTION
+---------------------------------------------------------- */
+.Alert {
+  gap: 7px !important;
+  padding: 10px 40px 10px 16px !important;
+}
+
+.containerNarrow {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 4px !important;
+}
+
+.containerNarrow::before {
+  width: 30px !important;
+  height: 30px !important;
+  margin-bottom: 4px !important;
+}
+
+.Hero-title {
+  font-size: 20px !important;
+  margin-bottom: 4px !important;
+}
+
+.Hero-subtitle {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
