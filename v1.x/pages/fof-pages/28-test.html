@@ -1,0 +1,71 @@
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2b1");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
+
+.hcf-page .hcf-runtime,
+.hcf-page .hcf-runtime-item,
+.hcf-page .hcf-runtime-label,
+.hcf-page .hcf-runtime-value,
+.hcf-page .hcf-runtime-device,
+.hcf-page .hcf-runtime-identity,
+.hcf-page [data-hcf-runtime-ui]{display:none!important;}
+
+#hcf-test .hcf-test-card{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(0,184,240,.24);
+  border-radius:14px;
+  background:#0c1015;
+  color:#c8dde4;
+  text-align:left;
+}
+
+#hcf-test .hcf-test-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+#hcf-test .hcf-test-row:last-child{border-bottom:0;}
+#hcf-test .hcf-test-row strong{color:#00b8f0;}
+
+@media(max-width:600px){
+  #hcf-test .hcf-test-row{display:block;}
+  #hcf-test .hcf-test-row span{display:block;margin-top:5px;}
+}
+</style>
+
+<div class="hcf-page" id="hcf-test" data-hcf-page-build="1.0.0">
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" alt="" aria-hidden="true">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // FoF Pages Test</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot"></span>Page Loader Online</div>
+    <h1 class="hcf-title">FoF Page Test</h1>
+    <p class="hcf-lead">This page confirms that the HCF dynamic FoF Pages loader can resolve page ID 28 and the <code>test</code> slug from the repository.</p>
+  </section>
+
+  <main class="hcf-content">
+    <div class="hcf-test-card">
+      <div class="hcf-test-row"><strong>Route</strong><span>/p/28-test</span></div>
+      <div class="hcf-test-row"><strong>Repository file</strong><span>v1.x/pages/fof-pages/28-test.html</span></div>
+      <div class="hcf-test-row"><strong>CDN mode</strong><span>@main</span></div>
+      <div class="hcf-test-row"><strong>Status</strong><span>Resolved</span></div>
+    </div>
+  </main>
+
+  <footer class="hcf-footer">
+    <span>Harley's Clan Forum // FoF Page Test // Build 1.0.0</span>
+    <a href="https://forum.harleytg.com/">Return to Forum</a>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.1"></script>
