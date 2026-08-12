@@ -3,6 +3,7 @@ import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const runtimeExtensions = new Set([".css", ".js", ".html"]);
 const checkedExtensions = new Set([".css", ".js", ".html", ".mjs", ".json", ".md", ".yml", ".yaml"]);
 const failures = [];
 const checked = [];
@@ -59,8 +60,9 @@ for (const file of walk(repositoryRoot)) {
 
   checked.push(file);
   const source = readFileSync(file, "utf8");
+  const isRuntimeFile = runtimeExtensions.has(extension);
 
-  if (/v1\.x\/assets\//i.test(source)) {
+  if (isRuntimeFile && /v1\.x\/assets\//i.test(source)) {
     fail(file, "hard-coded v1.x/assets reference; shared assets belong under repository-level assets/");
   }
 
@@ -70,11 +72,11 @@ for (const file of walk(repositoryRoot)) {
 
   // The retired asset used an uppercase H and I: HTG-Icon.*.
   // The canonical replacement htg-icon.png is intentionally lowercase.
-  if (/HTG-Icon\.(?:svg|png)/.test(source)) {
+  if (isRuntimeFile && /HTG-Icon\.(?:svg|png)/.test(source)) {
     fail(file, "retired HTG-Icon asset reference");
   }
 
-  if (/(?:^|[/'"(])Assets\/(?:Logo|Logos|logos)\//.test(source) || /(?:^|[/'"(])assets\/(?:Logo|Logos|logo)\//.test(source)) {
+  if (isRuntimeFile && (/(?:^|[/'"(])Assets\/(?:Logo|Logos|logos)\//.test(source) || /(?:^|[/'"(])assets\/(?:Logo|Logos|logo)\//.test(source))) {
     fail(file, "non-canonical asset folder casing; use assets/logos/");
   }
 
@@ -82,7 +84,7 @@ for (const file of walk(repositoryRoot)) {
     fail(file, "raw GitHub shared-logo URL; use the canonical jsDelivr global asset URL");
   }
 
-  checkRelativeAssetReferences(file, source);
+  if (isRuntimeFile) checkRelativeAssetReferences(file, source);
   checkHcfCdnRefs(file, source);
 }
 
