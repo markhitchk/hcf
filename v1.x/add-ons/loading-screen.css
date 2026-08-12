@@ -200,7 +200,7 @@
   letter-spacing: 0.035em !important;
   color: var(--hc-loader-text) !important;
   background:
-    url("../assets/logos/HTG.svg")
+    url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-neon.png")
     center top / 92px 92px no-repeat !important;
   filter: drop-shadow(0 0 11px var(--hc-welcome-glow));
   text-shadow:
