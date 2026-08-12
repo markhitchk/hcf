@@ -11,7 +11,7 @@
 (function(){
   "use strict";
 
-  var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
+  var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v2.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
   var SILENT_STYLE_ID="hcf-fof-silent-runtime";
   var resizeTimer=0;
 

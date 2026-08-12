@@ -19,12 +19,12 @@
   var root = shell ? shell.querySelector('[data-hcf-fof-import-root]') : null;
   if (!root) return;
 
-  var BOOTSTRAP_PATH = 'v1.x/pages/fof-pages/hcf-page-bootstrap.js';
+  var BOOTSTRAP_PATH = 'v2.x/pages/fof-pages/hcf-page-bootstrap.js';
   var SOURCES = [
     'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/' + BOOTSTRAP_PATH,
     'https://cdn.statically.io/gh/markhitchk/hcf/main/' + BOOTSTRAP_PATH
   ];
-  var LOGO = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg';
+  var LOGO = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v2.x/assets/logos/HTG.svg';
   var SOURCE_TIMEOUT = 3500;
   var WATCHDOG = 12000;
 

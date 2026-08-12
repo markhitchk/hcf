@@ -24,7 +24,7 @@
   --btn-text: #101414;
 
   /* Compatibility aliases for older HCF rules. Their sources are the
-     custom properties exported by Flarum 1.x common/root.less. */
+     custom properties exported by Flarum 2.x common/root.less. */
   --body-color: var(--text-color, #e8e8e8);
   --control-border: rgba(0, 255, 255, 0.24);
   --primary-inverted-color: var(--button-primary-color, #ffffff);
