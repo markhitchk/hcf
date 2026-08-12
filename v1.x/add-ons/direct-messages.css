@@ -14,7 +14,7 @@
    - @screen-tablet/@screen-desktop -> literal 768px / 992px / 991.98px
    - All nested LESS selectors flattened to plain CSS.
    - Empty conversation-state placeholder icon (div#people-list::before)
-     replaced with Harley's Studios HTG SVG icon.
+     replaced with Harley's Studios HTG icon.
    ========================================================================== */
 
 .ConversationsList span.message-data-name,
@@ -386,7 +386,7 @@ div#people-list::before {
   min-height: 100px !important;
   flex: 0 0 100px !important;
   margin: 14px auto 10px !important;
-  background-image: url("../assets/logos/HTG.svg");
+  background-image: url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-icon.png");
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -408,7 +408,7 @@ div#people-list::before {
   line-height: 36px !important;
   font-size: 0 !important;
   vertical-align: middle !important;
-  background-image: url("../assets/logos/HTG.svg");
+  background-image: url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-icon.png");
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
