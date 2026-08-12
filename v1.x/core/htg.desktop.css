@@ -126,7 +126,7 @@
   box-sizing: border-box !important;
   overflow: hidden !important;
 
-  background-image: url('../assets/logos/HTG.svg') !important;
+  background-image: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') !important;
   background-position: center !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
@@ -1248,7 +1248,7 @@ li.item-session .Dropdown-toggle.Button--user:focus-visible,
   width: 34px;
   height: 34px;
   margin-bottom: 6px;
-  background: url('../assets/logos/HTG.svg') center/contain no-repeat;
+  background: url('https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg') center/contain no-repeat;
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--control-border, rgba(0, 255, 255, 0.3)), 0 0 10px rgba(0, 255, 255, 0.2);
 }

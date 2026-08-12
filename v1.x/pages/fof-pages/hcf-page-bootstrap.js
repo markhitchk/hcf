@@ -4,7 +4,7 @@ var BUILD='1.4.3', OWNER='markhitchk', REPO='hcf', BRANCH='main';
 var FOLDER='v1.x/pages/fof-pages';
 var CDN='https://cdn.jsdelivr.net/gh/'+OWNER+'/'+REPO+'@'+BRANCH+'/'+FOLDER+'/';
 var API='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+FOLDER+'?ref='+encodeURIComponent(BRANCH);
-var LOGO='https://cdn.jsdelivr.net/gh/'+OWNER+'/'+REPO+'@'+BRANCH+'/v1.x/assets/logos/HTG.svg';
+var LOGO='https://cdn.jsdelivr.net/gh/'+OWNER+'/'+REPO+'@'+BRANCH+'/assets/logos/HTG.svg';
 var LOAD_TIMEOUT=8500;
 var ROUTE_FILES={};
 var ERR={
