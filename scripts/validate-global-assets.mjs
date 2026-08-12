@@ -68,7 +68,9 @@ for (const file of walk(repositoryRoot)) {
     fail(file, "legacy HarleyTG-O logo URL; use the global HCF assets");
   }
 
-  if (/HTG-Icon\.(?:svg|png)/i.test(source)) {
+  // The retired asset used an uppercase H and I: HTG-Icon.*.
+  // The canonical replacement htg-icon.png is intentionally lowercase.
+  if (/HTG-Icon\.(?:svg|png)/.test(source)) {
     fail(file, "retired HTG-Icon asset reference");
   }
 
