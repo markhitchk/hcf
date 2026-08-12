@@ -7,90 +7,10 @@
 <meta name="theme-color" content="#0d1014">
 <title>Error | Harley's Clan Forum</title>
 <link rel="icon" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" type="image/svg+xml">
-<style>
-:root{--hc:#00dfe6;--hc2:#00ffff;--bg:#0d1014;--panel:rgba(18,22,28,.94);--panel2:#0c1015;--border:rgba(0,223,230,.28);--text:#eefcff;--muted:#9cb7c2;--status:#ff6b6b;--statusbg:rgba(255,107,107,.10);--statusborder:rgba(255,107,107,.48)}
-*{box-sizing:border-box}html,body{min-height:100%}body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:clamp(14px,4vw,42px);overflow-x:hidden;background:radial-gradient(circle at 15% 10%,rgba(0,223,230,.13),transparent 30%),radial-gradient(circle at 88% 82%,rgba(0,223,230,.08),transparent 34%),linear-gradient(180deg,#11161c 0%,var(--bg) 72%);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent 88%);mask-image:linear-gradient(to bottom,#000,transparent 88%)}.shell{position:relative;isolation:isolate;width:min(760px,100%);overflow:hidden;border:1px solid var(--border);border-radius:22px;background:linear-gradient(180deg,rgba(0,223,230,.035),transparent 28%),var(--panel);box-shadow:0 30px 80px rgba(0,0,0,.48),0 0 30px rgba(0,223,230,.08),inset 0 1px rgba(255,255,255,.035);backdrop-filter:blur(18px) saturate(118%);-webkit-backdrop-filter:blur(18px) saturate(118%)}.shell:before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--hc),transparent);box-shadow:0 0 18px rgba(0,223,230,.72)}.brand{display:flex;align-items:center;gap:13px;padding:18px 20px;border-bottom:1px solid rgba(0,223,230,.16);background:rgba(8,12,16,.28)}.logo{width:46px;height:46px;flex:0 0 46px;object-fit:contain;border-radius:50%;filter:drop-shadow(0 0 8px rgba(0,223,230,.35))}.brand-copy{min-width:0}.brand-title{margin:0;color:var(--hc);font-size:clamp(17px,2.8vw,22px);font-weight:800;line-height:1.1;letter-spacing:.025em;text-shadow:1px 1px 0 #000,2px 2px 0 rgba(0,223,230,.24)}.brand-sub{margin:4px 0 0;color:var(--muted);font:700 10px/1.35 "Courier New",monospace;letter-spacing:.13em;text-transform:uppercase}.content{padding:clamp(28px,6vw,52px);text-align:center}.pill{display:inline-flex;align-items:center;gap:8px;min-height:30px;padding:6px 11px;border:1px solid var(--statusborder);border-radius:999px;background:var(--statusbg);color:var(--text);font:800 11px/1 "Courier New",monospace;letter-spacing:.1em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:var(--status);box-shadow:0 0 10px var(--status)}.code{margin:18px 0 2px;color:var(--hc);font-size:clamp(64px,18vw,122px);font-weight:900;line-height:.9;letter-spacing:-.06em;text-shadow:2px 2px 0 #000,4px 4px 0 rgba(0,223,230,.16),0 0 24px rgba(0,223,230,.18)}h1{margin:18px 0 0;color:var(--text);font-size:clamp(24px,5vw,36px);line-height:1.15;letter-spacing:-.025em}.message{max-width:590px;margin:14px auto 0;color:var(--muted);font-size:clamp(15px,2.4vw,17px);line-height:1.7}.detail{max-width:620px;margin:22px auto 0;padding:12px 14px;border:1px solid rgba(0,223,230,.14);border-radius:12px;background:var(--panel2);color:#c8dde4;font:600 12px/1.55 "Courier New",monospace;text-align:left}.detail strong{color:var(--hc);font-weight:800}.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}.button{display:inline-flex;align-items:center;justify-content:center;min-width:170px;min-height:46px;padding:11px 18px;border:1px solid rgba(0,223,230,.55);border-radius:12px;color:var(--hc);background:rgba(0,223,230,.08);font-size:14px;font-weight:800;letter-spacing:.02em;text-decoration:none;transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}.button.primary{border-color:var(--hc);background:var(--hc);color:#061013}.button:hover{transform:translateY(-2px);border-color:var(--hc2);background:rgba(0,223,230,.14);box-shadow:0 8px 22px rgba(0,223,230,.12)}.button.primary:hover{background:var(--hc2);color:#061013}.button:focus-visible,.footer a:focus-visible{outline:2px solid var(--hc2);outline-offset:3px}.footer{display:flex;justify-content:space-between;gap:14px;padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(0,223,230,.14);background:rgba(7,10,14,.36);color:#78939d;font:700 10px/1.4 "Courier New",monospace;letter-spacing:.08em;text-transform:uppercase}.footer a{color:var(--hc);text-decoration:none}@media(max-width:560px){body{padding:12px}.shell{border-radius:17px}.brand{padding:14px}.logo{width:40px;height:40px;flex-basis:40px}.content{padding:28px 18px 30px}.actions{flex-direction:column}.button{width:100%}.footer{flex-direction:column;align-items:center;text-align:center}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
-</style>
+<style>html,body{min-height:100%;margin:0}body{display:grid;place-items:center;padding:20px;box-sizing:border-box;background:#0d1014;color:#eefcff;font-family:Arial,sans-serif}.hcf-error-fallback{max-width:680px;text-align:center}.hcf-error-fallback h1{color:#00dfe6;font-size:clamp(38px,10vw,72px);margin:0 0 12px}.hcf-error-fallback p{color:#9cb7c2;line-height:1.6}</style>
+<script defer src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error-loader.js"></script>
 </head>
 <body>
-<main class="shell">
-<header class="brand"><img class="logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" alt="" aria-hidden="true"><div class="brand-copy"><p class="brand-title">Harley's Clan Forum</p><p class="brand-sub">Forum Network // Error Handler</p></div></header>
-<section class="content" aria-labelledby="error-title">
-<div class="pill"><span class="dot" aria-hidden="true"></span><span id="error-status">Server fault</span></div>
-<div class="code" id="error-code" aria-hidden="true">500</div>
-<h1 id="error-title">⚠ Internal Server Error</h1>
-<p class="message" id="error-message">The forum hit an unexpected server error while processing your request. Please try again in a moment.</p>
-<div class="detail"><strong id="error-http">HTTP 500</strong> // <span id="error-detail">An unexpected server-side failure prevented the request from completing.</span></div>
-<nav class="actions" aria-label="Error page actions"><a class="button primary" href="https://forum.harleytg.com/">Back to Forum</a><a class="button" href="https://forum.harleytg.com/p/17-support">Get Support</a></nav>
-</section>
-<footer class="footer"><span>Harley's Clan Forum // Flarum 1.x</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
-</main>
-<script>
-(function(){
-  'use strict';
-
-  var errors={
-    '403':{
-      title:'Access Forbidden',
-      icon:'🔒',
-      status:'Access denied',
-      message:'Access to this area is restricted. Your account may not have permission to view this resource.',
-      detail:'The server understood the request but access is not permitted.',
-      color:'#ffb454',
-      background:'rgba(255,180,84,.10)',
-      border:'rgba(255,180,84,.48)'
-    },
-    '404':{
-      title:'Page Not Found',
-      icon:'🔎',
-      status:'Route unavailable',
-      message:'The page you requested could not be found. It may have been moved, renamed, or removed.',
-      detail:'The requested forum route does not exist or is no longer available.',
-      color:'#00dfe6',
-      background:'rgba(0,223,230,.10)',
-      border:'rgba(0,223,230,.48)'
-    },
-    '500':{
-      title:'Internal Server Error',
-      icon:'⚠',
-      status:'Server fault',
-      message:'The forum hit an unexpected server error while processing your request. Please try again in a moment.',
-      detail:'An unexpected server-side failure prevented the request from completing.',
-      color:'#ff6b6b',
-      background:'rgba(255,107,107,.10)',
-      border:'rgba(255,107,107,.48)'
-    },
-    '503':{
-      title:'Service Unavailable',
-      icon:'🛠',
-      status:'Temporarily offline',
-      message:'The forum is temporarily unavailable, usually because of maintenance or a short service interruption. Please try again shortly.',
-      detail:'The service is temporarily unable to handle requests.',
-      color:'#ffd166',
-      background:'rgba(255,209,102,.10)',
-      border:'rgba(255,209,102,.48)'
-    }
-  };
-
-  var params=new URLSearchParams(window.location.search);
-  var requested=params.get('code');
-  var code=Object.prototype.hasOwnProperty.call(errors,requested)?requested:'500';
-  var error=errors[code];
-  var root=document.documentElement;
-
-  root.style.setProperty('--status',error.color);
-  root.style.setProperty('--statusbg',error.background);
-  root.style.setProperty('--statusborder',error.border);
-
-  document.title=code+' - '+error.title+' | Harley\'s Clan Forum';
-  document.getElementById('error-status').textContent=error.status;
-  document.getElementById('error-code').textContent=code;
-  document.getElementById('error-title').textContent=error.icon+' '+error.title;
-  document.getElementById('error-message').textContent=error.message;
-  document.getElementById('error-http').textContent='HTTP '+code;
-  document.getElementById('error-detail').textContent=error.detail;
-})();
-</script>
-<noscript><p style="position:fixed;left:12px;right:12px;bottom:12px;margin:0;text-align:center;color:#9cb7c2;font:700 11px/1.4 'Courier New',monospace">JavaScript is disabled. Showing the generic server error page.</p></noscript>
+<main class="hcf-error-fallback"><h1>500</h1><p>Error Handler</p><p>Loading Harley's Clan Forum error page…</p></main>
 </body>
 </html>
