@@ -1,0 +1,111 @@
+name: Global asset path sweep
+
+on:
+  push:
+    paths:
+      - .github/workflows/global-assets-sweep.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Normalize HTG image references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          global_svg = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg'
+
+          text_suffixes = {'.css', '.html', '.js', '.mjs', '.md', '.json', '.yml', '.yaml'}
+          changed = []
+
+          for path in root.rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path.suffix.lower() not in text_suffixes:
+                  continue
+              if path.as_posix() == '.github/workflows/global-assets-sweep.yml':
+                  continue
+
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+
+              original = text
+
+              # Old version-local CDN references, including commit-pinned URLs.
+              text = re.sub(
+                  r'https://cdn\.jsdelivr\.net/gh/markhitchk/hcf@[^/\"\'\s]+/v1\.x/assets/logos/HTG\.svg',
+                  global_svg,
+                  text,
+              )
+
+              # Current @main version-local path.
+              text = text.replace(
+                  'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg',
+                  global_svg,
+              )
+
+              # Relative references from v1.x files into the removed duplicate folder.
+              text = re.sub(
+                  r'(?:(?:\.\./)+)assets/logos/HTG\.svg',
+                  global_svg,
+                  text,
+              )
+
+              # Plain repository path references to the duplicate copy.
+              text = text.replace('v1.x/assets/logos/HTG.svg', 'assets/logos/HTG.svg')
+
+              if text != original:
+                  path.write_text(text, encoding='utf-8')
+                  changed.append(path.as_posix())
+
+          duplicate = root / 'v1.x' / 'assets' / 'logos'
+          if duplicate.exists():
+              for child in duplicate.iterdir():
+                  if child.is_file():
+                      child.unlink()
+              try:
+                  duplicate.rmdir()
+                  duplicate.parent.rmdir()
+              except OSError:
+                  pass
+
+          print('Updated:')
+          for path in changed:
+              print(' -', path)
+          PY
+
+      - name: Verify no version-local HTG paths remain
+        shell: bash
+        run: |
+          if grep -RInE 'v1\.x/assets/logos/(HTG\.svg|HTG\.png)|\.\./assets/logos/(HTG\.svg|HTG\.png)' v1.x --exclude-dir=.git; then
+            echo 'Version-local HTG references remain.' >&2
+            exit 1
+          fi
+          test ! -e v1.x/assets/logos
+          test -f assets/logos/HTG.svg
+          test -f assets/logos/htg-icon.png
+          test -f assets/logos/htg-neon.png
+
+      - name: Commit sweep results
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo 'No changes required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'use global HTG image assets'
+          git push origin HEAD:main
