@@ -9,11 +9,17 @@ Custom forum styling, add-ons, shared assets, and branded error pages for Harley
 | `v1.x/` | Flarum 1.x | Production |
 | `v2.x/` | Flarum 2.x | Not in use |
 
-All production files are stored under `v1.x/`. The repository uses folders on the `main` branch; it does not use version branches.
+All production Flarum files are stored under `v1.x/`. Shared branding assets are stored once under the repository-level `assets/` folder and are used by every supported version. The repository uses folders on the `main` branch; it does not use version branches.
 
 ## Repository structure
 
 ```text
+assets/
+└── logos/
+    ├── HTG.svg
+    ├── htg-icon.png
+    └── htg-neon.png
+
 v1.x/
 ├── add-ons/
 │   ├── direct-messages.css
@@ -27,9 +33,6 @@ v1.x/
 │       ├── holidays.json
 │       ├── install-snippet.html
 │       └── README.md
-├── assets/
-│   └── logos/
-│       └── HTG.svg
 ├── core/
 │   ├── admin.css
 │   ├── footer.html
@@ -51,6 +54,18 @@ scripts/
 
 .github/workflows/
 └── validate.yml
+```
+
+## Shared logo assets
+
+All HCF versions must use the repository-level logo assets. Do not create or reference a version-local `v1.x/assets/logos/` copy.
+
+Canonical CDN paths:
+
+```text
+https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg
+https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-icon.png
+https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-neon.png
 ```
 
 ## Main Flarum 1.x CSS
