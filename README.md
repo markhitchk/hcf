@@ -72,16 +72,13 @@ https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-neon.png
 
 `v1.x/core/htg.forum.css` is the production stylesheet used by Harley's Clan Forum.
 
-Paste this verified release import into Flarum's **Appearance → Custom CSS** field:
+Paste this live import into Flarum's **Appearance → Custom CSS** field:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@bea847934a4515ac2ddaf024c67fd058f322187d/v1.x/core/htg.forum.css");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/htg.forum.css");
 ```
 
-Use the URL exactly as shown. Its commit pin also applies to every relative
-import in the release, preventing jsDelivr from mixing cached `@main` files.
-Do not wrap the URL in Markdown link syntax such as `[URL](URL)` or paste the
-relative imports below directly into Flarum.
+Use the URL exactly as shown. HCF CDN references use `@main` so the forum follows the current production files in this repository. Relative imports inside `htg.forum.css` remain under the same `v1.x/` tree. Do not wrap the URL in Markdown link syntax such as `[URL](URL)` or paste the relative imports below directly into Flarum.
 
 The entry point separates phone and desktop rules at Flarum's native
 `767.98px` phone breakpoint:
