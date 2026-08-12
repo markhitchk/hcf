@@ -1,6 +1,6 @@
 (function () {
 'use strict';
-var BUILD='1.4.1', OWNER='markhitchk', REPO='hcf', BRANCH='main';
+var BUILD='1.4.2', OWNER='markhitchk', REPO='hcf', BRANCH='main';
 var FOLDER='v1.x/pages/fof-pages';
 var CDN='https://cdn.jsdelivr.net/gh/'+OWNER+'/'+REPO+'@'+BRANCH+'/'+FOLDER+'/';
 var API='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+FOLDER+'?ref='+encodeURIComponent(BRANCH);
@@ -106,8 +106,20 @@ var nodes=Array.prototype.slice.call(parsed.body.childNodes).map(function(n){ret
 root.replaceChildren.apply(root,nodes);['data-hcf-error','data-hcf-error-code','data-hcf-error-template'].forEach(function(a){root.removeAttribute(a);});root.setAttribute('data-hcf-source-file',r.file);root.removeAttribute('data-hcf-source-url');root.removeAttribute('data-hcf-source-kind');root.setAttribute('data-hcf-loaded','true');root.setAttribute('aria-busy','false');
 var failed=0;for(var i=0;i<scripts.length;i++)if(!(await runScript(scripts[i],r.url)))failed++;emit('hcf:fof-page:loaded',{build:BUILD,id:id,slug:slug,file:r.file,scriptWarnings:failed});
 }
+function getForcedTestError(){
+if(key!=='28-test')return null;
+var params;try{params=new URLSearchParams(win.location.search||'');}catch(e){return null;}
+var code=String(params.get('hcf-error')||'').trim();
+if(code==='403')return{type:'forbidden',status:403};
+if(code==='404')return{type:'not-found',status:404};
+if(code==='429')return{type:'rate-limited',status:429};
+if(code==='500')return{type:'upstream-error',status:500};
+if(code==='503')return{type:'unavailable',status:503};
+return null;
+}
 async function start(){
 var token=++runToken;if(!id||!slug){showError('invalid-route');return;}
+var forced=getForcedTestError();if(forced){showError(forced.type,{status:forced.status});return;}
 if(timeoutId)win.clearTimeout(timeoutId);if(controller){try{controller.abort();}catch(e){}}
 controller=typeof AbortController==='function'?new AbortController():null;timedOut=false;root.setAttribute('data-hcf-page',key);loading();
 timeoutId=win.setTimeout(function(){timedOut=true;if(controller){try{controller.abort();}catch(e){}}},LOAD_TIMEOUT);
