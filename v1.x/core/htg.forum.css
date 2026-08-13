@@ -6,15 +6,16 @@
    - <= 767.98px: Flarum owns navigation/drawer behavior;
      mobile.css owns HCF branding and compact extension layout
    - >= 768px: htg.desktop.css owns the desktop/tablet-up theme
-   - desktop header/alert stability patch runs after the base theme
-     and scales fluidly with no fixed upper desktop breakpoint
+   - desktop header/alert stability patch runs after the base theme,
+     scales fluidly with no fixed upper desktop breakpoint, and uses
+     Flarum theme variables for automatic dark/light surfaces
    - compact laptop mode: post-desktop overrides for short
      Chromebook-class browser viewports
 
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a27
+   Version: 5.9a28
    Author: HarleyTG
    Updated: 2026-08-12
 ========================================================== */
