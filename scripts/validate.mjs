@@ -168,6 +168,7 @@ if (existsSync(resolve(repositoryRoot, "v1.x/assets/logos"))) {
 const entryFile = resolve(repositoryRoot, "v1.x/core/htg.forum.css");
 const entry = readFileSync(entryFile, "utf8");
 for (const required of [
+  '../add-ons/cookie-consent.css")',
   '../add-ons/motion.css") screen and (max-width: 767.98px)',
   '../add-ons/header-panels.css") screen and (max-width: 767.98px)',
   '../add-ons/direct-messages.css") screen and (max-width: 767.98px)',
