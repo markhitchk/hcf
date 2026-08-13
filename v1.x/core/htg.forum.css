@@ -19,7 +19,7 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a31
+   Version: 5.9a32
    Author: HarleyTG
    Updated: 2026-08-13
 ========================================================== */
@@ -43,4 +43,41 @@
 /* Discord footer feedback is enabled system-wide. */
 .hc-feedback-float{
     display:block!important;
+}
+
+/* Phone-layout fallback when JS device detection has not applied
+   the hc-mobile-performance class yet. */
+@media screen and (max-width: 767.98px){
+    .hc-feedback-float{
+        display:block!important;
+        right:max(10px,env(safe-area-inset-right))!important;
+        bottom:calc(max(70px,calc(env(safe-area-inset-bottom) + 10px)) + var(--hc-feedback-cookie-offset,0px))!important;
+        width:46px!important;
+        height:46px!important;
+    }
+
+    .hc-feedback-float > summary{
+        justify-content:center!important;
+        width:46px!important;
+        min-width:46px!important;
+        max-width:46px!important;
+        height:46px!important;
+        min-height:46px!important;
+        max-height:46px!important;
+        padding:0!important;
+        border-radius:50%!important;
+    }
+
+    .hc-feedback-float .hc-feedback-label{
+        display:none!important;
+    }
+
+    .hc-feedback-float .hc-feedback-panel{
+        position:fixed!important;
+        right:10px!important;
+        left:10px!important;
+        bottom:calc(max(126px,calc(env(safe-area-inset-bottom) + 66px)) + var(--hc-feedback-cookie-offset,0px))!important;
+        width:auto!important;
+        max-height:calc(100dvh - 150px - var(--hc-feedback-cookie-offset,0px))!important;
+    }
 }
