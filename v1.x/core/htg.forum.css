@@ -3,6 +3,8 @@
 
    Mobile and desktop are intentionally separated at Flarum's
    native 767.98px phone breakpoint.
+   - FoF Cookie Consent receives the shared HCF dark/light theme
+     on every viewport and coordinates with footer Discord feedback
    - <= 767.98px: Flarum owns navigation/drawer behavior;
      mobile.css owns HCF branding and compact extension layout
    - mobile alert theme patch runs after mobile.css so phone alerts
@@ -17,10 +19,13 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a29
+   Version: 5.9a30
    Author: HarleyTG
    Updated: 2026-08-12
 ========================================================== */
+
+/* Shared extension styling runs on every viewport. */
+@import url("../add-ons/cookie-consent.css");
 
 /* Relative imports inherit this entry point's pinned release revision. */
 @import url("../add-ons/motion.css") screen and (max-width: 767.98px);
@@ -34,9 +39,3 @@
 @import url("./htg.desktop.css") screen and (min-width: 768px);
 @import url("../add-ons/desktop-header-alerts.css") screen and (min-width: 768px);
 @import url("../add-ons/compact-laptop.css") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px);
-
-/* Discord footer feedback is temporarily disabled system-wide.
-   It overlapped/interfered with the forum cookie acceptance controls. */
-.hc-feedback-float{
-    display:none!important;
-}
