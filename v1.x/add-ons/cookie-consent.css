@@ -1,0 +1,314 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — FoF COOKIE CONSENT THEME
+
+   Styles FriendsOfFlarum Cookie Consent / CookieConsent v3
+   without modifying the extension itself. Uses Flarum theme
+   variables so the surface follows dark/light mode while the
+   HCF cyan accent remains consistent.
+
+   Version: 1.0
+   Author: HarleyTG
+   Added: 2026-08-12
+========================================================== */
+
+/* Base window ------------------------------------------------ */
+html body .cc-window {
+  box-sizing: border-box !important;
+  border: 1px solid rgba(0, 184, 240, .52) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(145deg, rgba(0, 184, 240, .065), rgba(0, 184, 240, .018)),
+    var(--body-bg-shaded, var(--body-bg, #12171c)) !important;
+  color: var(--text-color, #eefcff) !important;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  box-shadow:
+    0 18px 46px var(--shadow-color, rgba(0, 0, 0, .34)),
+    0 0 22px rgba(0, 184, 240, .12) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Make every built-in FoF theme use the same HCF shell. */
+html body .cc-window.cc-theme-classic,
+html body .cc-window.cc-theme-edgeless {
+  border-radius: 16px !important;
+}
+
+html body .cc-window.cc-theme-edgeless {
+  padding: 14px 16px !important;
+}
+
+/* Banner placement ------------------------------------------- */
+html body .cc-window.cc-banner {
+  left: 18px !important;
+  right: 18px !important;
+  width: auto !important;
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 14px 16px !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+html body .cc-window.cc-banner.cc-bottom {
+  bottom: max(14px, env(safe-area-inset-bottom)) !important;
+}
+
+html body .cc-window.cc-banner.cc-top {
+  top: max(14px, env(safe-area-inset-top)) !important;
+}
+
+/* Floating layout -------------------------------------------- */
+html body .cc-window.cc-floating {
+  width: min(360px, calc(100vw - 36px)) !important;
+  max-width: 360px !important;
+  padding: 18px !important;
+}
+
+html body .cc-window.cc-floating.cc-bottom {
+  bottom: max(18px, env(safe-area-inset-bottom)) !important;
+}
+
+html body .cc-window.cc-floating.cc-top {
+  top: max(18px, env(safe-area-inset-top)) !important;
+}
+
+html body .cc-window.cc-floating.cc-left {
+  left: max(18px, env(safe-area-inset-left)) !important;
+}
+
+html body .cc-window.cc-floating.cc-right {
+  right: max(18px, env(safe-area-inset-right)) !important;
+}
+
+/* Message ----------------------------------------------------- */
+html body .cc-window .cc-message {
+  min-width: 0 !important;
+  margin: 0 !important;
+  color: var(--text-color, #eefcff) !important;
+  font-size: .86rem !important;
+  line-height: 1.55 !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body .cc-window.cc-floating .cc-message {
+  margin-bottom: 14px !important;
+}
+
+html body .cc-window.cc-banner .cc-message {
+  margin-right: 0 !important;
+}
+
+html body .cc-window .cc-header {
+  color: #00b8f0 !important;
+  font-weight: 850 !important;
+  letter-spacing: .02em !important;
+}
+
+/* Learn-more link -------------------------------------------- */
+html body .cc-window .cc-link,
+html body .cc-window .cc-link:link,
+html body .cc-window .cc-link:visited {
+  margin: 0 0 0 2px !important;
+  padding: 2px 3px !important;
+  color: #00b8f0 !important;
+  opacity: 1 !important;
+  font-weight: 750 !important;
+  text-decoration: none !important;
+  border-radius: 5px !important;
+}
+
+html body .cc-window .cc-link:hover {
+  color: #00b8f0 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+
+html body .cc-window .cc-link:focus-visible {
+  color: #00b8f0 !important;
+  outline: 2px solid #00b8f0 !important;
+  outline-offset: 2px !important;
+}
+
+/* Compliance / buttons --------------------------------------- */
+html body .cc-window .cc-compliance {
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+html body .cc-window .cc-btn {
+  box-sizing: border-box !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 9px 14px !important;
+  border: 1px solid #00b8f0 !important;
+  border-radius: 10px !important;
+  background: #00b8f0 !important;
+  color: #041012 !important;
+  font-family: inherit !important;
+  font-size: .76rem !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .02em !important;
+  text-decoration: none !important;
+  white-space: normal !important;
+  box-shadow: 0 0 0 rgba(0, 184, 240, 0) !important;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease !important;
+}
+
+html body .cc-window .cc-btn:hover,
+html body .cc-window .cc-btn:focus {
+  border-color: #00b8f0 !important;
+  background: #00b8f0 !important;
+  color: #041012 !important;
+  filter: brightness(1.06) !important;
+  box-shadow: 0 0 18px rgba(0, 184, 240, .28) !important;
+  text-decoration: none !important;
+}
+
+html body .cc-window .cc-btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+html body .cc-window .cc-btn:focus-visible {
+  outline: 2px solid #00b8f0 !important;
+  outline-offset: 3px !important;
+}
+
+html body .cc-window .cc-btn + .cc-btn {
+  margin-left: 0 !important;
+}
+
+/* If CookieConsent is configured with more than one choice,
+   keep non-dismiss secondary choices theme-aware instead of cyan. */
+html body .cc-window .cc-highlight .cc-btn:first-child:not(.cc-dismiss),
+html body .cc-window .cc-compliance .cc-btn.cc-deny {
+  border-color: rgba(0, 184, 240, .38) !important;
+  background: var(--control-bg, rgba(127, 127, 127, .14)) !important;
+  color: var(--text-color, #eefcff) !important;
+  box-shadow: none !important;
+}
+
+html body .cc-window .cc-highlight .cc-btn:first-child:not(.cc-dismiss):hover,
+html body .cc-window .cc-compliance .cc-btn.cc-deny:hover,
+html body .cc-window .cc-compliance .cc-btn.cc-deny:focus-visible {
+  border-color: #00b8f0 !important;
+  background: var(--control-bg-light, var(--control-bg, rgba(127, 127, 127, .20))) !important;
+  color: #00b8f0 !important;
+}
+
+/* Close / revoke controls ------------------------------------ */
+html body .cc-window .cc-close,
+html body .cc-revoke {
+  color: #00b8f0 !important;
+}
+
+html body .cc-revoke {
+  border: 1px solid rgba(0, 184, 240, .45) !important;
+  background: var(--body-bg-shaded, var(--body-bg, #12171c)) !important;
+  color: #00b8f0 !important;
+  border-radius: 10px !important;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+  box-shadow: 0 8px 24px var(--shadow-color, rgba(0, 0, 0, .28)) !important;
+}
+
+html body .cc-revoke:hover,
+html body .cc-revoke:focus-visible {
+  border-color: #00b8f0 !important;
+  color: #00b8f0 !important;
+  text-decoration: none !important;
+}
+
+/* Phone/tablet layout ---------------------------------------- */
+@media screen and (max-width: 767.98px) {
+  html body .cc-window {
+    font-size: 13px !important;
+    border-radius: 14px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow:
+      0 10px 28px var(--shadow-color, rgba(0, 0, 0, .30)),
+      0 0 14px rgba(0, 184, 240, .10) !important;
+  }
+
+  html body .cc-window.cc-banner,
+  html body .cc-window.cc-floating,
+  html body .cc-window.cc-left,
+  html body .cc-window.cc-right {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  html body .cc-window.cc-banner {
+    padding: 12px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  html body .cc-window.cc-banner.cc-bottom,
+  html body .cc-window.cc-floating.cc-bottom {
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  }
+
+  html body .cc-window.cc-banner.cc-top,
+  html body .cc-window.cc-floating.cc-top {
+    top: max(8px, env(safe-area-inset-top)) !important;
+  }
+
+  html body .cc-window.cc-floating {
+    padding: 14px !important;
+  }
+
+  html body .cc-window .cc-message,
+  html body .cc-window.cc-banner .cc-message,
+  html body .cc-window.cc-floating .cc-message {
+    margin: 0 !important;
+    font-size: .80rem !important;
+    line-height: 1.48 !important;
+  }
+
+  html body .cc-window .cc-compliance,
+  html body .cc-window.cc-banner .cc-compliance {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    gap: 8px !important;
+  }
+
+  html body .cc-window .cc-btn {
+    flex: 1 1 0 !important;
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+    font-size: .78rem !important;
+  }
+}
+
+/* Reduced-motion accessibility ------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html body .cc-window,
+  html body .cc-window *,
+  html body .cc-revoke {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  html body .cc-window .cc-btn:hover {
+    transform: none !important;
+  }
+}
+
+@media print {
+  html body .cc-window,
+  html body .cc-revoke {
+    display: none !important;
+  }
+}
