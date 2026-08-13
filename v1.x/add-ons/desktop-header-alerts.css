@@ -6,34 +6,40 @@
    header controls and keeping toast alerts readable in one row.
 
    Scope: desktop/tablet-up only (imported by htg.forum.css)
-   Version: 1.0
+   Desktop range: 768px and up, with no fixed upper breakpoint.
+   Version: 1.1
    Author: HarleyTG
-   Added: 2026-08-12
+   Updated: 2026-08-12
 ========================================================== */
 
 /* ----------------------------------------------------------
    HEADER SEARCH
 
    Flarum 1.x expands .Search.focused to 400px and shifts it left.
-   That native behavior can collide with a branded title and extra
-   extension controls in a busy desktop header. Keep the component's
-   own classes/DOM, but make its width stable inside Header-secondary.
+   HCF keeps the native component but replaces that fixed expansion
+   with a fluid width that automatically scales across desktop
+   viewports, including ultrawide and 4K displays.
 ---------------------------------------------------------- */
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
   .Header-secondary .item-search,
   .Header-secondary .Search,
   .Header-secondary .Search-input {
     min-width: 0 !important;
   }
 
+  .Header-secondary .item-search {
+    max-width: min(420px, 32vw) !important;
+  }
+
   .Header-secondary .Search {
-    width: clamp(210px, 18vw, 280px) !important;
-    max-width: clamp(210px, 18vw, 280px) !important;
+    width: clamp(180px, 20vw, 420px) !important;
+    max-width: min(420px, 32vw) !important;
     margin-left: 0 !important;
     margin-right: 10px !important;
   }
 
-  /* Cancel Flarum's focused margin-left:-400px expansion. */
+  /* Cancel Flarum's focused margin-left:-400px expansion. The field
+     stays at the same responsive width before, during, and after focus. */
   .Header-secondary .Search.focused {
     margin-left: 0 !important;
   }
@@ -59,15 +65,15 @@
     padding-right: 32px !important;
   }
 
-  /* Keep results aligned to the field without allowing the focused
-     400px core width to force the header wider. */
+  /* Results may be wider than the field for readability, but remain
+     bounded by the viewport instead of forcing the header wider. */
   .Header-secondary .Search-results,
   .Header-secondary .Search.focused .Search-results {
     left: auto !important;
     right: 0 !important;
-    width: min(360px, calc(100vw - 24px)) !important;
+    width: min(520px, calc(100vw - 24px)) !important;
     min-width: 100% !important;
-    max-width: min(360px, calc(100vw - 24px)) !important;
+    max-width: min(520px, calc(100vw - 24px)) !important;
     box-sizing: border-box !important;
   }
 }
