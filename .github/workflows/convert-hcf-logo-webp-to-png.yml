@@ -1,0 +1,39 @@
+name: Convert HCF Logo WebP to PNG
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/convert-hcf-logo-webp-to-png.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install WebP tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webp
+
+      - name: Convert logo assets to PNG
+        run: |
+          dwebp assets/logos/HTG-App-Icon.webp -o assets/logos/HTG-App-Icon.png
+          dwebp assets/logos/HTG-Construction-Icon.webp -o assets/logos/HTG-Construction-Icon.png
+          dwebp assets/logos/HTG-Full-Logo.webp -o assets/logos/HTG-Full-Logo.png
+          rm assets/logos/HTG-App-Icon.webp
+          rm assets/logos/HTG-Construction-Icon.webp
+          rm assets/logos/HTG-Full-Logo.webp
+          rm .github/workflows/convert-hcf-logo-webp-to-png.yml
+
+      - name: Commit PNG replacements
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Convert HCF logo assets to PNG"
+          git push
