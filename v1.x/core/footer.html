@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.2
+   HARLEY'S CLAN FORUM FOOTER v4.4.3
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-11
+   Updated: 2026-08-12
 ========================================================= */
 
 :root{
@@ -595,6 +595,7 @@
    DISCORD FEEDBACK
    Desktop: labeled terminal control and floating panel.
    Mobile: lightweight touch button and bottom panel.
+   Cookie consent: auto-clears a visible FoF Cookie Consent window.
 ========================================================= */
 .hc-feedback-float,
 .hc-feedback-float *{
@@ -603,9 +604,10 @@
 
 .hc-feedback-float{
     --hc-feedback-accent:#00b8f0;
+    --hc-feedback-cookie-offset:0px;
     position:fixed;
     right:max(20px,env(safe-area-inset-right));
-    bottom:max(20px,env(safe-area-inset-bottom));
+    bottom:calc(max(20px,env(safe-area-inset-bottom)) + var(--hc-feedback-cookie-offset));
     z-index:2147483000;
     width:auto;
     height:52px;
@@ -831,7 +833,7 @@
 /* Detected phone/tablet presentation. */
 .hc-feedback-float.hc-mobile-performance{
     right:max(10px,env(safe-area-inset-right));
-    bottom:max(70px,calc(env(safe-area-inset-bottom) + 10px));
+    bottom:calc(max(70px,calc(env(safe-area-inset-bottom) + 10px)) + var(--hc-feedback-cookie-offset));
     width:46px;
     height:46px;
 }
@@ -885,10 +887,10 @@
 .hc-feedback-float.hc-mobile-performance .hc-feedback-panel{
     position:fixed;
     right:10px;
-    bottom:max(126px,calc(env(safe-area-inset-bottom) + 66px));
+    bottom:calc(max(126px,calc(env(safe-area-inset-bottom) + 66px)) + var(--hc-feedback-cookie-offset));
     left:10px;
     width:auto;
-    max-height:calc(100dvh - 150px);
+    max-height:calc(100dvh - 150px - var(--hc-feedback-cookie-offset));
     padding:16px;
     border-color:rgba(0,184,240,.36);
     border-radius:18px;
@@ -1173,7 +1175,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.2">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.3">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1338,6 +1340,11 @@
     var ipStatus=document.getElementById("hc-ip-status");
     var topButton=document.getElementById("hc-top-btn");
     var feedbackFloat=document.querySelector(".hc-feedback-float");
+    var cookieConsentWindow=null;
+    var cookieFinderObserver=null;
+    var cookieWindowObserver=null;
+    var cookieResizeObserver=null;
+    var cookieUpdateFrame=0;
     var ipRequested=false;
     var clockTimer=0;
     var identityTimer=0;
@@ -1376,7 +1383,6 @@
         localZone=Intl.DateTimeFormat().resolvedOptions().timeZone||localZone;
     }catch(error){}
 
-
     function text(element,value){
         if(element){element.textContent=value}
     }
@@ -1396,6 +1402,156 @@
         }
 
         return name;
+    }
+
+    function isCookieWindowVisible(element){
+        if(!element||!document.documentElement.contains(element)){return false}
+
+        try{
+            var style=window.getComputedStyle(element);
+
+            if(
+                style.display==="none"||
+                style.visibility==="hidden"||
+                parseFloat(style.opacity||"1")===0
+            ){
+                return false;
+            }
+        }catch(error){}
+
+        var rect=element.getBoundingClientRect();
+        var viewportHeight=window.innerHeight||document.documentElement.clientHeight||0;
+
+        return rect.width>0&&
+            rect.height>0&&
+            rect.bottom>0&&
+            rect.top<viewportHeight;
+    }
+
+    function updateCookieConsentClearance(){
+        if(!feedbackFloat){return}
+
+        var cookieWindow=cookieConsentWindow;
+
+        if(!isCookieWindowVisible(cookieWindow)){
+            var candidate=document.querySelector(".cc-window");
+
+            if(candidate&&candidate!==cookieWindow){
+                watchCookieConsentWindow(candidate);
+                cookieWindow=candidate;
+            }
+        }
+
+        var offset=0;
+
+        if(isCookieWindowVisible(cookieWindow)){
+            var rect=cookieWindow.getBoundingClientRect();
+            var viewportHeight=window.innerHeight||document.documentElement.clientHeight||0;
+            var bottomAligned=
+                cookieWindow.classList.contains("cc-bottom")||
+                rect.bottom>=viewportHeight-80;
+
+            if(bottomAligned){
+                offset=Math.max(
+                    0,
+                    Math.ceil(viewportHeight-Math.max(0,rect.top)+12)
+                );
+            }
+        }
+
+        feedbackFloat.style.setProperty(
+            "--hc-feedback-cookie-offset",
+            offset+"px"
+        );
+        feedbackFloat.classList.toggle("hc-cookie-consent-active",offset>0);
+    }
+
+    function scheduleCookieConsentClearance(){
+        if(!feedbackFloat||cookieUpdateFrame){return}
+
+        var requestFrame=window.requestAnimationFrame||function(callback){
+            return window.setTimeout(callback,16);
+        };
+
+        cookieUpdateFrame=requestFrame(function(){
+            cookieUpdateFrame=0;
+            updateCookieConsentClearance();
+        });
+    }
+
+    function watchCookieConsentWindow(element){
+        if(!element){return}
+
+        if(element===cookieConsentWindow){
+            scheduleCookieConsentClearance();
+            return;
+        }
+
+        cookieConsentWindow=element;
+
+        if(cookieWindowObserver){
+            cookieWindowObserver.disconnect();
+            cookieWindowObserver=null;
+        }
+
+        if(cookieResizeObserver){
+            cookieResizeObserver.disconnect();
+            cookieResizeObserver=null;
+        }
+
+        if("MutationObserver" in window){
+            cookieWindowObserver=new MutationObserver(
+                scheduleCookieConsentClearance
+            );
+            cookieWindowObserver.observe(element,{
+                attributes:true,
+                attributeFilter:["class","style"],
+                childList:true,
+                subtree:true
+            });
+        }
+
+        if("ResizeObserver" in window){
+            cookieResizeObserver=new ResizeObserver(
+                scheduleCookieConsentClearance
+            );
+            cookieResizeObserver.observe(element);
+        }
+
+        scheduleCookieConsentClearance();
+    }
+
+    function findCookieConsentWindow(){
+        var element=document.querySelector(".cc-window");
+
+        if(!element){return false}
+
+        watchCookieConsentWindow(element);
+        return true;
+    }
+
+    function initCookieConsentClearance(){
+        if(!feedbackFloat){return}
+
+        feedbackFloat.style.setProperty("--hc-feedback-cookie-offset","0px");
+
+        if(!findCookieConsentWindow()&&"MutationObserver" in window){
+            cookieFinderObserver=new MutationObserver(function(){
+                if(findCookieConsentWindow()&&cookieFinderObserver){
+                    cookieFinderObserver.disconnect();
+                    cookieFinderObserver=null;
+                }
+            });
+
+            cookieFinderObserver.observe(document.body||document.documentElement,{
+                childList:true,
+                subtree:true
+            });
+        }
+
+        window.addEventListener("resize",scheduleCookieConsentClearance);
+        window.addEventListener("orientationchange",scheduleCookieConsentClearance);
+        scheduleCookieConsentClearance();
     }
 
     function isMobilePerformanceDevice(){
@@ -1683,6 +1839,7 @@
     }
 
     detectCompatibility();
+    initCookieConsentClearance();
     initMotion();
     initLiveUpdates();
 
