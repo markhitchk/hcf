@@ -5,6 +5,8 @@
    native 767.98px phone breakpoint.
    - <= 767.98px: Flarum owns navigation/drawer behavior;
      mobile.css owns HCF branding and compact extension layout
+   - mobile alert theme patch runs after mobile.css so phone alerts
+     automatically follow Flarum dark/light theme variables
    - >= 768px: htg.desktop.css owns the desktop/tablet-up theme
    - desktop header/alert stability patch runs after the base theme,
      scales fluidly with no fixed upper desktop breakpoint, and uses
@@ -15,7 +17,7 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a28
+   Version: 5.9a29
    Author: HarleyTG
    Updated: 2026-08-12
 ========================================================== */
@@ -26,6 +28,7 @@
 @import url("../add-ons/direct-messages.css") screen and (max-width: 767.98px);
 @import url("../add-ons/loading-screen.css") screen and (max-width: 767.98px);
 @import url("../add-ons/mobile.css") screen and (max-width: 767.98px);
+@import url("../add-ons/mobile-alerts-theme.css") screen and (max-width: 767.98px);
 @import url("../add-ons/mobile-auth-tooltip.css") screen and (max-width: 767.98px);
 
 @import url("./htg.desktop.css") screen and (min-width: 768px);
