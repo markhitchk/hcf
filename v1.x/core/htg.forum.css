@@ -19,7 +19,7 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a32
+   Version: 5.9a33
    Author: HarleyTG
    Updated: 2026-08-13
 ========================================================== */
@@ -79,5 +79,44 @@
         bottom:calc(max(126px,calc(env(safe-area-inset-bottom) + 66px)) + var(--hc-feedback-cookie-offset,0px))!important;
         width:auto!important;
         max-height:calc(100dvh - 150px - var(--hc-feedback-cookie-offset,0px))!important;
+    }
+
+    /* When the feedback panel is open, turn the native summary toggle
+       into an always-visible close button. Because it remains the same
+       <summary>, tapping it closes the <details> without extra JS. */
+    .hc-feedback-float[open] > summary{
+        position:fixed!important;
+        top:max(12px,env(safe-area-inset-top))!important;
+        right:max(12px,env(safe-area-inset-right))!important;
+        bottom:auto!important;
+        left:auto!important;
+        z-index:2147483002!important;
+        display:grid!important;
+        place-items:center!important;
+        width:44px!important;
+        min-width:44px!important;
+        max-width:44px!important;
+        height:44px!important;
+        min-height:44px!important;
+        max-height:44px!important;
+        padding:0!important;
+        border:1px solid #00b8f0!important;
+        border-radius:50%!important;
+        background:var(--control-bg,#11151b)!important;
+        color:#00b8f0!important;
+        box-shadow:0 8px 22px rgba(0,0,0,.32),0 0 14px rgba(0,184,240,.2)!important;
+        transform:none!important;
+    }
+
+    .hc-feedback-float[open] > summary .hc-feedback-paw,
+    .hc-feedback-float[open] > summary .hc-feedback-label{
+        display:none!important;
+    }
+
+    .hc-feedback-float[open] > summary::after{
+        content:"×"!important;
+        display:block!important;
+        font:700 28px/1 Arial,sans-serif!important;
+        color:#00b8f0!important;
     }
 }
