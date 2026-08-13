@@ -1,0 +1,95 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — MOBILE ALERT THEME PATCH
+
+   Mobile alerts are separate from the desktop AlertManager patch.
+   This file keeps Flarum's native mobile alert structure and HCF
+   mobile spacing, but makes alert surfaces automatically follow
+   Flarum's active light/dark theme variables.
+
+   Scope: phones only (<= 767.98px)
+   Version: 1.0
+   Author: HarleyTG
+   Added: 2026-08-12
+========================================================== */
+
+@media screen and (max-width: 767.98px) {
+  /* Standard phone toast alerts and inline notification-setting alerts.
+     Use Flarum theme variables rather than fixed dark colors, so dark
+     theme stays dark and light theme stays light automatically. */
+  html body .AlertManager .Alert,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert {
+    background: var(--body-bg-shaded, var(--body-bg, #111820)) !important;
+    color: var(--text-color, #e8e8e8) !important;
+    border-color: var(--control-bg, rgba(127, 127, 127, .24)) !important;
+    border-left-color: var(--primary-color, #00b8f0) !important;
+    box-shadow:
+      0 8px 24px var(--shadow-color, rgba(0, 0, 0, .28)),
+      0 0 14px rgba(0, 184, 240, .10) !important;
+  }
+
+  html body .AlertManager .Alert :is(.Alert-title, .Alert-body),
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert :is(.Alert-title, .Alert-body) {
+    color: var(--text-color, #e8e8e8) !important;
+  }
+
+  html body .AlertManager .Alert a,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert a {
+    color: var(--primary-color, #00b8f0) !important;
+  }
+
+  /* Action buttons also follow Flarum's control surface so they are
+     dark on dark theme and light on light theme. */
+  html body .AlertManager .Alert-controls .Button--link,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls .Button--link {
+    background: var(--control-bg, rgba(127, 127, 127, .14)) !important;
+    color: var(--primary-color, #00b8f0) !important;
+    border: 1px solid var(--control-bg-shaded, var(--control-bg, rgba(127, 127, 127, .22))) !important;
+  }
+
+  html body .AlertManager .Alert-controls .Button--link:hover,
+  html body .AlertManager .Alert-controls .Button--link:focus-visible,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls .Button--link:hover,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-controls .Button--link:focus-visible {
+    background: var(--control-bg-light, var(--control-bg, rgba(127, 127, 127, .20))) !important;
+    color: var(--primary-color, #00b8f0) !important;
+    outline: 2px solid var(--primary-color, #00b8f0) !important;
+    outline-offset: 1px !important;
+  }
+
+  html body .AlertManager .Alert-dismiss,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-dismiss {
+    background: var(--control-bg, rgba(127, 127, 127, .14)) !important;
+    color: var(--text-color, #e8e8e8) !important;
+  }
+
+  html body .AlertManager .Alert-dismiss:hover,
+  html body .AlertManager .Alert-dismiss:focus-visible,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-dismiss:hover,
+  html body .App .SettingsPage .Settings-notifications
+  > ul > li > .Alert .Alert-dismiss:focus-visible {
+    background: var(--control-bg-light, var(--control-bg, rgba(127, 127, 127, .20))) !important;
+    color: var(--primary-color, #00b8f0) !important;
+  }
+
+  /* Preserve semantic state accents without replacing the theme-aware
+     surface with bright red/green/yellow backgrounds. */
+  html body .AlertManager .Alert--error,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert--error {
+    border-left-color: var(--error-color, #ff6b6b) !important;
+  }
+
+  html body .AlertManager .Alert--success,
+  html body .App .SettingsPage
+  .Settings-notifications > ul > li > .Alert--success {
+    border-left-color: var(--enabled-color, #2ecc40) !important;
+  }
+}
