@@ -1,0 +1,32 @@
+name: Export Android 14 SDK Tools v2
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/hcf-android-apk
+    paths:
+      - ".github/workflows/export-android14-sdk-v2.yml"
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 14 platform and newer build tools
+        run: sdkmanager "platforms;android-34" "build-tools;36.0.0"
+
+      - name: Bundle required SDK files
+        run: |
+          mkdir -p sdk-export/platforms/android-34 sdk-export/build-tools
+          cp "$ANDROID_HOME/platforms/android-34/android.jar" sdk-export/platforms/android-34/
+          cp -a "$ANDROID_HOME/build-tools/36.0.0" sdk-export/build-tools/
+
+      - name: Upload SDK bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: android14-sdk-build-tools-v2
+          path: sdk-export
+          if-no-files-found: error
