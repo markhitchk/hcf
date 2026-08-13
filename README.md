@@ -22,6 +22,7 @@ assets/
 
 v1.x/
 ├── add-ons/
+│   ├── cookie-consent.css
 │   ├── direct-messages.css
 │   ├── header-panels.css
 │   ├── loading-screen.css
@@ -80,10 +81,12 @@ Paste this live import into Flarum's **Appearance → Custom CSS** field:
 
 Use the URL exactly as shown. HCF CDN references use `@main` so the forum follows the current production files in this repository. Relative imports inside `htg.forum.css` remain under the same `v1.x/` tree. Do not wrap the URL in Markdown link syntax such as `[URL](URL)` or paste the relative imports below directly into Flarum.
 
-The entry point separates phone and desktop rules at Flarum's native
-`767.98px` phone breakpoint:
+The entry point loads the shared FoF Cookie Consent theme on every viewport, then separates phone and desktop rules at Flarum's native `767.98px` phone breakpoint:
 
 ```css
+/* Shared extension styling. */
+@import url("../add-ons/cookie-consent.css");
+
 /* Phones: HCF add-ons plus mobile overrides. */
 @import url("../add-ons/motion.css") screen and (max-width: 767.98px);
 @import url("../add-ons/header-panels.css") screen and (max-width: 767.98px);
@@ -94,6 +97,8 @@ The entry point separates phone and desktop rules at Flarum's native
 /* Desktop and tablet-up. */
 @import url("./htg.desktop.css") screen and (min-width: 768px);
 ```
+
+`cookie-consent.css` styles FriendsOfFlarum Cookie Consent using the extension's standard CookieConsent v3 classes. It follows Flarum dark/light theme variables while keeping HCF cyan `#00b8f0`, includes desktop and mobile layouts, and is designed to work with the Discord feedback clearance logic in `v1.x/core/footer.html`.
 
 `mobile.css` deliberately leaves the phone header, navigation controls,
 drawer, backdrop, and content positioning to
