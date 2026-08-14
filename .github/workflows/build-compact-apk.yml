@@ -50,6 +50,9 @@ jobs:
           xz -t build-input/v030-override.tar.xz
           tar -xJf build-input/v030-override.tar.xz -C build-input/source
 
+          # v0.3.0 hotfix: keep every forum identity avatar fully inside its rounded frame.
+          python3 .apkbuild/fix-identity-avatar.py build-input/source
+
           mkdir -p app/src/main/java app/src/main/res app/src/main/assets
           cp -R build-input/source/src/com app/src/main/java/
           cp -R build-input/source/res/. app/src/main/res/
@@ -111,6 +114,9 @@ jobs:
           EOF
 
           grep -R "VERSION = \"0.3.0\"" app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R "INTERNAL_BUILD = 29" app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R "ScaleType.FIT_CENTER" app/src/main/java/com/harleytg/forum/MainActivity.java
+          grep -R "android:scaleType=\"fitCenter\"" app/src/main/res/layout/activity_main.xml
           grep -R "android:versionName=\"0.3.0\"" app/src/main/AndroidManifest.xml
 
       - name: Ensure Android 34 SDK
@@ -139,14 +145,14 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add output/HarleysClanForum-0.3.0.apk output/HarleysClanForum-0.3.0.apk.sha256
           if ! git diff --cached --quiet; then
-            git commit -m "Build 0.3.0 test APK"
+            git commit -m "Build 0.3.0 identity avatar fit hotfix"
             git push
           fi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HarleysClanForum-0.3.0
+          name: HarleysClanForum-0.3.0-avatar-fit
           path: |
             output/HarleysClanForum-0.3.0.apk
             output/HarleysClanForum-0.3.0.apk.sha256
