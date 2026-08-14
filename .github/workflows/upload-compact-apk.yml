@@ -1,0 +1,23 @@
+name: Package compact header APK
+
+on:
+  push:
+    branches:
+      - chatgpt-apk-compact-header-028
+    paths:
+      - '.github/workflows/upload-compact-apk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HarleysClanForum-0.2.8-compact-header
+          path: output/HarleysClanForum-0.2.8-compact-header.apk
+          if-no-files-found: error
+          retention-days: 1
