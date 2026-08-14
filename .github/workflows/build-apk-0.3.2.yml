@@ -1,0 +1,160 @@
+name: Build Harley's Clan Forum APK 0.3.2
+
+on:
+  push:
+    branches:
+      - chatgpt-apk-0.3.0-instant-notifications
+    paths:
+      - '.github/workflows/build-apk-0.3.2.yml'
+      - '.apkbuild/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+
+      - name: Restore persistent Android debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: hcf-android-debug-signing-v1
+
+      - name: Restore source and prepare v0.3.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.apkbuild/source.b64.part-003')
+          s = p.read_text()
+          replacement = 'L16gqx7L4cP8xG2HTtcuB6rfeIJUwJVVdwVa1mppYJMqeBirIgcJ0uqbtFSGfRbOn369PCRgVcxZbJB0jNmc+rakdstJf+z4xLmbo3di3y0yN1MhPJaZppR2wxj6/HcdvdfkLHGvMxEOtwjAy5e0xPBMuVfhO7sNhNzH/q5YOxKc3++xeIQQRctoBJFgi15odEz8bhRGSzgLxB1zZvJriQA3PvvHOS14UwH0tS2K+RjmI+zE2HSXD3/9tH5zjSRwN6f+G+6sFGvnuOESBqjPr2hS8KDyEDc65Cr202EG2qoc86yS16mZf2EpOuNIGFZSb7XeyVVji3gW9+MKb3mUgj40+cOiARaQTnJyH1WCH9ta0gzS6xfqZ2q6tl7wmH5vnZsSS63zbWgpydTDScPS4uAUKNLPZosjd3OdRsWrrAt+Acqt9iiKXsaRXDRR6QytYWkcNRDV0IOxvhvtJKTNJfLiasLG7h/4CUSKYVYVGywRJNcq/gdp'
+          if len(replacement) != 500:
+              raise SystemExit('repair chunk length mismatch')
+          s = s[:9000] + replacement + s[9500:]
+          p.write_text(s)
+          PY
+
+          mkdir -p build-input/source
+          cat .apkbuild/source.b64.part-* | base64 -d > build-input/source.tar.xz
+          xz -t build-input/source.tar.xz
+          tar -xJf build-input/source.tar.xz -C build-input/source
+
+          cat .apkbuild/v030-override.b64.part-* | base64 -d > build-input/v030-override.tar.xz
+          xz -t build-input/v030-override.tar.xz
+          tar -xJf build-input/v030-override.tar.xz -C build-input/source
+
+          python3 .apkbuild/fix-identity-avatar.py build-input/source
+
+          find build-input/source -type f \( -name '*.java' -o -name '*.xml' -o -name '*.js' \) -print0 \
+            | xargs -0 sed -i 's/0\.3\.0/0.3.2/g; s/3009999/3020000/g; s/INTERNAL_BUILD = 29/INTERNAL_BUILD = 31/g'
+
+          mkdir -p app/src/main/java app/src/main/res app/src/main/assets
+          cp -R build-input/source/src/com app/src/main/java/
+          cp -R build-input/source/res/. app/src/main/res/
+          cp -R build-input/source/assets/. app/src/main/assets/
+          cp build-input/source/AndroidManifest.xml app/src/main/AndroidManifest.xml
+
+          mkdir -p app/src/main/res/drawable-nodpi
+          curl -fsSL https://raw.githubusercontent.com/markhitchk/hcf/main/assets/logos/HTG-App-Icon.png \
+            -o app/src/main/res/drawable-nodpi/htg_app_logo.png
+
+          cat > settings.gradle <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          rootProject.name = 'HarleysClanForum'
+          include ':app'
+          EOF
+
+          cat > build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.6.1' apply false
+          }
+          EOF
+
+          cat > app/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application'
+          }
+
+          android {
+              namespace 'com.harleytg.forum'
+              compileSdk 34
+
+              defaultConfig {
+                  applicationId 'com.harleytg.forum'
+                  minSdk 26
+                  targetSdk 34
+                  versionCode 3020000
+                  versionName '0.3.2'
+              }
+
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
+              }
+          }
+          EOF
+
+          grep -R 'VERSION = "0.3.2"' app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R 'INTERNAL_BUILD = 31' app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R 'ScaleType.FIT_CENTER' app/src/main/java/com/harleytg/forum/MainActivity.java
+          grep -R 'android:scaleType="fitCenter"' app/src/main/res/layout/activity_main.xml
+          grep -R 'android:versionName="0.3.2"' app/src/main/AndroidManifest.xml
+
+      - name: Ensure Android 34 SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v sdkmanager >/dev/null 2>&1; then
+            yes | sdkmanager --licenses >/dev/null 2>&1 || true
+            sdkmanager 'platforms;android-34' 'build-tools;34.0.0' || true
+          fi
+
+      - name: Build installable APK
+        run: gradle --no-daemon :app:assembleDebug
+
+      - name: Validate APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          unzip -t "$APK" >/dev/null
+          mkdir -p output
+          cp "$APK" output/HarleysClanForum-0.3.2.apk
+          sha256sum output/HarleysClanForum-0.3.2.apk > output/HarleysClanForum-0.3.2.apk.sha256
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HarleysClanForum-0.3.2
+          path: |
+            output/HarleysClanForum-0.3.2.apk
+            output/HarleysClanForum-0.3.2.apk.sha256
+          if-no-files-found: error
+          retention-days: 1
