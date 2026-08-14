@@ -61,9 +61,6 @@ jobs:
           find build-input/source -type f \( -name '*.java' -o -name '*.xml' -o -name '*.js' \) -print0 \
             | xargs -0 sed -i 's/0\.3\.0/0.3.1/g; s/3009999/3010000/g; s/INTERNAL_BUILD = 29/INTERNAL_BUILD = 30/g'
 
-          # Distinguish the transition build in the launcher while keeping the existing app installed.
-          sed -i "s#<string name=\"app_name\">Harley\\'s Clan Forum</string>#<string name=\"app_name\">Harley\\'s Clan Forum Next</string>#" build-input/source/res/values/strings.xml
-
           mkdir -p app/src/main/java app/src/main/res app/src/main/assets
           cp -R build-input/source/src/com app/src/main/java/
           cp -R build-input/source/res/. app/src/main/res/
@@ -126,7 +123,6 @@ jobs:
 
           grep -R "VERSION = \"0.3.1\"" app/src/main/java/com/harleytg/forum/BuildInfo.java
           grep -R "ScaleType.FIT_CENTER" app/src/main/java/com/harleytg/forum/MainActivity.java
-          grep -R "Harley\\'s Clan Forum Next" app/src/main/res/values/strings.xml
 
       - name: Ensure Android 34 SDK
         shell: bash
