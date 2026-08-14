@@ -1,9 +1,9 @@
-name: Build compact header APK 0.2.9
+name: Build Harley's Clan Forum APK 0.3.0
 
 on:
   push:
     branches:
-      - chatgpt-apk-0.2.9-compact-header
+      - chatgpt-apk-0.3.0-instant-notifications
     paths:
       - '.apkbuild/**'
       - '.github/workflows/build-compact-apk.yml'
@@ -26,7 +26,7 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Restore Android source
+      - name: Restore v0.2.9 source and apply v0.3.0 override
         shell: bash
         run: |
           set -euo pipefail
@@ -41,21 +41,20 @@ jobs:
           p.write_text(s)
           PY
 
-          mkdir -p build-input
+          mkdir -p build-input/source
           cat .apkbuild/source.b64.part-* | base64 -d > build-input/source.tar.xz
           xz -t build-input/source.tar.xz
-          mkdir -p build-input/source
           tar -xJf build-input/source.tar.xz -C build-input/source
+
+          cat .apkbuild/v030-override.b64.part-* | base64 -d > build-input/v030-override.tar.xz
+          xz -t build-input/v030-override.tar.xz
+          tar -xJf build-input/v030-override.tar.xz -C build-input/source
 
           mkdir -p app/src/main/java app/src/main/res app/src/main/assets
           cp -R build-input/source/src/com app/src/main/java/
           cp -R build-input/source/res/. app/src/main/res/
           cp -R build-input/source/assets/. app/src/main/assets/
           cp build-input/source/AndroidManifest.xml app/src/main/AndroidManifest.xml
-
-          # Promote the compact-header build from 0.2.8 to 0.2.9 everywhere
-          find app/src/main -type f \( -name '*.java' -o -name '*.xml' -o -name '*.js' \) -print0 \
-            | xargs -0 sed -i 's/0\.2\.8/0.2.9/g; s/2089999/2099999/g; s/INTERNAL_BUILD = 26/INTERNAL_BUILD = 27/g'
 
           mkdir -p app/src/main/res/drawable-nodpi
           curl -fsSL \
@@ -100,8 +99,8 @@ jobs:
                   applicationId 'com.harleytg.forum'
                   minSdk 26
                   targetSdk 34
-                  versionCode 2099999
-                  versionName '0.2.9'
+                  versionCode 3009999
+                  versionName '0.3.0'
               }
 
               compileOptions {
@@ -110,6 +109,9 @@ jobs:
               }
           }
           EOF
+
+          grep -R "VERSION = \"0.3.0\"" app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R "android:versionName=\"0.3.0\"" app/src/main/AndroidManifest.xml
 
       - name: Ensure Android 34 SDK
         shell: bash
@@ -123,24 +125,30 @@ jobs:
       - name: Build installable APK
         run: gradle --no-daemon :app:assembleDebug
 
-      - name: Publish built APK on this temporary branch
+      - name: Validate and publish built APK
         shell: bash
         run: |
           set -euo pipefail
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          unzip -t "$APK" >/dev/null
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/HarleysClanForum-0.2.9-compact-header.apk
+          cp "$APK" output/HarleysClanForum-0.3.0.apk
+          sha256sum output/HarleysClanForum-0.3.0.apk | tee output/HarleysClanForum-0.3.0.apk.sha256
           git config user.name "chatgpt-build-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add output/HarleysClanForum-0.2.9-compact-header.apk
+          git add output/HarleysClanForum-0.3.0.apk output/HarleysClanForum-0.3.0.apk.sha256
           if ! git diff --cached --quiet; then
-            git commit -m "Build 0.2.9 compact header APK"
+            git commit -m "Build 0.3.0 test APK"
             git push
           fi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HarleysClanForum-0.2.9-compact-header
-          path: output/HarleysClanForum-0.2.9-compact-header.apk
+          name: HarleysClanForum-0.3.0
+          path: |
+            output/HarleysClanForum-0.3.0.apk
+            output/HarleysClanForum-0.3.0.apk.sha256
           if-no-files-found: error
           retention-days: 1
