@@ -1,4 +1,4 @@
-name: Build Harley's Clan Forum APK 0.3.0
+name: Build Harley's Clan Forum APK 0.3.1
 
 on:
   push:
@@ -26,7 +26,15 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Restore v0.2.9 source and apply v0.3.0 override
+      # Keep one signing identity for development/sideload builds from this workflow.
+      # The first v0.3.1 run creates the key; later runs restore the same key.
+      - name: Restore persistent Android debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: hcf-android-debug-signing-v1
+
+      - name: Restore v0.2.9 source and apply v0.3.1 override
         shell: bash
         run: |
           set -euo pipefail
@@ -50,8 +58,12 @@ jobs:
           xz -t build-input/v030-override.tar.xz
           tar -xJf build-input/v030-override.tar.xz -C build-input/source
 
-          # v0.3.0 hotfix: keep every forum identity avatar fully inside its rounded frame.
+          # Keep every forum identity avatar fully inside its rounded frame.
           python3 .apkbuild/fix-identity-avatar.py build-input/source
+
+          # Promote the hotfix build so Android sees a newer app version.
+          find build-input/source -type f \( -name '*.java' -o -name '*.xml' -o -name '*.js' \) -print0 \
+            | xargs -0 sed -i 's/0\.3\.0/0.3.1/g; s/3009999/3010000/g; s/INTERNAL_BUILD = 29/INTERNAL_BUILD = 30/g'
 
           mkdir -p app/src/main/java app/src/main/res app/src/main/assets
           cp -R build-input/source/src/com app/src/main/java/
@@ -102,8 +114,8 @@ jobs:
                   applicationId 'com.harleytg.forum'
                   minSdk 26
                   targetSdk 34
-                  versionCode 3009999
-                  versionName '0.3.0'
+                  versionCode 3010000
+                  versionName '0.3.1'
               }
 
               compileOptions {
@@ -113,11 +125,11 @@ jobs:
           }
           EOF
 
-          grep -R "VERSION = \"0.3.0\"" app/src/main/java/com/harleytg/forum/BuildInfo.java
-          grep -R "INTERNAL_BUILD = 29" app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R "VERSION = \"0.3.1\"" app/src/main/java/com/harleytg/forum/BuildInfo.java
+          grep -R "INTERNAL_BUILD = 30" app/src/main/java/com/harleytg/forum/BuildInfo.java
           grep -R "ScaleType.FIT_CENTER" app/src/main/java/com/harleytg/forum/MainActivity.java
           grep -R "android:scaleType=\"fitCenter\"" app/src/main/res/layout/activity_main.xml
-          grep -R "android:versionName=\"0.3.0\"" app/src/main/AndroidManifest.xml
+          grep -R "android:versionName=\"0.3.1\"" app/src/main/AndroidManifest.xml
 
       - name: Ensure Android 34 SDK
         shell: bash
@@ -139,22 +151,22 @@ jobs:
           test -s "$APK"
           unzip -t "$APK" >/dev/null
           mkdir -p output
-          cp "$APK" output/HarleysClanForum-0.3.0.apk
-          sha256sum output/HarleysClanForum-0.3.0.apk | tee output/HarleysClanForum-0.3.0.apk.sha256
+          cp "$APK" output/HarleysClanForum-0.3.1.apk
+          sha256sum output/HarleysClanForum-0.3.1.apk | tee output/HarleysClanForum-0.3.1.apk.sha256
           git config user.name "chatgpt-build-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add output/HarleysClanForum-0.3.0.apk output/HarleysClanForum-0.3.0.apk.sha256
+          git add output/HarleysClanForum-0.3.1.apk output/HarleysClanForum-0.3.1.apk.sha256
           if ! git diff --cached --quiet; then
-            git commit -m "Build 0.3.0 identity avatar fit hotfix"
+            git commit -m "Build 0.3.1 avatar fit update"
             git push
           fi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HarleysClanForum-0.3.0-avatar-fit
+          name: HarleysClanForum-0.3.1-avatar-fit
           path: |
-            output/HarleysClanForum-0.3.0.apk
-            output/HarleysClanForum-0.3.0.apk.sha256
+            output/HarleysClanForum-0.3.1.apk
+            output/HarleysClanForum-0.3.1.apk.sha256
           if-no-files-found: error
           retention-days: 1
