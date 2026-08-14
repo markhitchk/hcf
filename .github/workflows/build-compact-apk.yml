@@ -34,7 +34,7 @@ jobs:
           from pathlib import Path
           p = Path('.apkbuild/source.b64.part-003')
           s = p.read_text()
-          replacement = 'L16gqx7L4cP8xG2HTtcuB6rfeIJUwJVVdwVa1mppYJMqeBirIgcJ0uqbtFSGfRbOn369PCRgVcxZbJB0jNmc+rakdstJf+z4xLmbo3di3y0yN1MhPJaZppR2wxj6/HcdvdfkLHGvMxEOtwjAy5e0xPBMuVfhO7sNhNzH/q5YOxKc3++xeIQQRdtoBJFgi15odEz8bhRGSzgLxB1zZvJriQA3PvvHOS14UwH0tS2K+RjmI+zE2HSXD3/9tH5zjSRwN6f+G+6sFGvnuOESBqjPr2hS8KDyEDc65Cr202EG2qoc86yS16mZf2EpOuNIGFZSb7XeyVVji3gW9+MKb3mUgj40+cOiARaQTnJyH1WCH9ta0gzS6xfqZ2q6tl7wmH5vnZsSS63zbWgpydTDScPS4uAUKNLPZosjd3OdRsWrrAt+Acqt9iiKXsaRXDRR6QytYWkcNRDV0IOxvhvtJKTNJfLiasLG7h/4CUSKYVYVGywRJNcq/gdp'
+          replacement = 'L16gqx7L4cP8xG2HTtcuB6rfeIJUwJVVdwVa1mppYJMqeBirIgcJ0uqbtFSGfRbOn369PCRgVcxZbJB0jNmc+rakdstJf+z4xLmbo3di3y0yN1MhPJaZppR2wxj6/HcdvdfkLHGvMxEOtwjAy5e0xPBMuVfhO7sNhNzH/q5YOxKc3++xeIQQRctoBJFgi15odEz8bhRGSzgLxB1zZvJriQA3PvvHOS14UwH0tS2K+RjmI+zE2HSXD3/9tH5zjSRwN6f+G+6sFGvnuOESBqjPr2hS8KDyEDc65Cr202EG2qoc86yS16mZf2EpOuNIGFZSb7XeyVVji3gW9+MKb3mUgj40+cOiARaQTnJyH1WCH9ta0gzS6xfqZ2q6tl7wmH5vnZsSS63zbWgpydTDScPS4uAUKNLPZosjd3OdRsWrrAt+Acqt9iiKXsaRXDRR6QytYWkcNRDV0IOxvhvtJKTNJfLiasLG7h/4CUSKYVYVGywRJNcq/gdp'
           if len(replacement) != 500:
               raise SystemExit('repair chunk length mismatch')
           s = s[:9000] + replacement + s[9500:]
