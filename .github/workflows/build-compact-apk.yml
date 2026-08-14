@@ -1,9 +1,9 @@
-name: Build compact header APK
+name: Build compact header APK 0.2.9
 
 on:
   push:
     branches:
-      - chatgpt-apk-compact-header-028
+      - chatgpt-apk-0.2.9-compact-header
     paths:
       - '.apkbuild/**'
       - '.github/workflows/build-compact-apk.yml'
@@ -53,6 +53,10 @@ jobs:
           cp -R build-input/source/assets/. app/src/main/assets/
           cp build-input/source/AndroidManifest.xml app/src/main/AndroidManifest.xml
 
+          # Promote the compact-header build from 0.2.8 to 0.2.9 everywhere
+          find app/src/main -type f \( -name '*.java' -o -name '*.xml' -o -name '*.js' \) -print0 \
+            | xargs -0 sed -i 's/0\.2\.8/0.2.9/g; s/2089999/2099999/g; s/INTERNAL_BUILD = 26/INTERNAL_BUILD = 27/g'
+
           mkdir -p app/src/main/res/drawable-nodpi
           curl -fsSL \
             https://raw.githubusercontent.com/markhitchk/hcf/main/assets/logos/HTG-App-Icon.png \
@@ -96,8 +100,8 @@ jobs:
                   applicationId 'com.harleytg.forum'
                   minSdk 26
                   targetSdk 34
-                  versionCode 2089999
-                  versionName '0.2.8'
+                  versionCode 2099999
+                  versionName '0.2.9'
               }
 
               compileOptions {
@@ -124,9 +128,19 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p output
-          cp app/build/outputs/apk/debug/app-debug.apk output/HarleysClanForum-0.2.8-compact-header.apk
+          cp app/build/outputs/apk/debug/app-debug.apk output/HarleysClanForum-0.2.9-compact-header.apk
           git config user.name "chatgpt-build-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add output/HarleysClanForum-0.2.8-compact-header.apk
-          git commit -m "Build compact header APK"
-          git push
+          git add output/HarleysClanForum-0.2.9-compact-header.apk
+          if ! git diff --cached --quiet; then
+            git commit -m "Build 0.2.9 compact header APK"
+            git push
+          fi
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HarleysClanForum-0.2.9-compact-header
+          path: output/HarleysClanForum-0.2.9-compact-header.apk
+          if-no-files-found: error
+          retention-days: 1
