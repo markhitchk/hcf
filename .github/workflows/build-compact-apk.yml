@@ -17,55 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Diagnose staged source chunk
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import hashlib
-          expected = [
-          '4e6d5dd45c812da122e6b44c9e40e7dbcc189d102046fa0170f2088d37639d72',
-          '6aca036e8668a5fbb167f977abae49111e937bf95b0dbd1e88f061638b6db1d8',
-          '6c98a4243b1497238e366b9800c77d9268b654f36ed44a8d9a0d7c43af4d5470',
-          '2c465cdb1c78844965bd937e9c6db36e1d62343a71e89ba9d93a184a960f3a90',
-          'a2a3d741e18735e626c125def0e1a18253f576e2cf976200c1405b3eeec0764b',
-          'eed6e760f1a63041d47390f50bcae8e18b83ca716d3027fde00c902e178ff62c',
-          '3c69217192a4e6a61bd7bfbe46d275ec0a1d16dfc806b04c52fda32d14d684ec',
-          'c73630584a10ccb247b09d263443c9767ef1ebc54904fba78e9fb35dbe7cd693',
-          '24637d81fa083af14cad1b9af59a360080cb17f041a76ef808ba255330b45dcb',
-          '0db071f98d8b80266f378fc2e6eb93ef4976c763d691ea867e313a3b2e96bc7c',
-          '1a85d75106ea37dff09d6d448ba638f117fb0bafa55585339757835ebefcca54',
-          '7b60568017b8760a589d28b0818b8218ebbadb29a55f7ee2d5c17fd46e7eb72c',
-          'b38c3a0e99964a7c3371019a4f22e32b517c7217a8048bda5a6ce630e91baec4',
-          'cb6adf90ac033e27886d8a94dfe72c82e7202e8c772bdaf4d94ee66559164870',
-          '73e9b756949dcba3b81186231e2db05467dd280f185f0666b28cf3ddfb112ef1',
-          '4b56c11f9deed268c4a3c3e54dfda51998dd8b159fa1899c8ceb4ff18e242a22',
-          '3edb5a2da94ccf6f296f0b40c45828d531332516376c8ab280c80d4ca35cd157',
-          '213f7fc846c776046450cbb874a9e38288f83199334c15650988c63715f97eff',
-          'dff6554a4979b9c7db6f202dcf4b1b57491283e38af49c995928696cdb42f7ba',
-          '3430c8453b728c4fac582e4b06d939071143bc52296dbe63fb94ca2fc6587d2f',
-          '31578e6c45fd470d87c5f716abf7d8db646ee6a8d5d5c5d234a27335ef578fe7',
-          '21083764ff56c7da8f653f7e98a1d52c14ceff99056dd64916066ba98db306b6',
-          'e2b06c18e397bda6635e2ac939c6fc2eddec340182e4f39a9458282c0efbe155',
-          'fe6585ce7ec8ffc1190e79d2a06ec49543debc4062b50541b8ca8f4f6ed30638',
-          '8ecd26dd1f65c4e8be9dee61ab38bdda47117fa0cb68cead7b889f50c4c59df9',
-          '86d18d341f67aeae526eac4f4e852a42654195e8f33f55ae8ecf7c31657e6d52',
-          '9e76f08a415f27e1cc971fc6b799fe1a535c77493ff12b745462f17d0046ceaa',
-          'f9b8f2088597eff4a82a9ab1313626ff0b44b41226a56512fb8353a07a478b20',
-          'ce1b124da2c6c23583d8fac5e2b4fce3beb4dd94eb4e4e0da86853793d8a9c8b',
-          'e266b2c32b94160737d002de2978e665dd64d1c9a6631f14a19a6baf9c442816',
-          ]
-          s = Path('.apkbuild/source.b64.part-003').read_text()
-          print('length', len(s))
-          for i in range(0, len(s), 500):
-              chunk = s[i:i+500]
-              got = hashlib.sha256(chunk.encode()).hexdigest()
-              idx = i // 500
-              if idx >= len(expected) or got != expected[idx]:
-                  print('MISMATCH', idx, got, repr(chunk))
-          PY
-
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -79,8 +30,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.apkbuild/source.b64.part-003')
+          s = p.read_text()
+          replacement = 'L16gqx7L4cP8xG2HTtcuB6rfeIJUwJVVdwVa1mppYJMqeBirIgcJ0uqbtFSGfRbOn369PCRgVcxZbJB0jNmc+rakdstJf+z4xLmbo3di3y0yN1MhPJaZppR2wxj6/HcdvdfkLHGvMxEOtwjAy5e0xPBMuVfhO7sNhNzH/q5YOxKc3++xeIQQRdtoBJFgi15odEz8bhRGSzgLxB1zZvJriQA3PvvHOS14UwH0tS2K+RjmI+zE2HSXD3/9tH5zjSRwN6f+G+6sFGvnuOESBqjPr2hS8KDyEDc65Cr202EG2qoc86yS16mZf2EpOuNIGFZSb7XeyVVji3gW9+MKb3mUgj40+cOiARaQTnJyH1WCH9ta0gzS6xfqZ2q6tl7wmH5vnZsSS63zbWgpydTDScPS4uAUKNLPZosjd3OdRsWrrAt+Acqt9iiKXsaRXDRR6QytYWkcNRDV0IOxvhvtJKTNJfLiasLG7h/4CUSKYVYVGywRJNcq/gdp'
+          if len(replacement) != 500:
+              raise SystemExit('repair chunk length mismatch')
+          s = s[:9000] + replacement + s[9500:]
+          p.write_text(s)
+          PY
+
           mkdir -p build-input
           cat .apkbuild/source.b64.part-* | base64 -d > build-input/source.tar.xz
+          xz -t build-input/source.tar.xz
           mkdir -p build-input/source
           tar -xJf build-input/source.tar.xz -C build-input/source
 
