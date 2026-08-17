@@ -5,17 +5,23 @@
    FoF Night Mode writes meta[name="color-scheme"] to either
    "light" or "dark" whenever the selected theme changes.
 
-   Version: 1.0
+   IMPORTANT: During initial boot, do not guess the forum theme from
+   prefers-color-scheme. A saved FoF per-device preference can be the
+   opposite of the Android/OS preference. Guessing from the OS caused
+   the loader to paint dark -> light -> dark while FoF initialized.
+
+   Version: 1.1
    Author: HarleyTG
-   Added: 2026-08-17
+   Updated: 2026-08-17
 ========================================================= */
 
 /* =========================================================
    FLARUM LOADING SCREEN
 
    The loader can be visible while the forum stylesheet is being
-   swapped, so do not rely only on --body-bg. FoF Night Mode's
-   color-scheme meta value is the explicit source of truth.
+   initialized. Flarum's live theme variables remain the neutral
+   startup source. Only an explicit FoF "light" or "dark" meta value
+   is allowed to override them.
 ========================================================= */
 
 html:has(head meta[name="color-scheme"][content="light"]) {
@@ -48,20 +54,15 @@ html:has(head meta[name="color-scheme"][content="dark"]) #flarum-loading {
   color-scheme: dark !important;
 }
 
-/* Auto-theme fallback before FoF has replaced the meta value with an exact
-   light/dark value. The explicit selectors above win once FoF initializes. */
-@media (prefers-color-scheme: light) {
-  html:not(:has(head meta[name="color-scheme"][content="dark"])) {
-    --hc-loader-bg: #f5f8fa;
-    --hc-loader-text: #17242c;
-    --hc-loader-muted: #667982;
-    --hc-loader-track: #dce5e9;
-    --hc-loader-scanline: rgba(17, 36, 44, .035);
-    --hc-loader-shadow: rgba(20, 38, 46, .16);
-    --hc-welcome-glow: rgba(0, 184, 240, .22);
-    --hc-welcome-glow-soft: rgba(0, 184, 240, .11);
-  }
-}
+/*
+ * Anti-flicker startup rule:
+ *
+ * When color-scheme is missing, empty, or still a generic value such as
+ * "light dark", leave the loader on loading-screen.css/Flarum variables.
+ * Do NOT use prefers-color-scheme here. FoF may restore a saved preference
+ * a moment later, and using the OS preference in between creates a visible
+ * wrong-theme flash.
+ */
 
 /* Keep the loading bar readable on the bright Day Mode surface. */
 html:has(head meta[name="color-scheme"][content="light"]) #flarum-loading::after {
