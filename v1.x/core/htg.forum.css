@@ -16,12 +16,13 @@
    - compact laptop mode: post-desktop overrides for short
      Chromebook-class browser viewports
    - Day/Night compatibility patch runs last so custom loader/footer
-     surfaces follow FoF Night Mode's active color-scheme state
+     surfaces follow FoF Night Mode's explicit active color-scheme state
+     without temporarily guessing from the OS preference during startup
 
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a35
+   Version: 5.9a36
    Author: HarleyTG
    Updated: 2026-08-17
 ========================================================== */
