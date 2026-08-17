@@ -3,17 +3,24 @@
 
    Load AFTER add-ons/motion.css so these targeted fixes win.
 
-   Version: 1.2
+   Version: 1.3
    Author: HarleyTG
-   Updated: 2026-08-10
+   Updated: 2026-08-17
 ========================================================= */
 
 :root {
-  --hc-welcome-cyan: var(--cyan-readable, var(--cyan, #00ffff));
+  --hc-welcome-cyan: var(--cyan-readable, var(--primary-color, #00ffff));
   --hc-welcome-glow: rgba(0, 255, 255, 0.38);
   --hc-welcome-glow-soft: rgba(0, 255, 255, 0.16);
+
+  /* Flarum owns the active Day/Night palette. Keep the loader tied to those
+     live variables so a light forum never receives a forced dark boot screen. */
   --hc-loader-bg: var(--body-bg, #080c10);
   --hc-loader-text: var(--text-color, #e8ffff);
+  --hc-loader-muted: var(--muted-color, #9eb8c2);
+  --hc-loader-track: var(--control-bg, rgba(127, 127, 127, 0.14));
+  --hc-loader-scanline: color-mix(in srgb, var(--text-color, #e8ffff) 5%, transparent);
+  --hc-loader-shadow: color-mix(in srgb, var(--shadow-color, rgba(0, 0, 0, 0.28)) 72%, transparent);
 }
 
 /* =========================================================
@@ -160,14 +167,14 @@
   background:
     radial-gradient(
       circle at center,
-      rgba(0, 255, 255, 0.13) 0,
-      rgba(0, 255, 255, 0.055) 145px,
+      color-mix(in srgb, var(--hc-welcome-cyan) 13%, transparent) 0,
+      color-mix(in srgb, var(--hc-welcome-cyan) 5.5%, transparent) 145px,
       transparent 300px
     ),
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.018) 0,
-      rgba(255, 255, 255, 0.018) 1px,
+      var(--hc-loader-scanline) 0,
+      var(--hc-loader-scanline) 1px,
       transparent 1px,
       transparent 4px
     ),
@@ -223,23 +230,23 @@
   width: min(320px, 76vw) !important;
   height: 11px !important;
   margin-top: 2px !important;
-  border: 1px solid rgba(0, 255, 255, 0.55) !important;
+  border: 1px solid color-mix(in srgb, var(--hc-welcome-cyan) 55%, transparent) !important;
   border-radius: 999px !important;
   overflow: hidden !important;
-  background-color: rgba(0, 255, 255, 0.055) !important;
+  background-color: var(--hc-loader-track) !important;
   background-image: linear-gradient(
     90deg,
-    rgba(0, 128, 168, 0.72) 0%,
+    color-mix(in srgb, var(--hc-welcome-cyan) 58%, #006b8a) 0%,
     var(--hc-welcome-cyan) 72%,
-    #ffffff 100%
+    color-mix(in srgb, var(--hc-welcome-cyan) 22%, var(--hc-loader-text)) 100%
   );
   background-position: left center;
   background-size: 0% 100%;
   background-repeat: no-repeat;
   box-shadow:
-    inset 0 0 8px rgba(0, 0, 0, 0.72),
+    inset 0 0 8px var(--hc-loader-shadow),
     0 0 8px var(--hc-welcome-glow-soft),
-    0 0 17px rgba(0, 255, 255, 0.11) !important;
+    0 0 17px color-mix(in srgb, var(--hc-welcome-cyan) 11%, transparent) !important;
   animation: hc-loader-progress 9.5s linear forwards !important;
 }
 
@@ -278,14 +285,14 @@
     background:
       radial-gradient(
         circle at center,
-        rgba(0, 255, 255, 0.12) 0,
-        rgba(0, 255, 255, 0.045) 105px,
+        color-mix(in srgb, var(--hc-welcome-cyan) 12%, transparent) 0,
+        color-mix(in srgb, var(--hc-welcome-cyan) 4.5%, transparent) 105px,
         transparent 205px
       ),
       repeating-linear-gradient(
         0deg,
-        rgba(255, 255, 255, 0.016) 0,
-        rgba(255, 255, 255, 0.016) 1px,
+        var(--hc-loader-scanline) 0,
+        var(--hc-loader-scanline) 1px,
         transparent 1px,
         transparent 4px
       ),
