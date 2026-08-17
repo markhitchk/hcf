@@ -15,11 +15,13 @@
      Flarum theme variables for automatic dark/light surfaces
    - compact laptop mode: post-desktop overrides for short
      Chromebook-class browser viewports
+   - Day/Night compatibility patch runs last so custom loader/footer
+     surfaces follow FoF Night Mode's active color-scheme state
 
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a34
+   Version: 5.9a35
    Author: HarleyTG
    Updated: 2026-08-17
 ========================================================== */
@@ -39,6 +41,9 @@
 @import url("./htg.desktop.css") screen and (min-width: 768px);
 @import url("../add-ons/desktop-header-alerts.css") screen and (min-width: 768px);
 @import url("../add-ons/compact-laptop.css") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px);
+
+/* Final cross-viewport FoF Night Mode synchronization layer. */
+@import url("../add-ons/day-night-compat.css");
 
 /* Discord footer feedback is enabled system-wide. */
 .hc-feedback-float{
