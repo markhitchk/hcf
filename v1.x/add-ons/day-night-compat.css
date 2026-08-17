@@ -1,0 +1,132 @@
+/* =========================================================
+   HARLEY'S CLAN FORUM — DAY / NIGHT COMPATIBILITY PATCH
+
+   Keeps custom HCF surfaces synchronized with FoF Night Mode.
+   FoF Night Mode writes meta[name="color-scheme"] to either
+   "light" or "dark" whenever the selected theme changes.
+
+   Version: 1.0
+   Author: HarleyTG
+   Added: 2026-08-17
+========================================================= */
+
+/* =========================================================
+   FLARUM LOADING SCREEN
+
+   The loader can be visible while the forum stylesheet is being
+   swapped, so do not rely only on --body-bg. FoF Night Mode's
+   color-scheme meta value is the explicit source of truth.
+========================================================= */
+
+html:has(head meta[name="color-scheme"][content="light"]) {
+  --hc-loader-bg: #f5f8fa;
+  --hc-loader-text: #17242c;
+  --hc-loader-muted: #667982;
+  --hc-loader-track: #dce5e9;
+  --hc-loader-scanline: rgba(17, 36, 44, .035);
+  --hc-loader-shadow: rgba(20, 38, 46, .16);
+  --hc-welcome-glow: rgba(0, 184, 240, .22);
+  --hc-welcome-glow-soft: rgba(0, 184, 240, .11);
+}
+
+html:has(head meta[name="color-scheme"][content="dark"]) {
+  --hc-loader-bg: #080c10;
+  --hc-loader-text: #e8ffff;
+  --hc-loader-muted: #9eb8c2;
+  --hc-loader-track: rgba(0, 255, 255, .055);
+  --hc-loader-scanline: rgba(255, 255, 255, .018);
+  --hc-loader-shadow: rgba(0, 0, 0, .72);
+  --hc-welcome-glow: rgba(0, 255, 255, .38);
+  --hc-welcome-glow-soft: rgba(0, 255, 255, .16);
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) #flarum-loading {
+  color-scheme: light !important;
+}
+
+html:has(head meta[name="color-scheme"][content="dark"]) #flarum-loading {
+  color-scheme: dark !important;
+}
+
+/* Auto-theme fallback before FoF has replaced the meta value with an exact
+   light/dark value. The explicit selectors above win once FoF initializes. */
+@media (prefers-color-scheme: light) {
+  html:not(:has(head meta[name="color-scheme"][content="dark"])) {
+    --hc-loader-bg: #f5f8fa;
+    --hc-loader-text: #17242c;
+    --hc-loader-muted: #667982;
+    --hc-loader-track: #dce5e9;
+    --hc-loader-scanline: rgba(17, 36, 44, .035);
+    --hc-loader-shadow: rgba(20, 38, 46, .16);
+    --hc-welcome-glow: rgba(0, 184, 240, .22);
+    --hc-welcome-glow-soft: rgba(0, 184, 240, .11);
+  }
+}
+
+/* Keep the loading bar readable on the bright Day Mode surface. */
+html:has(head meta[name="color-scheme"][content="light"]) #flarum-loading::after {
+  border-color: rgba(0, 151, 199, .48) !important;
+  box-shadow:
+    inset 0 0 7px rgba(20, 38, 46, .13),
+    0 0 8px rgba(0, 184, 240, .09),
+    0 0 15px rgba(0, 184, 240, .07) !important;
+}
+
+/* =========================================================
+   FOOTER — PUBLIC IP REVEAL / HIDER
+
+   footer.html previously used fixed #202225 / #4f545c surfaces.
+   Use Flarum controls by default and explicit Day Mode fallbacks
+   so the CLICK TO REVEAL control cannot stay black in a light theme.
+========================================================= */
+
+.hc-simple-footer .hc-spoiler {
+  border: 1px solid var(--control-border, rgba(0, 184, 240, .22)) !important;
+  background: var(--control-bg, #202225) !important;
+  color: var(--text-color, inherit) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035) !important;
+}
+
+.hc-simple-footer .hc-spoiler:hover {
+  background: var(--control-bg-light, var(--control-bg, #4f545c)) !important;
+  border-color: color-mix(in srgb, var(--hc-accent, #00b8f0) 42%, transparent) !important;
+}
+
+.hc-simple-footer .hc-spoiler.is-revealed {
+  background: color-mix(in srgb, var(--control-bg, #202225) 72%, transparent) !important;
+  color: var(--text-color, inherit) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-simple-footer .hc-spoiler {
+  border-color: rgba(0, 128, 168, .24) !important;
+  background: #e5ebef !important;
+  color: #17242c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .8),
+    0 1px 3px rgba(25, 48, 58, .08) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-simple-footer .hc-spoiler:hover {
+  border-color: #00a6d9 !important;
+  background: #d8e4e9 !important;
+  color: #101c22 !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-simple-footer .hc-spoiler.is-revealed {
+  border-color: rgba(0, 128, 168, .18) !important;
+  background: rgba(218, 229, 234, .78) !important;
+  color: #17242c !important;
+}
+
+html:has(head meta[name="color-scheme"][content="dark"]) .hc-simple-footer .hc-spoiler {
+  background: #202225 !important;
+  color: var(--text-color, #eefcff) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="dark"]) .hc-simple-footer .hc-spoiler:hover {
+  background: #4f545c !important;
+}
+
+html:has(head meta[name="color-scheme"][content="dark"]) .hc-simple-footer .hc-spoiler.is-revealed {
+  background: rgba(32, 34, 37, .45) !important;
+}
