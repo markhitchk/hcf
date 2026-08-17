@@ -5,22 +5,24 @@
    Dedicated phone route pages such as /notifications and /flags
    must keep Flarum's native mobile App-titleControl behavior.
 
-   Version: 1.4
+   Version: 1.5
    Author: HarleyTG
-   Updated: 2026-08-11
+   Updated: 2026-08-17
 ========================================================= */
 
 :root {
-  --hc-panel-surface: rgba(10, 13, 17, .92);
-  --hc-panel-surface-soft: rgba(20, 24, 30, .86);
-  --hc-panel-border: rgba(0, 255, 255, .34);
-  --hc-panel-text: var(--text-color, #f2fdff);
-  --hc-panel-muted: var(--muted-color, #9eb8c2);
+  /* Follow Flarum's live theme variables instead of forcing dark glass.
+     These values automatically become light in Day Mode and dark in Night Mode. */
+  --hc-panel-surface: color-mix(in srgb, var(--body-bg, #111820) 94%, transparent);
+  --hc-panel-surface-soft: color-mix(in srgb, var(--body-bg, #111820) 86%, var(--control-bg, #1b222b) 14%);
+  --hc-panel-border: color-mix(in srgb, var(--primary-color, #00b8f0) 38%, transparent);
+  --hc-panel-text: var(--text-color, #e8e8e8);
+  --hc-panel-muted: var(--muted-color, #7f8c95);
   --hc-panel-accent: var(--cyan-readable, var(--primary-color, #00e5ea));
   --hc-panel-radius: 18px;
   --hc-panel-shadow:
-    0 18px 48px rgba(0, 0, 0, .38),
-    0 0 20px rgba(0, 255, 255, .08);
+    0 18px 48px color-mix(in srgb, var(--shadow-color, rgba(0, 0, 0, .28)) 78%, transparent),
+    0 0 20px color-mix(in srgb, var(--hc-panel-accent) 10%, transparent);
 }
 
 /* Header dropdown wrappers only. */
