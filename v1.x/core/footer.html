@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.3
+   HARLEY'S CLAN FORUM FOOTER v4.4.4
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-12
+   Updated: 2026-08-17
 ========================================================= */
 
 :root{
@@ -17,8 +17,8 @@
     --hc-warning:#ffd400;
     --hc-glow:rgba(0,184,240,.7);
     --hc-glow-soft:rgba(0,184,240,.35);
-    --hc-spoiler:#202225;
-    --hc-spoiler-hover:#4f545c;
+    --hc-spoiler:var(--control-bg,#202225);
+    --hc-spoiler-hover:var(--control-bg-light,var(--control-bg,#4f545c));
 }
 
 @supports (color:color-mix(in srgb,red,blue)){
@@ -522,14 +522,14 @@
     margin:0 1px;
     padding:1px 5px;
     overflow:hidden;
-    border:0;
+    border:1px solid var(--control-border,transparent);
     border-radius:4px;
     background:var(--hc-spoiler);
     color:inherit;
     font:inherit;
     letter-spacing:inherit;
     cursor:pointer;
-    transition:background-color .15s ease,box-shadow .15s ease;
+    transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease,color .15s ease;
 }
 
 .hc-spoiler:not(.is-revealed)::after{
@@ -544,7 +544,42 @@
 
 .hc-spoiler:hover{background:var(--hc-spoiler-hover)}
 .hc-spoiler:focus-visible{outline:2px solid var(--hc-accent);outline-offset:2px}
-.hc-spoiler.is-revealed{background:rgba(32,34,37,.45);cursor:default}
+.hc-spoiler.is-revealed{background:var(--control-bg,var(--hc-spoiler));cursor:default}
+
+/* FoF Night Mode synchronization. JavaScript writes data-hc-theme directly
+   on the footer, so this works in Android WebViews that do not support :has(). */
+.hc-simple-footer[data-hc-theme="day"] .hc-spoiler{
+    border-color:rgba(0,128,168,.24)!important;
+    background:#e5ebef!important;
+    color:#17242c!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 1px 3px rgba(25,48,58,.08)!important;
+}
+
+.hc-simple-footer[data-hc-theme="day"] .hc-spoiler:hover{
+    border-color:#00a6d9!important;
+    background:#d8e4e9!important;
+    color:#101c22!important;
+}
+
+.hc-simple-footer[data-hc-theme="day"] .hc-spoiler.is-revealed{
+    border-color:rgba(0,128,168,.18)!important;
+    background:#dae5ea!important;
+    color:#17242c!important;
+}
+
+.hc-simple-footer[data-hc-theme="night"] .hc-spoiler{
+    border-color:rgba(0,184,240,.18)!important;
+    background:#202225!important;
+    color:var(--text-color,#eefcff)!important;
+}
+
+.hc-simple-footer[data-hc-theme="night"] .hc-spoiler:hover{
+    background:#4f545c!important;
+}
+
+.hc-simple-footer[data-hc-theme="night"] .hc-spoiler.is-revealed{
+    background:rgba(32,34,37,.45)!important;
+}
 
 #utc-clock,
 #local-time,
@@ -1175,7 +1210,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.3">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.4">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1345,6 +1380,7 @@
     var cookieWindowObserver=null;
     var cookieResizeObserver=null;
     var cookieUpdateFrame=0;
+    var themeObserver=null;
     var ipRequested=false;
     var clockTimer=0;
     var identityTimer=0;
@@ -1385,6 +1421,55 @@
 
     function text(element,value){
         if(element){element.textContent=value}
+    }
+
+    function detectForumTheme(){
+        var value="";
+        var meta=document.querySelector('meta[name="color-scheme"]');
+
+        if(meta){
+            value=String(meta.getAttribute("content")||"").toLowerCase();
+        }
+
+        if(value.indexOf("light")!==-1){return "day"}
+        if(value.indexOf("dark")!==-1){return "night"}
+
+        try{
+            return window.matchMedia("(prefers-color-scheme: dark)").matches
+                ?"night"
+                :"day";
+        }catch(error){
+            return "day";
+        }
+    }
+
+    function syncForumTheme(event){
+        if(!footer){return}
+
+        var theme=event&&(
+            event.detail==="day"||event.detail==="night"
+        )
+            ?event.detail
+            :detectForumTheme();
+
+        footer.setAttribute("data-hc-theme",theme);
+    }
+
+    function initForumThemeSync(){
+        syncForumTheme();
+        document.addEventListener("fofnightmodechange",syncForumTheme);
+
+        var meta=document.querySelector('meta[name="color-scheme"]');
+
+        if(meta&&"MutationObserver" in window){
+            themeObserver=new MutationObserver(function(){
+                syncForumTheme();
+            });
+            themeObserver.observe(meta,{
+                attributes:true,
+                attributeFilter:["content"]
+            });
+        }
     }
 
     function normalizeUsername(value){
@@ -1838,6 +1923,7 @@
         }
     }
 
+    initForumThemeSync();
     detectCompatibility();
     initCookieConsentClearance();
     initMotion();
