@@ -7,12 +7,34 @@
    Flarum's active light/dark theme variables.
 
    Scope: phones only (<= 767.98px)
-   Version: 1.0
+   Version: 1.1
    Author: HarleyTG
    Added: 2026-08-12
+   Updated: 2026-08-19
 ========================================================== */
 
 @media screen and (max-width: 767.98px) {
+  /* Flarum anchors AlertManager to the lower-left of the viewport.
+     HCF also has a fixed Discord feedback control in the lower-right.
+     Reserve the feedback control's 46px footprint plus a 10px gap so
+     mobile toast alerts always sit above it instead of being covered. */
+  html body .AlertManager {
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(10px, env(safe-area-inset-right)) !important;
+    bottom: max(126px, calc(env(safe-area-inset-bottom) + 66px)) !important;
+    width: auto !important;
+    max-width: none !important;
+    pointer-events: none;
+  }
+
+  html body .AlertManager .Alert {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 8px 0 0 !important;
+    pointer-events: auto;
+  }
+
   /* Standard phone toast alerts and inline notification-setting alerts.
      Use Flarum theme variables rather than fixed dark colors, so dark
      theme stays dark and light theme stays light automatically. */
