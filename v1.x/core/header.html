@@ -25,6 +25,16 @@
   padding:0;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+
+#hc-header-stack button,
+#hc-header-stack a,
+#hc-header-stack [role="button"]{
+  pointer-events:auto;
 }
 
 #hc-header-stack .hc-slide{
@@ -59,7 +69,7 @@
 #hc-header-stack.hc-rotating .hc-slide.is-active{
   z-index:2;
   opacity:1;
-  pointer-events:auto;
+  pointer-events:none;
   transform:translate3d(0,0,0);
 }
 
@@ -78,7 +88,7 @@
 
 #hc-header-stack.hc-rotating .hc-slide.is-entering.is-entering-active{
   opacity:1;
-  pointer-events:auto;
+  pointer-events:none;
   transform:translate3d(0,0,0);
 }
 
@@ -152,6 +162,36 @@
 }
 
 .hc-notice-message strong{color:#fff2a4}
+
+/* Day / light theme: replace the notice's black surface with white. */
+html:has(head meta[name="color-scheme"][content="light"]) #forum-notice{
+  background:linear-gradient(180deg,rgba(255,212,0,.10),rgba(255,255,255,.98) 48%),#fff;
+  color:#725b00;
+  box-shadow:0 0 16px rgba(151,119,0,.12),inset 0 1px rgba(0,0,0,.035);
+  animation:hcNoticePulseLight 3.4s ease-in-out infinite;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) #forum-notice::before{
+  opacity:.10;
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(205,164,0,.34) 10px 20px);
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title{
+  color:#725b00;
+  text-shadow:0 0 4px rgba(205,164,0,.30);
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message{
+  color:#27323a;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message a{
+  color:#725b00;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message strong{
+  color:#594700;
+}
 
 #hc-birthday-header{
   position:relative;
@@ -292,6 +332,9 @@ html body #hc-holiday-header{
 
 @keyframes hcNoticePulse{
   50%{box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
+}
+@keyframes hcNoticePulseLight{
+  50%{box-shadow:0 0 20px rgba(151,119,0,.16),inset 0 1px rgba(0,0,0,.045)}
 }
 @keyframes hcNoticeStripes{to{background-position:28px 28px}}
 @keyframes hcNoticeDot{
