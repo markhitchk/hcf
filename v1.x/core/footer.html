@@ -1,7 +1,7 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.5
+   HARLEY'S CLAN FORUM FOOTER v4.4.6
    Animated Network Edition
    Author: HarleyTG
    Updated: 2026-08-19
@@ -630,7 +630,7 @@
    DISCORD FEEDBACK
    Desktop: labeled terminal control and floating panel.
    Mobile: lightweight touch button and bottom panel.
-   Cookie consent + Flarum mobile alerts: auto-clear fixed UI.
+   Cookie consent moves feedback; mobile alerts stay below it.
 ========================================================= */
 .hc-feedback-float,
 .hc-feedback-float *{
@@ -966,6 +966,25 @@
     transition:none;
 }
 
+/* Mobile Flarum alerts stay low in the viewport instead of pushing the
+   Discord feedback control upward. The right-side reservation keeps the
+   alert body clear of the 46px feedback button while allowing tall alerts
+   to grow upward naturally. */
+@media (max-width:767.98px){
+    .AlertManager.hc-alert-under-feedback{
+        left:max(10px,env(safe-area-inset-left))!important;
+        right:max(66px,calc(env(safe-area-inset-right) + 56px))!important;
+        bottom:calc(max(10px,env(safe-area-inset-bottom)) + var(--hc-alert-cookie-offset,0px))!important;
+        width:auto!important;
+        max-width:none!important;
+        z-index:2147482999!important;
+    }
+
+    .AlertManager.hc-alert-under-feedback .Alert{
+        max-width:100%!important;
+    }
+}
+
 /* Final HTG theme lock: prevent Flarum or extension button rules
    from restoring Discord-purple backgrounds and borders. */
 .hc-feedback-float > summary{
@@ -1209,7 +1228,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.5">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.6">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1521,7 +1540,6 @@
 
         var cookieWindow=cookieConsentWindow;
         var cookieOffset=0;
-        var alertOffset=0;
 
         if(!isCookieWindowVisible(cookieWindow)){
             var candidate=document.querySelector(".cc-window");
@@ -1550,37 +1568,46 @@
         var mobileFeedback=
             feedbackFloat.classList.contains("hc-mobile-performance")||
             (window.innerWidth||document.documentElement.clientWidth||0)<=767.98;
+        var hasVisibleAlert=false;
+        var manager=alertManager;
 
-        if(mobileFeedback){
-            var alerts=document.querySelectorAll(".AlertManager .Alert");
-            var alertViewportHeight=window.innerHeight||document.documentElement.clientHeight||0;
-            var alertTop=alertViewportHeight;
-            var hasVisibleAlert=false;
+        if(!manager||!document.documentElement.contains(manager)){
+            manager=document.querySelector(".AlertManager");
 
-            for(var i=0;i<alerts.length;i++){
-                if(!isCookieWindowVisible(alerts[i])){continue}
-
-                var alertRect=alerts[i].getBoundingClientRect();
-                alertTop=Math.min(alertTop,Math.max(0,alertRect.top));
-                hasVisibleAlert=true;
-            }
-
-            if(hasVisibleAlert){
-                alertOffset=Math.max(
-                    0,
-                    Math.ceil(alertViewportHeight-alertTop+12-70)
-                );
+            if(manager&&manager!==alertManager){
+                watchAlertManager(manager);
             }
         }
 
-        var offset=Math.max(cookieOffset,alertOffset);
+        if(manager){
+            var alerts=manager.querySelectorAll(".Alert");
+
+            for(var i=0;i<alerts.length;i++){
+                if(isCookieWindowVisible(alerts[i])){
+                    hasVisibleAlert=true;
+                    break;
+                }
+            }
+
+            manager.style.setProperty(
+                "--hc-alert-cookie-offset",
+                cookieOffset+"px"
+            );
+            manager.classList.toggle(
+                "hc-alert-under-feedback",
+                mobileFeedback&&hasVisibleAlert
+            );
+        }
 
         feedbackFloat.style.setProperty(
             "--hc-feedback-cookie-offset",
-            offset+"px"
+            cookieOffset+"px"
         );
         feedbackFloat.classList.toggle("hc-cookie-consent-active",cookieOffset>0);
-        feedbackFloat.classList.toggle("hc-alert-active",alertOffset>0);
+        feedbackFloat.classList.toggle(
+            "hc-alert-active",
+            mobileFeedback&&hasVisibleAlert
+        );
     }
 
     function scheduleCookieConsentClearance(){
