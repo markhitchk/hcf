@@ -163,34 +163,51 @@
 
 .hc-notice-message strong{color:#fff2a4}
 
-/* Day / light theme: replace the notice's black surface with white. */
+/* Day / light theme: high-contrast warm-gold accents on white. */
 html:has(head meta[name="color-scheme"][content="light"]) #forum-notice{
-  background:linear-gradient(180deg,rgba(255,212,0,.10),rgba(255,255,255,.98) 48%),#fff;
-  color:#725b00;
-  box-shadow:0 0 16px rgba(151,119,0,.12),inset 0 1px rgba(0,0,0,.035);
+  --hc-yellow:#8a5a00;
+  border-top-color:#9a6500;
+  border-bottom-color:#9a6500;
+  background:linear-gradient(180deg,rgba(255,221,92,.10),rgba(255,255,255,.99) 50%),#fff;
+  color:#4d3500;
+  box-shadow:0 0 14px rgba(122,82,0,.10),inset 0 1px rgba(0,0,0,.045);
   animation:hcNoticePulseLight 3.4s ease-in-out infinite;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) #forum-notice::before{
-  opacity:.10;
-  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(205,164,0,.34) 10px 20px);
+  opacity:.075;
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(138,90,0,.34) 10px 20px);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title{
-  color:#725b00;
-  text-shadow:0 0 4px rgba(205,164,0,.30);
+  color:#4d3500;
+  text-shadow:0 1px 0 rgba(255,255,255,.85),0 0 3px rgba(122,82,0,.18);
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-dot{
+  background:#8a5a00;
+  box-shadow:0 0 0 1px rgba(91,60,0,.18),0 0 6px rgba(138,90,0,.28);
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title > span[aria-hidden="true"]:not(.hc-notice-dot){
+  color:#5c3d00;
+  filter:brightness(.68) saturate(1.2);
+  text-shadow:none;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message{
-  color:#27323a;
+  color:#20282d;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message a{
-  color:#725b00;
+  color:#5b3d00;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:2px;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message strong{
-  color:#594700;
+  color:#3f2d00;
 }
 
 #hc-birthday-header{
@@ -334,7 +351,7 @@ html body #hc-holiday-header{
   50%{box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
 }
 @keyframes hcNoticePulseLight{
-  50%{box-shadow:0 0 20px rgba(151,119,0,.16),inset 0 1px rgba(0,0,0,.045)}
+  50%{box-shadow:0 0 18px rgba(122,82,0,.15),inset 0 1px rgba(0,0,0,.055)}
 }
 @keyframes hcNoticeStripes{to{background-position:28px 28px}}
 @keyframes hcNoticeDot{
