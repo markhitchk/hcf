@@ -163,51 +163,52 @@
 
 .hc-notice-message strong{color:#fff2a4}
 
-/* Day / light theme: high-contrast warm-gold accents on white. */
+/* Day / light theme: bright animated caution tape with dark high-contrast stripes. */
 html:has(head meta[name="color-scheme"][content="light"]) #forum-notice{
-  --hc-yellow:#8a5a00;
-  border-top-color:#9a6500;
-  border-bottom-color:#9a6500;
-  background:linear-gradient(180deg,rgba(255,221,92,.10),rgba(255,255,255,.99) 50%),#fff;
-  color:#4d3500;
-  box-shadow:0 0 14px rgba(122,82,0,.10),inset 0 1px rgba(0,0,0,.045);
+  --hc-yellow:#ffd400;
+  border-top-color:#b88400;
+  border-bottom-color:#b88400;
+  background:linear-gradient(180deg,#fff5ba 0%,#ffe66f 50%,#ffd83d 100%);
+  color:#211b00;
+  box-shadow:0 0 20px rgba(255,190,0,.36),inset 0 1px rgba(255,255,255,.68),inset 0 -1px rgba(88,61,0,.14);
   animation:hcNoticePulseLight 3.4s ease-in-out infinite;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) #forum-notice::before{
-  opacity:.075;
-  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(138,90,0,.34) 10px 20px);
+  opacity:.28;
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(28,23,0,.62) 10px 20px);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title{
-  color:#4d3500;
-  text-shadow:0 1px 0 rgba(255,255,255,.85),0 0 3px rgba(122,82,0,.18);
+  color:#211b00;
+  text-shadow:0 1px 0 rgba(255,255,255,.72),0 0 4px rgba(255,224,92,.5);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-dot{
-  background:#8a5a00;
-  box-shadow:0 0 0 1px rgba(91,60,0,.18),0 0 6px rgba(138,90,0,.28);
+  background:#2d2500;
+  box-shadow:0 0 0 1px rgba(0,0,0,.18),0 0 7px rgba(184,132,0,.52);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title > span[aria-hidden="true"]:not(.hc-notice-dot){
-  color:#5c3d00;
-  filter:brightness(.68) saturate(1.2);
-  text-shadow:none;
+  color:#2b2300;
+  filter:contrast(1.25) saturate(1.1);
+  text-shadow:0 1px 0 rgba(255,255,255,.55);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message{
-  color:#20282d;
+  color:#171717;
+  text-shadow:0 1px 0 rgba(255,255,255,.52);
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message a{
-  color:#5b3d00;
+  color:#3e3000;
   text-decoration:underline;
   text-decoration-thickness:1px;
   text-underline-offset:2px;
 }
 
 html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message strong{
-  color:#3f2d00;
+  color:#2a2100;
 }
 
 #hc-birthday-header{
@@ -351,7 +352,7 @@ html body #hc-holiday-header{
   50%{box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
 }
 @keyframes hcNoticePulseLight{
-  50%{box-shadow:0 0 18px rgba(122,82,0,.15),inset 0 1px rgba(0,0,0,.055)}
+  50%{box-shadow:0 0 28px rgba(255,184,0,.58),0 0 9px rgba(255,212,0,.42),inset 0 1px rgba(255,255,255,.78),inset 0 -1px rgba(88,61,0,.18)}
 }
 @keyframes hcNoticeStripes{to{background-position:28px 28px}}
 @keyframes hcNoticeDot{
