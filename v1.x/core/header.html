@@ -163,67 +163,7 @@
 
 .hc-notice-message strong{color:#fff2a4}
 
-/* Day / light theme: bright animated caution tape with a seamless mobile-safe stripe tile. */
-html:has(head meta[name="color-scheme"][content="light"]) #forum-notice{
-  --hc-yellow:#ffd400;
-  border-top-color:#b88400;
-  border-bottom-color:#b88400;
-  background:linear-gradient(180deg,#fff5ba 0%,#ffe66f 50%,#ffd83d 100%);
-  color:#211b00;
-  box-shadow:0 0 20px rgba(255,190,0,.36),inset 0 1px rgba(255,255,255,.68),inset 0 -1px rgba(88,61,0,.14);
-  animation:hcNoticePulseLight 3.4s ease-in-out infinite;
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) #forum-notice::before{
-  opacity:.22;
-  background-image:linear-gradient(135deg,
-    rgba(35,28,0,.42) 25%,
-    transparent 25%,
-    transparent 50%,
-    rgba(35,28,0,.42) 50%,
-    rgba(35,28,0,.42) 75%,
-    transparent 75%,
-    transparent 100%);
-  background-size:32px 32px;
-  background-repeat:repeat;
-  animation:hcNoticeStripesLight 1.9s linear infinite;
-  transform:translateZ(0);
-  -webkit-transform:translateZ(0);
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title{
-  color:#211b00;
-  text-shadow:0 1px 0 rgba(255,255,255,.72),0 0 4px rgba(255,224,92,.5);
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-dot{
-  background:#2d2500;
-  box-shadow:0 0 0 1px rgba(0,0,0,.18),0 0 7px rgba(184,132,0,.52);
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-title > span[aria-hidden="true"]:not(.hc-notice-dot){
-  color:#2b2300;
-  filter:contrast(1.25) saturate(1.1);
-  text-shadow:0 1px 0 rgba(255,255,255,.55);
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message{
-  color:#171717;
-  text-shadow:0 1px 0 rgba(255,255,255,.52);
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message a{
-  color:#3e3000;
-  text-decoration:underline;
-  text-decoration-thickness:1px;
-  text-underline-offset:2px;
-}
-
-html:has(head meta[name="color-scheme"][content="light"]) .hc-notice-message strong{
-  color:#2a2100;
-}
+/* Light mode intentionally uses the exact same forum notice appearance as dark mode. */
 
 #hc-birthday-header{
   position:relative;
@@ -365,11 +305,7 @@ html body #hc-holiday-header{
 @keyframes hcNoticePulse{
   50%{box-shadow:0 0 20px rgba(255,212,0,.16),inset 0 1px rgba(255,255,255,.055)}
 }
-@keyframes hcNoticePulseLight{
-  50%{box-shadow:0 0 28px rgba(255,184,0,.58),0 0 9px rgba(255,212,0,.42),inset 0 1px rgba(255,255,255,.78),inset 0 -1px rgba(88,61,0,.18)}
-}
 @keyframes hcNoticeStripes{to{background-position:28px 28px}}
-@keyframes hcNoticeStripesLight{to{background-position:32px 0}}
 @keyframes hcNoticeDot{
   0%,100%{opacity:.35;transform:scale(.72)}
   50%{opacity:1;transform:scale(1.25)}
