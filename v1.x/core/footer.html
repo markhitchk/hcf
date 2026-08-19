@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.4
+   HARLEY'S CLAN FORUM FOOTER v4.4.5
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-17
+   Updated: 2026-08-19
 ========================================================= */
 
 :root{
@@ -630,7 +630,7 @@
    DISCORD FEEDBACK
    Desktop: labeled terminal control and floating panel.
    Mobile: lightweight touch button and bottom panel.
-   Cookie consent: auto-clears a visible FoF Cookie Consent window.
+   Cookie consent + Flarum mobile alerts: auto-clear fixed UI.
 ========================================================= */
 .hc-feedback-float,
 .hc-feedback-float *{
@@ -1047,7 +1047,6 @@
     0%,100%{opacity:.78;text-shadow:none}
     50%{opacity:1;text-shadow:0 0 7px var(--hc-glow-soft)}
 }
-
 @keyframes hc-notice-pulse{
     0%,100%{opacity:.48;transform:scale(.92)}
     50%{opacity:1;transform:scale(1.08);filter:drop-shadow(0 0 4px var(--hc-glow-soft))}
@@ -1210,7 +1209,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.4">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.5">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1379,6 +1378,10 @@
     var cookieFinderObserver=null;
     var cookieWindowObserver=null;
     var cookieResizeObserver=null;
+    var alertManager=null;
+    var alertManagerFinderObserver=null;
+    var alertManagerObserver=null;
+    var alertManagerResizeObserver=null;
     var cookieUpdateFrame=0;
     var themeObserver=null;
     var ipRequested=false;
@@ -1517,6 +1520,8 @@
         if(!feedbackFloat){return}
 
         var cookieWindow=cookieConsentWindow;
+        var cookieOffset=0;
+        var alertOffset=0;
 
         if(!isCookieWindowVisible(cookieWindow)){
             var candidate=document.querySelector(".cc-window");
@@ -1527,8 +1532,6 @@
             }
         }
 
-        var offset=0;
-
         if(isCookieWindowVisible(cookieWindow)){
             var rect=cookieWindow.getBoundingClientRect();
             var viewportHeight=window.innerHeight||document.documentElement.clientHeight||0;
@@ -1537,18 +1540,47 @@
                 rect.bottom>=viewportHeight-80;
 
             if(bottomAligned){
-                offset=Math.max(
+                cookieOffset=Math.max(
                     0,
                     Math.ceil(viewportHeight-Math.max(0,rect.top)+12)
                 );
             }
         }
 
+        var mobileFeedback=
+            feedbackFloat.classList.contains("hc-mobile-performance")||
+            (window.innerWidth||document.documentElement.clientWidth||0)<=767.98;
+
+        if(mobileFeedback){
+            var alerts=document.querySelectorAll(".AlertManager .Alert");
+            var alertViewportHeight=window.innerHeight||document.documentElement.clientHeight||0;
+            var alertTop=alertViewportHeight;
+            var hasVisibleAlert=false;
+
+            for(var i=0;i<alerts.length;i++){
+                if(!isCookieWindowVisible(alerts[i])){continue}
+
+                var alertRect=alerts[i].getBoundingClientRect();
+                alertTop=Math.min(alertTop,Math.max(0,alertRect.top));
+                hasVisibleAlert=true;
+            }
+
+            if(hasVisibleAlert){
+                alertOffset=Math.max(
+                    0,
+                    Math.ceil(alertViewportHeight-alertTop+12-70)
+                );
+            }
+        }
+
+        var offset=Math.max(cookieOffset,alertOffset);
+
         feedbackFloat.style.setProperty(
             "--hc-feedback-cookie-offset",
             offset+"px"
         );
-        feedbackFloat.classList.toggle("hc-cookie-consent-active",offset>0);
+        feedbackFloat.classList.toggle("hc-cookie-consent-active",cookieOffset>0);
+        feedbackFloat.classList.toggle("hc-alert-active",alertOffset>0);
     }
 
     function scheduleCookieConsentClearance(){
@@ -1636,6 +1668,77 @@
 
         window.addEventListener("resize",scheduleCookieConsentClearance);
         window.addEventListener("orientationchange",scheduleCookieConsentClearance);
+        scheduleCookieConsentClearance();
+    }
+
+    function watchAlertManager(element){
+        if(!element){return}
+
+        if(element===alertManager){
+            scheduleCookieConsentClearance();
+            return;
+        }
+
+        alertManager=element;
+
+        if(alertManagerObserver){
+            alertManagerObserver.disconnect();
+            alertManagerObserver=null;
+        }
+
+        if(alertManagerResizeObserver){
+            alertManagerResizeObserver.disconnect();
+            alertManagerResizeObserver=null;
+        }
+
+        if("MutationObserver" in window){
+            alertManagerObserver=new MutationObserver(
+                scheduleCookieConsentClearance
+            );
+            alertManagerObserver.observe(element,{
+                attributes:true,
+                attributeFilter:["class","style"],
+                childList:true,
+                subtree:true
+            });
+        }
+
+        if("ResizeObserver" in window){
+            alertManagerResizeObserver=new ResizeObserver(
+                scheduleCookieConsentClearance
+            );
+            alertManagerResizeObserver.observe(element);
+        }
+
+        scheduleCookieConsentClearance();
+    }
+
+    function findAlertManager(){
+        var element=document.querySelector(".AlertManager");
+
+        if(!element){return false}
+
+        watchAlertManager(element);
+        return true;
+    }
+
+    function initAlertClearance(){
+        if(!feedbackFloat){return}
+
+        if(!findAlertManager()&&"MutationObserver" in window){
+            alertManagerFinderObserver=new MutationObserver(function(){
+                if(findAlertManager()&&alertManagerFinderObserver){
+                    alertManagerFinderObserver.disconnect();
+                    alertManagerFinderObserver=null;
+                }
+            });
+
+            alertManagerFinderObserver.observe(document.body||document.documentElement,{
+                childList:true,
+                subtree:true
+            });
+        }
+
         scheduleCookieConsentClearance();
     }
 
@@ -1926,6 +2029,7 @@
     initForumThemeSync();
     detectCompatibility();
     initCookieConsentClearance();
+    initAlertClearance();
     initMotion();
     initLiveUpdates();
 
