@@ -1,0 +1,451 @@
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a1");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
+
+.hcf-page .hcf-runtime,
+.hcf-page .hcf-runtime-item,
+.hcf-page .hcf-runtime-label,
+.hcf-page .hcf-runtime-value,
+.hcf-page .hcf-runtime-device,
+.hcf-page .hcf-runtime-identity,
+.hcf-page [data-hcf-runtime-ui] {
+  display: none !important;
+}
+
+.hcf-faq-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 4px;
+}
+
+.hcf-faq-jumps a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(0, 184, 240, 0.3);
+  border-radius: 999px;
+  background: rgba(0, 184, 240, 0.06);
+  color: #00b8f0;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.hcf-faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.hcf-faq-item {
+  overflow: hidden;
+  border: 1px solid rgba(0, 184, 240, 0.2);
+  border-radius: 13px;
+  background: rgba(8, 13, 18, 0.38);
+}
+
+.hcf-faq-item[open] {
+  border-color: rgba(0, 184, 240, 0.46);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16), 0 0 18px rgba(0, 184, 240, 0.05);
+}
+
+.hcf-faq-item summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 13px 46px 13px 14px;
+  color: #eefcff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.45;
+  cursor: pointer;
+  list-style: none;
+}
+
+.hcf-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.hcf-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  color: #00b8f0;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+}
+
+.hcf-faq-item[open] summary::after {
+  content: "−";
+}
+
+.hcf-faq-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(0, 184, 240, 0.35);
+  border-radius: 8px;
+  background: rgba(0, 184, 240, 0.08);
+  color: #00b8f0;
+  font: 800 10px/1 "Courier New", monospace;
+}
+
+.hcf-faq-answer {
+  padding: 0 16px 15px 52px;
+  color: #b8cbd2;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.hcf-faq-answer p {
+  margin: 0 0 9px;
+}
+
+.hcf-faq-answer p:last-child {
+  margin-bottom: 0;
+}
+
+.hcf-faq-answer strong {
+  color: #eefcff;
+}
+
+.hcf-faq-answer a {
+  color: #00b8f0;
+  font-weight: 800;
+}
+
+.hcf-faq-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.hcf-faq-channel {
+  padding: 15px;
+  border: 1px solid rgba(0, 184, 240, 0.2);
+  border-radius: 13px;
+  background: rgba(0, 184, 240, 0.04);
+}
+
+.hcf-faq-channel h3 {
+  margin: 0 0 7px;
+  color: #00b8f0;
+  font-size: 14px;
+}
+
+.hcf-faq-channel p {
+  margin: 0;
+  color: #aebfc6;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.hcf-faq-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  padding: 5px 8px;
+  border: 1px solid rgba(0, 184, 240, 0.26);
+  border-radius: 999px;
+  color: #c9edf8;
+  font: 800 9px/1 "Courier New", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hcf-faq-mini::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00b8f0;
+  box-shadow: 0 0 8px rgba(0, 184, 240, 0.8);
+}
+
+.hcf-faq-section-anchor {
+  scroll-margin-top: 90px;
+}
+
+@media (hover: hover) {
+  .hcf-faq-jumps a:hover {
+    border-color: #00b8f0;
+    background: rgba(0, 184, 240, 0.12);
+  }
+
+  .hcf-faq-item summary:hover {
+    background: rgba(0, 184, 240, 0.04);
+  }
+}
+
+@media (max-width: 650px) {
+  .hcf-faq-channel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hcf-faq-answer {
+    padding-left: 14px;
+  }
+
+  .hcf-faq-item summary {
+    align-items: flex-start;
+  }
+}
+</style>
+
+<div class="hcf-page" data-hcf-page-build="1.0.0" data-hcf-page="faq">
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/assets/logos/HTG.svg" alt="" aria-hidden="true">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // Help Center</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot"></span>30 Frequently Asked Questions</div>
+    <h1 class="hcf-title">Forum &amp; App FAQ</h1>
+    <p class="hcf-lead">Answers for the Harley's Clan Forum website, Android app, accounts, downloads, updates, notifications, Stable releases, and Beta / Development builds.</p>
+  </section>
+
+  <main class="hcf-content">
+    <div class="hcf-notice">
+      <strong>Official access:</strong> The primary forum is <a href="https://forum.harleytg.com">forum.harleytg.com</a>. If the custom domain is unavailable, the FreeFlarum address is <a href="https://harleysclan.freeflarum.com" target="_blank" rel="noopener noreferrer">harleysclan.freeflarum.com</a>.
+    </div>
+
+    <div class="hcf-faq-channel-grid" aria-label="Android app release channels">
+      <div class="hcf-faq-channel">
+        <span class="hcf-faq-mini">Stable Channel</span>
+        <h3>Stable</h3>
+        <p>Recommended for normal use. Stable builds receive the tested release path and should only follow the Stable app update channel.</p>
+      </div>
+      <div class="hcf-faq-channel">
+        <span class="hcf-faq-mini">Testing Channel</span>
+        <h3>Beta / Development</h3>
+        <p>For testing newer app changes before Stable. These builds can change more often and may contain unfinished or experimental behavior.</p>
+      </div>
+    </div>
+
+    <nav class="hcf-faq-jumps" aria-label="FAQ sections">
+      <a href="#faq-general">Forum Basics</a>
+      <a href="#faq-account">Accounts &amp; Safety</a>
+      <a href="#faq-website">Using the Website</a>
+      <a href="#faq-app">Android App</a>
+      <a href="#faq-channels">Stable vs Beta</a>
+      <a href="#faq-troubleshooting">Troubleshooting</a>
+    </nav>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-general">
+      <h2 class="hcf-section-title">I. Forum Basics</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">01</span>What is Harley's Clan Forum?</summary>
+          <div class="hcf-faq-answer"><p>Harley's Clan Forum is the community forum for discussions, announcements, messages, support information, downloads, and other Harley's Clan community pages.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">02</span>What is the official forum website?</summary>
+          <div class="hcf-faq-answer"><p>The primary address is <strong>forum.harleytg.com</strong>. Bookmark the official address instead of relying on links from unknown messages or websites.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">03</span>Is there a backup forum address?</summary>
+          <div class="hcf-faq-answer"><p>Yes. The FreeFlarum address is <strong>harleysclan.freeflarum.com</strong>. See <a href="/p/25-domain-help">Domain Help</a> for the current official routing information.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">04</span>Do I need the Android app to use the forum?</summary>
+          <div class="hcf-faq-answer"><p>No. The forum works as a website in a supported browser. The Android app is an additional way to access the same forum from a phone or tablet.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">05</span>Is the app a separate community from the website?</summary>
+          <div class="hcf-faq-answer"><p>No. The app connects you to Harley's Clan Forum. Your forum discussions, account, messages, and other server-side forum content belong to the same forum service.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">06</span>Where are the important forum pages?</summary>
+          <div class="hcf-faq-answer"><p>Use <a href="/p/23-rules">Forum Rules</a>, <a href="/p/14-downloads">Downloads</a>, <a href="/p/17-support">Support</a>, and <a href="/p/25-domain-help">Domain Help</a>. These pages are maintained as official HCF resources.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-account">
+      <h2 class="hcf-section-title">II. Accounts &amp; Safety</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">07</span>Do I use the same account on the website and app?</summary>
+          <div class="hcf-faq-answer"><p>Yes. Sign in with the same Harley's Clan Forum account. You do not need a second account just because you switch between the website and the Android app.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">08</span>Are usernames and passwords case-sensitive?</summary>
+          <div class="hcf-faq-answer"><p><strong>Usernames are not case-sensitive.</strong> <strong>Passwords are case-sensitive.</strong> Enter your password using the same uppercase and lowercase letters you originally set.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">09</span>What should I do if I forget my password?</summary>
+          <div class="hcf-faq-answer"><p>Use the forum's password-reset option from the sign-in screen. If you no longer have access to the email address on the account or the reset process fails, use <a href="/p/17-support">Forum Support</a>.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">10</span>What if my account is restricted, suspended, or I cannot sign in?</summary>
+          <div class="hcf-faq-answer"><p>Check any message shown by the forum first. If you still need help, contact support and include your forum username, what you were trying to do, and the exact error message if one appears.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">11</span>What information should I never post publicly?</summary>
+          <div class="hcf-faq-answer"><p>Do not publicly post passwords, password-reset links, authentication codes, private recovery information, payment details, or other sensitive personal information. Staff should not need your password to help with a normal support request.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-website">
+      <h2 class="hcf-section-title">III. Using the Website</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">12</span>How do I start a discussion?</summary>
+          <div class="hcf-faq-answer"><p>Sign in, choose the appropriate forum area or tags, and use the forum's discussion composer. Before posting, make sure the topic follows the <a href="/p/23-rules">Forum Rules</a>.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">13</span>Does the forum support direct messages?</summary>
+          <div class="hcf-faq-answer"><p>Yes, when messaging is available for your account. Use the forum's Direct Messages / Messenger interface for private conversations instead of posting private information in a public discussion.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">14</span>Where do forum notifications appear?</summary>
+          <div class="hcf-faq-answer"><p>Forum notifications appear through the forum notification interface. Depending on your device and app/browser permissions, you may also receive supported system notifications.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">15</span>Why does the forum look different on mobile and desktop?</summary>
+          <div class="hcf-faq-answer"><p>Harley's Clan Forum uses responsive layouts. Menus, buttons, notification controls, the composer, and other interface elements may move or collapse on smaller screens so the forum remains usable on phones and tablets.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">16</span>What should I do if an HCF page shows a loader or error code?</summary>
+          <div class="hcf-faq-answer"><p>Retry the page once and confirm that you are online. If an HCF error reference such as a loader, route, network, or server code continues to appear, include that exact reference when contacting <a href="/p/17-support">Support</a>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-app">
+      <h2 class="hcf-section-title">IV. Android App</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">17</span>What does the Harley's Clan Forum Android app do?</summary>
+          <div class="hcf-faq-answer"><p>The Android app provides a dedicated mobile interface for opening and using Harley's Clan Forum, with app-specific navigation, settings, update handling, notification support, and other Android-focused features.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">18</span>What Android versions are supported?</summary>
+          <div class="hcf-faq-answer"><p>The current HCF Android app requires <strong>Android 8.0 (API 26) or newer</strong>. Some features, especially notification permissions and installer behavior, can differ by Android version and device manufacturer.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">19</span>Where should I download the app?</summary>
+          <div class="hcf-faq-answer"><p>Use the official <a href="/p/14-downloads">HCF Downloads</a> page. Avoid APK files reposted by unknown third-party websites or sent from untrusted accounts.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">20</span>Why does Android ask me to allow installs from this source?</summary>
+          <div class="hcf-faq-answer"><p>Android can require permission before an APK downloaded outside an app store can be installed. Only grant this permission to the trusted app you intentionally used to obtain the official HCF APK, and review the installer screen before continuing.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">21</span>Why does Android say “App not installed” or reject an update?</summary>
+          <div class="hcf-faq-answer"><p>Common causes include a damaged download, insufficient storage, an incompatible Android version, or an APK signed with a different certificate than the version already installed. If the signing certificate does not match, Android will not treat the APK as a valid update to the installed app.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">22</span>Can Stable and Beta / Development be installed at the same time?</summary>
+          <div class="hcf-faq-answer"><p>They can coexist <strong>when the builds use separate Android package IDs</strong>. If two APKs use the same package ID, Android treats them as versions of the same app instead of separate installs.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-channels">
+      <h2 class="hcf-section-title">V. Stable vs Beta / Development</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">23</span>What is the Stable app channel?</summary>
+          <div class="hcf-faq-answer"><p><strong>Stable</strong> is the normal release channel. It is intended for users who want the most tested HCF app build and should follow Stable releases rather than Beta / Development prereleases.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">24</span>What is the Beta / Development app channel?</summary>
+          <div class="hcf-faq-answer"><p><strong>Beta / Development</strong> is the testing channel for newer changes before they are promoted to Stable. It may update more often and can include features or fixes that are still being evaluated.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">25</span>Which app channel should I use?</summary>
+          <div class="hcf-faq-answer"><p>Use <strong>Stable</strong> for everyday use. Choose <strong>Beta / Development</strong> if you intentionally want to test newer app changes and are comfortable reporting bugs or dealing with occasional unfinished behavior.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">26</span>How does the app decide whether an update is newer?</summary>
+          <div class="hcf-faq-answer"><p>HCF app update checks use the APK's numeric Android <strong>versionCode</strong> to compare installed and available builds. The visible version name, release tag, or APK filename should not be used as the only indicator that a build is newer.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">27</span>What is the difference between version name and versionCode?</summary>
+          <div class="hcf-faq-answer"><p>The <strong>version name</strong> is the human-readable version shown to users. The <strong>versionCode</strong> is Android's numeric build identifier. A newer release must use a higher versionCode for normal Android update logic.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section hcf-faq-section-anchor" id="faq-troubleshooting">
+      <h2 class="hcf-section-title">VI. Notifications &amp; Troubleshooting</h2>
+      <div class="hcf-faq-list">
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">28</span>Why am I not receiving app notifications?</summary>
+          <div class="hcf-faq-answer"><p>Confirm that forum notifications are enabled where applicable, then check Android's notification permission for the HCF app. Battery restrictions, background limits, Do Not Disturb, and manufacturer-specific power settings can also delay or block notifications.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">29</span>What should I try if the app cannot load the forum or I keep getting signed out?</summary>
+          <div class="hcf-faq-answer"><p>Confirm your internet connection, retry the primary forum address, and check <a href="/p/25-domain-help">Domain Help</a> if the custom domain is unavailable. If the website works in your browser but the app still fails, record the app version, Android version, and any error message before contacting support.</p></div>
+        </details>
+
+        <details class="hcf-faq-item">
+          <summary><span class="hcf-faq-num">30</span>How do I report a forum or app problem?</summary>
+          <div class="hcf-faq-answer"><p>Open <a href="/p/17-support">Forum Support</a>. Include whether the problem is on the <strong>website</strong>, <strong>Stable app</strong>, or <strong>Beta / Development app</strong>; your app version/versionCode if relevant; your Android version; what you expected; what actually happened; and any HCF error reference shown on screen.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="hcf-section">
+      <h2 class="hcf-section-title">Still Need Help?</h2>
+      <p>If your question is not covered here, use the support page or check the official downloads and domain information.</p>
+      <div class="hcf-actions">
+        <a class="hcf-button hcf-button--primary" href="/p/17-support">Get Support</a>
+        <a class="hcf-button" href="/p/14-downloads">App Downloads</a>
+        <a class="hcf-button" href="/p/25-domain-help">Domain Help</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="hcf-footer">
+    <span>Harley's Clan Forum // FAQ // Flarum 1.x</span>
+    <a href="https://forum.harleytg.com/">forum.harleytg.com</a>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.1"></script>
