@@ -1,0 +1,610 @@
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a1");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
+
+.hcf-page .hcf-runtime,
+.hcf-page .hcf-runtime-item,
+.hcf-page .hcf-runtime-label,
+.hcf-page .hcf-runtime-value,
+.hcf-page .hcf-runtime-device,
+.hcf-page .hcf-runtime-identity,
+.hcf-page [data-hcf-runtime-ui] {
+  display: none !important;
+}
+
+.hcf-faq-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.hcf-faq-choice {
+  width: 100%;
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(0, 184, 240, 0.3);
+  border-radius: 16px;
+  background: rgba(0, 184, 240, 0.055);
+  color: #eefcff;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.hcf-faq-choice:hover,
+.hcf-faq-choice:focus-visible {
+  border-color: #00b8f0;
+  background: rgba(0, 184, 240, 0.105);
+  box-shadow: 0 10px 28px rgba(0, 184, 240, 0.09);
+}
+
+.hcf-faq-choice:focus-visible {
+  outline: 2px solid #00ffff;
+  outline-offset: 3px;
+}
+
+.hcf-faq-choice[aria-pressed="true"] {
+  border-color: #00b8f0;
+  background: rgba(0, 184, 240, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(0, 184, 240, 0.18), 0 10px 28px rgba(0, 184, 240, 0.09);
+}
+
+.hcf-faq-choice-title {
+  display: block;
+  color: #00b8f0;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.hcf-faq-choice-copy {
+  display: block;
+  margin-top: 7px;
+  color: #a9c0c9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.hcf-faq-step {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(0, 184, 240, 0.18);
+  border-radius: 14px;
+  background: rgba(7, 12, 16, 0.38);
+}
+
+.hcf-faq-step-title {
+  margin: 0;
+  color: #eefcff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.hcf-faq-step-copy {
+  margin: 5px 0 0;
+  color: #9cb7c2;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.hcf-faq-path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 18px 0 0;
+  color: #9cb7c2;
+  font: 700 11px/1.4 "Courier New", monospace;
+  letter-spacing: .04em;
+}
+
+.hcf-faq-path strong {
+  color: #00b8f0;
+}
+
+.hcf-faq-change {
+  margin-left: auto;
+  padding: 5px 9px;
+  border: 1px solid rgba(0, 184, 240, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  color: #00b8f0;
+  font: 800 11px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+
+.hcf-faq-panel[hidden],
+.hcf-faq-step[hidden] {
+  display: none !important;
+}
+
+.hcf-faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.hcf-faq-item {
+  overflow: hidden;
+  border: 1px solid rgba(0, 184, 240, 0.18);
+  border-radius: 13px;
+  background: rgba(7, 12, 16, 0.34);
+}
+
+.hcf-faq-item[open] {
+  border-color: rgba(0, 184, 240, 0.38);
+  background: rgba(0, 184, 240, 0.045);
+}
+
+.hcf-faq-item summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 15px;
+  color: #eefcff;
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.45;
+  cursor: pointer;
+  list-style: none;
+}
+
+.hcf-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.hcf-faq-item summary::before {
+  content: "+";
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 184, 240, 0.3);
+  border-radius: 50%;
+  color: #00b8f0;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.hcf-faq-item[open] summary::before {
+  content: "−";
+}
+
+.hcf-faq-answer {
+  padding: 0 15px 15px 47px;
+  color: #a9c0c9;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.hcf-faq-answer p {
+  margin: 0 0 9px;
+}
+
+.hcf-faq-answer p:last-child {
+  margin-bottom: 0;
+}
+
+.hcf-faq-answer a {
+  color: #00b8f0;
+}
+
+.hcf-faq-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  margin: 0 4px 4px 0;
+  border: 1px solid rgba(0, 184, 240, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 184, 240, 0.07);
+  color: #00b8f0;
+  font: 800 10px/1.2 "Courier New", monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 680px) {
+  .hcf-faq-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hcf-faq-choice {
+    min-height: 0;
+  }
+
+  .hcf-faq-path {
+    align-items: flex-start;
+  }
+
+  .hcf-faq-change {
+    width: 100%;
+    margin: 4px 0 0;
+  }
+
+  .hcf-faq-answer {
+    padding-left: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcf-faq-choice {
+    transition: none;
+  }
+}
+</style>
+
+<div class="hcf-page" data-hcf-page-build="3.0.0" data-hcf-faq-root>
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" alt="" aria-hidden="true">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // FAQ</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot"></span>Help Center</div>
+    <h1 class="hcf-title">Frequently Asked Questions</h1>
+    <p class="hcf-lead">Choose what you need help with. The FAQ will only show questions for the forum website or the app channel you select.</p>
+  </section>
+
+  <main class="hcf-content">
+    <section class="hcf-section" data-faq-service-step>
+      <h2 class="hcf-section-title">1. What are you using?</h2>
+      <p>Select the service you want help with.</p>
+
+      <div class="hcf-faq-choice-grid" role="group" aria-label="Choose forum service">
+        <button class="hcf-faq-choice" type="button" data-faq-service="website" aria-pressed="false">
+          <span class="hcf-faq-choice-title">Forum Website</span>
+          <span class="hcf-faq-choice-copy">Accounts, discussions, Direct Messages, notifications, domains, browser issues, and general forum help.</span>
+        </button>
+
+        <button class="hcf-faq-choice" type="button" data-faq-service="app" aria-pressed="false">
+          <span class="hcf-faq-choice-title">Forum App</span>
+          <span class="hcf-faq-choice-copy">Android installation, updates, notifications, app settings, Stable releases, and Beta / Development builds.</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="hcf-faq-step" data-faq-channel-step hidden>
+      <h2 class="hcf-faq-step-title">2. Which app version are you using?</h2>
+      <p class="hcf-faq-step-copy">Choose the release channel installed on your Android device.</p>
+
+      <div class="hcf-faq-choice-grid" role="group" aria-label="Choose app version">
+        <button class="hcf-faq-choice" type="button" data-faq-channel="stable" aria-pressed="false">
+          <span class="hcf-faq-choice-title">Stable</span>
+          <span class="hcf-faq-choice-copy">Regular public release channel for normal everyday use.</span>
+        </button>
+
+        <button class="hcf-faq-choice" type="button" data-faq-channel="beta" aria-pressed="false">
+          <span class="hcf-faq-choice-title">Beta / Development</span>
+          <span class="hcf-faq-choice-copy">Testing channel with newer changes, experimental behavior, and development features.</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="hcf-faq-path" data-faq-path hidden>
+      <span>Selected:</span>
+      <strong data-faq-path-label></strong>
+      <button class="hcf-faq-change" type="button" data-faq-reset>Change selection</button>
+    </div>
+
+    <section class="hcf-faq-panel" data-faq-panel="website" hidden>
+      <section class="hcf-section">
+        <h2 class="hcf-section-title">Forum Website FAQ</h2>
+        <div class="hcf-notice"><strong>Website:</strong> These answers apply to the browser version of Harley's Clan Forum.</div>
+
+        <div class="hcf-faq-list">
+          <details class="hcf-faq-item">
+            <summary>What is Harley's Clan Forum?</summary>
+            <div class="hcf-faq-answer"><p>Harley's Clan Forum is the community forum for discussions, announcements, support, Direct Messages, and Harley's Clan community activity.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>What is the official forum address?</summary>
+            <div class="hcf-faq-answer"><p>The primary forum address is <a href="https://forum.harleytg.com">forum.harleytg.com</a>. The FreeFlarum address may be used as a fallback. See <a href="https://forum.harleytg.com/p/25-domain-help">Domain Help</a> for the currently supported addresses.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Do I need an account to use the forum?</summary>
+            <div class="hcf-faq-answer"><p>Some public content can be viewed while signed out, but posting, replying, Direct Messages, notifications, profile features, and other account tools require you to sign in.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Are usernames and passwords case-sensitive?</summary>
+            <div class="hcf-faq-answer"><p>Usernames are not case-sensitive. Passwords are case-sensitive, so capitalization must match the password you created.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>How do I start a discussion?</summary>
+            <div class="hcf-faq-answer"><p>Sign in, select the option to start a discussion, choose the correct tag or category when required, enter a clear title and message, then post it.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>How do Direct Messages work?</summary>
+            <div class="hcf-faq-answer"><p>Direct Messages let signed-in users have private forum conversations where the feature is available. If the Direct Messages interface is not loading correctly, reopen the page, sign in again, or contact support.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why am I not receiving forum notifications?</summary>
+            <div class="hcf-faq-answer"><p>Check your forum notification preferences and your browser notification permission. Browser or operating-system power-saving settings can also delay notifications.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why does a forum page show a loader or an error?</summary>
+            <div class="hcf-faq-answer"><p>Some Harley's Clan Forum pages are loaded dynamically from the HCF page service. A temporary connection, CDN, or page-service problem can show a loading or error screen. Retry the page first; if it continues, use <a href="https://forum.harleytg.com/p/17-support">Forum Support</a>.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>What should I do if the forum looks wrong on mobile?</summary>
+            <div class="hcf-faq-answer"><p>Refresh the page, close and reopen the browser, and make sure browser zoom or forced desktop mode is not changing the layout. If the problem continues, report the device, browser, affected page, and a screenshot when possible.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Where are the forum rules?</summary>
+            <div class="hcf-faq-answer"><p>Read the current community rules on the <a href="https://forum.harleytg.com/p/23-rules">Forum Rules</a> page before posting.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Where can I get help with my forum account?</summary>
+            <div class="hcf-faq-answer"><p>Use <a href="https://forum.harleytg.com/p/17-support">Forum Support</a>. Include your forum username, what you were trying to do, what happened, and any error message you saw. Never post your password or authentication codes publicly.</p></div>
+          </details>
+        </div>
+      </section>
+    </section>
+
+    <section class="hcf-faq-panel" data-faq-panel="stable" hidden>
+      <section class="hcf-section">
+        <h2 class="hcf-section-title">Forum App — Stable FAQ</h2>
+        <p><span class="hcf-faq-badge">App</span><span class="hcf-faq-badge">Stable</span></p>
+        <div class="hcf-notice"><strong>Stable channel:</strong> Intended for normal everyday use. Stable should follow Stable releases and should not install Beta / Development releases as normal updates.</div>
+
+        <div class="hcf-faq-list">
+          <details class="hcf-faq-item">
+            <summary>What is the Stable app?</summary>
+            <div class="hcf-faq-answer"><p>The Stable app is the regular Android release of Harley's Clan Forum. It opens the forum inside the HCF app interface and is intended to receive tested Stable updates.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Where should I download the Stable app?</summary>
+            <div class="hcf-faq-answer"><p>Use the official <a href="https://forum.harleytg.com/p/14-downloads">Downloads</a> page or another official Harley's Clan Forum download location. Avoid APK files reposted by unknown third parties.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>How does the Stable updater decide whether an update is newer?</summary>
+            <div class="hcf-faq-answer"><p>The app should compare the APK's numeric Android <strong>versionCode</strong>. The filename, GitHub tag, and display version name should not be the deciding factor.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Will Stable update to Beta / Development automatically?</summary>
+            <div class="hcf-faq-answer"><p>No. Stable is a separate release channel and should remain on Stable releases unless you intentionally install a different app/channel.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why does Android say "App not installed" or "App invalid"?</summary>
+            <div class="hcf-faq-answer"><p>This can happen when the APK is damaged, built incorrectly, incompatible with the device, or signed with a different certificate than the installed copy. Android will not install an update over an existing app when the signing certificate does not match.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why does Android ask me to allow installs from this source?</summary>
+            <div class="hcf-faq-answer"><p>Android requires permission before an app such as your browser or the HCF app can hand an APK to the package installer. Only enable this for a source you trust, then continue the installation.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Can I keep my forum account when the app updates?</summary>
+            <div class="hcf-faq-answer"><p>Normally yes. A regular in-place app update should preserve app data. Your actual forum account is stored by the forum service rather than being created by the APK itself.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why are app notifications delayed or missing?</summary>
+            <div class="hcf-faq-answer"><p>Check the app's notification permission, HCF notification settings, Android battery restrictions, background-data settings, and your forum notification preferences. Device power-saving modes can delay background activity.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>What should I do if the app opens a blank or error page?</summary>
+            <div class="hcf-faq-answer"><p>Check your internet connection, reopen the app, and try the forum again. If only one page fails, try opening another forum page. Use <a href="https://forum.harleytg.com/p/17-support">Forum Support</a> if the problem continues.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Can the Stable app use a backup forum address?</summary>
+            <div class="hcf-faq-answer"><p>The HCF app may support approved primary and backup forum domains. See <a href="https://forum.harleytg.com/p/25-domain-help">Domain Help</a> for official forum addresses.</p></div>
+          </details>
+        </div>
+      </section>
+    </section>
+
+    <section class="hcf-faq-panel" data-faq-panel="beta" hidden>
+      <section class="hcf-section">
+        <h2 class="hcf-section-title">Forum App — Beta / Development FAQ</h2>
+        <p><span class="hcf-faq-badge">App</span><span class="hcf-faq-badge">Beta / Development</span></p>
+        <div class="hcf-notice"><strong>Testing channel:</strong> Beta / Development builds can contain newer changes that have not yet moved to Stable. Features, layouts, update behavior, and diagnostics may change more frequently.</div>
+
+        <div class="hcf-faq-list">
+          <details class="hcf-faq-item">
+            <summary>What is the Beta / Development app?</summary>
+            <div class="hcf-faq-answer"><p>It is the testing channel for newer HCF Android app changes before they are considered ready for the Stable channel.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Is Beta / Development the same as Stable?</summary>
+            <div class="hcf-faq-answer"><p>No. They are separate channels. Beta / Development may contain features, interface changes, diagnostics, or update behavior that Stable does not have yet.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Should I use Beta / Development as my everyday version?</summary>
+            <div class="hcf-faq-answer"><p>You can test it, but expect a higher chance of bugs or unfinished behavior. Use Stable when you prefer the regular release channel.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Where should I download Beta / Development builds?</summary>
+            <div class="hcf-faq-answer"><p>Only use an official HCF testing download location or the official <a href="https://forum.harleytg.com/p/14-downloads">Downloads</a> page when a testing build is offered there.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>How are Beta / Development updates compared?</summary>
+            <div class="hcf-faq-answer"><p>As with Stable, Android build ordering should use the APK's numeric <strong>versionCode</strong>. The display name or APK filename can describe the build, but should not replace versionCode comparison.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Can Beta / Development have features that Stable does not?</summary>
+            <div class="hcf-faq-answer"><p>Yes. Testing builds are where newer app interface, update, notification, diagnostic, and other experimental changes may appear first.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Why did something change between two testing builds?</summary>
+            <div class="hcf-faq-answer"><p>Beta / Development builds are expected to change more often. A feature may be adjusted, replaced, temporarily disabled, or reverted while it is being tested.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>What should I include when reporting a Beta / Development bug?</summary>
+            <div class="hcf-faq-answer"><p>Include the app channel, displayed version, numeric versionCode if available, Android version, device model, steps that reproduce the bug, what you expected, what happened instead, and a screenshot when useful.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Can I switch back to Stable?</summary>
+            <div class="hcf-faq-answer"><p>Yes, but whether Android can install one over the other depends on package IDs, versionCodes, and signing certificates. If Android treats them as separate applications, both may coexist. If they use the same package ID, a downgrade or signature mismatch can block installation.</p></div>
+          </details>
+
+          <details class="hcf-faq-item">
+            <summary>Where do I report testing-channel problems?</summary>
+            <div class="hcf-faq-answer"><p>Use <a href="https://forum.harleytg.com/p/17-support">Forum Support</a> and clearly say that you are using the Beta / Development app so the issue is not confused with Stable.</p></div>
+          </details>
+        </div>
+      </section>
+    </section>
+
+    <section class="hcf-section">
+      <h2 class="hcf-section-title">Still need help?</h2>
+      <div class="hcf-actions">
+        <a class="hcf-button hcf-button--primary" href="https://forum.harleytg.com/p/17-support">Forum Support</a>
+        <a class="hcf-button" href="https://forum.harleytg.com/p/14-downloads">Downloads</a>
+        <a class="hcf-button" href="https://forum.harleytg.com/p/25-domain-help">Domain Help</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="hcf-footer">
+    <span>Harley's Clan Forum // FAQ</span>
+    <a href="https://forum.harleytg.com/">forum.harleytg.com</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var root = document.querySelector('[data-hcf-faq-root]');
+  if (!root) return;
+
+  var serviceButtons = Array.prototype.slice.call(root.querySelectorAll('[data-faq-service]'));
+  var channelButtons = Array.prototype.slice.call(root.querySelectorAll('[data-faq-channel]'));
+  var channelStep = root.querySelector('[data-faq-channel-step]');
+  var path = root.querySelector('[data-faq-path]');
+  var pathLabel = root.querySelector('[data-faq-path-label]');
+  var resetButton = root.querySelector('[data-faq-reset]');
+  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-faq-panel]'));
+
+  function setPressed(buttons, selected) {
+    buttons.forEach(function (button) {
+      button.setAttribute('aria-pressed', button === selected ? 'true' : 'false');
+    });
+  }
+
+  function hidePanels() {
+    panels.forEach(function (panel) {
+      panel.hidden = true;
+    });
+  }
+
+  function closeFaqs() {
+    root.querySelectorAll('.hcf-faq-item[open]').forEach(function (item) {
+      item.removeAttribute('open');
+    });
+  }
+
+  function showPanel(name, label) {
+    hidePanels();
+    closeFaqs();
+
+    var panel = root.querySelector('[data-faq-panel="' + name + '"]');
+    if (panel) panel.hidden = false;
+
+    if (pathLabel) pathLabel.textContent = label;
+    if (path) path.hidden = false;
+
+    try {
+      panel && panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (error) {}
+  }
+
+  serviceButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      setPressed(serviceButtons, button);
+      setPressed(channelButtons, null);
+      hidePanels();
+      closeFaqs();
+
+      var service = button.getAttribute('data-faq-service');
+
+      if (service === 'website') {
+        if (channelStep) channelStep.hidden = true;
+        showPanel('website', 'Forum Website');
+        return;
+      }
+
+      if (channelStep) {
+        channelStep.hidden = false;
+        try {
+          channelStep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (error) {}
+      }
+
+      if (path) path.hidden = true;
+    });
+  });
+
+  channelButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      setPressed(channelButtons, button);
+
+      var channel = button.getAttribute('data-faq-channel');
+      if (channel === 'stable') {
+        showPanel('stable', 'Forum App → Stable');
+      } else {
+        showPanel('beta', 'Forum App → Beta / Development');
+      }
+    });
+  });
+
+  if (resetButton) {
+    resetButton.addEventListener('click', function () {
+      setPressed(serviceButtons, null);
+      setPressed(channelButtons, null);
+      hidePanels();
+      closeFaqs();
+      if (channelStep) channelStep.hidden = true;
+      if (path) path.hidden = true;
+
+      var first = root.querySelector('[data-faq-service]');
+      if (first) {
+        try {
+          first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          first.focus({ preventScroll: true });
+        } catch (error) {
+          try { first.focus(); } catch (_) {}
+        }
+      }
+    });
+  }
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.1"></script>
