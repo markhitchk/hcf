@@ -11,13 +11,13 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.17
-   Updated: 2026-08-11
+   Version: 5.18
+   Updated: 2026-08-25
 ========================================================== */
 
 :root {
   --hc-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --cyan-readable: var(--primary-color, #00dfe6);
+  --cyan-readable: var(--primary-color, #00b8f0);
 }
 
 @media screen and (max-width: 767.98px) {

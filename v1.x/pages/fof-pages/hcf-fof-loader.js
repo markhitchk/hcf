@@ -1,7 +1,7 @@
 /* =========================================================
    Harley's Clan Forum — Dynamic FoF Pages GitHub Loader
-   Build: 1.1.0
-   Updated: 2026-08-11
+   Build: 1.1.1
+   Updated: 2026-08-25
 
    Install this ONCE in Flarum's global custom footer/header.
 
@@ -43,11 +43,11 @@
     return;
   }
 
-  var BUILD = '1.1.0';
-  var RAW_BASE = 'https://raw.githubusercontent.com/markhitchk/hcf/main/v1.x/pages/fof-pages/';
+  var BUILD = '1.1.1';
+  var RAW_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var CDN_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var DIRECTORY_API = 'https://api.github.com/repos/markhitchk/hcf/contents/v1.x/pages/fof-pages?ref=main';
-  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.2.0';
+  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.4.1';
   var DOMAIN_ROUTER_SRC = CDN_BASE + 'hcf-domain-router.js?v=1.0.1';
   var CACHE_TTL = 30000;
   var MISSING_TTL = 15000;
@@ -64,6 +64,7 @@
     time: 0,
     files: []
   };
+  var directoryBlockedUntil = 0;
 
   Array.prototype.forEach.call(document.scripts || [], function (script) {
     if (script.src) loadedExternalScripts.add(script.src);
@@ -305,6 +306,9 @@
     if (!force && directoryCache.files.length && now() - directoryCache.time <= DIRECTORY_TTL) {
       return directoryCache.files;
     }
+    if (now() < directoryBlockedUntil) {
+      return directoryCache.files;
+    }
 
     try {
       var response = await fetch(DIRECTORY_API + '&hcf=' + now(), {
@@ -317,6 +321,9 @@
       });
 
       if (!response.ok) {
+        if (response.status === 403 || response.status === 429) {
+          directoryBlockedUntil = now() + 300000;
+        }
         console.warn('[HCF FoF Loader] GitHub directory discovery returned HTTP ' + response.status);
         return directoryCache.files;
       }
@@ -331,7 +338,7 @@
         .map(function (item) {
           return {
             name: String(item.name || ''),
-            downloadUrl: item.download_url || rawUrl(item.name)
+            downloadUrl: rawUrl(item.name)
           };
         });
 

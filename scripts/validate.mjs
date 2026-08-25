@@ -174,7 +174,11 @@ for (const required of [
   '../add-ons/direct-messages.css") screen and (max-width: 767.98px)',
   '../add-ons/loading-screen.css") screen and (max-width: 767.98px)',
   '../add-ons/mobile.css") screen and (max-width: 767.98px)',
+  '../add-ons/mobile-auth-tooltip.css") screen and (max-width: 767.98px)',
   './htg.desktop.css") screen and (min-width: 768px)',
+  '../add-ons/desktop-header-alerts.css") screen and (min-width: 768px)',
+  '../add-ons/compact-laptop.css") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px)',
+  '../add-ons/day-night-compat.css")',
 ]) {
   if (!entry.includes(required)) fail(entryFile, `missing Flarum breakpoint import: ${required}`);
 }

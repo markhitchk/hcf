@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +9,11 @@ const failures = [];
 const checked = [];
 
 const sharedLogoNames = ["HTG.svg", "htg-icon.png", "htg-neon.png"];
+const sharedLogoMaxBytes = new Map([
+  ["HTG.svg", 50 * 1024],
+  ["htg-icon.png", 80 * 1024],
+  ["htg-neon.png", 120 * 1024],
+]);
 const canonicalLogoBase = "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/";
 const versionAssetsRoot = resolve(repositoryRoot, "v1.x/assets");
 
@@ -90,7 +95,15 @@ for (const file of walk(repositoryRoot)) {
 
 for (const name of sharedLogoNames) {
   const file = resolve(repositoryRoot, "assets/logos", name);
-  if (!existsSync(file)) failures.push(`assets/logos/${name}: required global HTG asset is missing`);
+  if (!existsSync(file)) {
+    failures.push(`assets/logos/${name}: required global HTG asset is missing`);
+    continue;
+  }
+  const maxBytes = sharedLogoMaxBytes.get(name);
+  const size = statSync(file).size;
+  if (maxBytes && size > maxBytes) {
+    fail(file, `shared logo is ${size} bytes; maximum is ${maxBytes} bytes`);
+  }
 }
 
 if (existsSync(resolve(repositoryRoot, "v1.x/assets"))) {

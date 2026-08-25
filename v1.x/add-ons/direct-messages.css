@@ -17,13 +17,17 @@
      replaced with Harley's Studios HTG icon.
    ========================================================================== */
 
-.ConversationsList span.message-data-name,
+.ConversationsList .chat .chat-header span.message-data-name,
 .ConversationsList .chat .chat-message button {
   display: none !important;
 }
 
+.ConversationsList .chat .chat-history span.message-data-name {
+  display: inline !important;
+}
+
 .ConversationsList .message-text {
-  background: #0084ff !important;
+  background: var(--primary-color, #00b8f0) !important;
   color: white !important;
   border-radius: 30px !important;
 }

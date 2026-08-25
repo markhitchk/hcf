@@ -17,15 +17,23 @@ All production Flarum files are stored under `v1.x/`. Shared branding assets are
 assets/
 └── logos/
     ├── HTG.svg
+    ├── HTG-App-Icon.png
+    ├── HTG-Construction-Icon.png
+    ├── HTG-Full-Logo.png
     ├── htg-icon.png
     └── htg-neon.png
 
 v1.x/
 ├── add-ons/
+│   ├── compact-laptop.css
 │   ├── cookie-consent.css
+│   ├── day-night-compat.css
+│   ├── desktop-header-alerts.css
 │   ├── direct-messages.css
 │   ├── header-panels.css
 │   ├── loading-screen.css
+│   ├── mobile-auth-tip.js
+│   ├── mobile-auth-tooltip.css
 │   ├── mobile.css
 │   ├── motion.css
 │   └── seasonal/
@@ -40,18 +48,28 @@ v1.x/
 │   ├── header.html
 │   ├── htg.desktop.css
 │   └── htg.forum.css
-├── pages/
-│   └── errors/
-│       ├── 403.html
-│       ├── 404.html
-│       ├── 500.html
-│       └── 503.html
+└── pages/
+    ├── errors/
+    │   ├── 403.html
+    │   ├── 404.html
+    │   ├── 500.html
+    │   ├── 503.html
+    │   └── error-loader.js
+    └── fof-pages/
+        ├── *.html
+        ├── hcf-domain-router.js
+        ├── hcf-fof-loader.js
+        ├── hcf-page.js
+        ├── hcf-page.css
+        ├── hcf-page-runtime.css
+        └── hcf-page-v2.1.css
 
 v2.x/
 └── README.md
 
 scripts/
-└── validate.mjs
+├── validate.mjs
+└── validate-global-assets.mjs
 
 .github/workflows/
 └── validate.yml
@@ -149,6 +167,7 @@ before publishing changes:
 
 ```sh
 node scripts/validate.mjs
+node scripts/validate-global-assets.mjs
 ```
 
 The same check runs automatically in GitHub Actions.

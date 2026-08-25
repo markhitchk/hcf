@@ -5,8 +5,8 @@
    dynamic FoF page loads / Flarum SPA navigation.
 
    Runtime Version: 1.4.1
-   Domain Cutover: October 12, 2026
-   Updated: 2026-08-11
+   Domain Cutover: 2026-10-12T00:00:00-07:00
+   Updated: 2026-08-25
 ========================================================== */
 (function(){
   "use strict";

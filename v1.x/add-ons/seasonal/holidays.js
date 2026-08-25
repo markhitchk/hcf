@@ -3,10 +3,10 @@
    Time zone: America/Los_Angeles
 
    Test every celebration:
-   https://forum.harleytg.com/?hcHoliday=all
+   https://forum.harleytg.com/?hcDebug=1&hcHoliday=all
 
    Optional visible time per banner:
-   https://forum.harleytg.com/?hcHoliday=all&hcSpeed=5000
+   https://forum.harleytg.com/?hcDebug=1&hcHoliday=all&hcSpeed=5000
 ========================================================= */
 (function () {
   "use strict";
@@ -203,8 +203,13 @@
     }
   }
 
+  function debugQueryAllowed() {
+    var host = String(location.hostname || "").toLowerCase();
+    return host === "localhost" || host === "127.0.0.1" || host === "::1" || getQueryValue("hcDebug") === "1";
+  }
+
   function queryForce() {
-    return getQueryValue("hcHoliday").toLowerCase();
+    return debugQueryAllowed() ? getQueryValue("hcHoliday").toLowerCase() : "";
   }
 
   function isSequenceRequest(value) {
@@ -212,6 +217,7 @@
   }
 
   function requestedSpeed() {
+    if (!debugQueryAllowed()) return 6000;
     var value = Number(getQueryValue("hcSpeed"));
     if (!Number.isFinite(value)) {
       return 6000;

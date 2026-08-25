@@ -4,7 +4,7 @@
 
    Version: 1.1
    Author: HarleyTG
-   Updated: 2026-08-10
+   Updated: 2026-08-25
 
    Notes:
    - Uses Flarum's live CSS variables so this stays valid as a
@@ -14,10 +14,13 @@
 =================================== */
 
 :root {
-  --htg-cyan: #00ffff;
-  --htg-cyan-soft: rgba(0, 255, 255, 0.35);
+  --hc-accent: #00b8f0;
+  --cyan: var(--hc-accent);
+  --cyan-readable: var(--primary-color, #00b8f0);
+  --htg-cyan: var(--hc-accent);
+  --htg-cyan-soft: rgba(0, 184, 240, 0.35);
   --htg-glass-surface: rgba(20, 20, 20, 0.82);
-  --htg-border: rgba(0, 255, 255, 0.22);
+  --htg-border: rgba(0, 184, 240, 0.22);
   --htg-shadow: rgba(0, 0, 0, 0.4);
 }
 
@@ -60,7 +63,7 @@
   font-size: 2.4rem;
   font-weight: 700;
   text-align: center;
-  background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);
+  background: linear-gradient(90deg, var(--htg-cyan), #7f5cff, var(--htg-cyan));
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

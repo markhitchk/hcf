@@ -16,3 +16,12 @@ Birthday and holiday data and scripts for Harley's Clan Forum.
 ```
 
 The system uses the `America/Los_Angeles` timezone and loads its settings from `holidays.json` in this folder.
+
+## Testing
+
+Production uses real holiday dates only. Forced holiday testing is allowed on localhost, or on the production forum only when `hcDebug=1` is present.
+
+```text
+https://forum.harleytg.com/?hcDebug=1&hcHoliday=all
+https://forum.harleytg.com/?hcDebug=1&hcHoliday=all&hcSpeed=5000
+```
