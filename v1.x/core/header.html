@@ -37,6 +37,12 @@
   pointer-events:auto;
 }
 
+#hc-header-stack.hc-rotating .hc-slide.is-active button,
+#hc-header-stack.hc-rotating .hc-slide.is-active a,
+#hc-header-stack.hc-rotating .hc-slide.is-active [role="button"]{
+  pointer-events:auto!important;
+}
+
 #hc-header-stack .hc-slide{
   width:100%;
   height:var(--hc-banner-height);
@@ -385,15 +391,18 @@ html body #hc-holiday-header{
       </div>
       <button id="hc-birthday-close" type="button" aria-label="Close birthday announcement">×</button>
     </section>
+    <span id="hc-birthday-header-particles" aria-hidden="true" hidden></span>
   </div>
-
-  <span id="hc-birthday-header-particles" aria-hidden="true" hidden></span>
 </div>
 
 <script>
 (function enforceNormalMode(){
   try{
     var url=new URL(window.location.href);
+    var host=window.location.hostname.toLowerCase();
+    var local=host==="localhost"||host==="127.0.0.1"||host==="::1";
+    var debugHoliday=url.searchParams.has("hcHoliday")&&url.searchParams.get("hcDebug")==="1";
+    if(local||debugHoliday){return}
     var changed=false;
     ["hcHoliday","hcSpeed"].forEach(function(name){
       if(url.searchParams.has(name)){
@@ -411,7 +420,7 @@ html body #hc-holiday-header{
   "use strict";
 
   var item=document.getElementById("hc-domain-expiration");
-  var cutoff=new Date("2026-10-13T00:00:00-07:00").getTime();
+  var cutoff=new Date("2026-10-12T00:00:00-07:00").getTime();
   var MAX_TIMEOUT=2147483647;
 
   function sync(){
@@ -567,8 +576,6 @@ html body #hc-holiday-header{
     banner.setAttribute("aria-label","Birthday celebration for "+names);
     banner.hidden=false;
     slide.hidden=false;
-    showHeaderParticles();
-    buildPageEffects();
     notify();
     return true;
   }
@@ -586,11 +593,13 @@ html body #hc-holiday-header{
   window.HCBirthday={
     refresh:showToday,
     isActive:function(){return activeToday},
-    showEffects:function(){
-      if(activeToday){showHeaderParticles();buildPageEffects()}
+    showEffects:function(isBirthdaySlide){
+      if(isBirthdaySlide&&activeToday){showHeaderParticles();buildPageEffects()}
+      else{hideHeaderParticles();removePageEffects()}
     },
     hideEffects:function(){
-      if(!activeToday){hideHeaderParticles();removePageEffects()}
+      hideHeaderParticles();
+      removePageEffects();
     }
   };
 
@@ -610,14 +619,24 @@ html body #hc-holiday-header{
 })();
 </script>
 
-<!-- Normal production mode: holidays appear only on their real dates. -->
+<!-- Normal production mode: holidays appear only on their real dates. Debug forcing requires localhost or hcDebug=1. -->
 <script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/seasonal/holidays.js"></script>
 
 <script>
 (function normalizeHolidayMode(remaining){
+  function testsAllowed(){
+    try{
+      var url=new URL(window.location.href);
+      var host=window.location.hostname.toLowerCase();
+      return host==="localhost"||host==="127.0.0.1"||host==="::1"||
+        (url.searchParams.has("hcHoliday")&&url.searchParams.get("hcDebug")==="1");
+    }catch(error){return false}
+  }
   if(window.HCHolidays){
-    if(typeof window.HCHolidays.stopTest==="function"){window.HCHolidays.stopTest()}
-    if(typeof window.HCHolidays.clearForce==="function"){window.HCHolidays.clearForce()}
+    if(!testsAllowed()){
+      if(typeof window.HCHolidays.stopTest==="function"){window.HCHolidays.stopTest()}
+      if(typeof window.HCHolidays.clearForce==="function"){window.HCHolidays.clearForce()}
+    }
     if(window.HCBirthday&&typeof window.HCBirthday.refresh==="function"){window.HCBirthday.refresh()}
     return;
   }
@@ -649,7 +668,6 @@ html body #hc-holiday-header{
   function wrapDynamicBanners(){
     Array.prototype.slice.call(stack.children).forEach(function(child){
       if(child.classList&&child.classList.contains("hc-slide")){return}
-      if(child.id==="hc-birthday-header-particles"){return}
       if(!child.matches||!child.matches("#hc-holiday-header,[data-hc-banner]")){return}
       var wrapper=document.createElement("div");
       wrapper.className="hc-slide";
@@ -684,12 +702,13 @@ html body #hc-holiday-header{
   function updateEffects(){
     var banner=bannerFor(current);
     var holidayActive=banner&&banner.id==="hc-holiday-header";
+    var birthdayActive=!!current&&current.getAttribute("data-hc-slide")==="birthday"&&!current.classList.contains("is-leaving");
 
     if(window.HCBirthday){
-      if(typeof window.HCBirthday.isActive==="function"&&window.HCBirthday.isActive()){
-        window.HCBirthday.showEffects();
+      if(birthdayActive&&typeof window.HCBirthday.isActive==="function"&&window.HCBirthday.isActive()){
+        window.HCBirthday.showEffects(birthdayActive);
       }else{
-        window.HCBirthday.hideEffects();
+        window.HCBirthday.hideEffects(birthdayActive);
       }
     }
 
@@ -752,6 +771,7 @@ html body #hc-holiday-header{
     void incoming.offsetWidth;
     outgoing.classList.add("is-leaving");
     incoming.classList.add("is-entering-active");
+    updateEffects();
 
     window.setTimeout(function(){
       clear(outgoing);
