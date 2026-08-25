@@ -1,14 +1,16 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.6
+   HARLEY'S CLAN FORUM FOOTER v4.4.7
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-19
+   Updated: 2026-08-25
 ========================================================= */
 
 :root{
     --hc-accent:#00b8f0;
+    --cyan:var(--hc-accent);
+    --cyan-readable:var(--primary-color,#00b8f0);
     --hc-bg:#15171b;
     --hc-bg-strong:#0d0f12;
     --hc-border:#2f3742;
@@ -1228,7 +1230,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.6">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.7">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1450,19 +1452,12 @@
         var meta=document.querySelector('meta[name="color-scheme"]');
 
         if(meta){
-            value=String(meta.getAttribute("content")||"").toLowerCase();
+            value=String(meta.getAttribute("content")||"").trim().toLowerCase();
         }
 
-        if(value.indexOf("light")!==-1){return "day"}
-        if(value.indexOf("dark")!==-1){return "night"}
-
-        try{
-            return window.matchMedia("(prefers-color-scheme: dark)").matches
-                ?"night"
-                :"day";
-        }catch(error){
-            return "day";
-        }
+        if(value==="light"){return "day"}
+        if(value==="dark"){return "night"}
+        return "";
     }
 
     function syncForumTheme(event){
@@ -1474,7 +1469,11 @@
             ?event.detail
             :detectForumTheme();
 
-        footer.setAttribute("data-hc-theme",theme);
+        if(theme==="day"||theme==="night"){
+            footer.setAttribute("data-hc-theme",theme);
+        }else{
+            footer.removeAttribute("data-hc-theme");
+        }
     }
 
     function initForumThemeSync(){
@@ -1497,7 +1496,6 @@
     function normalizeUsername(value){
         var name=String(value||"").trim();
         var lower=name.toLowerCase();
-
         if(
             !name||
             lower==="guest"||
@@ -2064,3 +2062,4 @@
     topButton.addEventListener("click",returnToTop);
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/mobile-auth-tip.js"></script>
