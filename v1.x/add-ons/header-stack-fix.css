@@ -1,0 +1,75 @@
+/* ==========================================================
+   HARLEY'S CLAN FORUM — NOTICE + FLARUM HEADER STACK FIX
+
+   Keeps the custom notice/header banner above Flarum's native
+   navigation on desktop and mobile, including affixed/fixed states.
+
+   Flarum phone breakpoint: max-width 767.98px
+   Author: HarleyTG
+   Added: 2026-08-25
+========================================================== */
+
+:root {
+  --hc-notice-stack-height: var(--hc-banner-height, 58px);
+}
+
+/* Custom Header HTML is rendered before #app. Keep that banner as the
+   topmost normal header surface without outranking Flarum modals/drawers. */
+html body #hc-header-stack {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  z-index: calc(var(--zindex-header, 1000) + 1);
+  isolation: isolate;
+}
+
+html body #hc-header-stack > .hc-slide {
+  max-width: 100%;
+}
+
+/* Desktop/tablet-up: Flarum switches .App-header to fixed when affixed.
+   Offset only that fixed state so normal document flow remains untouched. */
+@media screen and (min-width: 768px) {
+  html body .App.affix .App-header {
+    top: var(--hc-notice-stack-height);
+  }
+}
+
+/* Phones: the visible top bar is .App-navigation; .App-header lives inside
+   Flarum's slide-out drawer and must not be repositioned. */
+@media screen and (max-width: 767.98px) {
+  html body .App.affix .App-navigation {
+    top: var(--hc-notice-stack-height);
+  }
+
+  /* Flarum sets top:0 !important on these fixed controls, so !important is
+     required here to keep hamburger/back/title/action controls with the bar. */
+  html body .App.affix .App-primaryControl,
+  html body .App.affix .App-titleControl,
+  html body .App.affix .App-backControl {
+    top: var(--hc-notice-stack-height) !important;
+  }
+
+  /* Composer mode can independently fix the same controls. */
+  html body .Composer .App-primaryControl,
+  html body .Composer .App-titleControl,
+  html body .Composer .App-backControl {
+    top: var(--hc-notice-stack-height) !important;
+  }
+}
+
+/* Do not introduce transforms that would alter containing blocks for fixed
+   menus, drawers, Popper dropdowns, or composer controls. */
+html body #hc-header-stack,
+html body .App-header,
+html body .App-navigation {
+  transform-origin: center top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #hc-header-stack {
+    scroll-behavior: auto;
+  }
+}
