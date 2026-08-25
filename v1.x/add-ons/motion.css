@@ -8,9 +8,9 @@
    Popper, and app-control positioning. This layer only tunes
    native transition timing and animates safe inner content.
 
-   Version: 3.1
+   Version: 3.2
    Author: HarleyTG
-   Updated: 2026-08-11
+   Updated: 2026-08-25
 ========================================================= */
 
 :root {
@@ -519,5 +519,15 @@
   .DiscussionListItem-title,
   .Post-body a {
     transition-duration: 1ms !important;
+  }
+}
+
+
+/* P3: reduced-motion touch feedback must not scale controls. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+
+  .Button:not(.Dropdown-toggle):not(:disabled):active {
+    transform: none !important;
   }
 }

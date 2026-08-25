@@ -242,6 +242,57 @@ if (!/@keyframes\s+hc-loader-progress/.test(loader) || !/100%\s*\{\s*background-
   fail(loaderFile, "staged loading progress animation is missing");
 }
 
+// P3: optional live fragment importer must preserve the canonical body-only sources.
+const fragmentImporterFile = resolve(repositoryRoot, "v1.x/core/fragment-importer.js");
+const fragmentImporter = readFileSync(fragmentImporterFile, "utf8");
+for (const required of [
+  "data-hcf-fragment",
+  "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/",
+  "kind + '.html'",
+  "template.content.cloneNode(true)",
+  "scripts.reduce",
+  "console.warn",
+]) {
+  if (!fragmentImporter.includes(required)) fail(fragmentImporterFile, `missing guarded fragment importer behavior: ${required}`);
+}
+const fragmentImporterSyntax = spawnSync(process.execPath, ["--check", fragmentImporterFile], { encoding: "utf8" });
+if (fragmentImporterSyntax.status !== 0) {
+  fail(fragmentImporterFile, fragmentImporterSyntax.stderr.trim() || "JavaScript syntax check failed");
+}
+
+// P3: error shells share one stylesheet; loader JS must not carry a duplicate CSS bundle.
+const errorCssFile = resolve(repositoryRoot, "v1.x/pages/errors/error.css");
+const errorCss = readFileSync(errorCssFile, "utf8");
+if (!errorCss.includes("--hc: #00b8f0")) fail(errorCssFile, "primary HCF cyan token is missing");
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(errorCss) || !/animation:\s*none\s*!important/.test(errorCss)) {
+  fail(errorCssFile, "reduced-motion error-page fallback is missing");
+}
+for (const name of ["403.html", "404.html", "500.html", "503.html", "error.html"]) {
+  const file = resolve(repositoryRoot, "v1.x/pages/errors", name);
+  const source = readFileSync(file, "utf8");
+  if (!source.includes("v1.x/pages/errors/error.css")) fail(file, "shared error.css is not loaded");
+  if (/<style\b/i.test(source)) fail(file, "duplicate inline error-page CSS remains");
+}
+const errorLoaderFile = resolve(repositoryRoot, "v1.x/pages/errors/error-loader.js");
+const errorLoader = readFileSync(errorLoaderFile, "utf8");
+if (/hcf-error-style|createElement\(['\"]style['\"]\)/.test(errorLoader)) {
+  fail(errorLoaderFile, "error loader still injects the extracted stylesheet");
+}
+
+// P3: preserve reduced-motion behavior in both Flarum phone motion and FoF runtime motion.
+const motionSource = readFileSync(motionFile, "utf8");
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(motionSource) || !/transition-duration:\s*1ms\s*!important/.test(motionSource)) {
+  fail(motionFile, "reduced-motion Flarum transition safeguard is missing");
+}
+if (!/Button:not\(\.Dropdown-toggle\):not\(:disabled\):active[\s\S]{0,120}transform:\s*none\s*!important/.test(motionSource)) {
+  fail(motionFile, "reduced-motion touch transform reset is missing");
+}
+const fofRuntimeMotionFile = resolve(repositoryRoot, "v1.x/pages/fof-pages/hcf-page-runtime.css");
+const fofRuntimeMotion = readFileSync(fofRuntimeMotionFile, "utf8");
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(fofRuntimeMotion) || !/transition:\s*none\s*!important/.test(fofRuntimeMotion)) {
+  fail(fofRuntimeMotionFile, "FoF runtime reduced-motion coverage is missing");
+}
+
 const holidayFile = resolve(repositoryRoot, "v1.x/add-ons/seasonal/holidays.js");
 const syntax = spawnSync(process.execPath, ["--check", holidayFile], { encoding: "utf8" });
 if (syntax.status !== 0) fail(holidayFile, syntax.stderr.trim() || "JavaScript syntax check failed");

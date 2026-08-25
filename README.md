@@ -46,6 +46,7 @@ v1.x/
 │   ├── admin.css
 │   ├── footer.html
 │   ├── header.html
+│   ├── fragment-importer.js
 │   ├── htg.desktop.css
 │   └── htg.forum.css
 └── pages/
@@ -54,6 +55,8 @@ v1.x/
     │   ├── 404.html
     │   ├── 500.html
     │   ├── 503.html
+    │   ├── error.css
+    │   ├── error.html
     │   └── error-loader.js
     └── fof-pages/
         ├── *.html
@@ -154,10 +157,21 @@ Learn More controls inside user notification settings.
 - Paste the body-only `v1.x/core/footer.html` fragment into the forum custom footer.
 - Use `v1.x/core/admin.css` for the Flarum administration panel.
 
+For installations that should live-sync the body-only fragments instead of copying their full contents, use the guarded importer with an explicit target:
+
+```html
+<script defer src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/fragment-importer.js" data-hcf-fragment="header"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/core/fragment-importer.js" data-hcf-fragment="footer"></script>
+```
+
+The importer resolves relative assets against the source fragment, inserts markup and embedded styles before executing scripts, then runs scripts sequentially. If a later embedded script fails, the already-inserted header or footer remains in place.
+
 ## Seasonal content and error pages
 
 - Birthday records and automatic holiday banners are in `v1.x/add-ons/seasonal/`.
-- FoF HTML error pages are in `v1.x/pages/errors/`, organized by HTTP status code.
+- FoF HTML error pages are in `v1.x/pages/errors/`, organized by HTTP status code and sharing `error.css`.
+
+The current FoF page visual baseline remains `hcf-page-v2.1.css`, while `hcf-page-runtime.css` owns runtime identity/device UI and motion. The older `hcf-page.css` is retained only as a compatibility file. These layers are intentionally not merged because their responsibilities and live references differ.
 
 ## Browser support
 
