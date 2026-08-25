@@ -14,6 +14,8 @@
    - desktop header/alert stability patch runs after the base theme,
      scales fluidly with no fixed upper desktop breakpoint, and uses
      Flarum theme variables for automatic dark/light surfaces
+   - messaging light-mode overrides load after both mobile and desktop
+     Messenger base styles without altering the existing dark treatment
    - compact laptop mode: post-desktop overrides for short
      Chromebook-class browser viewports
    - Day/Night compatibility patch runs last so custom loader/footer
@@ -23,7 +25,7 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a39
+   Version: 5.9a40
    Author: HarleyTG
    Updated: 2026-08-25
 ========================================================== */
@@ -43,6 +45,9 @@
 @import url("./htg.desktop.css") screen and (min-width: 768px);
 @import url("../add-ons/desktop-header-alerts.css") screen and (min-width: 768px);
 @import url("../add-ons/compact-laptop.css") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px);
+
+/* Cross-viewport Messenger Day Mode overrides run after both base branches. */
+@import url("../add-ons/direct-messages-light.css");
 
 /* Final cross-viewport FoF Night Mode synchronization layer. */
 @import url("../add-ons/day-night-compat.css");
