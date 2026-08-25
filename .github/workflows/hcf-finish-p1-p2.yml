@@ -1,0 +1,329 @@
+name: Finish HCF P1 and P2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/hcf-finish-p1-p2.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  finish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply P1 and P2 patches
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import shutil
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          def sub(path, pattern, replacement, count=0, flags=0):
+              text = read(path)
+              updated, n = re.subn(pattern, replacement, text, count=count, flags=flags)
+              if n:
+                  write(path, updated)
+              return n
+
+          def replace_if_present(path, old, new):
+              text = read(path)
+              if old in text:
+                  write(path, text.replace(old, new))
+                  return True
+              return False
+
+          # P1.6 — holiday test URLs require localhost or hcDebug=1.
+          p = 'v1.x/add-ons/seasonal/holidays.js'
+          text = read(p)
+          text = text.replace(
+              'https://forum.harleytg.com/?hcHoliday=all&hcSpeed=5000',
+              'https://forum.harleytg.com/?hcDebug=1&hcHoliday=all&hcSpeed=5000'
+          )
+          text = text.replace(
+              'https://forum.harleytg.com/?hcHoliday=all',
+              'https://forum.harleytg.com/?hcDebug=1&hcHoliday=all'
+          )
+          if 'function debugQueryAllowed()' not in text:
+              anchor = '''  function queryForce() {\n    return getQueryValue("hcHoliday").toLowerCase();\n  }'''
+              replacement = '''  function debugQueryAllowed() {\n    var host = String(location.hostname || "").toLowerCase();\n    return host === "localhost" || host === "127.0.0.1" || host === "::1" || getQueryValue("hcDebug") === "1";\n  }\n\n  function queryForce() {\n    return debugQueryAllowed() ? getQueryValue("hcHoliday").toLowerCase() : "";\n  }'''
+              if anchor not in text:
+                  raise SystemExit('holidays.js queryForce anchor not found')
+              text = text.replace(anchor, replacement, 1)
+          if 'if (!debugQueryAllowed()) return 6000;' not in text:
+              anchor = '''  function requestedSpeed() {\n    var value = Number(getQueryValue("hcSpeed"));'''
+              replacement = '''  function requestedSpeed() {\n    if (!debugQueryAllowed()) return 6000;\n    var value = Number(getQueryValue("hcSpeed"));'''
+              if anchor not in text:
+                  raise SystemExit('holidays.js requestedSpeed anchor not found')
+              text = text.replace(anchor, replacement, 1)
+          write(p, text)
+
+          p = 'v1.x/add-ons/seasonal/README.md'
+          text = read(p)
+          if '?hcDebug=1&hcHoliday=all' not in text:
+              text = text.rstrip() + '''\n\n## Testing\n\nProduction uses real holiday dates only. Forced holiday testing is allowed on localhost, or on the production forum only when `hcDebug=1` is present.\n\n```text\nhttps://forum.harleytg.com/?hcDebug=1&hcHoliday=all\nhttps://forum.harleytg.com/?hcDebug=1&hcHoliday=all&hcSpeed=5000\n```\n'''
+          write(p, text)
+
+          # P1.8 — one domain cutover timestamp.
+          p = 'v1.x/pages/fof-pages/hcf-page.js'
+          text = read(p)
+          text = text.replace('Domain Cutover: October 12, 2026', 'Domain Cutover: 2026-10-12T00:00:00-07:00')
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          write(p, text)
+
+          p = 'v1.x/pages/fof-pages/27-domain-expiration.html'
+          text = read(p)
+          if 'data-hcf-cutover-at=' not in text:
+              text = text.replace(
+                  '<div class="hcf-page" id="hcf-domain-expiration" data-hcf-page-build="2.3a4">',
+                  '<!-- Domain cutover: 2026-10-12T00:00:00-07:00 -->\n<div class="hcf-page" id="hcf-domain-expiration" data-hcf-page-build="2.3a4" data-hcf-cutover-at="2026-10-12T00:00:00-07:00">',
+                  1
+              )
+          write(p, text)
+
+          # P1.9 / P2.16 — current runtime cache-buster and jsDelivr-first FoF loading.
+          p = 'v1.x/pages/fof-pages/hcf-fof-loader.js'
+          text = read(p)
+          text = text.replace('Build: 1.1.0', 'Build: 1.1.1')
+          text = text.replace('Updated: 2026-08-11', 'Updated: 2026-08-25', 1)
+          text = text.replace("var BUILD = '1.1.0';", "var BUILD = '1.1.1';")
+          text = re.sub(
+              r"var RAW_BASE = 'https://raw\.githubusercontent\.com/markhitchk/hcf/main/v1\.x/pages/fof-pages/';",
+              "var RAW_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';",
+              text
+          )
+          text = re.sub(r"hcf-page\.js\?v=[0-9A-Za-z._-]+", 'hcf-page.js?v=1.4.1', text)
+          if 'var directoryBlockedUntil = 0;' not in text:
+              anchor = '''  var directoryCache = {\n    time: 0,\n    files: []\n  };'''
+              if anchor not in text:
+                  raise SystemExit('hcf-fof-loader.js directory cache anchor not found')
+              text = text.replace(anchor, anchor + '\n  var directoryBlockedUntil = 0;', 1)
+          if 'if (now() < directoryBlockedUntil)' not in text:
+              anchor = '''  async function fetchDirectory(force) {\n    if (!force && directoryCache.files.length && now() - directoryCache.time <= DIRECTORY_TTL) {\n      return directoryCache.files;\n    }'''
+              replacement = anchor + '''\n    if (now() < directoryBlockedUntil) {\n      return directoryCache.files;\n    }'''
+              if anchor not in text:
+                  raise SystemExit('hcf-fof-loader.js fetchDirectory anchor not found')
+              text = text.replace(anchor, replacement, 1)
+          if 'directoryBlockedUntil = now() + 300000;' not in text:
+              anchor = '''      if (!response.ok) {\n        console.warn('[HCF FoF Loader] GitHub directory discovery returned HTTP ' + response.status);\n        return directoryCache.files;\n      }'''
+              replacement = '''      if (!response.ok) {\n        if (response.status === 403 || response.status === 429) {\n          directoryBlockedUntil = now() + 300000;\n        }\n        console.warn('[HCF FoF Loader] GitHub directory discovery returned HTTP ' + response.status);\n        return directoryCache.files;\n      }'''
+              if anchor not in text:
+                  raise SystemExit('hcf-fof-loader.js HTTP fallback anchor not found')
+              text = text.replace(anchor, replacement, 1)
+          text = text.replace('downloadUrl: item.download_url || rawUrl(item.name)', 'downloadUrl: rawUrl(item.name)')
+          write(p, text)
+
+          for path in Path('v1.x').rglob('*'):
+              if path.is_file() and path.suffix.lower() in {'.html', '.js', '.css'}:
+                  text = path.read_text(encoding='utf-8')
+                  updated = re.sub(r'hcf-page\.js\?v=[0-9A-Za-z._-]+', 'hcf-page.js?v=1.4.1', text)
+                  if updated != text:
+                      path.write_text(updated, encoding='utf-8')
+
+          # P1.10 — direct messages use the forum primary color and show transcript names.
+          p = 'v1.x/add-ons/direct-messages.css'
+          text = read(p)
+          text = text.replace(
+              '.ConversationsList span.message-data-name,\n.ConversationsList .chat .chat-message button {\n  display: none !important;\n}',
+              '.ConversationsList .chat .chat-header span.message-data-name,\n.ConversationsList .chat .chat-message button {\n  display: none !important;\n}\n\n.ConversationsList .chat .chat-history span.message-data-name {\n  display: inline !important;\n}'
+          )
+          text = text.replace('background: #0084ff !important;', 'background: var(--primary-color, #00b8f0) !important;')
+          write(p, text)
+
+          # P1.11 / P2.18 — cyan tokens and coherent version/date labels.
+          p = 'v1.x/core/htg.forum.css'
+          text = read(p)
+          text = re.sub(r'Version: 5\.9a\d+', 'Version: 5.9a38', text, count=1)
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          write(p, text)
+
+          p = 'v1.x/core/htg.desktop.css'
+          text = read(p)
+          text = re.sub(r'Version: 5\.9a\d+', 'Version: 5.9a11', text, count=1)
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          if '--hc-accent:' not in text.split('}', 1)[0]:
+              text = text.replace(':root {\n  --cyan: #00ffff;', ':root {\n  --hc-accent: #00b8f0;\n  --cyan: var(--hc-accent);', 1)
+          else:
+              text = text.replace('--cyan: #00ffff;', '--cyan: var(--hc-accent);', 1)
+          text = text.replace('--control-border: rgba(0, 255, 255, 0.24);', '--control-border: rgba(0, 184, 240, 0.24);', 1)
+          text = text.replace('--cyan-readable: var(--primary-color, #00dfe6);', '--cyan-readable: var(--primary-color, #00b8f0);', 1)
+          write(p, text)
+
+          p = 'v1.x/core/admin.css'
+          text = read(p)
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          if '--hc-accent:' not in text.split('}', 1)[0]:
+              text = text.replace(
+                  ':root {\n  --htg-cyan: #00ffff;\n  --htg-cyan-soft: rgba(0, 255, 255, 0.35);',
+                  ':root {\n  --hc-accent: #00b8f0;\n  --cyan: var(--hc-accent);\n  --cyan-readable: var(--primary-color, #00b8f0);\n  --htg-cyan: var(--hc-accent);\n  --htg-cyan-soft: rgba(0, 184, 240, 0.35);',
+                  1
+              )
+          text = text.replace('--htg-border: rgba(0, 255, 255, 0.22);', '--htg-border: rgba(0, 184, 240, 0.22);', 1)
+          text = text.replace('background: linear-gradient(90deg, #00ffff, #7f5cff, #00ffff);', 'background: linear-gradient(90deg, var(--htg-cyan), #7f5cff, var(--htg-cyan));', 1)
+          write(p, text)
+
+          p = 'v1.x/add-ons/mobile.css'
+          text = read(p)
+          text = re.sub(r'Version: 5\.\d+', 'Version: 5.18', text, count=1)
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          text = text.replace('--cyan-readable: var(--primary-color, #00dfe6);', '--cyan-readable: var(--primary-color, #00b8f0);', 1)
+          write(p, text)
+
+          p = 'v1.x/core/footer.html'
+          text = read(p)
+          text = re.sub(r'FOOTER v4\.4\.\d+', 'FOOTER v4.4.7', text, count=1)
+          text = re.sub(r'Updated: 2026-08-\d{2}', 'Updated: 2026-08-25', text, count=1)
+          text = text.replace('data-hc-footer-build="4.4.6"', 'data-hc-footer-build="4.4.7"')
+          root = text.split('}', 1)[0]
+          if '--cyan:var(--hc-accent);' not in root.replace(' ', ''):
+              text = text.replace('    --hc-accent:#00b8f0;', '    --hc-accent:#00b8f0;\n    --cyan:var(--hc-accent);\n    --cyan-readable:var(--primary-color,#00b8f0);', 1)
+          write(p, text)
+
+          # P2.15 — protect every current entry-point import in the validator.
+          p = 'scripts/validate.mjs'
+          text = read(p)
+          required = [
+              "  '../add-ons/mobile-auth-tooltip.css\") screen and (max-width: 767.98px)',",
+              "  '../add-ons/desktop-header-alerts.css\") screen and (min-width: 768px)',",
+              "  '../add-ons/compact-laptop.css\") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px)',",
+              "  '../add-ons/day-night-compat.css\")',",
+          ]
+          anchor = "  '../add-ons/mobile.css\") screen and (max-width: 767.98px)',\n"
+          if required[0] not in text:
+              if anchor not in text:
+                  raise SystemExit('validate.mjs mobile import anchor not found')
+              text = text.replace(anchor, anchor + required[0] + '\n', 1)
+          desktop_anchor = "  './htg.desktop.css\") screen and (min-width: 768px)',\n"
+          if required[1] not in text:
+              if desktop_anchor not in text:
+                  raise SystemExit('validate.mjs desktop import anchor not found')
+              text = text.replace(desktop_anchor, desktop_anchor + required[1] + '\n' + required[2] + '\n' + required[3] + '\n', 1)
+          write(p, text)
+
+          # P0 acceptance / P2 validator hygiene — size ceilings for shared logo assets.
+          p = 'scripts/validate-global-assets.mjs'
+          text = read(p)
+          text = text.replace(
+              'import { existsSync, readFileSync, readdirSync } from "node:fs";',
+              'import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";',
+              1
+          )
+          if 'sharedLogoMaxBytes' not in text:
+              anchor = 'const sharedLogoNames = ["HTG.svg", "htg-icon.png", "htg-neon.png"];\n'
+              addition = anchor + '''const sharedLogoMaxBytes = new Map([\n  ["HTG.svg", 50 * 1024],\n  ["htg-icon.png", 80 * 1024],\n  ["htg-neon.png", 120 * 1024],\n]);\n'''
+              if anchor not in text:
+                  raise SystemExit('validate-global-assets logo list anchor not found')
+              text = text.replace(anchor, addition, 1)
+              old = '''for (const name of sharedLogoNames) {\n  const file = resolve(repositoryRoot, "assets/logos", name);\n  if (!existsSync(file)) failures.push(`assets/logos/${name}: required global HTG asset is missing`);\n}\n'''
+              new = '''for (const name of sharedLogoNames) {\n  const file = resolve(repositoryRoot, "assets/logos", name);\n  if (!existsSync(file)) {\n    failures.push(`assets/logos/${name}: required global HTG asset is missing`);\n    continue;\n  }\n  const maxBytes = sharedLogoMaxBytes.get(name);\n  const size = statSync(file).size;\n  if (maxBytes && size > maxBytes) {\n    fail(file, `shared logo is ${size} bytes; maximum is ${maxBytes} bytes`);\n  }\n}\n'''
+              if old not in text:
+                  raise SystemExit('validate-global-assets logo loop anchor not found')
+              text = text.replace(old, new, 1)
+          write(p, text)
+
+          # P2.17 — root .well-known is production DAL; keep the existing fingerprint.
+          p = '.well-known/assetlinks.json'
+          text = read(p).replace('"package_name": "com.harleytg.forum.dev"', '"package_name": "com.harleytg.forum"')
+          write(p, text)
+
+          # P2.13 — remove logo-import junk.
+          shutil.rmtree('.github/logo-import', ignore_errors=True)
+
+          # P2.14 — document the real repo layout and both validators, retaining the live CSS import snippet.
+          p = 'README.md'
+          text = read(p)
+          structure = '''## Repository structure\n\n```text\nassets/\n└── logos/\n    ├── HTG.svg\n    ├── HTG-App-Icon.png\n    ├── HTG-Construction-Icon.png\n    ├── HTG-Full-Logo.png\n    ├── htg-icon.png\n    └── htg-neon.png\n\nv1.x/\n├── add-ons/\n│   ├── compact-laptop.css\n│   ├── cookie-consent.css\n│   ├── day-night-compat.css\n│   ├── desktop-header-alerts.css\n│   ├── direct-messages.css\n│   ├── header-panels.css\n│   ├── loading-screen.css\n│   ├── mobile-auth-tip.js\n│   ├── mobile-auth-tooltip.css\n│   ├── mobile.css\n│   ├── motion.css\n│   └── seasonal/\n│       ├── birthdays.json\n│       ├── holidays.js\n│       ├── holidays.json\n│       ├── install-snippet.html\n│       └── README.md\n├── core/\n│   ├── admin.css\n│   ├── footer.html\n│   ├── header.html\n│   ├── htg.desktop.css\n│   └── htg.forum.css\n└── pages/\n    ├── errors/\n    │   ├── 403.html\n    │   ├── 404.html\n    │   ├── 500.html\n    │   ├── 503.html\n    │   └── error-loader.js\n    └── fof-pages/\n        ├── *.html\n        ├── hcf-domain-router.js\n        ├── hcf-fof-loader.js\n        ├── hcf-page.js\n        ├── hcf-page.css\n        ├── hcf-page-runtime.css\n        └── hcf-page-v2.1.css\n\nv2.x/\n└── README.md\n\nscripts/\n├── validate.mjs\n└── validate-global-assets.mjs\n\n.github/workflows/\n└── validate.yml\n```\n'''
+          updated, n = re.subn(r'## Repository structure\n\n```text\n.*?\n```\n', structure, text, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit('README repository tree not found')
+          text = updated
+          mobile_line = '@import url("../add-ons/mobile.css") screen and (max-width: 767.98px);'
+          if 'mobile-auth-tooltip.css' not in text:
+              text = text.replace(mobile_line, mobile_line + '\n@import url("../add-ons/mobile-auth-tooltip.css") screen and (max-width: 767.98px);', 1)
+          desktop_line = '@import url("./htg.desktop.css") screen and (min-width: 768px);'
+          if 'desktop-header-alerts.css' not in text:
+              text = text.replace(desktop_line, desktop_line + '\n@import url("../add-ons/desktop-header-alerts.css") screen and (min-width: 768px);\n@import url("../add-ons/compact-laptop.css") screen and (min-width: 768px) and (max-width: 1366px) and (max-height: 760px);\n\n/* Cross-viewport FoF day/night synchronization. */\n@import url("../add-ons/day-night-compat.css");', 1)
+          if 'node scripts/validate-global-assets.mjs' not in text:
+              text = text.replace('node scripts/validate.mjs\n```', 'node scripts/validate.mjs\nnode scripts/validate-global-assets.mjs\n```', 1)
+          write(p, text)
+
+          # Final P1/P2 static assertions (production/repo files only; do not inspect this workflow source).
+          live_text = '\n'.join(
+              path.read_text(encoding='utf-8', errors='ignore')
+              for root in [Path('v1.x'), Path('README.md'), Path('.well-known/assetlinks.json')]
+              for path in ([root] if root.is_file() else root.rglob('*'))
+              if path.is_file()
+          )
+          old_invite = 'JnAY' + '97BRw7'
+          if old_invite in live_text:
+              raise SystemExit('old Discord invite remains in production/repo content')
+          old_privacy = '/p/4-' + 'privicy-policy'
+          if old_privacy in live_text:
+              raise SystemExit('old privacy route remains')
+          if 'hcf-page.js?v=1.2.0' in live_text:
+              raise SystemExit('stale hcf-page.js cache-buster remains')
+          if Path('v1.x/pages/fof-pages/4-privicy-policy.html').exists():
+              raise SystemExit('misspelled privacy file still exists')
+          if Path('.github/logo-import').exists():
+              raise SystemExit('.github/logo-import still exists')
+          if 'com.harleytg.forum.dev' in read('.well-known/assetlinks.json'):
+              raise SystemExit('production assetlinks still targets dev package')
+
+          # Remove temporary maintenance artifacts only after patch assertions succeed.
+          for temp in [
+              Path('.github/workflows/hcf-maintenance-patch.yml'),
+              Path('.github/workflows/hcf-maintenance-patch-v2.yml'),
+              Path('.github/workflows/hcf-finish-p1-p2.yml'),
+              Path('hcf-patch-error.txt'),
+          ]:
+              if temp.exists():
+                  temp.unlink()
+          PY
+
+      - name: Run required validators
+        run: |
+          node scripts/validate.mjs
+          node scripts/validate-global-assets.mjs
+
+      - name: Verify acceptance checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -Rho 'https://discord.gg/[A-Za-z0-9]*' v1.x README.md 2>/dev/null | sort -u | wc -l)" -eq 1
+          ! grep -R '4-privicy-policy' v1.x README.md
+          ! grep -R 'hcf-page.js?v=1.2.0' v1.x
+          ! grep -R -E '\b(console\.log|debugger)\b' v1.x
+          ! grep -E '<!doctype|</?(html|head|body)\b' v1.x/core/header.html v1.x/core/footer.html
+          test ! -e .github/logo-import
+          test ! -e .github/workflows/hcf-maintenance-patch.yml
+          test ! -e .github/workflows/hcf-maintenance-patch-v2.yml
+          test ! -e .github/workflows/hcf-finish-p1-p2.yml
+          test ! -e hcf-patch-error.txt
+
+      - name: Commit final P1 and P2 fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Complete HCF P1 and P2 fixes"
+          git push origin HEAD:main
