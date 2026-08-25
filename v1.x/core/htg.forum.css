@@ -5,6 +5,8 @@
    native 767.98px phone breakpoint.
    - FoF Cookie Consent receives the shared HCF dark/light theme
      on every viewport and coordinates with footer Discord feedback
+   - notice/header stack stability runs globally so the Custom Header
+     always stays above Flarum's affixed desktop/mobile navigation
    - <= 767.98px: Flarum owns navigation/drawer behavior;
      mobile.css owns HCF branding and compact extension layout
    - footer.html owns Discord-feedback clearance around mobile alerts
@@ -21,13 +23,14 @@
    This prevents desktop header/profile rules from fighting
    Flarum's native mobile navigation and drawer behavior.
 
-   Version: 5.9a38
+   Version: 5.9a39
    Author: HarleyTG
    Updated: 2026-08-25
 ========================================================== */
 
 /* Shared extension styling runs on every viewport. */
 @import url("../add-ons/cookie-consent.css");
+@import url("../add-ons/header-stack-fix.css");
 
 /* Relative imports inherit this entry point's pinned release revision. */
 @import url("../add-ons/motion.css") screen and (max-width: 767.98px);
