@@ -10,9 +10,9 @@
    opposite of the Android/OS preference. Guessing from the OS caused
    the loader to paint dark -> light -> dark while FoF initialized.
 
-   Version: 1.1
+   Version: 1.2
    Author: HarleyTG
-   Updated: 2026-08-17
+   Updated: 2026-08-26
 ========================================================= */
 
 /* =========================================================
@@ -71,6 +71,54 @@ html:has(head meta[name="color-scheme"][content="light"]) #flarum-loading::after
     inset 0 0 7px rgba(20, 38, 46, .13),
     0 0 8px rgba(0, 184, 240, .09),
     0 0 15px rgba(0, 184, 240, .07) !important;
+}
+
+/* =========================================================
+   MESSENGER — DAY MODE FINAL SURFACE GUARD
+
+   direct-messages.css intentionally defaults Messenger to black.
+   This final FoF Day layer runs after the Messenger/mobile sheets so
+   the actual message area, history, composer and typing field cannot
+   retain those dark defaults while the forum is in Day Mode.
+========================================================= */
+
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat,
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage .ConversationsList .chat,
+html:has(head meta[name="color-scheme"][content="light"]) .MessagesDropdown .ConversationsList .chat {
+  background: var(--hc-messages-chat, #ffffff) !important;
+  color: var(--hc-messages-text, #17242c) !important;
+  border-color: var(--hc-messages-border, rgba(0, 128, 168, .18)) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-history,
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage .ConversationsList .chat .chat-history,
+html:has(head meta[name="color-scheme"][content="light"]) .MessagesDropdown .ConversationsList .chat .chat-history {
+  background: var(--hc-messages-chat, #ffffff) !important;
+  color: var(--hc-messages-text, #17242c) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-message,
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage .ConversationsList .chat .chat-message,
+html:has(head meta[name="color-scheme"][content="light"]) .MessagesDropdown .ConversationsList .chat .chat-message {
+  background: var(--hc-messages-composer, #f3f7f9) !important;
+  background-color: var(--hc-messages-composer, #f3f7f9) !important;
+  color: var(--hc-messages-text, #17242c) !important;
+  border-top: 1px solid var(--hc-messages-border, rgba(0, 128, 168, .18)) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-message textarea,
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage .ConversationsList .chat .chat-message textarea,
+html:has(head meta[name="color-scheme"][content="light"]) .MessagesDropdown .ConversationsList .chat .chat-message textarea {
+  background: var(--hc-messages-input, #e7eef2) !important;
+  background-color: var(--hc-messages-input, #e7eef2) !important;
+  color: var(--hc-messages-text, #17242c) !important;
+  border: 1px solid rgba(0, 128, 168, .16) !important;
+  caret-color: var(--primary-color, #00b8f0) !important;
+}
+
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-message textarea::placeholder {
+  color: var(--hc-messages-muted, #627680) !important;
+  opacity: 1 !important;
 }
 
 /* =========================================================
