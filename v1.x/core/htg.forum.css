@@ -5,8 +5,8 @@
    native 767.98px phone breakpoint.
    - FoF Cookie Consent receives the shared HCF dark/light theme
      on every viewport and coordinates with footer Discord feedback
-   - notice/header stack stability runs globally so the Custom Header
-     always stays above Flarum's affixed desktop/mobile navigation
+   - the custom notice stays in normal document flow; Flarum alone
+     owns native header/navigation affix positioning after it scrolls away
    - <= 767.98px: Flarum owns navigation/drawer behavior;
      mobile.css owns HCF branding and compact extension layout
    - footer.html owns Discord-feedback clearance around mobile alerts
@@ -22,12 +22,12 @@
      surfaces follow FoF Night Mode's explicit active color-scheme state
      without temporarily guessing from the OS preference during startup
 
-   This prevents desktop header/profile rules from fighting
-   Flarum's native mobile navigation and drawer behavior.
+   This prevents HCF header offsets from fighting Flarum's native
+   scroll listener, mobile navigation, and desktop affix behavior.
 
-   Version: 5.9a40
+   Version: 5.9a41
    Author: HarleyTG
-   Updated: 2026-08-25
+   Updated: 2026-08-26
 ========================================================== */
 
 /* Shared extension styling runs on every viewport. */
@@ -55,6 +55,16 @@
 /* Discord footer feedback is enabled system-wide. */
 .hc-feedback-float{
     display:block!important;
+}
+
+/* The footer markup already points at the canonical repository-level HTG.svg.
+   Keep the full mark visible instead of allowing the image itself to crop it;
+   the surrounding feedback control supplies its own shape and background. */
+.hc-feedback-float .hc-feedback-logo{
+    object-fit:contain!important;
+    object-position:center!important;
+    border-radius:0!important;
+    background:transparent!important;
 }
 
 /* Phone-layout fallback when JS device detection has not applied
