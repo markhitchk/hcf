@@ -3,7 +3,7 @@
 
    Load AFTER add-ons/motion.css so these targeted fixes win.
 
-   Version: 1.4
+   Version: 1.5
    Author: HarleyTG
    Updated: 2026-08-26
 ========================================================= */
@@ -136,9 +136,9 @@
    Expected HTML:
    <div id="flarum-loading" style="display: none;">Loading...</div>
 
-   Boot UX (v1.4):
+   Boot UX (v1.5):
    - Soft ambient cyan field (no CRT scanlines)
-   - Logo + title with restrained breathe
+   - Canonical HCF HTG.svg mark + title with restrained breathe
    - Progress track: staged fill holds near complete + continuous shimmer
    - Muted uppercase status uses the element text ("Loading...")
    - Day/Night via --hc-loader-* from day-night-compat.css
@@ -194,7 +194,8 @@
   display: none !important;
 }
 
-/* Logo + forum title */
+/* Logo + forum title. The same canonical repository-level HCF mark is used by
+   footer Discord feedback and FoF/error loaders; no app-repo asset is used. */
 #flarum-loading::before {
   content: "Harley's Clan Forum" !important;
   position: relative !important;
@@ -212,7 +213,7 @@
   letter-spacing: 0.02em !important;
   color: var(--hc-loader-text) !important;
   background:
-    url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/htg-neon.png")
+    url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg")
     center top / 84px 84px no-repeat !important;
   filter: drop-shadow(
     0 8px 20px color-mix(in srgb, var(--hc-welcome-cyan, #00b8f0) 28%, transparent)
