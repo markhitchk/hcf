@@ -804,3 +804,156 @@ div#people-list::before {
     min-width: 0 !important;
   }
 }
+
+/* ==========================================================================
+   PHONE / NARROW VIEWPORT — size & layout fixes
+   Desktop keeps the 250px + chat grid and 725px shell. Phones must be a
+   single-column flex stack that fills the viewport without overflow.
+   Aligns with mobile.css ConversationsPage rules at Flarum's 767.98px break.
+   ========================================================================== */
+@media screen and (max-width: 767.98px) {
+  /* Kill the desktop two-column grid everywhere on phones. */
+  .ConversationsList,
+  .MessagesDropdown .ConversationsList,
+  .ConversationsPage > .ConversationsList {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-auto-rows: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 6px !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  /* Header Messages pop-out: full-bleed, safe height. */
+  .MessagesDropdown .Dropdown-menu,
+  .MessagesDropdown form.Dropdown-menu.Dropdown-menu--right {
+    box-sizing: border-box !important;
+    width: min(100vw - 12px, 100%) !important;
+    max-width: calc(100vw - 12px) !important;
+    max-height: calc(100dvh - var(--header-height-phone, 46px) - 12px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    left: 6px !important;
+    right: 6px !important;
+    border-radius: 18px !important;
+  }
+
+  .MessagesDropdown .ConversationsList {
+    max-height: calc(100dvh - var(--header-height-phone, 46px) - 24px) !important;
+    min-height: 0 !important;
+  }
+
+  /* Full-page /conversations: never keep the desktop 725px shell. */
+  .ConversationsPage {
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 8px 8px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow: visible !important;
+  }
+
+  .App-content:has(.ConversationsPage) {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Compact HTG placeholder on phones (desktop stays 100px). */
+  div#people-list::before {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    min-height: 64px !important;
+    flex: 0 0 64px !important;
+    margin: 8px auto 6px !important;
+  }
+
+  .ConversationsList .fa-comment-alt {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    flex: 0 0 28px !important;
+    line-height: 28px !important;
+  }
+
+  /* People list + chat stack full width. */
+  .ConversationsList .people-list,
+  .ConversationsList .chat {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    border-radius: 14px !important;
+  }
+
+  .ConversationsList .chat .chat-header {
+    padding: 8px 10px !important;
+  }
+
+  .ConversationsList .chat .chat-header .chat-with {
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+  }
+
+  .ConversationsList .chat .chat-history {
+    padding: 8px !important;
+  }
+
+  .ConversationsList .chat .message-content .message-text {
+    padding: 8px 12px !important;
+    line-height: 1.4 !important;
+    font-size: 15px !important;
+    max-width: 92% !important;
+  }
+
+  .ConversationsList .chat .chat-message {
+    padding: 8px !important;
+    border-radius: 0 0 14px 14px !important;
+  }
+
+  .ConversationsList .chat .chat-message textarea {
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+    font-size: 16px !important; /* avoid iOS zoom */
+    border-radius: 16px !important;
+  }
+
+  .ConversationsList form.chat-message.clearfix {
+    min-height: 56px !important;
+  }
+
+  .ConversationsList .people-list .UserListItem {
+    padding: 10px 8px !important;
+    border-radius: 14px !important;
+  }
+
+  .ConversationsList .people-list .UserListItem:hover,
+  .ConversationsList .people-list .UserListItem.active {
+    padding: 10px 8px !important;
+    border-radius: 14px !important;
+  }
+
+  .ConversationsList .people-list .UserListItem .Avatar {
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+  }
+
+  .MessagesDropdown .ConversationsList .people-list > .Button--primary,
+  .ConversationsPage .ConversationsList .people-list > .Button--primary {
+    min-height: 46px !important;
+    margin: 8px 4px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+  }
+}

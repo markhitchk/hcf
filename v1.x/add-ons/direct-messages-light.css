@@ -1,17 +1,26 @@
-/* ========================================================================== 
+/* ==========================================================================
    Harley's Clan Forum — Unified Messaging Light Mode
    File: v1.x/add-ons/direct-messages-light.css
 
    Loaded after the shared Messenger base. The existing dark treatment remains
-   untouched; these overrides activate only after FoF Night Mode explicitly
-   reports the light color scheme.
+   untouched; these overrides activate when FoF Night Mode reports light.
 
-   Covers both the header Messages pop-out and /conversations.
+   Detection covers:
+   - meta color-scheme="light" (explicit Day Mode)
+   - meta color-scheme="light dark" + prefers-color-scheme: light (Auto)
+
+   Also sets --hc-panel-surface / --hc-panel-border so mobile.css phone
+   ConversationsPage rules inherit day surfaces instead of dark fallbacks.
+
+   Covers header Messages pop-out and /conversations (desktop + phone).
    Author: HarleyTG
-   Added: 2026-08-25
+   Updated: 2026-08-26
    ========================================================================== */
 
-html:has(head meta[name="color-scheme"][content="light"]) {
+/* ---------- Shared light tokens ---------- */
+html:has(head meta[name="color-scheme"][content="light"]),
+html[data-theme="light"],
+html.theme-light {
   --hc-messages-shell: rgba(248, 251, 253, .97);
   --hc-messages-chat: #ffffff;
   --hc-messages-composer: #f3f7f9;
@@ -27,11 +36,41 @@ html:has(head meta[name="color-scheme"][content="light"]) {
   --hc-messages-received-text: #17242c;
   --hc-messages-sent: var(--primary-color, #00b8f0);
   --hc-messages-sent-text: #06151b;
+  /* Shared with mobile.css panel fallbacks */
+  --hc-panel-surface: rgba(248, 251, 253, .985);
+  --hc-panel-border: rgba(0, 128, 168, .18);
 }
+
+@media (prefers-color-scheme: light) {
+  html:has(head meta[name="color-scheme"][content="light dark"]) {
+    --hc-messages-shell: rgba(248, 251, 253, .97);
+    --hc-messages-chat: #ffffff;
+    --hc-messages-composer: #f3f7f9;
+    --hc-messages-input: #e7eef2;
+    --hc-messages-text: #17242c;
+    --hc-messages-muted: #627680;
+    --hc-messages-border: rgba(0, 128, 168, .18);
+    --hc-messages-row-hover: rgba(0, 184, 240, .10);
+    --hc-messages-row-active: rgba(0, 184, 240, .16);
+    --hc-messages-control: #e6f0f4;
+    --hc-messages-control-hover: #d7e8ee;
+    --hc-messages-received: #e8eef2;
+    --hc-messages-received-text: #17242c;
+    --hc-messages-sent: var(--primary-color, #00b8f0);
+    --hc-messages-sent-text: #06151b;
+    --hc-panel-surface: rgba(248, 251, 253, .985);
+    --hc-panel-border: rgba(0, 128, 168, .18);
+  }
+}
+
+/* Combined selector used for all surface overrides below */
+/* (pure light + auto-light). */
 
 /* Main Messenger shell: dropdown and full-page view share this component. */
 html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList,
-html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage > .ConversationsList {
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage > .ConversationsList,
+html[data-theme="light"] .ConversationsList,
+html.theme-light .ConversationsList {
   background: var(--hc-messages-shell) !important;
   color: var(--hc-messages-text) !important;
   border: 1px solid var(--hc-messages-border) !important;
@@ -40,13 +79,17 @@ html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage > .
     0 2px 7px rgba(30, 54, 64, .08) !important;
 }
 
-html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat {
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat,
+html[data-theme="light"] .ConversationsList .chat,
+html.theme-light .ConversationsList .chat {
   background: var(--hc-messages-chat) !important;
   color: var(--hc-messages-text) !important;
   border: 1px solid var(--hc-messages-border) !important;
 }
 
-html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-header {
+html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-header,
+html[data-theme="light"] .ConversationsList .chat .chat-header,
+html.theme-light .ConversationsList .chat .chat-header {
   color: var(--hc-messages-text) !important;
   border-bottom: 1px solid var(--hc-messages-border) !important;
   background: rgba(255, 255, 255, .72) !important;
@@ -88,9 +131,7 @@ html:has(head meta[name="color-scheme"][content="light"]) .ConversationsPage .Co
   color: var(--hc-messages-text) !important;
 }
 
-/* Message bubbles: keep sent messages branded cyan and make received messages
-   a readable neutral light surface. The base sheet marks .message-text as
-   !important, so the light-mode variants intentionally match that strength. */
+/* Message bubbles */
 html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-history .my-message .message-text {
   background: var(--hc-messages-sent) !important;
   color: var(--hc-messages-sent-text) !important;
@@ -112,7 +153,7 @@ html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .ch
   text-decoration-color: rgba(0, 127, 168, .35) !important;
 }
 
-/* Composer. */
+/* Composer */
 html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-message {
   background: var(--hc-messages-composer) !important;
   border-top: 1px solid var(--hc-messages-border) !important;
@@ -137,8 +178,7 @@ html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .ch
   box-shadow: 0 0 0 2px rgba(0, 184, 240, .15) !important;
 }
 
-/* Generic controls inside Messenger. Start Conversation keeps Flarum's primary
-   button colors instead of being flattened into the neutral control style. */
+/* Controls */
 html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .Button:not(.Button--primary) {
   background: var(--hc-messages-control) !important;
   color: var(--hc-messages-text) !important;
@@ -158,13 +198,10 @@ html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .pe
   box-shadow: 0 5px 14px rgba(0, 184, 240, .20) !important;
 }
 
-/* The dropdown form itself stays transparent; the light ConversationsList is
-   the visual panel, matching the existing Messenger structure. */
 html:has(head meta[name="color-scheme"][content="light"]) .MessagesDropdown form.Dropdown-menu.Dropdown-menu--right {
   background: transparent !important;
 }
 
-/* Recipient/start-conversation surfaces that share messaging controls. */
 html:has(head meta[name="color-scheme"][content="light"]) .RecipientLabel {
   background: #eef4f6 !important;
   color: var(--hc-messages-text) !important;
@@ -183,14 +220,179 @@ html:has(head meta[name="color-scheme"][content="light"]) .AddRecipientModal-for
   border: 1px solid var(--hc-messages-border) !important;
 }
 
-/* Small-screen light mode keeps the same geometry; only surfaces/colors change. */
-@media screen and (max-width: 767.98px) {
-  html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList {
-    background: rgba(248, 251, 253, .985) !important;
+/* ==========================================================================
+   Auto mode (meta = "light dark") + OS light preference
+   Mirror the pure-light overrides so day mode works without exact "light".
+   ========================================================================== */
+@media (prefers-color-scheme: light) {
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsPage > .ConversationsList {
+    background: var(--hc-messages-shell) !important;
+    color: var(--hc-messages-text) !important;
+    border: 1px solid var(--hc-messages-border) !important;
+    box-shadow:
+      0 12px 32px rgba(30, 54, 64, .16),
+   0 2px 7px rgba(30, 54, 64, .08) !important;
   }
 
-  html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat,
-  html:has(head meta[name="color-scheme"][content="light"]) .ConversationsList .chat .chat-message {
-    border-color: rgba(0, 128, 168, .16) !important;
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat {
+    background: var(--hc-messages-chat) !important;
+    color: var(--hc-messages-text) !important;
+    border: 1px solid var(--hc-messages-border) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-header {
+    color: var(--hc-messages-text) !important;
+    border-bottom: 1px solid var(--hc-messages-border) !important;
+    background: rgba(255, 255, 255, .72) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-header .chat-with,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .UserListItem .info,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .about,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .message-data-name {
+    color: var(--hc-messages-text) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-header .chat-num-messages,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .status,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList li.startConvo,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-history .message-data,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-history .message-data-time {
+    color: var(--hc-messages-muted) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .UserListItem {
+    color: var(--hc-messages-text) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .UserListItem:hover {
+    background: var(--hc-messages-row-hover) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list .UserListItem.active {
+    background: var(--hc-messages-row-active) !important;
+    box-shadow: inset 0 0 0 1px rgba(0, 184, 240, .18) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .App-header .ConversationsList-list a,
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsPage .ConversationsList-list a {
+    color: var(--hc-messages-text) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-history .my-message .message-text {
+    background: var(--hc-messages-sent) !important;
+    color: var(--hc-messages-sent-text) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-history .other-message .message-text {
+    background: var(--hc-messages-received) !important;
+    color: var(--hc-messages-received-text) !important;
+    box-shadow: inset 0 0 0 1px rgba(23, 36, 44, .06) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-message {
+    background: var(--hc-messages-composer) !important;
+    border-top: 1px solid var(--hc-messages-border) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .chat .chat-message textarea {
+    background: var(--hc-messages-input) !important;
+    color: var(--hc-messages-text) !important;
+    border: 1px solid rgba(0, 128, 168, .16) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .Button:not(.Button--primary) {
+    background: var(--hc-messages-control) !important;
+    color: var(--hc-messages-text) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) .ConversationsList .people-list > .Button--primary {
+    background: var(--primary-color, #00b8f0) !important;
+    color: var(--button-primary-color, #06151b) !important;
+  }
+}
+
+/* ==========================================================================
+   PHONE light surfaces — beat mobile.css hard-coded dark panel fallbacks
+   Specificity matches: html body .App .ConversationsPage ...
+   ========================================================================== */
+@media screen and (max-width: 767.98px) {
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsPage > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsPage:not(.viewing-conversation) > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsPage.viewing-conversation > .ConversationsList {
+    background: var(--hc-panel-surface, rgba(248, 251, 253, .985)) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 128, 168, .18)) !important;
+    box-shadow: 0 8px 24px rgba(30, 54, 64, .12) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsList .chat,
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsPage.viewing-conversation .chat {
+    background: var(--hc-messages-chat, #ffffff) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+    border-color: var(--hc-messages-border, rgba(0, 128, 168, .16)) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsList .chat .chat-message {
+    background: var(--hc-messages-composer, #f3f7f9) !important;
+    border-color: var(--hc-messages-border, rgba(0, 128, 168, .16)) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsList .chat .chat-message textarea {
+    background: var(--hc-messages-input, #e7eef2) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+    font-size: 16px !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .ConversationsList .Button:not(.Button--primary) {
+    background: var(--hc-messages-control, #e6f0f4) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .MessagesDropdown .Dropdown-menu,
+  html:has(head meta[name="color-scheme"][content="light"]) body .App .MessagesDropdown form.Dropdown-menu {
+    background: transparent !important;
+  }
+
+  /* Auto + OS light on phones */
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage:not(.viewing-conversation) > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage.viewing-conversation > .ConversationsList {
+    /* only when OS prefers light — nested media not allowed, so rely on
+       variables set in the prefers-color-scheme block above; if vars are
+       unset (OS dark), these still apply wrong colors. Guard with cascade:
+       variables are only defined under prefers-color-scheme: light. */
+  }
+}
+
+/* Auto phone surfaces when OS is light (variables only exist then). */
+@media screen and (max-width: 767.98px) and (prefers-color-scheme: light) {
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage:not(.viewing-conversation) > .ConversationsList,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage.viewing-conversation > .ConversationsList {
+    background: var(--hc-panel-surface, rgba(248, 251, 253, .985)) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+    border: 1px solid var(--hc-panel-border, rgba(0, 128, 168, .18)) !important;
+    box-shadow: 0 8px 24px rgba(30, 54, 64, .12) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsList .chat,
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsPage.viewing-conversation .chat {
+    background: var(--hc-messages-chat, #ffffff) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsList .chat .chat-message {
+    background: var(--hc-messages-composer, #f3f7f9) !important;
+  }
+
+  html:has(head meta[name="color-scheme"][content="light dark"]) body .App .ConversationsList .chat .chat-message textarea {
+    background: var(--hc-messages-input, #e7eef2) !important;
+    color: var(--hc-messages-text, #17242c) !important;
+    font-size: 16px !important;
   }
 }
