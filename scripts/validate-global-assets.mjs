@@ -15,6 +15,7 @@ const sharedLogoMaxBytes = new Map([
   ["htg-neon.png", 120 * 1024],
 ]);
 const canonicalLogoBase = "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/";
+const canonicalHcfMark = `${canonicalLogoBase}HTG.svg`;
 const versionAssetsRoot = resolve(repositoryRoot, "v1.x/assets");
 
 function walk(directory) {
@@ -37,6 +38,10 @@ function isInside(path, parent) {
 
 function stripQueryAndHash(value) {
   return value.split(/[?#]/, 1)[0];
+}
+
+function stripCssComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "");
 }
 
 function checkRelativeAssetReferences(file, source) {
@@ -110,10 +115,46 @@ if (existsSync(resolve(repositoryRoot, "v1.x/assets"))) {
   failures.push("v1.x/assets: version-local asset directory must not exist; use repository-level assets/");
 }
 
+// The main forum loader, FoF/error loaders, and Discord feedback share the
+// canonical HTG.svg mark. Alternative shared assets may remain available for
+// designs that explicitly need them, but these core identity surfaces must not
+// silently drift to an app icon, neon fallback, or external repository asset.
+const loaderFile = resolve(repositoryRoot, "v1.x/add-ons/loading-screen.css");
+const loaderSource = readFileSync(loaderFile, "utf8");
+if (!loaderSource.includes(canonicalHcfMark)) {
+  fail(loaderFile, "main Flarum loading screen must use the canonical assets/logos/HTG.svg mark");
+}
+if (/assets\/logos\/htg-neon\.png/i.test(loaderSource)) {
+  fail(loaderFile, "stale neon logo remains in the main Flarum loading screen");
+}
+
+const footerFile = resolve(repositoryRoot, "v1.x/core/footer.html");
+const footerSource = readFileSync(footerFile, "utf8");
+const escapedCanonicalMark = canonicalHcfMark.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const feedbackLogoPattern = new RegExp(
+  `class=["']hc-feedback-logo["'][\\s\\S]{0,240}src=["']${escapedCanonicalMark}["']`,
+  "i",
+);
+if (!feedbackLogoPattern.test(footerSource)) {
+  fail(footerFile, "Discord feedback must use the canonical assets/logos/HTG.svg mark");
+}
+
+// Preserve Flarum 1.x's native affix architecture. The custom notice must
+// remain in normal flow so Flarum's scroll listener can measure #app and own
+// the absolute -> fixed transition without a second sticky/fixed offset layer.
+const headerStackFile = resolve(repositoryRoot, "v1.x/add-ons/header-stack-fix.css");
+const headerStackSource = stripCssComments(readFileSync(headerStackFile, "utf8"));
+if (/html\s+body\s+#hc-header-stack\s*\{[^}]*\bposition\s*:\s*(?:sticky|fixed)\b/is.test(headerStackSource)) {
+  fail(headerStackFile, "custom notice must stay in normal document flow; sticky/fixed positioning breaks Flarum affix geometry");
+}
+if (/\.(?:App-header|App-navigation|App-primaryControl|App-titleControl|App-backControl)[^{]*\{[^}]*\btop\s*:/is.test(headerStackSource)) {
+  fail(headerStackFile, "do not apply HCF top offsets to Flarum-owned navigation controls");
+}
+
 if (failures.length) {
   console.error(`Global asset validation failed with ${failures.length} issue(s):`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log(`Validated ${checked.length} repo text files against the global HCF CDN and HTG asset policy.`);
+console.log(`Validated ${checked.length} repo text files against the global HCF CDN, HTG identity, and native Flarum affix policy.`);
