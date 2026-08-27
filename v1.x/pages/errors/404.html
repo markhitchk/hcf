@@ -68,23 +68,38 @@ body {
     503: true
   };
 
+  function getFallbackCode() {
+    var code = "500";
+
+    try {
+      var queryCode = new URLSearchParams(window.location.search).get("code");
+      if (VALID_CODES[queryCode]) {
+        return String(queryCode);
+      }
+    } catch (e) {}
+
+    var match = window.location.pathname.match(/\/(403|404|500|503)\.html$/i);
+    if (match && VALID_CODES[match[1]]) {
+      code = match[1];
+    }
+
+    return code;
+  }
+
+  var fallbackCode = getFallbackCode();
+
   function startErrorLoader(code) {
     code = String(code);
 
     if (!VALID_CODES[code]) {
-      code = "500";
+      code = fallbackCode;
     }
 
-    document.documentElement.setAttribute(
-      "data-hcf-error",
-      code
-    );
+    document.documentElement.setAttribute("data-hcf-error", code);
 
     var script = document.createElement("script");
-
     script.src =
-      "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error-loader.js";
-
+      "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error-loader.js?v=2.0.0";
     script.async = false;
 
     document.body.appendChild(script);
@@ -97,14 +112,9 @@ body {
     redirect: "follow"
   })
   .then(function (response) {
-    startErrorLoader(response.status);
+    startErrorLoader(VALID_CODES[response.status] ? response.status : fallbackCode);
   })
   .catch(function () {
-    /*
-     * Network-level failure:
-     * use 503 rather than incorrectly claiming
-     * an internal HTTP 500.
-     */
     startErrorLoader(503);
   });
 })();
