@@ -9,10 +9,12 @@ const failures = [];
 const checked = [];
 
 const sharedLogoNames = ["HTG.svg", "htg-icon.png", "htg-neon.png"];
+// Keep the original HCF artwork byte-for-byte. These limits are sanity caps,
+// not optimization targets; replacing the artwork to satisfy smaller caps is prohibited.
 const sharedLogoMaxBytes = new Map([
-  ["HTG.svg", 50 * 1024],
-  ["htg-icon.png", 80 * 1024],
-  ["htg-neon.png", 120 * 1024],
+  ["HTG.svg", 4 * 1024 * 1024],
+  ["htg-icon.png", 700 * 1024],
+  ["htg-neon.png", 1100 * 1024],
 ]);
 const canonicalLogoBase = "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/";
 const canonicalHcfMark = `${canonicalLogoBase}HTG.svg`;
