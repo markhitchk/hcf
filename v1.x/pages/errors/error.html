@@ -5,12 +5,110 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0d1014">
+
 <title>Error | Harley's Clan Forum</title>
-<link rel="icon" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error.css">
-<script defer src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error-loader.js"></script>
+
+<link
+  rel="icon"
+  href="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg"
+  type="image/svg+xml"
+>
+
+<style>
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #0d1014;
+  color: #eefcff;
+  font-family: Arial, sans-serif;
+}
+
+.hcf-error-loader {
+  max-width: 680px;
+  text-align: center;
+}
+
+.hcf-error-loader h1 {
+  margin: 0 0 12px;
+  color: #00dfe6;
+  font-size: clamp(32px, 8vw, 58px);
+}
+
+.hcf-error-loader p {
+  margin: 0;
+  color: #9cb7c2;
+  line-height: 1.6;
+}
+</style>
 </head>
+
 <body>
-<main class="hcf-error-fallback"><h1>500</h1><p>Error Handler</p><p>Loading Harley's Clan Forum error page…</p></main>
+
+<main class="hcf-error-loader" aria-live="polite" aria-busy="true">
+  <h1>Harley's Clan Forum</h1>
+  <p>Loading error handler…</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var VALID_CODES = {
+    403: true,
+    404: true,
+    500: true,
+    503: true
+  };
+
+  function startErrorLoader(code) {
+    code = String(code);
+
+    if (!VALID_CODES[code]) {
+      code = "500";
+    }
+
+    document.documentElement.setAttribute(
+      "data-hcf-error",
+      code
+    );
+
+    var script = document.createElement("script");
+
+    script.src =
+      "https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error-loader.js";
+
+    script.async = false;
+
+    document.body.appendChild(script);
+  }
+
+  fetch(window.location.href, {
+    method: "GET",
+    cache: "no-store",
+    credentials: "same-origin",
+    redirect: "follow"
+  })
+  .then(function (response) {
+    startErrorLoader(response.status);
+  })
+  .catch(function () {
+    /*
+     * Network-level failure:
+     * use 503 rather than incorrectly claiming
+     * an internal HTTP 500.
+     */
+    startErrorLoader(503);
+  });
+})();
+</script>
+
 </body>
 </html>

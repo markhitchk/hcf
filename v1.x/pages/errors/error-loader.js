@@ -1,6 +1,17 @@
 (function () {
   'use strict';
 
+  var ERROR_STYLESHEET = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/errors/error.css';
+  var existingStylesheet = document.querySelector('link[data-hcf-error-styles], link[href*="/v1.x/pages/errors/error.css"]');
+
+  if (!existingStylesheet) {
+    var stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = ERROR_STYLESHEET;
+    stylesheet.setAttribute('data-hcf-error-styles', 'true');
+    document.head.appendChild(stylesheet);
+  }
+
   var ERRORS = {
     '403': {
       title: 'Access Forbidden',
