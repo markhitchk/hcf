@@ -1,0 +1,60 @@
+name: Purge HCF jsDelivr Cache
+
+on:
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: "HCF repo paths to purge from jsDelivr (one per line)"
+        required: true
+        default: |
+          v1.x/core/htg.forum.css
+          assets/logos/HTG.svg
+
+permissions:
+  contents: read
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge selected @main CDN files
+        shell: bash
+        env:
+          PURGE_PATHS: ${{ inputs.paths }}
+        run: |
+          set -euo pipefail
+          BASE='https://purge.jsdelivr.net/gh/markhitchk/hcf@main'
+          COUNT=0
+
+          while IFS= read -r raw || [ -n "$raw" ]; do
+            path="$(printf '%s' "$raw" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+            [ -z "$path" ] && continue
+            path="${path#/}"
+
+            case "$path" in
+              *'..'*|http://*|https://*|//* )
+                echo "Invalid repository path: $path"
+                exit 1
+                ;;
+            esac
+
+            encoded="${path// /%20}"
+            url="$BASE/$encoded"
+            echo "Purging: $url"
+            response="$(curl --fail-with-body --silent --show-error --location --retry 3 --retry-delay 2 "$url")"
+            printf '%s\n' "$response"
+            COUNT=$((COUNT + 1))
+          done <<< "$PURGE_PATHS"
+
+          if [ "$COUNT" -eq 0 ]; then
+            echo "No cache paths were supplied."
+            exit 1
+          fi
+
+          {
+            echo '### HCF jsDelivr purge'
+            echo
+            echo "Requested purge for $COUNT file(s) from \`markhitchk/hcf@main\`."
+            echo
+            echo '> Note: commit-hash-pinned jsDelivr URLs are immutable; this workflow is for branch-based `@main` URLs.'
+          } >> "$GITHUB_STEP_SUMMARY"
