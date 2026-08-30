@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.7
+   HARLEY'S CLAN FORUM FOOTER v4.4.8
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-25
+   Updated: 2026-08-30
 ========================================================= */
 
 :root{
@@ -1189,14 +1189,132 @@
 }
 
 @media (max-width:600px){
-    .hc-simple-footer{margin-top:40px;padding:40px 12px}
-    .hc-terminal-block{padding:18px 14px;border-radius:12px}
-    .hc-terminal-heading{align-items:flex-start;flex-direction:column;gap:8px}
-    .hc-data-row{display:block;margin-bottom:13px}
-    .hc-label{display:block;margin-top:8px;margin-bottom:1px}
-    .hc-sep{margin:0 4px}
-    .hc-ip-line{line-height:1.7}
+    .hc-simple-footer{
+        margin-top:28px;
+        padding:28px 10px 32px;
+    }
 
+    .hc-scroll-container{margin-bottom:20px}
+
+    #hc-top-btn{
+        gap:7px;
+        min-height:36px;
+        padding:9px 16px;
+        font-size:.72rem;
+    }
+
+    #hc-top-btn svg{
+        width:16px;
+        height:16px;
+    }
+
+    .hc-footer-brand{margin-bottom:22px}
+
+    .hc-footer-logo-wrap{
+        width:60px;
+        height:60px;
+        margin-bottom:12px;
+    }
+
+    .hc-footer-logo-wrap::before{inset:-6px}
+
+    .hc-footer-logo-img{
+        width:56px;
+        height:56px;
+    }
+
+    .hc-footer-text{
+        font-size:.92rem;
+        line-height:1.35;
+    }
+
+    .hc-footer-subtitle{
+        margin-top:3px;
+        font-size:.58rem;
+        line-height:1.3;
+        letter-spacing:.08em;
+    }
+
+    .hc-terminal-block{
+        padding:13px 11px;
+        border-radius:10px;
+        font-size:.76rem;
+        line-height:1.4;
+    }
+
+    .hc-terminal-heading{
+        align-items:center;
+        flex-direction:row;
+        gap:8px;
+        margin:-1px 0 10px;
+        padding-bottom:8px;
+    }
+
+    .hc-terminal-title{
+        font-size:.62rem;
+        letter-spacing:.11em;
+    }
+
+    .hc-terminal-lights{gap:4px}
+
+    .hc-terminal-light,
+    .hc-terminal-light.is-active{
+        width:6px;
+        height:6px;
+    }
+
+    .hc-data-row{
+        display:grid;
+        grid-template-columns:94px minmax(0,1fr);
+        gap:8px;
+        margin-bottom:6px;
+        padding:1px 2px;
+        line-height:1.45;
+    }
+
+    .hc-label{
+        display:block;
+        margin:0;
+        font-size:.7rem;
+    }
+
+    .hc-divider{margin:8px 0}
+    .hc-sep{margin:0 3px}
+    .hc-ip-line{gap:3px;line-height:1.45}
+
+    .hc-device-indicator{
+        width:6px;
+        height:6px;
+        margin-right:5px;
+    }
+
+    .hc-system-notice{
+        gap:6px;
+        margin-top:10px;
+        padding-top:9px;
+        font-size:.62rem;
+        line-height:1.4;
+    }
+
+    .hc-system-notice svg{
+        width:12px;
+        height:12px;
+    }
+
+    .hc-noscript-notice,
+    .hc-compatibility-notice{
+        margin-bottom:16px;
+        padding:11px 12px;
+        border-radius:10px;
+        font-size:.66rem;
+        line-height:1.5;
+    }
+}
+
+@media (max-width:380px){
+    .hc-terminal-block{padding:12px 9px}
+    .hc-data-row{grid-template-columns:88px minmax(0,1fr);gap:6px}
+    .hc-terminal-title{font-size:.59rem;letter-spacing:.08em}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1230,7 +1348,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.7">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.8">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
