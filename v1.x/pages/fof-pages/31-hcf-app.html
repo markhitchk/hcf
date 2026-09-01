@@ -1,0 +1,136 @@
+<style>
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-v2.1.css?v=2.2a1");
+@import url("https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page-runtime.css?v=2.2a1");
+.hcf-page .hcf-runtime,.hcf-page .hcf-runtime-item,.hcf-page .hcf-runtime-label,.hcf-page .hcf-runtime-value,.hcf-page .hcf-runtime-device,.hcf-page .hcf-runtime-identity,.hcf-page [data-hcf-runtime-ui]{display:none!important;}
+.hcf-app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:20px}.hcf-app-card{position:relative;overflow:hidden;min-width:0;padding:20px;border:1px solid color-mix(in srgb,var(--hcf-accent) 24%,transparent);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--hcf-accent) 5%,transparent),transparent 35%),var(--hcf-control)}.hcf-app-card:before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--hcf-accent),transparent)}.hcf-app-card--beta{--hcf-channel:#ffc857}.hcf-app-card--stable{--hcf-channel:#45d483}.hcf-app-channel{display:inline-flex;align-items:center;gap:8px;min-height:28px;padding:5px 10px;border:1px solid color-mix(in srgb,var(--hcf-channel) 52%,transparent);border-radius:999px;background:color-mix(in srgb,var(--hcf-channel) 10%,transparent);color:var(--hcf-text);font:800 10px/1 "Courier New",monospace;letter-spacing:.09em;text-transform:uppercase}.hcf-app-channel-dot{width:7px;height:7px;border-radius:50%;background:var(--hcf-channel);box-shadow:0 0 10px var(--hcf-channel)}.hcf-app-name{margin:14px 0 5px;color:var(--hcf-text);font-size:22px;line-height:1.2}.hcf-app-desc{margin:0;color:var(--hcf-muted);font-size:13px;line-height:1.65}.hcf-app-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.hcf-app-detail{min-width:0;padding:10px;border:1px solid color-mix(in srgb,var(--hcf-accent) 14%,transparent);border-radius:10px;background:color-mix(in srgb,var(--hcf-panel-strong) 76%,transparent)}.hcf-app-detail-label{display:block;margin-bottom:4px;color:var(--hcf-muted);font:700 9px/1.2 "Courier New",monospace;letter-spacing:.09em;text-transform:uppercase}.hcf-app-detail-value{display:block;color:var(--hcf-text);font-size:12px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}.hcf-app-card .hcf-actions{margin-top:18px}.hcf-app-card .hcf-button{width:100%;text-align:center}.hcf-app-release-link{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;text-decoration:none}.hcf-app-status{margin-top:12px;color:var(--hcf-muted);font:700 10px/1.5 "Courier New",monospace}.hcf-app-note{margin-top:18px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--hcf-accent) 18%,transparent);border-radius:12px;background:color-mix(in srgb,var(--hcf-accent) 5%,transparent);color:var(--hcf-muted);font-size:12px;line-height:1.65}.hcf-app-note strong{color:var(--hcf-text)}
+@media(max-width:760px){.hcf-app-grid{grid-template-columns:1fr}.hcf-app-card{padding:17px}.hcf-app-details{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.hcf-app-details{grid-template-columns:1fr}}
+</style>
+
+<div class="hcf-page" data-hcf-page-build="2.2a1" data-hcf-app-page="31">
+  <header class="hcf-brand">
+    <img class="hcf-logo" src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/assets/logos/HTG.svg" alt="" aria-hidden="true">
+    <div class="hcf-brand-copy">
+      <p class="hcf-brand-title">Harley's Clan Forum</p>
+      <p class="hcf-brand-sub">Forum Network // HCF App</p>
+    </div>
+  </header>
+
+  <section class="hcf-hero hcf-hero--compact">
+    <div class="hcf-pill"><span class="hcf-dot hcf-dot--success"></span>Android App Downloads</div>
+    <h1 class="hcf-title">Choose your HCF App channel</h1>
+    <p class="hcf-lead">Use Standard / Stable for the recommended everyday build, or BETA to try newer HCF App features before they move to Stable.</p>
+
+    <div class="hcf-app-grid">
+      <article class="hcf-app-card hcf-app-card--stable" data-hcf-app-channel="stable">
+        <div class="hcf-app-channel"><span class="hcf-app-channel-dot"></span>Standard / Stable</div>
+        <h2 class="hcf-app-name">HCF App Standard</h2>
+        <p class="hcf-app-desc">Recommended for normal use. Stable releases receive the production app package and are intended for the most reliable forum experience.</p>
+
+        <div class="hcf-app-details">
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Latest version</span><span class="hcf-app-detail-value" data-hcf-version>Checking…</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Channel</span><span class="hcf-app-detail-value">Stable</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Package</span><span class="hcf-app-detail-value">com.harleytg.forum</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">APK size</span><span class="hcf-app-detail-value" data-hcf-size>Checking…</span></div>
+        </div>
+
+        <div class="hcf-actions">
+          <a class="hcf-button hcf-button--primary" data-hcf-download href="https://github.com/markhitchk/hcf-app/releases" rel="noopener">Find Stable APK</a>
+        </div>
+        <a class="hcf-app-release-link" data-hcf-release href="https://github.com/markhitchk/hcf-app/releases" rel="noopener">View release details</a>
+        <div class="hcf-app-status" data-hcf-status>Connecting to HCF release service…</div>
+      </article>
+
+      <article class="hcf-app-card hcf-app-card--beta" data-hcf-app-channel="beta">
+        <div class="hcf-app-channel"><span class="hcf-app-channel-dot"></span>Beta Channel</div>
+        <h2 class="hcf-app-name">HCF App BETA</h2>
+        <p class="hcf-app-desc">Preview newer features and fixes before Stable. BETA builds may contain unfinished behavior, regressions, or changes still being tested.</p>
+
+        <div class="hcf-app-details">
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Latest version</span><span class="hcf-app-detail-value" data-hcf-version>Checking…</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Channel</span><span class="hcf-app-detail-value">BETA / Preview</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">Package</span><span class="hcf-app-detail-value">com.harleytg.forum.dev</span></div>
+          <div class="hcf-app-detail"><span class="hcf-app-detail-label">APK size</span><span class="hcf-app-detail-value" data-hcf-size>Checking…</span></div>
+        </div>
+
+        <div class="hcf-actions">
+          <a class="hcf-button hcf-button--primary" data-hcf-download href="https://github.com/markhitchk/hcf-app/releases" rel="noopener">Find BETA APK</a>
+        </div>
+        <a class="hcf-app-release-link" data-hcf-release href="https://github.com/markhitchk/hcf-app/releases" rel="noopener">View release details</a>
+        <div class="hcf-app-status" data-hcf-status>Connecting to HCF release service…</div>
+      </article>
+    </div>
+
+    <div class="hcf-app-note"><strong>Android installation:</strong> APK installs may require permission for your browser or file manager to install unknown apps. Only install HCF App packages downloaded from the official <strong>markhitchk/hcf-app</strong> GitHub releases.</div>
+  </section>
+
+  <footer class="hcf-footer"><span>Harley's Clan Forum // HCF App</span><a href="https://forum.harleytg.com/">forum.harleytg.com</a></footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var API='https://api.github.com/repos/markhitchk/hcf-app/releases?per_page=30';
+  var FALLBACK='https://github.com/markhitchk/hcf-app/releases';
+
+  function text(node,selector,value){var el=node.querySelector(selector);if(el)el.textContent=value;}
+  function bytes(size){
+    var n=Number(size)||0;
+    if(!n)return 'Unknown';
+    if(n>=1048576)return (n/1048576).toFixed(n>=10485760?1:2)+' MB';
+    if(n>=1024)return (n/1024).toFixed(1)+' KB';
+    return n+' B';
+  }
+  function apkFor(release){
+    var assets=Array.isArray(release&&release.assets)?release.assets:[];
+    return assets.find(function(a){return a&&/\.apk$/i.test(String(a.name||''));})||null;
+  }
+  function isStable(r){return r&&!r.draft&&!r.prerelease;}
+  function isBeta(r){
+    if(!r||r.draft||!r.prerelease)return false;
+    var signal=[r.tag_name,r.name,r.target_commitish].join(' ').toLowerCase();
+    return /beta|dev|preview|alpha|rc/.test(signal)||r.prerelease===true;
+  }
+  function render(kind,release){
+    var card=document.querySelector('[data-hcf-app-channel="'+kind+'"]');
+    if(!card)return;
+    if(!release){
+      text(card,'[data-hcf-version]','Unavailable');
+      text(card,'[data-hcf-size]','—');
+      text(card,'[data-hcf-status]','No '+(kind==='stable'?'Stable':'BETA')+' release was found.');
+      return;
+    }
+    var apk=apkFor(release);
+    var version=release.tag_name||release.name||'Available';
+    var download=card.querySelector('[data-hcf-download]');
+    var releaseLink=card.querySelector('[data-hcf-release]');
+    text(card,'[data-hcf-version]',version);
+    text(card,'[data-hcf-size]',apk?bytes(apk.size):'No APK');
+    if(releaseLink)releaseLink.href=release.html_url||FALLBACK;
+    if(download){
+      download.href=apk&&apk.browser_download_url?apk.browser_download_url:(release.html_url||FALLBACK);
+      download.textContent=apk?(kind==='stable'?'Download Stable APK':'Download BETA APK'):'Open Release';
+    }
+    text(card,'[data-hcf-status]',apk?('Ready // '+String(apk.name||'APK')):'Release found, but no APK asset is attached.');
+  }
+  function fail(){
+    ['stable','beta'].forEach(function(kind){
+      var card=document.querySelector('[data-hcf-app-channel="'+kind+'"]');
+      if(!card)return;
+      text(card,'[data-hcf-version]','Check releases');
+      text(card,'[data-hcf-size]','Unknown');
+      text(card,'[data-hcf-status]','Live release lookup unavailable. Open GitHub releases to continue.');
+    });
+  }
+
+  fetch(API,{method:'GET',cache:'no-store',headers:{Accept:'application/vnd.github+json'}})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(releases){
+      if(!Array.isArray(releases))throw new Error('Invalid release data');
+      render('stable',releases.find(isStable)||null);
+      render('beta',releases.find(isBeta)||null);
+    })
+    .catch(function(){fail();});
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-page.js?v=1.4.1"></script>
