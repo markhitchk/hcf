@@ -1,0 +1,48 @@
+name: Purge FoF jsDelivr Cache
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'v1.x/pages/fof-pages/**'
+
+permissions:
+  contents: read
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Purge changed FoF files from jsDelivr
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BEFORE='${{ github.event.before }}'
+          AFTER='${{ github.sha }}'
+
+          if [[ -z "$BEFORE" || "$BEFORE" == '0000000000000000000000000000000000000000' ]]; then
+            mapfile -t FILES < <(git ls-tree -r --name-only "$AFTER" -- 'v1.x/pages/fof-pages')
+          else
+            mapfile -t FILES < <(git diff --name-only "$BEFORE" "$AFTER" -- 'v1.x/pages/fof-pages')
+          fi
+
+          if (( ${#FILES[@]} == 0 )); then
+            echo 'No FoF files changed.'
+            exit 0
+          fi
+
+          for file in "${FILES[@]}"; do
+            [[ -f "$file" ]] || continue
+            url="https://purge.jsdelivr.net/gh/${{ github.repository }}@main/${file}"
+            echo "Purging ${file}"
+            curl --fail --silent --show-error --retry 3 --retry-delay 2 "$url" >/dev/null
+          done
+
+          echo 'jsDelivr purge requests completed.'
