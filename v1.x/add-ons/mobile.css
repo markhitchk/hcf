@@ -11,8 +11,8 @@
    layout here.
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 5.18
-   Updated: 2026-08-25
+   Version: 5.19
+   Updated: 2026-09-16
 ========================================================== */
 
 :root {
@@ -842,11 +842,123 @@
     touch-action: manipulation !important;
   }
 
+  /* ======================================================
+     FOF UPLOAD IMAGE CARDS — PHONE
+
+     FoF Upload keeps .card at 50% width with large horizontal padding.
+     On phones that collapses image uploads into a narrow strip and exposes
+     the generated filename/UUID over the preview. Reset only post upload
+     cards to the available post width and keep the whole image visible.
+     ====================================================== */
+  html body .App .Post-body .fof-download.row {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin: 12px 0 !important;
+  }
+
+  html body .App .Post-body .fof-download.row > .card {
+    box-sizing: border-box !important;
+    float: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .App .Post-body .fof-download.row > .card > .wrapper {
+    position: relative !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 14px !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: var(--control-bg, #11151b) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .28) !important;
+    transform: none !important;
+  }
+
+  /* Remove FoF Upload's filename/UUID overlay on image cards. */
+  html body .App .Post-body .fof-download.row .wrapper .header,
+  html body .App .Post-body .fof-download.row .wrapper .data .title {
+    display: none !important;
+  }
+
+  html body .App .Post-body .fof-download.row .wrapper .data {
+    box-sizing: border-box !important;
+    position: absolute !important;
+    inset: auto 0 0 0 !important;
+    z-index: 2 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    padding: 10px !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, .62), transparent) !important;
+    color: #fff !important;
+    transform: none !important;
+  }
+
+  html body .App .Post-body .fof-download.row .wrapper .data .content {
+    box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   /* File actions must not depend on hover on touch devices. */
-  .Post-body .wrapper .data .Button--primary {
+  html body .App .Post-body .fof-download.row .wrapper .data .Button--primary,
+  html body .App .Post-body .wrapper .data .Button--primary {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: rgba(0, 0, 0, .75) !important;
+    color: #fff !important;
     opacity: 1 !important;
     transform: none !important;
-    background: rgba(0, 0, 0, .75) !important;
+  }
+
+  html body .App .Post-body .fof-download.row .wrapper .data .Button--primary i {
+    display: block !important;
+    color: #fff !important;
+  }
+
+  /* FoF Upload's Image Preview template uses a real <img>; keep it
+     responsive as well without distorting its natural aspect ratio. */
+  html body .App .Post-body .FoFUpload--Upl-Image-Preview-Link {
+    display: inline-block !important;
+    max-width: 100% !important;
+  }
+
+  html body .App .Post-body .FoFUpload--Upl-Image-Preview {
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 12px 0 !important;
+    object-fit: contain !important;
   }
 
   /* Style Flarum's native phone dropdown sheet without replacing its
