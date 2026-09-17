@@ -147,10 +147,11 @@ Design:
 - retain `hcf:fof-page:loaded`
 - retain visibility-return refresh
 - make event-driven refresh the primary path
-- slow the 30-second interval to a low-frequency safety fallback rather than removing it outright
+- replace the 30-second fallback with a 5-minute fallback interval
+- run the fallback only while `document.hidden === false`
 - keep `HCFPageRuntime.refresh()` public and synchronous from the caller's perspective
 
-The safety interval exists only to recover from missed extension/session changes, not as the primary state engine.
+The five-minute interval exists only to recover from missed extension/session changes, not as the primary state engine.
 
 ### Mobile auth tooltip
 
@@ -160,9 +161,9 @@ Design:
 
 - preserve node-added scanning because Flarum modals are dynamic
 - avoid a full-document rescan per mutation
-- activate the observer only while the viewport is in the phone range when practical
-- disconnect it when the viewport is clearly desktop
-- reconnect and scan once when entering the phone breakpoint
+- use `matchMedia("(max-width: 767.98px)")` to control observer lifecycle
+- connect the observer and perform one scan when entering the phone breakpoint
+- disconnect the observer when leaving the phone breakpoint
 - retain sessionStorage semantics and the CSS-only fallback
 
 ### FoF loader
@@ -174,9 +175,12 @@ Design:
 - preserve direct `{id}-{slug}.html` lookup as the fast path
 - preserve directory discovery as fallback
 - preserve existing remote HTML fallback behavior
-- stop forcing timestamp cache-busting for every successful production fetch
-- use normal browser/CDN caching for stable production fetches
-- keep an explicit cache-busting/debug mode for development and forced refresh scenarios
+- remove unconditional timestamp cache-busting in production
+- use `cache: "no-cache"` in production so cached responses may be stored but must revalidate before reuse
+- use the explicit URL query flag `hcfNoCache=1` to switch HCF remote fetches to `cache: "no-store"` and append a timestamp for debugging or forced refresh
+- keep page-cache TTL at 60 seconds
+- keep missing-page TTL at 30 seconds
+- increase directory-discovery cache TTL to 5 minutes because standard `{id}-{slug}.html` pages do not use directory discovery
 - continue aborting stale requests when navigation moves to another FoF page
 - keep script execution order unchanged
 
@@ -188,8 +192,8 @@ Design:
 
 - calculate state on startup
 - recalculate when the tab becomes visible
-- schedule a refresh for the next local HCF date boundary
-- retain a low-frequency fallback to recover from timer throttling or long-running tabs
+- schedule a one-shot refresh for the next midnight in `America/Los_Angeles`
+- keep a 15-minute visible-tab fallback interval to recover from browser timer throttling or clock changes
 - preserve birthday dismissal behavior, JSON fallback records, holiday integration, banner events, and visual effects
 
 ### Footer identity and clock
@@ -198,8 +202,9 @@ Design:
 
 - keep the visible clock's one-second timer if seconds are displayed
 - replace identity polling as the primary mechanism with event-driven refresh from available SPA/session/header changes
-- retain a slower identity fallback interval for compatibility
-- avoid identity DOM queries while the document is hidden when no visible update is needed
+- retain a 60-second identity fallback interval while the document is visible
+- skip the fallback identity DOM query while `document.hidden === true`
+- trigger an immediate identity refresh when the tab becomes visible again
 
 ## Design: HTML, Header, and Footer Optimization
 
@@ -245,9 +250,11 @@ Design:
 - preserve insertion order and script order
 - preserve failure logging and partially inserted markup behavior
 - preserve body-only validation
-- allow normal browser/CDN caching in production instead of unconditional `cache: "no-store"`
-- support explicit versioning or cache-busting when a release requires an immediate fragment refresh
+- remove unconditional `cache: "no-store"` in production
+- use `cache: "no-cache"` in production so a cached fragment can be revalidated instead of discarded
+- use the same `hcfNoCache=1` page query flag to force `cache: "no-store"` plus a timestamp when diagnosing CDN/cache behavior
 - preserve the existing `data-hcf-fragment` interface
+- preserve `hcf:core-fragment:loaded`
 
 ## Validation and Regression Strategy
 
@@ -278,6 +285,8 @@ Implementation must keep these passing at every commit.
 - preservation of FoF Upload phone image-preview rules
 - preservation of reduced-motion safeguards
 - preservation of fragment importer sequential execution behavior
+- production fetch paths must not contain unconditional timestamp cache-busting
+- `hcfNoCache=1` remains the explicit diagnostic cache-bypass path
 
 ### Manual regression matrix
 
@@ -305,14 +314,15 @@ Every runtime optimization must be checked across these scenarios before release
 
 The implementation should compare before/after behavior using browser developer tools or equivalent instrumentation and verify:
 
-- fewer periodic calls to FoF runtime refresh during an idle visible page
-- fewer identity refreshes during an idle session
-- no repeated remote FoF HTML requests when revisiting the same page within the cache window
-- no repeated header/footer fragment network transfer when the browser cache is valid
+- FoF runtime fallback refreshes no more often than once every 5 minutes while an idle tab is visible
+- footer identity fallback refreshes no more often than once every 60 seconds while an idle tab is visible
+- birthday fallback checks no more often than once every 15 minutes, outside startup/visibility/midnight events
+- no repeated remote FoF HTML body transfer when revalidation can return an unchanged cached response
+- no repeated header/footer fragment body transfer when revalidation can return an unchanged cached response
 - no increase in layout shift during header/footer startup
 - no increase in long tasks from mutation handling
 
-Absolute performance targets are not required because device/network conditions vary. The required result is lower repeated work with equivalent visible behavior.
+Absolute load-time targets are not required because device/network conditions vary. The required result is lower repeated work with equivalent visible behavior.
 
 ## Implementation Order
 
@@ -321,7 +331,7 @@ Implementation should proceed in independent, reviewable phases:
 1. strengthen validation for the contracts that will be touched;
 2. perform safe CSS deduplication without runtime behavior changes;
 3. optimize FoF/runtime polling and observer scheduling;
-4. optimize fragment/FoF caching with explicit debug bypass support;
+4. optimize fragment/FoF caching with `hcfNoCache=1` bypass support;
 5. optimize header/footer internal timers and repeated DOM work;
 6. perform safe HTML/inline-style cleanup;
 7. run the full automated and manual regression matrix;
@@ -357,7 +367,7 @@ The optimization is complete only when all of the following are true:
 - FoF Pages still work through SPA navigation and network-failure fallback;
 - mobile auth tooltip still works with and without JavaScript;
 - header notice, seasonal banners, footer feedback, and identity UI remain functional;
-- idle runtime polling and repeat network requests are measurably reduced;
+- idle runtime polling and repeat network body transfers are measurably reduced;
 - source remains readable and maintainable.
 
 ## Non-Goal Confirmation
