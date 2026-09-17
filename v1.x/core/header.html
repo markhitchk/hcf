@@ -598,7 +598,7 @@ html body #hc-holiday-header{
     var low=start;
     var high=start+(27*60*60*1000);
 
-    while(dateKey(high)===current){
+    while(dateKey(high)===current&&high<start+(48*60*60*1000)){
       high+=6*60*60*1000;
     }
 

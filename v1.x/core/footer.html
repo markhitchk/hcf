@@ -2025,6 +2025,7 @@
 
     function queueIdentityRefresh(){
         if(identityRefreshQueued||document.hidden||!footerVisible){return}
+        if(!identityObserver){initIdentityObserver()}
         identityRefreshQueued=true;
         var run=function(){
             identityRefreshQueued=false;
@@ -2104,6 +2105,7 @@
     function initLiveUpdates(){
         document.addEventListener("visibilitychange",syncLiveUpdates);
         window.addEventListener("hcf:fof-page:loaded",queueIdentityRefresh);
+        window.addEventListener("hcf:core-fragment:loaded",queueIdentityRefresh);
         window.addEventListener("pageshow",queueIdentityRefresh,{passive:true});
         initIdentityObserver();
 
