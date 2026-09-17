@@ -43,6 +43,7 @@ check("v1.x/core/fragment-importer.js", [
 check("v1.x/core/header.html", [
   ["900000", "birthday fallback must be 15 minutes"],
   ["scheduleMidnightRefresh", "birthday midnight scheduler is missing"],
+  ["high<start+(48*60*60*1000)", "birthday midnight search safety bound is missing"],
   ['id="hc-header-stack"', "header stack hook is missing"],
   ['id="forum-notice"', "forum notice hook is missing"],
   ['data-hc-slide="notice"', "notice slide hook is missing"],
@@ -59,6 +60,8 @@ check("v1.x/core/header.html", [
 check("v1.x/core/footer.html", [
   ["60000", "footer identity fallback must be 60 seconds"],
   ["identityObserver", "footer identity observer is missing"],
+  ["if(!identityObserver){initIdentityObserver()}", "footer identity observer retry is missing"],
+  ['window.addEventListener("hcf:core-fragment:loaded",queueIdentityRefresh)', "footer fragment-loaded identity refresh is missing"],
   ["setInterval(updateClock,1000)", "visible one-second footer clock must remain"],
   ['id="hc-simple-footer"', "footer root hook is missing"],
   ['id="hc-compatibility-notice"', "compatibility notice hook is missing"],
