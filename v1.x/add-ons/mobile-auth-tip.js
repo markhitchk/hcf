@@ -10,8 +10,8 @@
    - preference is remembered for the current browser session
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 1.0
-   Updated: 2026-08-11
+   Version: 1.1
+   Updated: 2026-09-16
 ========================================================== */
 
 (function hcfMobileAuthTipToggle() {
@@ -23,6 +23,8 @@
   var STORAGE_KEY = "hcfMobileAuthTipHidden";
   var HEADER_SELECTOR = ".LogInModal .Modal-header, .SignUpModal .Modal-header";
   var STYLE_ID = "hcf-mobile-auth-tip-toggle-style";
+  var phoneQuery = window.matchMedia("(max-width: 767.98px)");
+  var observer = null;
 
   function readHiddenPreference() {
     try {
@@ -112,11 +114,11 @@
     root.querySelectorAll(HEADER_SELECTOR).forEach(enhanceHeader);
   }
 
-  function start() {
-    installStyles();
-    scan(document.documentElement);
+  function connectObserver() {
+    if (observer || !phoneQuery.matches) return;
 
-    var observer = new MutationObserver(function (records) {
+    scan(document.documentElement);
+    observer = new MutationObserver(function (records) {
       records.forEach(function (record) {
         record.addedNodes.forEach(function (node) {
           scan(node);
@@ -128,6 +130,28 @@
       childList: true,
       subtree: true
     });
+  }
+
+  function disconnectObserver() {
+    if (!observer) return;
+    observer.disconnect();
+    observer = null;
+  }
+
+  function syncObserver() {
+    if (phoneQuery.matches) connectObserver();
+    else disconnectObserver();
+  }
+
+  function start() {
+    installStyles();
+    syncObserver();
+
+    if (phoneQuery.addEventListener) {
+      phoneQuery.addEventListener("change", syncObserver);
+    } else if (phoneQuery.addListener) {
+      phoneQuery.addListener(syncObserver);
+    }
   }
 
   if (document.readyState === "loading") {

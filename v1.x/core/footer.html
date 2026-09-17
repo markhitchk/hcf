@@ -1,10 +1,10 @@
 <!-- Paste this body-only fragment into Flarum's custom footer field. -->
 <style>
 /* =========================================================
-   HARLEY'S CLAN FORUM FOOTER v4.4.8
+   HARLEY'S CLAN FORUM FOOTER v4.4.9
    Animated Network Edition
    Author: HarleyTG
-   Updated: 2026-08-30
+   Updated: 2026-09-16
 ========================================================= */
 
 :root{
@@ -1348,7 +1348,7 @@
     }
 }
 </style>
-<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.8">
+<footer class="hc-simple-footer" id="hc-simple-footer" data-hc-footer-build="4.4.9">
     <noscript>
         <div class="hc-noscript-notice">
             <strong>JAVASCRIPT PROTOCOL OFFLINE.</strong><br>
@@ -1526,6 +1526,8 @@
     var ipRequested=false;
     var clockTimer=0;
     var identityTimer=0;
+    var identityObserver=null;
+    var identityRefreshQueued=false;
     var footerVisible=false;
     var utcDateFormatter;
     var utcTimeFormatter;
@@ -2021,6 +2023,31 @@
         identity.appendChild(link);
     }
 
+    function queueIdentityRefresh(){
+        if(identityRefreshQueued||document.hidden||!footerVisible){return}
+        if(!identityObserver){initIdentityObserver()}
+        identityRefreshQueued=true;
+        var run=function(){
+            identityRefreshQueued=false;
+            refreshIdentity();
+        };
+
+        if("requestAnimationFrame" in window){window.requestAnimationFrame(run)}
+        else{window.setTimeout(run,0)}
+    }
+
+    function initIdentityObserver(){
+        if(identityObserver||!("MutationObserver" in window)){return}
+        var host=document.querySelector(".App-header,.Header-secondary");
+        if(!host){return}
+        identityObserver=new MutationObserver(queueIdentityRefresh);
+        identityObserver.observe(host,{
+            childList:true,
+            subtree:true,
+            characterData:true
+        });
+    }
+
     function updateClock(){
         var now=new Date();
 
@@ -2069,12 +2096,18 @@
         }
 
         if(!identityTimer){
-            identityTimer=window.setInterval(refreshIdentity,15000);
+            identityTimer=window.setInterval(function(){
+                if(!document.hidden){refreshIdentity()}
+            },60000);
         }
     }
 
     function initLiveUpdates(){
         document.addEventListener("visibilitychange",syncLiveUpdates);
+        window.addEventListener("hcf:fof-page:loaded",queueIdentityRefresh);
+        window.addEventListener("hcf:core-fragment:loaded",queueIdentityRefresh);
+        window.addEventListener("pageshow",queueIdentityRefresh,{passive:true});
+        initIdentityObserver();
 
         if(!("IntersectionObserver" in window)){
             footerVisible=true;

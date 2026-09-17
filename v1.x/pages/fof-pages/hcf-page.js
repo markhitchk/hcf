@@ -4,15 +4,16 @@
    Loads the global domain router and re-initializes safely after
    dynamic FoF page loads / Flarum SPA navigation.
 
-   Runtime Version: 1.4.1
+   Runtime Version: 1.4.2
    Domain Cutover: 2026-10-12T00:00:00-07:00
-   Updated: 2026-08-25
+   Updated: 2026-09-16
 ========================================================== */
 (function(){
   "use strict";
 
   var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
   var SILENT_STYLE_ID="hcf-fof-silent-runtime";
+  var SAFETY_REFRESH_MS=300000;
   var resizeTimer=0;
 
   function installSilentRuntimeStyle(){
@@ -169,7 +170,7 @@
   }
 
   window.HCFPageRuntime={
-    version:"1.4.1",
+    version:"1.4.2",
     refresh:refresh,
     getIdentity:getIdentity,
     isMobilePerformanceDevice:isMobilePerformanceDevice,
@@ -184,7 +185,7 @@
 
   window.setInterval(function(){
     if(!document.hidden)refresh();
-  },30000);
+  },SAFETY_REFRESH_MS);
 
   if(document.readyState==="loading"){
     document.addEventListener("DOMContentLoaded",refresh,{once:true});

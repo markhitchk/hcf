@@ -1,7 +1,7 @@
 /* =========================================================
    Harley's Clan Forum — Dynamic FoF Pages GitHub Loader
-   Build: 1.1.1
-   Updated: 2026-08-25
+   Build: 1.1.2
+   Updated: 2026-09-16
 
    Install this ONCE in Flarum's global custom footer/header.
 
@@ -43,15 +43,15 @@
     return;
   }
 
-  var BUILD = '1.1.1';
+  var BUILD = '1.1.2';
   var RAW_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var CDN_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var DIRECTORY_API = 'https://api.github.com/repos/markhitchk/hcf/contents/v1.x/pages/fof-pages?ref=main';
-  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.4.1';
+  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.4.2';
   var DOMAIN_ROUTER_SRC = CDN_BASE + 'hcf-domain-router.js?v=1.0.1';
-  var CACHE_TTL = 30000;
-  var MISSING_TTL = 15000;
-  var DIRECTORY_TTL = 60000;
+  var CACHE_TTL = 60000;
+  var MISSING_TTL = 30000;
+  var DIRECTORY_TTL = 300000;
 
   var pageCache = new Map();
   var missingCache = new Map();
@@ -72,6 +72,19 @@
 
   function now() {
     return Date.now();
+  }
+
+  function noCacheRequested() {
+    try {
+      return new URLSearchParams(window.location.search).get('hcfNoCache') === '1';
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function requestUrl(url, noCache) {
+    if (!noCache) return url;
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'hcf=' + now();
   }
 
   function absoluteUrl(value) {
@@ -310,10 +323,12 @@
       return directoryCache.files;
     }
 
+    var noCache = noCacheRequested();
+
     try {
-      var response = await fetch(DIRECTORY_API + '&hcf=' + now(), {
+      var response = await fetch(requestUrl(DIRECTORY_API, noCache), {
         method: 'GET',
-        cache: 'no-store',
+        cache: noCache ? 'no-store' : 'no-cache',
         credentials: 'omit',
         headers: {
           'Accept': 'application/vnd.github+json,application/json;q=0.9,*/*;q=0.1'
@@ -408,10 +423,10 @@
     return best;
   }
 
-  function makeFetchOptions(controller) {
+  function makeFetchOptions(controller, noCache) {
     var options = {
       method: 'GET',
-      cache: 'no-store',
+      cache: noCache ? 'no-store' : 'no-cache',
       credentials: 'omit',
       headers: {
         'Accept': 'text/html,text/plain;q=0.9,*/*;q=0.1'
@@ -424,9 +439,10 @@
 
   async function fetchHtml(url, controller) {
     var response;
+    var noCache = noCacheRequested();
 
     try {
-      response = await fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 'hcf=' + now(), makeFetchOptions(controller));
+      response = await fetch(requestUrl(url, noCache), makeFetchOptions(controller, noCache));
     } catch (error) {
       if (error && error.name === 'AbortError') throw error;
       console.warn('[HCF FoF Loader] GitHub fetch failed:', url, error);

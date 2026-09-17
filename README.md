@@ -71,8 +71,10 @@ v2.x/
 └── README.md
 
 scripts/
-├── validate.mjs
-└── validate-global-assets.mjs
+├── audit-css.mjs
+├── validate-global-assets.mjs
+├── validate-optimization.mjs
+└── validate.mjs
 
 .github/workflows/
 └── validate.yml
@@ -166,6 +168,10 @@ For installations that should live-sync the body-only fragments instead of copyi
 
 The importer resolves relative assets against the source fragment, inserts markup and embedded styles before executing scripts, then runs scripts sequentially. If a later embedded script fails, the already-inserted header or footer remains in place.
 
+### Runtime cache behavior
+
+HCF production remote content uses cache revalidation. Add `hcfNoCache=1` to the current page URL only when diagnosing CDN/cache behavior; this forces HCF-managed remote fetches to bypass cache for that page load. Do not use the bypass for normal browsing.
+
 ## Seasonal content and error pages
 
 - Birthday records and automatic holiday banners are in `v1.x/add-ons/seasonal/`.
@@ -180,8 +186,10 @@ Flarum's official `767.98px` phone breakpoint. Run the dependency-free check
 before publishing changes:
 
 ```sh
-node scripts/validate.mjs
+node scripts/audit-css.mjs
 node scripts/validate-global-assets.mjs
+node scripts/validate.mjs
+node scripts/validate-optimization.mjs
 ```
 
 The same check runs automatically in GitHub Actions.

@@ -11,6 +11,14 @@ function fail(file, message) {
   errors.push(`${relative(repositoryRoot, file)}: ${message}`);
 }
 
+function requireText(file, source, text, message) {
+  if (!source.includes(text)) fail(file, message);
+}
+
+function rejectText(file, source, text, message) {
+  if (source.includes(text)) fail(file, message);
+}
+
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     if (entry.name === ".git") return [];
@@ -209,6 +217,9 @@ for (const required of [
   "padding-left: 60px !important",
   "padding-right: 50px !important",
   ".DraftsPage",
+  ".fof-download.row > .card",
+  "background-size: contain !important",
+  ".FoFUpload--Upl-Image-Preview",
 ]) {
   if (!mobile.includes(required)) fail(mobileFile, `missing mobile compatibility rule: ${required}`);
 }
@@ -230,6 +241,8 @@ const header = readFileSync(headerFile, "utf8");
 if (header.includes("hcfMobileHeaderPanels")) {
   fail(headerFile, "mobile header override disables Flarum's native route navigation");
 }
+requireText(headerFile, header, "window.HCBirthday", "HCBirthday public global is missing");
+requireText(headerFile, header, "hc-banners-changed", "header banner-change event is missing");
 
 const motionFile = resolve(repositoryRoot, "v1.x/add-ons/motion.css");
 if (/@import\b/.test(readFileSync(motionFile, "utf8"))) {
@@ -242,7 +255,7 @@ if (!/@keyframes\s+hc-loader-progress/.test(loader) || !/100%\s*\{\s*background-
   fail(loaderFile, "staged loading progress animation is missing");
 }
 
-// P3: optional live fragment importer must preserve the canonical body-only sources.
+// Optional live fragment importer must preserve the canonical body-only sources.
 const fragmentImporterFile = resolve(repositoryRoot, "v1.x/core/fragment-importer.js");
 const fragmentImporter = readFileSync(fragmentImporterFile, "utf8");
 for (const required of [
@@ -255,31 +268,29 @@ for (const required of [
 ]) {
   if (!fragmentImporter.includes(required)) fail(fragmentImporterFile, `missing guarded fragment importer behavior: ${required}`);
 }
-const fragmentImporterSyntax = spawnSync(process.execPath, ["--check", fragmentImporterFile], { encoding: "utf8" });
-if (fragmentImporterSyntax.status !== 0) {
-  fail(fragmentImporterFile, fragmentImporterSyntax.stderr.trim() || "JavaScript syntax check failed");
-}
+requireText(fragmentImporterFile, fragmentImporter, "window.HCFCoreFragmentImports", "fragment import registry is missing");
+requireText(fragmentImporterFile, fragmentImporter, "hcf:core-fragment:loaded", "fragment-loaded event is missing");
 
-// P3: error shells share one stylesheet; loader JS must not carry a duplicate CSS bundle.
+// Error pages intentionally keep a tiny inline loading shell, then error-loader.js
+// attaches the shared FoF-compatible stylesheet and replaces the loading markup.
 const errorCssFile = resolve(repositoryRoot, "v1.x/pages/errors/error.css");
 const errorCss = readFileSync(errorCssFile, "utf8");
-if (!errorCss.includes("--hc: #00b8f0")) fail(errorCssFile, "primary HCF cyan token is missing");
-if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(errorCss) || !/animation:\s*none\s*!important/.test(errorCss)) {
-  fail(errorCssFile, "reduced-motion error-page fallback is missing");
-}
+requireText(errorCssFile, errorCss, "hcf-page-v2.1.css", "FoF page visual baseline import is missing");
+requireText(errorCssFile, errorCss, "hcf-page-runtime.css", "FoF runtime stylesheet import is missing");
 for (const name of ["403.html", "404.html", "500.html", "503.html", "error.html"]) {
   const file = resolve(repositoryRoot, "v1.x/pages/errors", name);
   const source = readFileSync(file, "utf8");
-  if (!source.includes("v1.x/pages/errors/error.css")) fail(file, "shared error.css is not loaded");
-  if (/<style\b/i.test(source)) fail(file, "duplicate inline error-page CSS remains");
+  requireText(file, source, "error-loader.js", "shared error loader is not loaded");
+  requireText(file, source, "hcf-error-loader", "minimal error loading shell is missing");
+  if (!/<style\b/i.test(source)) fail(file, "minimal inline error loading shell CSS is missing");
 }
 const errorLoaderFile = resolve(repositoryRoot, "v1.x/pages/errors/error-loader.js");
 const errorLoader = readFileSync(errorLoaderFile, "utf8");
-if (/hcf-error-style|createElement\(['\"]style['\"]\)/.test(errorLoader)) {
-  fail(errorLoaderFile, "error loader still injects the extracted stylesheet");
-}
+requireText(errorLoaderFile, errorLoader, "ERROR_STYLESHEET", "shared error stylesheet reference is missing");
+requireText(errorLoaderFile, errorLoader, "createElement('link')", "error loader does not attach the shared stylesheet");
+rejectText(errorLoaderFile, errorLoader, "createElement('style')", "error loader must not inject a duplicate style bundle");
 
-// P3: preserve reduced-motion behavior in both Flarum phone motion and FoF runtime motion.
+// Preserve reduced-motion behavior in both Flarum phone motion and FoF runtime motion.
 const motionSource = readFileSync(motionFile, "utf8");
 if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(motionSource) || !/transition-duration:\s*1ms\s*!important/.test(motionSource)) {
   fail(motionFile, "reduced-motion Flarum transition safeguard is missing");
@@ -291,6 +302,33 @@ const fofRuntimeMotionFile = resolve(repositoryRoot, "v1.x/pages/fof-pages/hcf-p
 const fofRuntimeMotion = readFileSync(fofRuntimeMotionFile, "utf8");
 if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(fofRuntimeMotion) || !/transition:\s*none\s*!important/.test(fofRuntimeMotion)) {
   fail(fofRuntimeMotionFile, "FoF runtime reduced-motion coverage is missing");
+}
+
+// Lock public runtime globals/events used across FoF SPA page loads.
+const fofPageRuntimeFile = resolve(repositoryRoot, "v1.x/pages/fof-pages/hcf-page.js");
+const fofPageRuntime = readFileSync(fofPageRuntimeFile, "utf8");
+requireText(fofPageRuntimeFile, fofPageRuntime, "window.HCFPageRuntime", "HCFPageRuntime public global is missing");
+requireText(fofPageRuntimeFile, fofPageRuntime, '"hcf:fof-page:loaded"', "FoF page-loaded event listener is missing");
+
+const fofLoaderFile = resolve(repositoryRoot, "v1.x/pages/fof-pages/hcf-fof-loader.js");
+const fofLoader = readFileSync(fofLoaderFile, "utf8");
+requireText(fofLoaderFile, fofLoader, "window.HCFFoFPagesLoader", "HCFFoFPagesLoader public global is missing");
+requireText(fofLoaderFile, fofLoader, "hcf:fof-page:loaded", "FoF loader event contract is missing");
+
+const domainRouterFile = resolve(repositoryRoot, "v1.x/pages/fof-pages/hcf-domain-router.js");
+const domainRouter = readFileSync(domainRouterFile, "utf8");
+requireText(domainRouterFile, domainRouter, "window.HCFDomainRouter", "HCFDomainRouter public global is missing");
+
+// Standalone JavaScript touched by this optimization must stay syntax-valid.
+for (const file of [
+  fofPageRuntimeFile,
+  fofLoaderFile,
+  domainRouterFile,
+  resolve(repositoryRoot, "v1.x/add-ons/mobile-auth-tip.js"),
+  fragmentImporterFile,
+]) {
+  const check = spawnSync(process.execPath, ["--check", file], { encoding: "utf8" });
+  if (check.status !== 0) fail(file, check.stderr.trim() || "JavaScript syntax check failed");
 }
 
 const holidayFile = resolve(repositoryRoot, "v1.x/add-ons/seasonal/holidays.js");
