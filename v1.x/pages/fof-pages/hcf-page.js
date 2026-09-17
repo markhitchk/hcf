@@ -13,6 +13,7 @@
 
   var DOMAIN_ROUTER_SRC="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/hcf-domain-router.js?v=1.0.1";
   var SILENT_STYLE_ID="hcf-fof-silent-runtime";
+  var SAFETY_REFRESH_MS=300000;
   var resizeTimer=0;
 
   function installSilentRuntimeStyle(){
@@ -184,7 +185,7 @@
 
   window.setInterval(function(){
     if(!document.hidden)refresh();
-  },30000);
+  },SAFETY_REFRESH_MS);
 
   if(document.readyState==="loading"){
     document.addEventListener("DOMContentLoaded",refresh,{once:true});
