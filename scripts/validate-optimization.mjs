@@ -27,6 +27,19 @@ check("v1.x/add-ons/mobile-auth-tip.js", [
   [".disconnect()", "mobile auth observer does not disconnect on desktop"],
 ]);
 
+check("v1.x/pages/fof-pages/hcf-fof-loader.js", [
+  ["hcfNoCache", "FoF loader cache bypass flag is missing"],
+  ["cache: noCache ? 'no-store' : 'no-cache'", "FoF loader production revalidation mode is missing"],
+  ["var CACHE_TTL = 60000", "FoF page cache TTL must be 60 seconds"],
+  ["var MISSING_TTL = 30000", "FoF missing-page TTL must be 30 seconds"],
+  ["var DIRECTORY_TTL = 300000", "FoF directory cache TTL must be 5 minutes"],
+]);
+
+check("v1.x/core/fragment-importer.js", [
+  ["hcfNoCache", "fragment importer cache bypass flag is missing"],
+  ["cache: noCache ? 'no-store' : 'no-cache'", "fragment importer cache policy is missing"],
+]);
+
 if (errors.length) {
   console.error(`Optimization validation failed with ${errors.length} issue(s):`);
   for (const error of errors) console.error(`- ${error}`);
