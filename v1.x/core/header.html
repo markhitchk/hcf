@@ -447,6 +447,7 @@ html body #hc-holiday-header{
 
   var RECORDS_URL="https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/add-ons/seasonal/birthdays.json";
   var TIME_ZONE="America/Los_Angeles";
+  var BIRTHDAY_FALLBACK_MS=900000;
   var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var fallback=[
     {displayName:"Comander Forrest",month:1,day:28},
@@ -465,6 +466,8 @@ html body #hc-holiday-header{
   var records=fallback.slice();
   var dismissedThisPage=false;
   var activeToday=false;
+  var midnightTimer=0;
+  var fallbackTimer=0;
   var slide=document.querySelector('[data-hc-slide="birthday"]');
   var banner=document.getElementById("hc-birthday-header");
   var title=document.getElementById("hc-birthday-title");
@@ -472,14 +475,15 @@ html body #hc-holiday-header{
   var close=document.getElementById("hc-birthday-close");
   var headerParticles=document.getElementById("hc-birthday-header-particles");
   var colors=["#00ffff","#5ea1ff","#b86cff","#ff5fc8","#ffd76a","#ffffff"];
+  var dateFormatter=new Intl.DateTimeFormat("en-US",{
+    timeZone:TIME_ZONE,
+    year:"numeric",
+    month:"numeric",
+    day:"numeric"
+  });
 
-  function dateNow(){
-    var parts=new Intl.DateTimeFormat("en-US",{
-      timeZone:TIME_ZONE,
-      year:"numeric",
-      month:"numeric",
-      day:"numeric"
-    }).formatToParts(new Date());
+  function dateAt(value){
+    var parts=dateFormatter.formatToParts(new Date(value));
     var date={year:0,month:0,day:0};
     parts.forEach(function(part){
       if(part.type==="year"||part.type==="month"||part.type==="day"){
@@ -487,6 +491,13 @@ html body #hc-holiday-header{
       }
     });
     return date;
+  }
+
+  function dateNow(){return dateAt(Date.now())}
+
+  function dateKey(value){
+    var date=dateAt(value);
+    return date.year+"-"+date.month+"-"+date.day;
   }
 
   function clean(list){
@@ -580,6 +591,29 @@ html body #hc-holiday-header{
     return true;
   }
 
+  function scheduleMidnightRefresh(){
+    window.clearTimeout(midnightTimer);
+    var start=Date.now();
+    var current=dateKey(start);
+    var low=start;
+    var high=start+(27*60*60*1000);
+
+    while(dateKey(high)===current){
+      high+=6*60*60*1000;
+    }
+
+    while(high-low>1000){
+      var middle=low+Math.floor((high-low)/2);
+      if(dateKey(middle)===current){low=middle}
+      else{high=middle}
+    }
+
+    midnightTimer=window.setTimeout(function(){
+      showToday();
+      scheduleMidnightRefresh();
+    },Math.max(1000,high-Date.now()+1000));
+  }
+
   close.addEventListener("click",function(){
     dismissedThisPage=true;
     activeToday=false;
@@ -604,6 +638,7 @@ html body #hc-holiday-header{
   };
 
   showToday();
+  scheduleMidnightRefresh();
 
   if(typeof fetch==="function"){
     fetch(RECORDS_URL,{cache:"no-store"})
@@ -615,7 +650,15 @@ html body #hc-holiday-header{
       .catch(function(){records=fallback.slice();showToday()});
   }
 
-  window.setInterval(showToday,30000);
+  document.addEventListener("visibilitychange",function(){
+    if(document.hidden){return}
+    showToday();
+    scheduleMidnightRefresh();
+  });
+
+  fallbackTimer=window.setInterval(function(){
+    if(!document.hidden){showToday()}
+  },BIRTHDAY_FALLBACK_MS);
 })();
 </script>
 
@@ -757,7 +800,6 @@ html body #hc-holiday-header{
     var list=visibleSlides();
 
     if(list.length<2){sync();return}
-
     var index=list.indexOf(current);
     if(index<0){activate(preferredFirst(list),list);return}
 
