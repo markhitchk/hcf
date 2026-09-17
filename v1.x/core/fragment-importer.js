@@ -26,6 +26,11 @@
   var fragmentUrl = base + kind + '.html';
   var anchor = script;
   var parent = anchor.parentNode;
+  var noCache = false;
+
+  try {
+    noCache = new URLSearchParams(window.location.search).get('hcfNoCache') === '1';
+  } catch (error) {}
 
   function absolute(value) {
     try {
@@ -121,9 +126,14 @@
     });
   }
 
-  fetch(fragmentUrl, {
+  var requestUrl = fragmentUrl;
+  if (noCache) {
+    requestUrl += (requestUrl.indexOf('?') === -1 ? '?' : '&') + 'hcf=' + Date.now();
+  }
+
+  fetch(requestUrl, {
     method: 'GET',
-    cache: 'no-store',
+    cache: noCache ? 'no-store' : 'no-cache',
     credentials: 'omit',
     headers: { 'Accept': 'text/html,*/*;q=0.8' }
   })
