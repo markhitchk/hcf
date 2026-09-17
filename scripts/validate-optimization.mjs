@@ -43,6 +43,15 @@ check("v1.x/core/fragment-importer.js", [
 check("v1.x/core/header.html", [
   ["900000", "birthday fallback must be 15 minutes"],
   ["scheduleMidnightRefresh", "birthday midnight scheduler is missing"],
+  ['id="hc-header-stack"', "header stack hook is missing"],
+  ['id="forum-notice"', "forum notice hook is missing"],
+  ['data-hc-slide="notice"', "notice slide hook is missing"],
+  ['data-hc-slide="birthday"', "birthday slide hook is missing"],
+  ['id="hc-birthday-header"', "birthday banner hook is missing"],
+  ['id="hc-birthday-title"', "birthday title hook is missing"],
+  ['id="hc-birthday-date"', "birthday date hook is missing"],
+  ['id="hc-birthday-close"', "birthday close control hook is missing"],
+  ['id="hc-birthday-header-particles"', "birthday particle hook is missing"],
 ], [
   ["setInterval(showToday,30000)", "legacy 30-second birthday polling remains"],
 ]);
@@ -51,6 +60,16 @@ check("v1.x/core/footer.html", [
   ["60000", "footer identity fallback must be 60 seconds"],
   ["identityObserver", "footer identity observer is missing"],
   ["setInterval(updateClock,1000)", "visible one-second footer clock must remain"],
+  ['id="hc-simple-footer"', "footer root hook is missing"],
+  ['id="hc-compatibility-notice"', "compatibility notice hook is missing"],
+  ['id="hc-device-status"', "device status hook is missing"],
+  ['id="hc-id"', "identity hook is missing"],
+  ['id="hc-ip-spoiler"', "IP reveal control hook is missing"],
+  ['id="hc-ip"', "IP value hook is missing"],
+  ['id="hc-ip-status"', "IP status hook is missing"],
+  ['id="hc-top-btn"', "return-to-top control hook is missing"],
+  ['class="hc-feedback-float"', "feedback panel root hook is missing"],
+  ["data-hc-footer-build", "footer build hook is missing"],
 ], [
   ["setInterval(refreshIdentity,15000)", "legacy 15-second identity polling remains"],
 ]);
@@ -61,4 +80,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Validated HCF optimization runtime contracts.");
+console.log("Validated HCF optimization runtime and fragment contracts.");
