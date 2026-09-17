@@ -40,6 +40,21 @@ check("v1.x/core/fragment-importer.js", [
   ["cache: noCache ? 'no-store' : 'no-cache'", "fragment importer cache policy is missing"],
 ]);
 
+check("v1.x/core/header.html", [
+  ["900000", "birthday fallback must be 15 minutes"],
+  ["scheduleMidnightRefresh", "birthday midnight scheduler is missing"],
+], [
+  ["setInterval(showToday,30000)", "legacy 30-second birthday polling remains"],
+]);
+
+check("v1.x/core/footer.html", [
+  ["60000", "footer identity fallback must be 60 seconds"],
+  ["identityObserver", "footer identity observer is missing"],
+  ["setInterval(updateClock,1000)", "visible one-second footer clock must remain"],
+], [
+  ["setInterval(refreshIdentity,15000)", "legacy 15-second identity polling remains"],
+]);
+
 if (errors.length) {
   console.error(`Optimization validation failed with ${errors.length} issue(s):`);
   for (const error of errors) console.error(`- ${error}`);
