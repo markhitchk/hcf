@@ -3,8 +3,8 @@
    Loads the canonical body-only header/footer fragments from
    jsDelivr while preserving markup, styles, relative assets,
    and sequential script execution.
-   Version: 1.0
-   Updated: 2026-08-25
+   Version: 1.1
+   Updated: 2026-09-16
 ========================================================= */
 (function () {
   'use strict';

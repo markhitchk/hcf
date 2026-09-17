@@ -10,8 +10,8 @@
    - preference is remembered for the current browser session
 
    Flarum phone breakpoint: max-width 767.98px
-   Version: 1.0
-   Updated: 2026-08-11
+   Version: 1.1
+   Updated: 2026-09-16
 ========================================================== */
 
 (function hcfMobileAuthTipToggle() {

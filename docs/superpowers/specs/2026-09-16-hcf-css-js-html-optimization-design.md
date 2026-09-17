@@ -3,7 +3,7 @@
 **Date:** 2026-09-16  
 **Repository:** `markhitchk/hcf`  
 **Production scope:** `v1.x/`  
-**Status:** Approved design, implementation not started
+**Status:** Implemented on optimization branch; pending review and merge
 
 ## Goal
 

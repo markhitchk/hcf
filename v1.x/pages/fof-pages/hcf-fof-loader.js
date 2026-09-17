@@ -1,7 +1,7 @@
 /* =========================================================
    Harley's Clan Forum — Dynamic FoF Pages GitHub Loader
-   Build: 1.1.1
-   Updated: 2026-08-25
+   Build: 1.1.2
+   Updated: 2026-09-16
 
    Install this ONCE in Flarum's global custom footer/header.
 
@@ -43,11 +43,11 @@
     return;
   }
 
-  var BUILD = '1.1.1';
+  var BUILD = '1.1.2';
   var RAW_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var CDN_BASE = 'https://cdn.jsdelivr.net/gh/markhitchk/hcf@main/v1.x/pages/fof-pages/';
   var DIRECTORY_API = 'https://api.github.com/repos/markhitchk/hcf/contents/v1.x/pages/fof-pages?ref=main';
-  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.4.1';
+  var SHARED_RUNTIME_SRC = CDN_BASE + 'hcf-page.js?v=1.4.2';
   var DOMAIN_ROUTER_SRC = CDN_BASE + 'hcf-domain-router.js?v=1.0.1';
   var CACHE_TTL = 60000;
   var MISSING_TTL = 30000;
