@@ -1526,6 +1526,8 @@
     var ipRequested=false;
     var clockTimer=0;
     var identityTimer=0;
+    var identityObserver=null;
+    var identityRefreshQueued=false;
     var footerVisible=false;
     var utcDateFormatter;
     var utcTimeFormatter;
@@ -2021,6 +2023,30 @@
         identity.appendChild(link);
     }
 
+    function queueIdentityRefresh(){
+        if(identityRefreshQueued||document.hidden||!footerVisible){return}
+        identityRefreshQueued=true;
+        var run=function(){
+            identityRefreshQueued=false;
+            refreshIdentity();
+        };
+
+        if("requestAnimationFrame" in window){window.requestAnimationFrame(run)}
+        else{window.setTimeout(run,0)}
+    }
+
+    function initIdentityObserver(){
+        if(identityObserver||!("MutationObserver" in window)){return}
+        var host=document.querySelector(".App-header,.Header-secondary");
+        if(!host){return}
+        identityObserver=new MutationObserver(queueIdentityRefresh);
+        identityObserver.observe(host,{
+            childList:true,
+            subtree:true,
+            characterData:true
+        });
+    }
+
     function updateClock(){
         var now=new Date();
 
@@ -2069,12 +2095,17 @@
         }
 
         if(!identityTimer){
-            identityTimer=window.setInterval(refreshIdentity,15000);
+            identityTimer=window.setInterval(function(){
+                if(!document.hidden){refreshIdentity()}
+            },60000);
         }
     }
 
     function initLiveUpdates(){
         document.addEventListener("visibilitychange",syncLiveUpdates);
+        window.addEventListener("hcf:fof-page:loaded",queueIdentityRefresh);
+        window.addEventListener("pageshow",queueIdentityRefresh,{passive:true});
+        initIdentityObserver();
 
         if(!("IntersectionObserver" in window)){
             footerVisible=true;
