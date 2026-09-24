@@ -862,6 +862,68 @@
     outline-offset:2px;
 }
 
+.hc-feedback-donate{
+    margin:0;
+    padding:0;
+}
+
+.hc-feedback-donate > summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:40px;
+    padding:9px 12px;
+    border:1px solid rgba(0,184,240,.30);
+    border-radius:10px;
+    background:rgba(0,184,240,.055);
+    color:inherit;
+    cursor:pointer;
+    list-style:none!important;
+    font-size:.72rem;
+    font-weight:850;
+    line-height:1.2;
+    text-align:center;
+}
+
+.hc-feedback-donate > summary::-webkit-details-marker{display:none!important}
+.hc-feedback-donate > summary::marker{content:""!important;font-size:0!important}
+.hc-feedback-donate > summary::after{
+    content:"+";
+    flex:0 0 auto;
+    margin-left:10px;
+    color:var(--hc-feedback-accent);
+    font-size:1rem;
+    font-weight:900;
+    line-height:1;
+}
+.hc-feedback-donate[open] > summary::after{content:"−"}
+.hc-feedback-donate > summary:hover,
+.hc-feedback-donate[open] > summary{
+    border-color:var(--hc-feedback-accent);
+    background:rgba(0,184,240,.11);
+}
+.hc-feedback-donate > summary:focus-visible{
+    outline:2px solid var(--hc-feedback-accent);
+    outline-offset:2px;
+}
+.hc-feedback-donate-body{
+    margin-top:8px;
+    padding:8px;
+    border:1px solid rgba(0,184,240,.22);
+    border-radius:10px;
+    background:rgba(0,184,240,.035);
+}
+.hc-feedback-donate-frame{
+    display:block;
+    width:100%;
+    height:712px;
+    margin:0;
+    padding:4px;
+    border:0;
+    border-radius:8px;
+    background:#f9f9f9;
+}
+
 @keyframes hc-feedback-panel-in{
     from{opacity:0;transform:translateY(8px) scale(.985)}
     to{opacity:1;transform:none}
@@ -1496,9 +1558,19 @@
             <a class="hc-feedback-link" href="https://discord.com/channels/1225158490901971105/1536706202422091826" target="_blank" rel="noopener noreferrer">
                 Open Feedback Channel
             </a>
-            <a class="hc-feedback-link" href="https://forum.harleytg.com/p/27-domain-expiration#hcf-domain-support">
-                Support / Donate
-            </a>
+            <details class="hc-feedback-donate">
+                <summary aria-label="Open donation options">Support / Donate</summary>
+                <div class="hc-feedback-donate-body">
+                    <iframe
+                        id="hc-footer-kofiframe"
+                        class="hc-feedback-donate-frame"
+                        src="https://ko-fi.com/harleytg_/?hidefeed=true&amp;widget=true&amp;embed=true&amp;preview=true"
+                        height="712"
+                        title="Donate to HarleyTG on Ko-fi"
+                        loading="lazy"
+                    ></iframe>
+                </div>
+            </details>
         </div>
     </div>
 </details>
