@@ -420,7 +420,7 @@ html body #hc-holiday-header{
   "use strict";
 
   var item=document.getElementById("hc-domain-expiration");
-  var cutoff=new Date("2026-10-12T00:00:00-07:00").getTime();
+  // Keep the notice visible through the final second of October 12, 2026 (Pacific time).\n  var cutoff=new Date("2026-10-13T00:00:00-07:00").getTime();
   var MAX_TIMEOUT=2147483647;
 
   function sync(){
